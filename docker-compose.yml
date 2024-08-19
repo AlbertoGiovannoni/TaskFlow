@@ -1,0 +1,56 @@
+#version: '3.4'
+
+# services:
+#   taskflow:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     ports:
+#       - 3000:8080
+#     depends_on:
+#       - mongodb
+#     environment:
+#       - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/taskflowdb
+#     volumes:
+#       - ./src/main/java:/app/src/main/java
+#       - ./src/main/resources:/app/src/main/resources
+#     # Non usare mvn spring-boot:run qui, usa l'immagine buildata
+#     # command: mvn spring-boot:run  # Non necessario
+
+#   mongodb:
+#     image: mongo:latest
+#     ports:
+#       - 27017:27017
+#     volumes:
+#       - mongodb_data:/data/db
+
+# volumes:
+#   mongodb_data:
+
+
+version: '3.9'
+
+services:
+  taskflow:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:8080
+    depends_on:
+      - mongodb
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/taskflowdb
+    volumes:
+      - .:/app  # Monta l'intera directory del progetto
+    command: mvn spring-boot:run  # Avvia con spring-boot:run per supportare l'hot reload
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
