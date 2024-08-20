@@ -33,7 +33,7 @@ public class HelloWorldController {
     @GetMapping("/hello")
     public String sayHello() {
         // Crea un documento di esempio
-        Message m = new Message("Prova");
+        Message m = new Message("Pr nweuhfuon");
         
         
         // Salva il documento nel database
