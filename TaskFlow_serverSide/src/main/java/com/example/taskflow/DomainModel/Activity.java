@@ -2,7 +2,7 @@ package com.example.taskflow.DomainModel;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collation = "activities")
+@Document(collection = "activities")
 public class Activity {
     
     @Id
@@ -13,7 +13,7 @@ public class Activity {
     public Activity(){
     }
 
-    public Activity(String id, String name) {
+    public Activity(String name) {
         this.name = name;
     }
 

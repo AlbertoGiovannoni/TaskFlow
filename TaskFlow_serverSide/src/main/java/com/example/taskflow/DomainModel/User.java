@@ -3,45 +3,55 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
-import java.util.List;
+import java.util.ArrayList;
 
-@Document(collation = "users")
+@Document(collection = "users")
 public class User {
     @Id
     private String id;
 
     @DBRef
-    private List<Organization> organizations;
+    private ArrayList<Organization> organizations;
 
     @DBRef
-    private User_info userInfo;
+    private UserInfo userInfo;
 
     // costruttore di default
     public User(){
     }
 
-    public User(List<Organization> organizations, User_info userInfo){
+    public User(ArrayList<Organization> organizations, UserInfo userInfo){
         this.organizations = organizations;
         this.userInfo = userInfo;
     }
 
+    public User(UserInfo userInfo){
+        this.organizations = new ArrayList<Organization>();
+        this.userInfo = userInfo;
+    }
+    
+    public void addOrganization(Organization organization){
+        this.organizations.add(organization);
+    }
+    
     public String getId() {
         return id;
     }
 
-    public List<Organization> getOrganizations() {
+    public ArrayList<Organization> getOrganizations() {
         return organizations;
     }
 
-    public void setOrganizations(List<Organization> organizations) {
+    public void setOrganizations(ArrayList<Organization> organizations) {
         this.organizations = organizations;
     }
 
-    public User_info getUserInfo() {
+    public UserInfo getUserInfo() {
         return userInfo;
     }
-
-    public void setUserInfo(User_info userInfo) {
+    
+    public void setUserInfo(UserInfo userInfo) {
         this.userInfo = userInfo;
     }
+    
 }

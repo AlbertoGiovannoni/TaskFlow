@@ -13,7 +13,7 @@ public class Project {
     public Project(){
     }
 
-    public Project(String id, String name) {
+    public Project(String name) {
         this.name = name;
     }
 

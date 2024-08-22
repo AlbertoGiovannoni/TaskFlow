@@ -17,9 +17,8 @@ public class Organization {
     public Organization(){
     }
 
-    public Organization(String id, String name){
+    public Organization(String name){
         this.name = name;
-        this.creationDate = LocalDateTime.now();;
     }
 
     public String getId() {

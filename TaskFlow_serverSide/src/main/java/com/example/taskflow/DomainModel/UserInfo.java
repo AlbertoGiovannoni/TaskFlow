@@ -4,8 +4,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 //TODO aggiungi questa classe nel class diagram
-@Document(collation = "users_info")
-public class User_info {
+@Document(collection = "users_info")
+public class UserInfo {
     
     @Id
     private String id;
@@ -14,13 +14,13 @@ public class User_info {
     private String password;
 
     // costruttore di default
-    public User_info() {
+    public UserInfo() {
     }
 
-    public User_info(String id, String username, String email, String password){
+    public UserInfo(String username, String email, String password){
         this.username = username;
         this.email = email;
-        this.password = password; // TODO cripta password
+        this.password = password; // TODO: cripta password
     }
 
     public String getId() {
