@@ -1,4 +1,5 @@
-package com.example.taskflow.DomainModel;
+package com.example.taskflow.DomainModel.FieldDefinitionPackage;
+
 
 public class FieldDefinitionBuilder {
     public static FieldDefinition buildField(FieldType type, String name) {

@@ -1,4 +1,4 @@
-package com.example.taskflow.DomainModel;
+package com.example.taskflow.DomainModel.FieldDefinitionPackage;
 
 public enum FieldType {
 

@@ -1,6 +1,11 @@
 package com.example.taskflow.DomainModel;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionBuilder;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
+
 import java.util.ArrayList;
 
 
