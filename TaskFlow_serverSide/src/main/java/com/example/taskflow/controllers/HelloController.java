@@ -1,7 +1,8 @@
 package com.example.taskflow.controllers;
 
+import com.example.taskflow.DAOs.MessageRepository;
 import com.example.taskflow.DomainModel.Message;
-import com.example.taskflow.repositories.MessageRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
