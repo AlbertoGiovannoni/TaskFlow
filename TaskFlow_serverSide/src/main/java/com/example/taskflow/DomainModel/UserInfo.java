@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 //TODO aggiungi questa classe nel class diagram
-@Document(collection = "users_info")
+@Document
 public class UserInfo {
     
     @Id

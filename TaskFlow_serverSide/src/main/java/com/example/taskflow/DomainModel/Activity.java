@@ -2,7 +2,7 @@ package com.example.taskflow.DomainModel;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "activities")
+@Document
 public class Activity {
     
     @Id

@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import java.util.ArrayList;
 
-@Document(collection = "users")
+@Document
 public class User {
     @Id
     private String id;
@@ -33,7 +33,7 @@ public class User {
     public void addOrganization(Organization organization){
         this.organizations.add(organization);
     }
-    
+
     public String getId() {
         return id;
     }
