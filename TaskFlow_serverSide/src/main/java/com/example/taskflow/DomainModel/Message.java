@@ -1,4 +1,4 @@
-package com.example.taskflow.models;
+package com.example.taskflow.DomainModel;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
