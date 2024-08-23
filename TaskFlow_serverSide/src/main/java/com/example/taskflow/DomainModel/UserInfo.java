@@ -1,5 +1,5 @@
 package com.example.taskflow.DomainModel;
-
+import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,6 +12,7 @@ public class UserInfo {
     private String username;
     private String email;
     private String password;
+    private UUID uuid;
 
     // costruttore di default
     public UserInfo() {
@@ -21,10 +22,17 @@ public class UserInfo {
         this.username = username;
         this.email = email;
         this.password = password; // TODO: cripta password
+        this.uuid = UUID.randomUUID();
     }
+
+    // getter e setter
 
     public String getId() {
         return id;
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 
     public String getUsername() {

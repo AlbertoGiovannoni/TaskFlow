@@ -1,9 +1,7 @@
 package com.example.taskflow.DomainModel;
 import java.util.UUID;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 @Document
@@ -24,6 +22,8 @@ public class User {
         this.userInfo = userInfo;
         this.uuid = UUID.randomUUID();
     }
+
+    // getter e setter
 
     public String getId() {
         return id;

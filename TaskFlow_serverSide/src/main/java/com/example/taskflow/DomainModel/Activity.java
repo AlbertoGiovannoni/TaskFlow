@@ -1,6 +1,8 @@
 package com.example.taskflow.DomainModel;
+import java.util.ArrayList;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import com.example.taskflow.DomainModel.FieldPackage.Field;
 
 @Document
 public class Activity {
@@ -8,15 +10,19 @@ public class Activity {
     @Id
     private String id;
     private String name;
+    private ArrayList<Field> fields;
 
     // costruttore di default
     public Activity(){
     }
 
-    public Activity(String name) {
+    public Activity(String name, ArrayList<Field> fields) {
         this.name = name;
+        this.fields = fields;
     }
 
+    // getter e setter
+    
     public String getId() {
         return id;
     }
@@ -28,5 +34,14 @@ public class Activity {
     public void setName(String name) {
         this.name = name;
     }
+
+    public ArrayList<Field> getFields() {
+        return fields;
+    }
+
+    public void setFields(ArrayList<Field> fields) {
+        this.fields = fields;
+    }
+    
     
 }
