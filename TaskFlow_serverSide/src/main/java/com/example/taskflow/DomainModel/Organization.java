@@ -33,6 +33,7 @@ public class Organization {
         this.owners = owners;
         this.projects = projects;
         this.members = members;
+        this.creationDate = LocalDateTime.now();
         this.uuid = UUID.randomUUID();
     }
 

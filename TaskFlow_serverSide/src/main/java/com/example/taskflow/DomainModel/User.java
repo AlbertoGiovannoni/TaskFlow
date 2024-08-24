@@ -6,11 +6,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 
 @Document
 public class User {
-    /*
-        FIXME: si potrebbe mantenere lo username in questa classe e le info sensibili in 
-               userInfo? Lo username dovrebbe essere una cosa pubblica mi immagino. 
-               Anche perché sennò a che serve questa classe?
-    */
+    
     @Id
     private String id;
 
@@ -18,12 +14,14 @@ public class User {
     private UserInfo userInfo;
 
     private UUID uuid;
+    private String username;
 
     // costruttore di default
     public User(){
     }
 
-    public User(UserInfo userInfo){
+    public User(UserInfo userInfo, String username){
+        this.username = username;
         this.userInfo = userInfo;
         this.uuid = UUID.randomUUID();
     }
@@ -56,6 +54,14 @@ public class User {
 
     public UUID getUuid() {
         return uuid;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
     
 }

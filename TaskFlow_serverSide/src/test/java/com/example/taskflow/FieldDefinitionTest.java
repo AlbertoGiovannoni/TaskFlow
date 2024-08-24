@@ -61,10 +61,10 @@ public class FieldDefinitionTest {
     }
 
     private void addRandomUserToDatabase(){
-        UserInfo info = new UserInfo(RandomString.make(10), RandomString.make(10), RandomString.make(10));
+        UserInfo info = new UserInfo(RandomString.make(10), RandomString.make(10));
         this.userInfoDAO.save(info);
 
-        User user = new User(info);
+        User user = new User(info, RandomString.make(10));
         this.userDAO.save(user);
     }
 

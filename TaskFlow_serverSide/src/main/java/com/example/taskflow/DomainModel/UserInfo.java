@@ -9,7 +9,6 @@ public class UserInfo {
     
     @Id
     private String id;
-    private String username;
     private String email;
     private String password;
     private UUID uuid;
@@ -18,8 +17,7 @@ public class UserInfo {
     public UserInfo() {
     }
 
-    public UserInfo(String username, String email, String password){
-        this.username = username;
+    public UserInfo(String email, String password){
         this.email = email;
         this.password = password; // TODO: cripta password
         this.uuid = UUID.randomUUID();
@@ -33,14 +31,6 @@ public class UserInfo {
 
     public UUID getUuid() {
         return uuid;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getEmail() {
