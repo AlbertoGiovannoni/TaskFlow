@@ -52,9 +52,9 @@ class AssigneeDefinition extends FieldDefinition {
     }
 
     private void mergeWithoutRepetition(ArrayList<User> startingArrayList, ArrayList<User> arrayListToMerge){
-        for (User element : arrayListToMerge){
-            if (!startingArrayList.contains(element)){
-                this.possibleAssigneeUsers.add(element);
+        for (User user : arrayListToMerge){
+            if (!startingArrayList.contains(user)){
+                this.possibleAssigneeUsers.add(user);
             }
         }
     }
