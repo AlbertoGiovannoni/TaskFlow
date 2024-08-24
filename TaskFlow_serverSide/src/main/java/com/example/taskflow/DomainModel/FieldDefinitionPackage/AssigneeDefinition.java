@@ -16,19 +16,22 @@ class AssigneeDefinition extends FieldDefinition {
                qua se metto una reference diretta agli users mentre se metto
                reference a organization posso gestirla in quella classe
                (che secondo me ha senso perché l'organizzazione ha la
-               responsabilità di tenere gli utenti come un 'set')
+               responsabilità di tenere gli utenti come un 'set').
+               No scherzo forse ha senso metterci direttamente gli users,
+               però allora l'utente ha possibilità di modificare la lista 
+               degli utenti ammessi a questo campo?
     */ 
     @DBRef
-    private ArrayList<User> possibleAssegneeUsers;
+    private ArrayList<User> possibleAssigneeUsers;
 
     public AssigneeDefinition(String nome, FieldType type) {
         super(nome, type);
-        this.possibleAssegneeUsers = new ArrayList<>();
+        this.possibleAssigneeUsers = new ArrayList<>();
     }
 
     public AssigneeDefinition(String nome, FieldType type, ArrayList<User> users) {
         super(nome, type);
-        this.possibleAssegneeUsers = users;
+        this.possibleAssigneeUsers = users;
     }
 
     @Override
@@ -39,12 +42,20 @@ class AssigneeDefinition extends FieldDefinition {
     //FIXME: se si cambia la reference ad Organization questi devono essere rimossi
 
     public void addUser(User user){
-        if (!this.possibleAssegneeUsers.contains(user)){
-            this.possibleAssegneeUsers.add(user);
+        if (!this.possibleAssigneeUsers.contains(user)){
+            this.possibleAssigneeUsers.add(user);
         }
     }
 
     public void addUsers(ArrayList<User> users){
-        this.possibleAssegneeUsers.addAll(users);
+        this.mergeWithoutRepetition(this.possibleAssigneeUsers, users);
+    }
+
+    private void mergeWithoutRepetition(ArrayList<User> startingArrayList, ArrayList<User> arrayListToMerge){
+        for (User element : arrayListToMerge){
+            if (!startingArrayList.contains(element)){
+                this.possibleAssigneeUsers.add(element);
+            }
+        }
     }
 }
