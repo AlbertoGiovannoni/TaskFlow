@@ -3,8 +3,13 @@ import java.util.ArrayList;
 
 class SingleSelectionDefinition extends FieldDefinition {
 
-    private ArrayList<String> possibleSelection;        //TODO implementa le possibile selezioni
+    private ArrayList<String> possibleSelections;        //TODO implementa le possibile selezioni
 
+    public SingleSelectionDefinition(String nome, FieldType type, ArrayList<String> possibleSelections) {
+        super(nome, type);
+        this.possibleSelections = possibleSelections;
+    }
+    
     public SingleSelectionDefinition(String nome, FieldType type) {
         super(nome, type);
     }
