@@ -5,8 +5,8 @@ class SingleSelectionDefinition extends FieldDefinition {
 
     private ArrayList<String> possibleSelection;        //TODO implementa le possibile selezioni
 
-    public SingleSelectionDefinition(String nome) {
-        super(nome);
+    public SingleSelectionDefinition(String nome, FieldType type) {
+        super(nome, type);
     }
 
     @Override

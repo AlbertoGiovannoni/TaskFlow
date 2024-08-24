@@ -11,17 +11,17 @@ public class Notification {
     private String id;
     private ArrayList<String> emails;
     private String message;
-    
+
     @DBRef
-    private Activity activity;
+    ArrayList<User> receivers;
 
     // costruttore di default
     public Notification(){
     }
 
-    public Notification(ArrayList<String> emails, Activity activity, String message) {
+    public Notification(ArrayList<String> emails,ArrayList<User> receivers, String message) {
         this.emails = emails;
-        this.activity = activity;
+        this.receivers = receivers;
         this.message = message;
     }
 
@@ -47,11 +47,12 @@ public class Notification {
         this.message = message;
     }
 
-    public Activity getActivity() {
-        return activity;
+    public ArrayList<User> getReceivers() {
+        return receivers;
     }
 
-    public void setActivity(Activity activity) {
-        this.activity = activity;
+    public void setReceivers(ArrayList<User> receivers) {
+        this.receivers = receivers;
     }
+    
 }

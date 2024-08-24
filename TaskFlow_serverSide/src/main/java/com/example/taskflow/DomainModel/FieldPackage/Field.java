@@ -1,10 +1,16 @@
 package com.example.taskflow.DomainModel.FieldPackage;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 public abstract class Field<T> {
     
-    private T value;
+    T value;
 
-    public Field(T value) {
+    @DBRef
+    FieldDefinition fieldDefinition;
+
+    public Field(T value, FieldDefinition fieldDefinition) {
+        this.fieldDefinition = fieldDefinition;
         this.value = value;
     }
 

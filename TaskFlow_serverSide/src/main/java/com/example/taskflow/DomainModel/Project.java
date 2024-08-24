@@ -14,6 +14,8 @@ public class Project {
     private String id;
     private String name;
     private UUID uuid;
+
+    @DBRef
     private ArrayList<FieldDefinition> fieldsTemplate;
 
     @DBRef
