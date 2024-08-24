@@ -3,8 +3,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionBuilder;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -32,15 +30,8 @@ public class Project {
         this.uuid = UUID.randomUUID();
     }
 
-    //TODO perchè aggiungo un field definition da dentro project? non dovrei passargli un oggetto fieldDefinition già costruito?
-    public void addFieldDefinition(FieldType type, String name) {
-        FieldDefinition newFieldDef = FieldDefinitionBuilder.buildField(type, name);
-        fieldsTemplate.add(newFieldDef);
-    }
-
-    //TODO controlla se questi metodi devono stare qui
-    public void deleteActivity(String id) {
-        activities.removeIf(activity -> activity.getId().equals(id));
+    public void addFieldDefinition(FieldDefinition fieldDefinition) {
+        fieldsTemplate.add(fieldDefinition);
     }
     
     public ArrayList<Activity> getAllActivities() {
@@ -49,6 +40,10 @@ public class Project {
     
     public void addActivity(Activity newAct) {
         activities.add(newAct);
+    }
+
+    public boolean deleteActivity(Activity actToRemove) {
+        return activities.remove(actToRemove);
     }
     
     // getter e setter

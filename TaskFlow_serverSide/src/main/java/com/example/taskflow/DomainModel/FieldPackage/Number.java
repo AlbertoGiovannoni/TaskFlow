@@ -1,16 +1,9 @@
 package com.example.taskflow.DomainModel.FieldPackage;
 
-public class Number extends Field<Integer>{
+public class Number extends Field<Float>{
 
-    public Number(Integer value) {
+    public Number(Float value) {
         super(value);
         //TODO Auto-generated constructor stub
     }
-
-    @Override
-    public void validateValue(Integer value) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'validateValue'");
-    }
-    
 }

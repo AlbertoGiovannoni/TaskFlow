@@ -8,11 +8,5 @@ public class Assignee extends Field<ArrayList<User>>{
         super(value);
         //TODO Auto-generated constructor stub
     }
-
-    @Override
-    public void validateValue(ArrayList<User> value) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'validateValue'");
-    }
     
 }

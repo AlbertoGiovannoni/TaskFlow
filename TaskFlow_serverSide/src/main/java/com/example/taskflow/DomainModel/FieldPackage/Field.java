@@ -8,8 +8,6 @@ public abstract class Field<T> {
         this.value = value;
     }
 
-    public abstract void validateValue(T value);
-
     // getter e setter
     
     public T getValue() {

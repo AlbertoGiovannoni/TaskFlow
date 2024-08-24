@@ -1,5 +1,6 @@
 package com.example.taskflow.DomainModel;
 import java.util.ArrayList;
+import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
@@ -11,6 +12,7 @@ public class Activity {
     private String id;
     private String name;
     private ArrayList<Field> fields;
+    private UUID uuid;
 
     // costruttore di default
     public Activity(){
@@ -19,6 +21,7 @@ public class Activity {
     public Activity(String name, ArrayList<Field> fields) {
         this.name = name;
         this.fields = fields;
+        this.uuid = UUID.randomUUID();
     }
 
     // getter e setter
@@ -26,6 +29,10 @@ public class Activity {
     public String getId() {
         return id;
     }
+    
+        public UUID getUuid() {
+            return uuid;
+        }
 
     public String getName() {
         return name;
@@ -42,6 +49,5 @@ public class Activity {
     public void setFields(ArrayList<Field> fields) {
         this.fields = fields;
     }
-    
     
 }

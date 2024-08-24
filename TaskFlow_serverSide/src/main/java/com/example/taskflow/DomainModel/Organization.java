@@ -40,8 +40,8 @@ public class Organization {
         members.add(user);
     }
 
-    public void removeMember(User user) { // TODO aggiungere UUID e fare equals su quello prima di fare remove
-        members.remove(user);
+    public boolean removeMember(User user) { // TODO aggiungere UUID e fare equals su quello prima di fare remove
+        return members.remove(user);
     }
 
     // getter e setter
