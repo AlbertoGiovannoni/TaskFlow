@@ -4,6 +4,7 @@ import com.example.taskflow.DomainModel.UserInfo;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionBuilder;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -45,6 +46,12 @@ public class FieldDefinitionTest {
         if (template.collectionExists("fieldDefinition")){
             template.dropCollection("fieldDefinition");
         }
+        if (template.collectionExists("user")){
+            template.dropCollection("user");
+        }
+        if (template.collectionExists("userInfo")){
+            template.dropCollection("userInfo");
+        }
 
         for (int i = 0; i < 5; i++){
             this.addRandomUserToDatabase();
@@ -71,6 +78,14 @@ public class FieldDefinitionTest {
         FieldDefinition found = fieldDefinitionDAO.findById(fieldDefinition.getId()).orElse(null);
         assertNotNull(found);
         assertEquals(fieldDefinition.getName(), found.getName());
+    }
+
+    @Test
+    public void testAssigneeDefinition(){
+        AssigneeDefinition assigneeDefinition = (AssigneeDefinition)FieldDefinitionBuilder.buildField(FieldType.ASSIGNEE, "Partecipanti");
+        assigneeDefinition.addUsers(this.someUsers);
+
+        fieldDefinitionDAO.save(assigneeDefinition);
     }
     
 }

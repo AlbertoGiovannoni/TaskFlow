@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import com.example.taskflow.DomainModel.User;
 
-class AssigneeDefinition extends FieldDefinition {
+public class AssigneeDefinition extends FieldDefinition {
 
     /*
         FIXME: forse qua dobbiamo avere una reference ad organization?
@@ -24,8 +24,8 @@ class AssigneeDefinition extends FieldDefinition {
     @DBRef
     private ArrayList<User> possibleAssigneeUsers;
 
-    public AssigneeDefinition(String nome, FieldType type) {
-        super(nome, type);
+    public AssigneeDefinition(String name, FieldType type) {
+        super(name, type);
         this.possibleAssigneeUsers = new ArrayList<>();
     }
 
