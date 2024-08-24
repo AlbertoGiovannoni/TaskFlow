@@ -23,6 +23,8 @@ public class User {
         this.uuid = UUID.randomUUID();
     }
 
+    // TODO: implementare metodo equals() per comparare tramite UUID
+
     // getter e setter
 
     public String getId() {
