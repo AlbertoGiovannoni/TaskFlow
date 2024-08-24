@@ -28,7 +28,17 @@ public class User {
         this.uuid = UUID.randomUUID();
     }
 
-    // TODO: implementare metodo equals() per comparare tramite UUID
+    @Override
+    public boolean equals(Object obj) {
+        boolean value = false;
+
+        if (obj != null && obj instanceof User){
+            value = (this.uuid == ((User)obj).getUuid());  
+        }
+
+        return value;
+    }
+
 
     // getter e setter
 
