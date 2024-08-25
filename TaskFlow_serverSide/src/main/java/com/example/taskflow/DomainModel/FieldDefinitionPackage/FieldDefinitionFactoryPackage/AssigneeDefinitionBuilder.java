@@ -4,16 +4,17 @@ import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
-public class AssegneeDefinitionFactory extends FieldDefinitionFactory<AssigneeDefinition, AssegneeDefinitionFactory> {
+public class AssigneeDefinitionBuilder extends FieldDefinitionBuilder<AssigneeDefinition, AssigneeDefinitionBuilder> implements SpecificBuilder<AssigneeDefinitionBuilder, ArrayList<User>>{
     private ArrayList<User>  possibleAssignees;
 
-    public AssegneeDefinitionFactory addSpecificField(ArrayList<User> possibleAssignees) {
+    @Override
+    public AssigneeDefinitionBuilder addSpecificField(ArrayList<User> possibleAssignees) {
         this.possibleAssignees = possibleAssignees;
         return this;
     }
 
     @Override
-    protected AssegneeDefinitionFactory self() {
+    protected AssigneeDefinitionBuilder self() {
         return this;
     }
 

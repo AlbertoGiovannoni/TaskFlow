@@ -2,10 +2,10 @@ package com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionF
 
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.SimpleFieldDefinition;
 
-public class SimpleFieldDefinitionFactory extends FieldDefinitionFactory<SimpleFieldDefinition, SimpleFieldDefinitionFactory> {
+public class SimpleFieldDefinitionBuilder extends FieldDefinitionBuilder<SimpleFieldDefinition, SimpleFieldDefinitionBuilder> {
 
     @Override
-    protected SimpleFieldDefinitionFactory self() {
+    protected SimpleFieldDefinitionBuilder self() {
         return this;
     }
 

@@ -3,7 +3,7 @@ package com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionF
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
-public abstract class FieldDefinitionFactory<T extends FieldDefinition, B extends FieldDefinitionFactory<T, B>> {
+public abstract class FieldDefinitionBuilder<T extends FieldDefinition, B extends FieldDefinitionBuilder<T, B>> {
     String name;
     FieldType type;
 

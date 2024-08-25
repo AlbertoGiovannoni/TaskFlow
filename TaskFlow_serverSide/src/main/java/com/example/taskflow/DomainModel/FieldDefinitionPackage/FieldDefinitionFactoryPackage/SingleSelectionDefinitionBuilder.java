@@ -5,16 +5,17 @@ import java.util.ArrayList;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.SingleSelectionDefinition;
 
-public class SingleSelectionDefinitionFactory extends FieldDefinitionFactory<SingleSelectionDefinition, SingleSelectionDefinitionFactory> {
+public class SingleSelectionDefinitionBuilder extends FieldDefinitionBuilder<SingleSelectionDefinition, SingleSelectionDefinitionBuilder> implements SpecificBuilder<SingleSelectionDefinitionBuilder, ArrayList<String>>{
     private ArrayList<String> possibleSelections;
 
-    public SingleSelectionDefinitionFactory addSpecificField(ArrayList<String> possibleSelections) {
+    @Override
+    public SingleSelectionDefinitionBuilder addSpecificField(ArrayList<String> possibleSelections) {
         this.possibleSelections = possibleSelections;
         return this;
     }
 
     @Override
-    protected SingleSelectionDefinitionFactory self() {
+    protected SingleSelectionDefinitionBuilder self() {
         return this;
     }
 

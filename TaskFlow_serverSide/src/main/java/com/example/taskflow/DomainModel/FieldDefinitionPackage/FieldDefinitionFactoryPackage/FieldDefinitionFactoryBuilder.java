@@ -3,20 +3,20 @@ package com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionF
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
 public class FieldDefinitionFactoryBuilder {
-    public static FieldDefinitionFactory<?, ?> getBuilder(FieldType type){
+    public static FieldDefinitionBuilder<?, ?> getBuilder(FieldType type){
         switch (type) {
             case ASSIGNEE:
-                return new AssegneeDefinitionFactory();
+                return new AssigneeDefinitionBuilder();
             case SINGLE_SELECTION:
-                return new SingleSelectionDefinitionFactory();
+                return new SingleSelectionDefinitionBuilder();
             case DATE:
-                return new SimpleFieldDefinitionFactory();
+                return new SimpleFieldDefinitionBuilder();
             case NUMBER:
-                return new SimpleFieldDefinitionFactory();
+                return new SimpleFieldDefinitionBuilder();
             case DOCUMENT:
-                return new SimpleFieldDefinitionFactory();
+                return new SimpleFieldDefinitionBuilder();
             case TEXT:
-                return new SimpleFieldDefinitionFactory();
+                return new SimpleFieldDefinitionBuilder();
             default:
                 throw new IllegalArgumentException("Unsopported type: " + type);
         }

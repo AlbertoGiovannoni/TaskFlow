@@ -4,7 +4,7 @@ import com.example.taskflow.DomainModel.UserInfo;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionBuilder;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.AssegneeDefinitionFactory;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.AssigneeDefinitionFactory;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.SimpleFieldDefinitionFactory;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.SingleSelectionDefinitionFactory;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
@@ -94,7 +94,7 @@ public class FieldDefinitionTest {
     @Test
     public void testAssigneeDefinition(){
 
-        FieldDefinition fieldDefinition = new AssegneeDefinitionFactory()
+        FieldDefinition fieldDefinition = new AssigneeDefinitionFactory()
                 .addCommonAttributes("reviewers", FieldType.ASSIGNEE)
                 .addSpecificField(this.someUsers)
                 .build();    
