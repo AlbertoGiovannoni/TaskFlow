@@ -2,12 +2,10 @@ package com.example.taskflow;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.UserInfo;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionBuilder;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.AssigneeDefinitionFactory;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.SimpleFieldDefinitionFactory;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.SingleSelectionDefinitionFactory;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.AssigneeDefinitionBuilder;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionBuilder;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -42,7 +40,7 @@ public class FieldDefinitionTest {
     @Autowired
     MongoTemplate template;
 
-    ArrayList<User> someUsers;
+    ArrayList<Object> someUsers;
     ArrayList<String> someSingleSeletions;
 
     @BeforeEach
@@ -78,11 +76,11 @@ public class FieldDefinitionTest {
     }
 
     @Test
-    public void testInsertAndFindFieldDefinition() {
+    public void testInsertAndFindSimpleFieldDefinition() {
         
-        FieldDefinition fieldDefinition = new SimpleFieldDefinitionFactory()
-                .addCommonAttributes("scadenza", FieldType.DATE)
-                .build();
+        FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.DATE)
+                                        .addCommonAttributes("Scadenza")
+                                        .build();
 
         fieldDefinition = fieldDefinitionDAO.save(fieldDefinition);
 
@@ -92,25 +90,18 @@ public class FieldDefinitionTest {
     }
 
     @Test
-    public void testAssigneeDefinition(){
+    public void testInsertAndFindAssigneeDefinition() {
+        
+        FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.ASSIGNEE)
+                                            .addCommonAttributes("Partecipanti")
+                                            .addSpecificField(this.someUsers)
+                                            .build();
 
-        FieldDefinition fieldDefinition = new AssigneeDefinitionFactory()
-                .addCommonAttributes("reviewers", FieldType.ASSIGNEE)
-                .addSpecificField(this.someUsers)
-                .build();    
+        fieldDefinition = fieldDefinitionDAO.save(fieldDefinition);
 
-        fieldDefinitionDAO.save(fieldDefinition);
-    }
-
-    @Test
-    public void singleSelectionDefinition(){
-
-        FieldDefinition fieldDefinition = new SingleSelectionDefinitionFactory()
-                .addCommonAttributes("reviewers", FieldType.ASSIGNEE)
-                .addSpecificField(someSingleSeletions)
-                .build();    
-
-        fieldDefinitionDAO.save(fieldDefinition);
+        FieldDefinition found = fieldDefinitionDAO.findById(fieldDefinition.getId()).orElse(null);
+        assertNotNull(found);
+        assertEquals(fieldDefinition.getName(), found.getName());
     }
     
 }

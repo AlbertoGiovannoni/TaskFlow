@@ -4,12 +4,23 @@ import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
-public class AssigneeDefinitionBuilder extends FieldDefinitionBuilder<AssigneeDefinition, AssigneeDefinitionBuilder> implements SpecificBuilder<AssigneeDefinitionBuilder, ArrayList<User>>{
+public class AssigneeDefinitionBuilder extends FieldDefinitionBuilder<AssigneeDefinition, AssigneeDefinitionBuilder>{
     private ArrayList<User>  possibleAssignees;
 
+    AssigneeDefinitionBuilder(FieldType type) {
+        super(type);
+    }
+
     @Override
-    public AssigneeDefinitionBuilder addSpecificField(ArrayList<User> possibleAssignees) {
-        this.possibleAssignees = possibleAssignees;
+    public AssigneeDefinitionBuilder addSpecificField(ArrayList<Object> possibleAssignees) {
+        //FIXME: rivedere questo
+
+        ArrayList<User> entryUsers = new ArrayList<>();
+        for (Object obj : possibleAssignees){
+            entryUsers.add((User)obj);
+        }
+
+        this.possibleAssignees = entryUsers;
         return this;
     }
 
@@ -20,6 +31,9 @@ public class AssigneeDefinitionBuilder extends FieldDefinitionBuilder<AssigneeDe
 
     @Override
     public AssigneeDefinition build() {
-        return new AssigneeDefinition(name, FieldType.ASSIGNEE, possibleAssignees);
+        if (this.possibleAssignees == null){
+            throw new IllegalAccessError("possibleAssignees are null");
+        }
+        return new AssigneeDefinition(name, this.type, possibleAssignees);
     }
 }

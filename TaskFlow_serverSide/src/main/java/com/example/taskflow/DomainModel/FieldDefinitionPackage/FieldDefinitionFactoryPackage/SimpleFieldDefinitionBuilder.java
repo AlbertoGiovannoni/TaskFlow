@@ -1,8 +1,13 @@
 package com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage;
 
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.SimpleFieldDefinition;
 
 public class SimpleFieldDefinitionBuilder extends FieldDefinitionBuilder<SimpleFieldDefinition, SimpleFieldDefinitionBuilder> {
+
+    SimpleFieldDefinitionBuilder(FieldType type) {
+        super(type);
+    }
 
     @Override
     protected SimpleFieldDefinitionBuilder self() {
@@ -11,6 +16,6 @@ public class SimpleFieldDefinitionBuilder extends FieldDefinitionBuilder<SimpleF
 
     @Override
     public SimpleFieldDefinition build() {
-        return new SimpleFieldDefinition(name, type);
+        return new SimpleFieldDefinition(this.name, this.type);
     }
 }
