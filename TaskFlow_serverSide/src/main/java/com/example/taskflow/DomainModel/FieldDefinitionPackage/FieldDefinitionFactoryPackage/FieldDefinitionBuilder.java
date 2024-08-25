@@ -2,10 +2,11 @@ package com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionF
 
 import java.util.ArrayList;
 
+import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
-public abstract class FieldDefinitionBuilder<T extends FieldDefinition, SPECIFIC_TYPE, B extends FieldDefinitionBuilder<T, SPECIFIC_TYPE, B>> {
+public abstract class FieldDefinitionBuilder {
     String name;
     FieldType type;
 
@@ -13,17 +14,17 @@ public abstract class FieldDefinitionBuilder<T extends FieldDefinition, SPECIFIC
         this.type = type;
     }
 
-    public B addCommonAttributes(String name) {
+    public FieldDefinitionBuilder addCommonAttributes(String name) {
         this.name = name;
         return self();
     }
 
-    public B addSpecificField(SPECIFIC_TYPE value){
+    public FieldDefinitionBuilder addSpecificField(ArrayList<User> values){
         throw new IllegalAccessError(this.getClass().getSimpleName() + " not implement method addSpecificField()");
     }
 
-    abstract B self();
+    abstract FieldDefinitionBuilder self();
 
-    public abstract T build();
+    public abstract FieldDefinition build();
 }
 

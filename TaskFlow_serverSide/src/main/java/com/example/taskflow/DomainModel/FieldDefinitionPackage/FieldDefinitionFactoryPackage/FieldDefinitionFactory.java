@@ -3,7 +3,7 @@ package com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionF
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
 public class FieldDefinitionFactory {
-    public static FieldDefinitionBuilder<?, ?, ?> getBuilder(FieldType type){
+    public static FieldDefinitionBuilder getBuilder(FieldType type){
         switch (type) {
             case ASSIGNEE:
                 return new AssigneeDefinitionBuilder(type);

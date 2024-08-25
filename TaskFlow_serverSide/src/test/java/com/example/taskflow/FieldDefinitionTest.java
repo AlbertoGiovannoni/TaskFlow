@@ -15,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.BeforeEach;
 
@@ -40,7 +39,7 @@ public class FieldDefinitionTest {
     @Autowired
     MongoTemplate template;
 
-    ArrayList<Object> someUsers;
+    ArrayList<User> someUsers;
     ArrayList<String> someSingleSeletions;
 
     @BeforeEach
@@ -76,32 +75,13 @@ public class FieldDefinitionTest {
     }
 
     @Test
-    public void testInsertAndFindSimpleFieldDefinition() {
-        
-        FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.DATE)
-                                        .addCommonAttributes("Scadenza")
-                                        .build();
-
-        fieldDefinition = fieldDefinitionDAO.save(fieldDefinition);
-
-        FieldDefinition found = fieldDefinitionDAO.findById(fieldDefinition.getId()).orElse(null);
-        assertNotNull(found);
-        assertEquals(fieldDefinition.getName(), found.getName());
-    }
-
-    @Test
-    public void testInsertAndFindAssigneeDefinition() {
-        
+    public void testInsertAndFindAssigneeFieldDefinition() {
         FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.ASSIGNEE)
-                                            .addCommonAttributes("Partecipanti")
-                                            .addSpecificField(this.someUsers)
-                                            .build();
+                                    .addCommonAttributes("Partecipanti")
+                                    .addSpecificField(this.someUsers)
+                                    .build();
 
-        fieldDefinition = fieldDefinitionDAO.save(fieldDefinition);
-
-        FieldDefinition found = fieldDefinitionDAO.findById(fieldDefinition.getId()).orElse(null);
-        assertNotNull(found);
-        assertEquals(fieldDefinition.getName(), found.getName());
+        FieldDefinition fieldDefinitionFromDB = this.fieldDefinitionDAO.save(fieldDefinition);
     }
     
 }

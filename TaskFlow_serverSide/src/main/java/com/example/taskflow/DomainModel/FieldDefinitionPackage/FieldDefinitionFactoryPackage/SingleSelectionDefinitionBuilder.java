@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.SingleSelectionDefinition;
 
-public class SingleSelectionDefinitionBuilder extends FieldDefinitionBuilder<SingleSelectionDefinition, ArrayList<String>, SingleSelectionDefinitionBuilder>{
+public class SingleSelectionDefinitionBuilder extends FieldDefinitionBuilder{
     
     private ArrayList<String> possibleSelections;
     
@@ -13,11 +13,13 @@ public class SingleSelectionDefinitionBuilder extends FieldDefinitionBuilder<Sin
         super(type);
     }
 
+    /*
     @Override
     public SingleSelectionDefinitionBuilder addSpecificField(ArrayList<String> possibleSelections) {
         this.possibleSelections = possibleSelections;
         return this.self();
     }
+     */
 
     @Override
     protected SingleSelectionDefinitionBuilder self() {
