@@ -1,4 +1,6 @@
-package com.example.taskflow.DomainModel.FieldDefinitionPackage;
+package com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage;
+
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.SimpleFieldDefinition;
 
 public class SimpleFieldDefinitionFactory extends FieldDefinitionFactory<SimpleFieldDefinition, SimpleFieldDefinitionFactory> {
 

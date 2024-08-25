@@ -1,7 +1,7 @@
 package com.example.taskflow.DomainModel.FieldDefinitionPackage;
 import java.util.ArrayList;
 
-class SingleSelectionDefinition extends FieldDefinition {
+public class SingleSelectionDefinition extends FieldDefinition {
 
     private ArrayList<String> possibleSelections;        //TODO implementa le possibile selezioni
 

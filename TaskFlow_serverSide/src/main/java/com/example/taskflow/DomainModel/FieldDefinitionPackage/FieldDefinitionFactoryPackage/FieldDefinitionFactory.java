@@ -1,5 +1,7 @@
-package com.example.taskflow.DomainModel.FieldDefinitionPackage;
+package com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage;
 
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
 public abstract class FieldDefinitionFactory<T extends FieldDefinition, B extends FieldDefinitionFactory<T, B>> {
     String name;

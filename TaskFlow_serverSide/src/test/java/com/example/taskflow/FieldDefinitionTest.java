@@ -4,9 +4,9 @@ import com.example.taskflow.DomainModel.UserInfo;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionBuilder;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.SimpleFieldDefinitionFactory;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.SingleSelectionDefinitionFactory;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssegneeDefinitionFactory;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.AssegneeDefinitionFactory;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.SimpleFieldDefinitionFactory;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.SingleSelectionDefinitionFactory;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
 
 import net.bytebuddy.utility.RandomString;
@@ -102,6 +102,7 @@ public class FieldDefinitionTest {
         fieldDefinitionDAO.save(fieldDefinition);
     }
 
+    @Test
     public void singleSelectionDefinition(){
 
         FieldDefinition fieldDefinition = new SingleSelectionDefinitionFactory()

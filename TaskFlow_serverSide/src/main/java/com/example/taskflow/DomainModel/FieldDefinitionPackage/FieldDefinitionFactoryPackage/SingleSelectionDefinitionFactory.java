@@ -1,6 +1,9 @@
-package com.example.taskflow.DomainModel.FieldDefinitionPackage;
+package com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage;
 
 import java.util.ArrayList;
+
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.SingleSelectionDefinition;
 
 public class SingleSelectionDefinitionFactory extends FieldDefinitionFactory<SingleSelectionDefinition, SingleSelectionDefinitionFactory> {
     private ArrayList<String> possibleSelections;
