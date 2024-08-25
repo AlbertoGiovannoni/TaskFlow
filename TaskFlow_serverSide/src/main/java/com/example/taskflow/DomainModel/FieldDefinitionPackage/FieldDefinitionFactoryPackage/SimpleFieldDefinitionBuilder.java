@@ -3,7 +3,7 @@ package com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionF
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.SimpleFieldDefinition;
 
-public class SimpleFieldDefinitionBuilder extends FieldDefinitionBuilder<SimpleFieldDefinition, SimpleFieldDefinitionBuilder> {
+public class SimpleFieldDefinitionBuilder extends FieldDefinitionBuilder<SimpleFieldDefinition, Object, SimpleFieldDefinitionBuilder> {
 
     SimpleFieldDefinitionBuilder(FieldType type) {
         super(type);

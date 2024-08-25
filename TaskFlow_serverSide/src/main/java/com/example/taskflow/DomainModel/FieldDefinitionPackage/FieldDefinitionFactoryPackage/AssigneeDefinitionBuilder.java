@@ -4,7 +4,7 @@ import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
-public class AssigneeDefinitionBuilder extends FieldDefinitionBuilder<AssigneeDefinition, AssigneeDefinitionBuilder>{
+public class AssigneeDefinitionBuilder extends FieldDefinitionBuilder<AssigneeDefinition, ArrayList<User>, AssigneeDefinitionBuilder>{
     private ArrayList<User>  possibleAssignees;
 
     AssigneeDefinitionBuilder(FieldType type) {
@@ -12,16 +12,9 @@ public class AssigneeDefinitionBuilder extends FieldDefinitionBuilder<AssigneeDe
     }
 
     @Override
-    public AssigneeDefinitionBuilder addSpecificField(ArrayList<Object> possibleAssignees) {
-        //FIXME: rivedere questo
-
-        ArrayList<User> entryUsers = new ArrayList<>();
-        for (Object obj : possibleAssignees){
-            entryUsers.add((User)obj);
-        }
-
-        this.possibleAssignees = entryUsers;
-        return this;
+    public AssigneeDefinitionBuilder addSpecificField(ArrayList<User> possibleAssignees) {
+        this.possibleAssignees = possibleAssignees;
+        return this.self();
     }
 
     @Override

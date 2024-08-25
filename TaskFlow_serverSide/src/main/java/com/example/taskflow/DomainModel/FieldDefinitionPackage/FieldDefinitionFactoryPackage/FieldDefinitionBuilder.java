@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
-public abstract class FieldDefinitionBuilder<T extends FieldDefinition, B extends FieldDefinitionBuilder<T, B>> {
+public abstract class FieldDefinitionBuilder<T extends FieldDefinition, SPECIFIC_TYPE, B extends FieldDefinitionBuilder<T, SPECIFIC_TYPE, B>> {
     String name;
     FieldType type;
 
@@ -18,8 +18,8 @@ public abstract class FieldDefinitionBuilder<T extends FieldDefinition, B extend
         return self();
     }
 
-    public B addSpecificField(ArrayList<Object> value){
-        throw new IllegalAccessError(this.getClass() + " not implement method addSpecificField()");
+    public B addSpecificField(SPECIFIC_TYPE value){
+        throw new IllegalAccessError(this.getClass().getSimpleName() + " not implement method addSpecificField()");
     }
 
     abstract B self();
