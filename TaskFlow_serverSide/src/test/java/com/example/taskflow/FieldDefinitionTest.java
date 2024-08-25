@@ -4,6 +4,9 @@ import com.example.taskflow.DomainModel.UserInfo;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionBuilder;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.SimpleFieldDefinitionFactory;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.SingleSelectionDefinitionFactory;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssegneeDefinitionFactory;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
 
 import net.bytebuddy.utility.RandomString;
@@ -40,6 +43,7 @@ public class FieldDefinitionTest {
     MongoTemplate template;
 
     ArrayList<User> someUsers;
+    ArrayList<String> someSingleSeletions;
 
     @BeforeEach
     public void setupDatabase(){
@@ -58,6 +62,11 @@ public class FieldDefinitionTest {
         }
 
         this.someUsers = this.userDAO.findAll().stream().collect(Collectors.toCollection(ArrayList::new));
+
+        someSingleSeletions = new ArrayList<String>();
+        someSingleSeletions.add("Done");
+        someSingleSeletions.add("In progress");
+        someSingleSeletions.add("Waiting");
     }
 
     private void addRandomUserToDatabase(){
@@ -71,7 +80,9 @@ public class FieldDefinitionTest {
     @Test
     public void testInsertAndFindFieldDefinition() {
         
-        FieldDefinition fieldDefinition = FieldDefinitionBuilder.buildField(FieldType.DATE, "scadenza");
+        FieldDefinition fieldDefinition = new SimpleFieldDefinitionFactory()
+                .addCommonAttributes("scadenza", FieldType.DATE)
+                .build();
 
         fieldDefinition = fieldDefinitionDAO.save(fieldDefinition);
 
@@ -82,10 +93,23 @@ public class FieldDefinitionTest {
 
     @Test
     public void testAssigneeDefinition(){
-        AssigneeDefinition assigneeDefinition = (AssigneeDefinition)FieldDefinitionBuilder.buildField(FieldType.ASSIGNEE, "Partecipanti");
-        assigneeDefinition.addUsers(this.someUsers);
 
-        fieldDefinitionDAO.save(assigneeDefinition);
+        FieldDefinition fieldDefinition = new AssegneeDefinitionFactory()
+                .addCommonAttributes("reviewers", FieldType.ASSIGNEE)
+                .addSpecificField(this.someUsers)
+                .build();    
+
+        fieldDefinitionDAO.save(fieldDefinition);
+    }
+
+    public void singleSelectionDefinition(){
+
+        FieldDefinition fieldDefinition = new SingleSelectionDefinitionFactory()
+                .addCommonAttributes("reviewers", FieldType.ASSIGNEE)
+                .addSpecificField(someSingleSeletions)
+                .build();    
+
+        fieldDefinitionDAO.save(fieldDefinition);
     }
     
 }

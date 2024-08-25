@@ -5,7 +5,7 @@ import com.example.taskflow.DomainModel.User;
 public class AssegneeDefinitionFactory extends FieldDefinitionFactory<AssigneeDefinition, AssegneeDefinitionFactory> {
     private ArrayList<User>  possibleAssignees;
 
-    public AssegneeDefinitionFactory addSpecific(ArrayList<User> possibleAssignees) {
+    public AssegneeDefinitionFactory addSpecificField(ArrayList<User> possibleAssignees) {
         this.possibleAssignees = possibleAssignees;
         return this;
     }

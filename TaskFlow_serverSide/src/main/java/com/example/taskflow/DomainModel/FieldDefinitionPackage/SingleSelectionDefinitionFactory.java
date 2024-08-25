@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class SingleSelectionDefinitionFactory extends FieldDefinitionFactory<SingleSelectionDefinition, SingleSelectionDefinitionFactory> {
     private ArrayList<String> possibleSelections;
 
-    public SingleSelectionDefinitionFactory addSpecific(ArrayList<String> possibleSelections) {
+    public SingleSelectionDefinitionFactory addSpecificField(ArrayList<String> possibleSelections) {
         this.possibleSelections = possibleSelections;
         return this;
     }
