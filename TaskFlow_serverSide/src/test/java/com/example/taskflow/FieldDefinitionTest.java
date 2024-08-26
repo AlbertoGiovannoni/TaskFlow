@@ -39,8 +39,8 @@ public class FieldDefinitionTest {
     @Autowired
     MongoTemplate template;
 
-    ArrayList<User> someUsers;
-    ArrayList<String> someSingleSeletions;
+    ArrayList<Object> someUsers;
+    ArrayList<Object> someSingleSelections;
 
     @BeforeEach
     public void setupDatabase(){
@@ -60,10 +60,10 @@ public class FieldDefinitionTest {
 
         this.someUsers = this.userDAO.findAll().stream().collect(Collectors.toCollection(ArrayList::new));
 
-        someSingleSeletions = new ArrayList<String>();
-        someSingleSeletions.add("Done");
-        someSingleSeletions.add("In progress");
-        someSingleSeletions.add("Waiting");
+        someSingleSelections = new ArrayList<>();
+        someSingleSelections.add("Done");
+        someSingleSelections.add("In progress");
+        someSingleSelections.add("Waiting");
     }
 
     private void addRandomUserToDatabase(){
@@ -78,10 +78,24 @@ public class FieldDefinitionTest {
     public void testInsertAndFindAssigneeFieldDefinition() {
         FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.ASSIGNEE)
                                     .addCommonAttributes("Partecipanti")
-                                    .addSpecificField(this.someUsers)
+                                    .setSpecificField(this.someUsers)
                                     .build();
 
         FieldDefinition fieldDefinitionFromDB = this.fieldDefinitionDAO.save(fieldDefinition);
+
+        assertEquals(fieldDefinition, fieldDefinitionFromDB);
+    }
+
+    @Test
+    public void testInsertAndFindSingleSelectionFieldDefinition() {
+        FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.SINGLE_SELECTION)
+                                    .addCommonAttributes("Status")
+                                    .setSpecificField(this.someSingleSelections)
+                                    .build();
+
+        FieldDefinition fieldDefinitionFromDB = this.fieldDefinitionDAO.save(fieldDefinition);
+
+        assertEquals(fieldDefinition, fieldDefinitionFromDB);
     }
     
 }

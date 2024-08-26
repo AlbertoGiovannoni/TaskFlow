@@ -9,11 +9,24 @@ public class AssigneeDefinitionBuilder extends FieldDefinitionBuilder{
 
     AssigneeDefinitionBuilder(FieldType type) {
         super(type);
+        this.possibleAssignees = new ArrayList<>();
     }
 
     @Override
-    public AssigneeDefinitionBuilder addSpecificField(ArrayList<User> possibleAssignees) {
-        this.possibleAssignees = possibleAssignees;
+    public AssigneeDefinitionBuilder setSpecificField(ArrayList<Object> possibleAssignees) {
+        if (this.possibleAssignees != null){
+            if (!this.possibleAssignees.isEmpty()){
+                this.possibleAssignees.clear();
+            }
+        }
+        else{
+            throw new IllegalArgumentException(this.getClass().getSimpleName() + " possibleAssignees is null");
+        }
+
+        for (Object obj : possibleAssignees){
+            this.possibleAssignees.add((User)obj);
+        }
+
         return this.self();
     }
 
