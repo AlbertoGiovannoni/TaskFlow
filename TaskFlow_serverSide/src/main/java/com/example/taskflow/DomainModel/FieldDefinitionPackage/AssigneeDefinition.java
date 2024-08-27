@@ -43,6 +43,7 @@ public class AssigneeDefinition extends FieldDefinition {
 
     //FIXME: se si cambia la reference ad Organization questi devono essere rimossi
 
+    @Override
     public void addUser(User user){
         if (!this.possibleAssigneeUsers.contains(user)){
             this.possibleAssigneeUsers.add(user);

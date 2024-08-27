@@ -99,10 +99,10 @@ public class FieldDefinitionTest {
     
     @Test
     public void updateFieldDefinitionWithObject(){
-        AssigneeDefinition fieldDefinition = (AssigneeDefinition)this.pushGetRandomFieldDefinitionToDatabase(FieldType.ASSIGNEE);
+        FieldDefinition fieldDefinition = this.pushGetRandomFieldDefinitionToDatabase(FieldType.ASSIGNEE);
 
         User newUserForAssignee = this.addGetRandomUserToDatabase();
-
+        
         fieldDefinition.addUser(newUserForAssignee);
 
         FieldDefinition fieldDefinitionPushed = this.fieldDefinitionDAO.save(fieldDefinition);

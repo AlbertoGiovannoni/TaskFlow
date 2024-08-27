@@ -4,7 +4,10 @@ import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.UuidInterface;
+
+import java.lang.UnsupportedOperationException;
 
 @Document
 public abstract class FieldDefinition implements UuidInterface{
@@ -37,6 +40,10 @@ public abstract class FieldDefinition implements UuidInterface{
         }
 
         return value;
+    }
+
+    public void addUser(User user){
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + "not implements method" + this.getClass().getEnclosingMethod().toString());
     }
 
     // getter e setter
