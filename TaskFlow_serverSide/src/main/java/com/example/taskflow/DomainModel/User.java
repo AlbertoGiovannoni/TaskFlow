@@ -31,7 +31,9 @@ public class User {
         boolean value = false;
 
         if (obj != null && obj instanceof User){
-            value = (this.uuid == ((User)obj).getUuid());  
+            if (obj instanceof User){
+                value = (this.uuid.equals(((User)obj).getUuid()));  
+            }
         }
 
         return value;
