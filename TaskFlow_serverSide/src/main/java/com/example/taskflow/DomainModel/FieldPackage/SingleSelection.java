@@ -17,6 +17,7 @@ public class SingleSelection extends Field{
         super(fieldDefinition);
 
         this.value = value;
+        this.uuid = UUID.randomUUID();
     }
 
     public ArrayList<String> getValue() {

@@ -12,8 +12,9 @@ public class Assignee extends Field{
 
     public Assignee(FieldDefinition fieldDefinition, ArrayList<User> value) {
         super(fieldDefinition);
-        
+
         this.value = value;
+        this.uuid = UUID.randomUUID();
     }
 
     public ArrayList<User> getValue() {
