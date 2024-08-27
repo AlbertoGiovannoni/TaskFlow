@@ -81,4 +81,17 @@ public class Project {
     public void setActivities(ArrayList<Activity> activities) {
         this.activities = activities;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean value = false;
+
+        if (obj != null && obj instanceof Project){
+            if (obj instanceof Project){
+                value = (this.uuid.equals(((Project)obj).getUuid()));  
+            }
+        }
+
+        return value;
+    }
 }

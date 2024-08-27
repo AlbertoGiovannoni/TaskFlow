@@ -48,4 +48,17 @@ public class UserInfo {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean value = false;
+
+        if (obj != null && obj instanceof UserInfo){
+            if (obj instanceof UserInfo){
+                value = (this.uuid.equals(((UserInfo)obj).getUuid()));  
+            }
+        }
+
+        return value;
+    }
 }

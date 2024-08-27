@@ -94,4 +94,17 @@ public class Organization {
     public void setMembers(ArrayList<User> members) {
         this.members = members;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean value = false;
+
+        if (obj != null && obj instanceof Organization){
+            if (obj instanceof Organization){
+                value = (this.uuid.equals(((Organization)obj).getUuid()));  
+            }
+        }
+
+        return value;
+    }
 }
