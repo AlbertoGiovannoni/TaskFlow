@@ -1,9 +1,10 @@
 package com.example.taskflow.DomainModel.FieldPackage;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import com.example.taskflow.DomainModel.UuidInterface;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
-public abstract class Field {
+public abstract class Field implements UuidInterface{
     @DBRef
     FieldDefinition fieldDefinition;
 

@@ -1,11 +1,33 @@
 package com.example.taskflow.DomainModel.FieldPackage;
 
+import java.util.UUID;
+
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
-public class Text extends Field<String>{
+public class Text extends Field{
 
-    public Text(String value, FieldDefinition fieldDefinition) {
-        super(value, fieldDefinition);
-        //TODO Auto-generated constructor stub
-    } 
+    private String value;
+    private UUID uuid;
+
+    // costruttore di default
+    public Text(){
+    }
+
+    public Text(FieldDefinition fieldDefinition, String value) {
+        super(fieldDefinition);
+
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
 }
