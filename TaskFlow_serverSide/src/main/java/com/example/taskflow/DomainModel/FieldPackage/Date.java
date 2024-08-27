@@ -4,53 +4,48 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
-public class Date extends Field<LocalDateTime>{
+public class Date extends Field{
     
     @DBRef
     private Notification notification;
-    private Boolean enabledNotification;     // TODO usare un booleano o il fatto che c'e il campo notification e` sufficiente?
+    // TODO usare un booleano o il fatto che c'e il campo notification e` sufficiente?
+    private Boolean enabledNotification = false;
+    private LocalDateTime dateTime;
     
     // costruttore di default
     public Date() {
     }
 
-    public Date(LocalDateTime value, FieldDefinition fieldDefinition) {
-        super(value, fieldDefinition);
+    public Date(FieldDefinition fieldDefinition, LocalDateTime dateTime) {
+        super(fieldDefinition);
+
+        this.dateTime = dateTime;
     }
 
-    public Date(LocalDateTime value, FieldDefinition fieldDefinition, Notification notification, Boolean enabledNotification) {
-        super(value, fieldDefinition);
+    public Date(FieldDefinition fieldDefinition, LocalDateTime value, Notification notification) {
+        super(fieldDefinition);
 
-        this.enabledNotification = enabledNotification;
-        if (enabledNotification) {
-            this.notification = notification;
-        }
-        else {
-            this.notification =  null;
-        }
+        this.notification = notification;
+        this.enabledNotification = true;
     }
 
     public Notification getNotification() {
-        return notification;
+        return this.notification;
     }
 
     public void setNotification(Notification notification) {
-        if (this.enabledNotification) {
-            this.notification = notification;
-        } else {
-            throw new IllegalStateException("Cannot set a notification when notifications are disabled.");
-        }
+        this.notification = notification;
     }
 
     public Boolean getEnabledNotification() {
         return enabledNotification;
     }
 
-    public void setEnabledNotification(Boolean enabledNotification) {
-        this.enabledNotification = enabledNotification;
-        if (!enabledNotification) {
+    public void removeNotification(){
+        if (this.notification != null){
             this.notification = null;
-        }    
+        }
+        this.enabledNotification = false;
     }
     
 }
