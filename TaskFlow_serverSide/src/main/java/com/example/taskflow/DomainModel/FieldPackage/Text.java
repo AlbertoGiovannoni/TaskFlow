@@ -17,6 +17,7 @@ public class Text extends Field{
         super(fieldDefinition);
 
         this.value = value;
+        this.uuid = UUID.randomUUID();
     }
 
     public String getValue() {

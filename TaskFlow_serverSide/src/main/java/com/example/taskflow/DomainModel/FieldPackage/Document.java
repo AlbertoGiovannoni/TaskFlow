@@ -19,6 +19,7 @@ public class Document extends Field{ // TODO non so se il tipo ObjectId va bene 
         this.value = value;
         this.name = name;
         this.fileType = fileType;
+        this.uuid = UUID.randomUUID();
     }
 
     public String getName() {

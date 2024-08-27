@@ -21,6 +21,7 @@ public class Date extends Field{
         super(fieldDefinition);
 
         this.value = value;
+        this.uuid = UUID.randomUUID();
     }
 
     public Date(FieldDefinition fieldDefinition, LocalDateTime value, Notification notification) {

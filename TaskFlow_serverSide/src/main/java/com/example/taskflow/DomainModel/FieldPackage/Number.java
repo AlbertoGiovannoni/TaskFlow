@@ -15,6 +15,7 @@ public class Number extends Field{
         super(fieldDefinition);
 
         this.value = value;
+        this.uuid = UUID.randomUUID();
     }
 
     public Float getValue() {

@@ -24,6 +24,7 @@ public class Notification implements UuidInterface{
     public Notification(ArrayList<User> receivers, String message) {
         this.receivers = receivers;
         this.message = message;
+        this.uuid = UUID.randomUUID();
     }
 
     // getter e setter
