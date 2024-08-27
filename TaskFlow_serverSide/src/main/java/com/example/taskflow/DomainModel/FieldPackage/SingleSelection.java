@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
-public class SingleSelection extends Field<ArrayList<String>>{
+public class SingleSelection extends Field{
 
     public SingleSelection(ArrayList<String> value, FieldDefinition fieldDefinition) {
         super(value, fieldDefinition);
