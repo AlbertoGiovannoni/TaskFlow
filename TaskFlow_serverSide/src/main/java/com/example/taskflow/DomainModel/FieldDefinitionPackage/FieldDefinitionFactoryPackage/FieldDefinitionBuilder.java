@@ -10,11 +10,9 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 public abstract class FieldDefinitionBuilder {
     String name;
     FieldType type;
-    UUID uuid;
 
     FieldDefinitionBuilder(FieldType type){
         this.type = type;
-        this.uuid = UUID.randomUUID();
     }
 
     public FieldDefinitionBuilder addCommonAttributes(String name) {
