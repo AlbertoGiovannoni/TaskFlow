@@ -19,8 +19,12 @@ public class Notification {
     public Notification(){
     }
 
-    public Notification(ArrayList<String> emails,ArrayList<User> receivers, String message) {
-        this.emails = emails;
+    public Notification(ArrayList<User> receivers, String message) {
+        ArrayList<String> tmpEmails = new ArrayList<String>();
+        for(User r : receivers){    
+            tmpEmails.add(r.getUserInfo().getEmail());
+        }
+        this.emails = tmpEmails;
         this.receivers = receivers;
         this.message = message;
     }
