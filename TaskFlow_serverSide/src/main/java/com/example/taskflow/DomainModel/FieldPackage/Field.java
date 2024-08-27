@@ -1,6 +1,7 @@
 package com.example.taskflow.DomainModel.FieldPackage;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
 public abstract class Field {
     @DBRef
@@ -16,5 +17,9 @@ public abstract class Field {
 
     public FieldDefinition getFieldDefinition() {
         return fieldDefinition;
+    }
+
+    public FieldType getType(){
+        return this.fieldDefinition.getType();
     }
 }

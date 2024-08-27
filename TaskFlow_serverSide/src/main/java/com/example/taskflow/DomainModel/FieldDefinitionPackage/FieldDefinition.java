@@ -51,5 +51,9 @@ public abstract class FieldDefinition implements UuidInterface{
     public UUID getUuid() {
         return uuid;
     }
+
+    public FieldType getType(){
+        return this.type;
+    }
 }
 
