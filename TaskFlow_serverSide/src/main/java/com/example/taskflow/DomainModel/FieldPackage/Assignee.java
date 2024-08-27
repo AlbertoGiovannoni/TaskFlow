@@ -5,7 +5,7 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 public class Assignee extends Field{
 
-    ArrayList<User> assignees;
+    private ArrayList<User> assignees;
 
     public Assignee(FieldDefinition fieldDefinition, ArrayList<User> assignees) {
         super(fieldDefinition);

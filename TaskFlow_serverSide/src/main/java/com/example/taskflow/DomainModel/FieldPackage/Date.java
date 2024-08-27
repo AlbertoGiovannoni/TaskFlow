@@ -8,7 +8,6 @@ public class Date extends Field{
     
     @DBRef
     private Notification notification;
-    // TODO usare un booleano o il fatto che c'e il campo notification e` sufficiente?
     private Boolean enabledNotification = false;
     private LocalDateTime dateTime;
     
