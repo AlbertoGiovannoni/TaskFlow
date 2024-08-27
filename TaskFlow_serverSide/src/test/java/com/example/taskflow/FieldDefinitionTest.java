@@ -39,8 +39,8 @@ public class FieldDefinitionTest {
     @Autowired
     MongoTemplate template;
 
-    ArrayList<Object> someUsers;
-    ArrayList<Object> someSingleSelections;
+    ArrayList<User> someUsers;
+    ArrayList<String> someSingleSelections;
 
     @BeforeEach
     public void setupDatabase(){
@@ -78,10 +78,12 @@ public class FieldDefinitionTest {
     public void testInsertAndFindAssigneeFieldDefinition() {
         FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.ASSIGNEE)
                                     .addCommonAttributes("Partecipanti")
-                                    .setSpecificField(this.someUsers)
+                                    .setUsers(this.someUsers)
                                     .build();
 
-        FieldDefinition fieldDefinitionFromDB = this.fieldDefinitionDAO.save(fieldDefinition);
+        this.fieldDefinitionDAO.save(fieldDefinition);
+
+        FieldDefinition fieldDefinitionFromDB = fieldDefinitionDAO.findById(fieldDefinition.getId()).orElse(null);
 
         assertEquals(fieldDefinition, fieldDefinitionFromDB);
     }
@@ -90,7 +92,7 @@ public class FieldDefinitionTest {
     public void testInsertAndFindSingleSelectionFieldDefinition() {
         FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.SINGLE_SELECTION)
                                     .addCommonAttributes("Status")
-                                    .setSpecificField(this.someSingleSelections)
+                                    .setString(this.someSingleSelections)
                                     .build();
 
         FieldDefinition fieldDefinitionFromDB = this.fieldDefinitionDAO.save(fieldDefinition);

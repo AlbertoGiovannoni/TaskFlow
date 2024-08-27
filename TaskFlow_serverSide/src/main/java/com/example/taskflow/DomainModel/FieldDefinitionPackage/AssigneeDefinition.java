@@ -24,6 +24,8 @@ public class AssigneeDefinition extends FieldDefinition {
     @DBRef
     private ArrayList<User> possibleAssigneeUsers;
 
+    public AssigneeDefinition() {}
+
     public AssigneeDefinition(String name, FieldType type) {
         super(name, type);
         this.possibleAssigneeUsers = new ArrayList<>();

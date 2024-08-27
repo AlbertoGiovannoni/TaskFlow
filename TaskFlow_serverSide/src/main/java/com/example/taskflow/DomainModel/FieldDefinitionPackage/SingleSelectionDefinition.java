@@ -5,6 +5,8 @@ public class SingleSelectionDefinition extends FieldDefinition {
 
     private ArrayList<String> possibleSelections;        //TODO implementa le possibile selezioni
 
+    public SingleSelectionDefinition() {}
+
     public SingleSelectionDefinition(String nome, FieldType type, ArrayList<String> possibleSelections) {
         super(nome, type);
         this.possibleSelections = possibleSelections;

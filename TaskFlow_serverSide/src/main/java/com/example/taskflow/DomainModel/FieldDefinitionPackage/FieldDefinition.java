@@ -12,6 +12,9 @@ public abstract class FieldDefinition {
     String name;
     FieldType type;
     UUID uuid;
+
+    // Costruttore di default
+    public FieldDefinition() {}
     
     public FieldDefinition(String name, FieldType type) {
         this.type = type;
@@ -27,7 +30,7 @@ public abstract class FieldDefinition {
 
         if (obj != null){
             if (obj instanceof FieldDefinition){
-                value = ((FieldDefinition)obj).getUuid() == this.uuid;
+                value = this.uuid.equals(((FieldDefinition)obj).getUuid());
             }
         }
 
