@@ -9,6 +9,10 @@ public abstract class Field<T> {
     @DBRef
     FieldDefinition fieldDefinition;
 
+    // costruttore di default
+    public Field() {
+    }
+
     public Field(T value, FieldDefinition fieldDefinition) {
         this.fieldDefinition = fieldDefinition;
         this.value = value;

@@ -9,7 +9,6 @@ public class Notification {
     
     @Id
     private String id;
-    private ArrayList<String> emails;
     private String message;
 
     @DBRef
@@ -20,11 +19,6 @@ public class Notification {
     }
 
     public Notification(ArrayList<User> receivers, String message) {
-        ArrayList<String> tmpEmails = new ArrayList<String>();
-        for(User r : receivers){    
-            tmpEmails.add(r.getUserInfo().getEmail());
-        }
-        this.emails = tmpEmails;
         this.receivers = receivers;
         this.message = message;
     }
@@ -33,14 +27,6 @@ public class Notification {
 
     public String getId() {
         return id;
-    }
-
-    public ArrayList<String> getEmails() {
-        return emails;
-    }
-
-    public void setEmails(ArrayList<String> emails) {
-        this.emails = emails;
     }
 
     public String getMessage() {
