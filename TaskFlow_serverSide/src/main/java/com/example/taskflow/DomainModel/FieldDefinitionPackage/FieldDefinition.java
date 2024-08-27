@@ -8,6 +8,7 @@ import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.UuidInterface;
 
 import java.lang.UnsupportedOperationException;
+import java.util.ArrayList;
 
 @Document
 public abstract class FieldDefinition implements UuidInterface{
@@ -27,8 +28,6 @@ public abstract class FieldDefinition implements UuidInterface{
         this.uuid = UUID.randomUUID();
     }
     
-    public abstract void validateValue();
-    
     @Override
     public boolean equals(Object obj) {
         boolean value = false;
@@ -42,9 +41,13 @@ public abstract class FieldDefinition implements UuidInterface{
         return value;
     }
 
-    public void addUser(User user){
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + "not implements method" + this.getClass().getEnclosingMethod().toString());
-    }
+    public abstract void addSingleEntry(Object obj);
+
+    public abstract void addMultipleEntry(ArrayList<Object> obj);
+
+    public abstract void removeEntry(Object obj);
+
+    public abstract void removeMultipleEntry(ArrayList<Object> objs);
 
     // getter e setter
     public String getName() {

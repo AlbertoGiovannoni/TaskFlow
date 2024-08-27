@@ -35,23 +35,39 @@ public class AssigneeDefinition extends FieldDefinition {
         super(nome, type);
         this.possibleAssigneeUsers = users;
     }
-
+    
     @Override
-    public void validateValue() {
-        //TODO
-    }
-
-    //FIXME: se si cambia la reference ad Organization questi devono essere rimossi
-
-    @Override
-    public void addUser(User user){
-        if (!this.possibleAssigneeUsers.contains(user)){
-            this.possibleAssigneeUsers.add(user);
+    public void addSingleEntry(Object obj){
+        if (obj != null){
+            if (obj instanceof User){
+                if (!this.possibleAssigneeUsers.contains((User)obj)){
+                    this.possibleAssigneeUsers.add((User)obj);
+                }
+            }
         }
     }
 
-    public void addUsers(ArrayList<User> users){
-        this.mergeWithoutRepetition(this.possibleAssigneeUsers, users);
+    @Override
+    public void addMultipleEntry(ArrayList<Object> objs){
+        this.mergeWithoutRepetition(this.possibleAssigneeUsers, this.castToUser(objs));
+    }
+
+    @Override
+    public void removeEntry(Object obj) {
+        if (obj != null){
+            if (obj instanceof User){
+                if (!this.possibleAssigneeUsers.isEmpty()){
+                    this.possibleAssigneeUsers.add((User)obj);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void removeMultipleEntry(ArrayList<Object> objs) {
+        for (Object obj : objs){
+            this.removeEntry(obj);
+        }
     }
 
     private void mergeWithoutRepetition(ArrayList<User> startingArrayList, ArrayList<User> arrayListToMerge){
@@ -60,5 +76,19 @@ public class AssigneeDefinition extends FieldDefinition {
                 this.possibleAssigneeUsers.add(user);
             }
         }
+    }
+
+    private ArrayList<User> castToUser(ArrayList<Object> objs){
+        ArrayList<User> users = new ArrayList<>();
+
+        for (Object obj : objs){
+            if (obj != null){
+                if (obj instanceof User){
+                    users.add((User)obj);
+                }
+            }
+        }
+
+        return users;
     }
 }
