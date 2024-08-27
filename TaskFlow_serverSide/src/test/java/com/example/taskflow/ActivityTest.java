@@ -11,6 +11,8 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFa
 import com.example.taskflow.DomainModel.FieldPackage.Date;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.Text;
+import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.DateBuilder;
+import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -55,6 +57,7 @@ public class ActivityTest {
 
     ArrayList<User> someUsers;
     ArrayList<String> someSingleSeletions;
+    LocalDateTime aTime;
 
     @BeforeEach
     public void setupDatabase(){
@@ -78,6 +81,8 @@ public class ActivityTest {
         someSingleSeletions.add("Done");
         someSingleSeletions.add("In progress");
         someSingleSeletions.add("Waiting");
+
+        aTime = LocalDateTime.now();
     }
 
     private void addRandomUserToDatabase(){
@@ -98,15 +103,20 @@ public class ActivityTest {
                                         .build();
 
         FieldDefinition fieldDefinition2 = FieldDefinitionFactory.getBuilder(FieldType.TEXT)
-        .addCommonAttributes("descrizione")
-        .build();
+                                        .addCommonAttributes("descrizione")
+                                        .build();
 
         Notification notification = new Notification(someUsers, "notifica per meeting");
 
         notificationDAO.save(notification);
 
-        Field<LocalDateTime> date = new Date(LocalDateTime.now(), fieldDefinition, notification,true);
-        Field<String> text = new Text("CIAOOOOOO", fieldDefinition2);
+        Field date = FieldFactory.getBuilder(FieldType.DATE)
+                                    .setDate(aTime)
+                                    .build();
+                                
+        Field text = FieldFactory.getBuilder(FieldType.TEXT)
+                                    .setText("diocan")
+                                    .build();
         
         fieldDefinitionDAO.save(fieldDefinition);
         fieldDefinitionDAO.save(fieldDefinition2);
