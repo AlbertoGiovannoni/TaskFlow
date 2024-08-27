@@ -27,7 +27,7 @@ public class SingleSelectionBuilder extends FieldBuilder{
 
     @Override
     public SingleSelection build() {
-        return new SingleSelection( selections, this.fieldDefinition);
+        return new SingleSelection(this.fieldDefinition, selections);
     }
 }
 

@@ -1,12 +1,15 @@
 package com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage;
-import java.time.LocalDateTime;
-import com.example.taskflow.DomainModel.FieldPackage.Date;
+
+import org.bson.types.ObjectId;
+
+import com.example.taskflow.DomainModel.FieldPackage.Document;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
-import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
 public class DocumentBuilder extends FieldBuilder{
     private String name;
+    private String fileType;
+    private ObjectId value;
 
     DocumentBuilder(FieldType type) {
         super(type);
@@ -18,7 +21,17 @@ public class DocumentBuilder extends FieldBuilder{
         return this.self();
     }
 
-    //TODO implementa altri metodi di set
+    @Override
+    public DocumentBuilder setDocumentFileType(String fileType){
+        this.fileType = fileType;
+        return this.self();
+    }
+
+    @Override
+    public DocumentBuilder setDocumentObjectId(ObjectId value){
+        this.value = value;
+        return this.self();
+    }
 
     @Override
     protected DocumentBuilder self() {
@@ -27,10 +40,16 @@ public class DocumentBuilder extends FieldBuilder{
 
     @Override
     public Field build() {
-        if (this.name == null){
+        if (this.name == null ){
             throw new IllegalAccessError("name is null");
         }
-        return new Document(this.fieldDefinition, name);
+        if (this.value == null ){
+            throw new IllegalAccessError("ObjectId is null");
+        }
+        if (this.fileType == null ){
+            throw new IllegalAccessError("fileType is null");
+        }
+        return new Document( this.value, this.fieldDefinition, this.name, this.fileType);
         
     }
 }

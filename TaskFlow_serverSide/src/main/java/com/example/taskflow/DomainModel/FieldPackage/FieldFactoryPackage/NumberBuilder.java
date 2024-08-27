@@ -1,19 +1,17 @@
 package com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage;
-import java.time.LocalDateTime;
-import com.example.taskflow.DomainModel.FieldPackage.Date;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
-import com.example.taskflow.DomainModel.Notification;
+import com.example.taskflow.DomainModel.FieldPackage.Number;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
 public class NumberBuilder extends FieldBuilder{
-    private float value;
+    private Float value;
 
     NumberBuilder(FieldType type) {
         super(type);
     }
 
     @Override
-    public NumberBuilder setNumber(float value){
+    public NumberBuilder setNumber(Float value){
         this.value = value;
         return this.self();
     }
@@ -28,7 +26,7 @@ public class NumberBuilder extends FieldBuilder{
         if (this.value == 0.0f){            //TODO da testare se funziona questa verifica
             throw new IllegalAccessError("value is null");
         }
-        return new Number(this.fieldDefinition, date);
+        return new Number(this.fieldDefinition, this.value);
         
     }
 }

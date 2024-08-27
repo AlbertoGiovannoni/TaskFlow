@@ -1,8 +1,6 @@
 package com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage;
-import java.time.LocalDateTime;
-import com.example.taskflow.DomainModel.FieldPackage.Date;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
-import com.example.taskflow.DomainModel.Notification;
+import com.example.taskflow.DomainModel.FieldPackage.Text;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
 public class TextBuilder extends FieldBuilder{

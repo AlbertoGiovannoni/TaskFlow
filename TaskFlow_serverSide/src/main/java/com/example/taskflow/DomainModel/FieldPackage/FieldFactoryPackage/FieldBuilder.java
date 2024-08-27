@@ -1,6 +1,9 @@
 package com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage;
 
 import java.util.ArrayList;
+
+import org.bson.types.ObjectId;
+
 import java.time.LocalDateTime;
 
 import com.example.taskflow.DomainModel.Notification;
@@ -38,7 +41,7 @@ public abstract class FieldBuilder {
         throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
     }
     
-    public FieldBuilder setNumber( float number){
+    public FieldBuilder setNumber( Float number){
         throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
     }
 
@@ -47,6 +50,14 @@ public abstract class FieldBuilder {
     }
 
     public FieldBuilder setDocumentName( String name){
+        throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
+    }
+
+    public FieldBuilder setDocumentFileType( String fileType){
+        throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
+    }
+
+    public FieldBuilder setDocumentObjectId( ObjectId value){
         throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
     }
 
