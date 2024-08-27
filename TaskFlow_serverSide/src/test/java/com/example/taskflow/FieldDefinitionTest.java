@@ -1,11 +1,14 @@
 package com.example.taskflow;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.UserInfo;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.AssigneeDefinitionBuilder;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionBuilder;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
+import com.example.taskflow.DomainModel.FieldPackage.Assignee;
+import com.mongodb.client.result.UpdateResult;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -13,6 +16,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.expression.spel.ast.Assign;
 import org.springframework.test.context.ActiveProfiles;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -55,23 +60,15 @@ public class FieldDefinitionTest {
         }
 
         for (int i = 0; i < 5; i++){
-            this.addRandomUserToDatabase();
+            this.addGetRandomUserToDatabase();
         }
 
         this.someUsers = this.userDAO.findAll().stream().collect(Collectors.toCollection(ArrayList::new));
 
-        someSingleSelections = new ArrayList<>();
-        someSingleSelections.add("Done");
-        someSingleSelections.add("In progress");
-        someSingleSelections.add("Waiting");
-    }
-
-    private void addRandomUserToDatabase(){
-        UserInfo info = new UserInfo(RandomString.make(10), RandomString.make(10));
-        this.userInfoDAO.save(info);
-
-        User user = new User(info, RandomString.make(10));
-        this.userDAO.save(user);
+        this.someSingleSelections = new ArrayList<>();
+        this.someSingleSelections.add("Done");
+        this.someSingleSelections.add("In progress");
+        this.someSingleSelections.add("Waiting");
     }
 
     @Test
@@ -100,4 +97,33 @@ public class FieldDefinitionTest {
         assertEquals(fieldDefinition, fieldDefinitionFromDB);
     }
     
+    @Test
+    public void updateFieldDefinitionWithObject(){
+        AssigneeDefinition fieldDefinition = (AssigneeDefinition)this.pushGetRandomFieldDefinitionToDatabase(FieldType.ASSIGNEE);
+
+        User newUserForAssignee = this.addGetRandomUserToDatabase();
+
+        fieldDefinition.addUser(newUserForAssignee);
+
+        FieldDefinition fieldDefinitionPushed = this.fieldDefinitionDAO.save(fieldDefinition);
+
+        assertEquals(fieldDefinition.getId(), fieldDefinitionPushed.getId());
+    }
+
+    private User addGetRandomUserToDatabase(){
+        UserInfo info = new UserInfo(RandomString.make(10), RandomString.make(10));
+        this.userInfoDAO.save(info);
+
+        User user = new User(info, RandomString.make(10));
+        return this.userDAO.save(user);
+    }
+
+    private FieldDefinition pushGetRandomFieldDefinitionToDatabase(FieldType type){
+        FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(type)
+                                    .addCommonAttributes(RandomString.make(10))
+                                    .setUsers(this.someUsers)
+                                    .build();
+
+        return this.fieldDefinitionDAO.save(fieldDefinition);
+    }
 }
