@@ -103,7 +103,7 @@ public class FieldDefinitionTest {
 
         User newUserForAssignee = this.addGetRandomUserToDatabase();
         
-        fieldDefinition.addUser(newUserForAssignee);
+        fieldDefinition.addSingleEntry(newUserForAssignee);
 
         FieldDefinition fieldDefinitionPushed = this.fieldDefinitionDAO.save(fieldDefinition);
 
