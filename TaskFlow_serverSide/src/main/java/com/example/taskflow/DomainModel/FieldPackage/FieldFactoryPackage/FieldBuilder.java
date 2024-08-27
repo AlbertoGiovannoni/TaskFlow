@@ -1,7 +1,9 @@
 package com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage;
 
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 
+import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
@@ -25,6 +27,26 @@ public abstract class FieldBuilder {
     }
 
     public FieldBuilder setSelection(ArrayList<String> values){
+        throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
+    }
+
+    public FieldBuilder setDate( LocalDateTime date){
+        throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
+    }
+
+    public FieldBuilder setNotification( Notification notification){
+        throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
+    }
+    
+    public FieldBuilder setNumber( float number){
+        throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
+    }
+
+    public FieldBuilder setText( String text){
+        throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
+    }
+
+    public FieldBuilder setDocumentName( String name){
         throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
     }
 
