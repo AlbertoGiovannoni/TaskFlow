@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 @Document
-public class Organization {
+public class Organization implements UuidInterface{
 
     @Id
     private String id;
@@ -17,12 +17,12 @@ public class Organization {
 
     @DBRef
     private ArrayList<User> owners;
+    @DBRef
+    private ArrayList<User> members;
 
     @DBRef
     private ArrayList<Project> projects;
 
-    @DBRef
-    private ArrayList<User> members;
 
     // costruttore di default
     public Organization() {
@@ -41,22 +41,22 @@ public class Organization {
         members.add(user);
     }
 
-    public boolean removeMember(User user) { // TODO aggiungere UUID e fare equals su quello prima di fare remove
+    public boolean removeMember(User user) {
         return members.remove(user);
     }
 
     // getter e setter
 
     public String getId() {
-        return id;
+        return this.id;
     }
 
     public UUID getUuid() {
-        return uuid;
+        return this.uuid;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -64,7 +64,7 @@ public class Organization {
     }
 
     public LocalDateTime getCreationDate() {
-        return creationDate;
+        return this.creationDate;
     }
 
     public void setCreationDate(LocalDateTime creationDate) {
@@ -72,7 +72,7 @@ public class Organization {
     }
 
     public ArrayList<User> getOwners() {
-        return owners;
+        return this.owners;
     }
 
     public void setOwners(ArrayList<User> owners) {
@@ -80,7 +80,7 @@ public class Organization {
     }
 
     public ArrayList<Project> getProjects() {
-        return projects;
+        return this.projects;
     }
 
     public void setProjects(ArrayList<Project> projects) {
@@ -88,7 +88,7 @@ public class Organization {
     }
 
     public ArrayList<User> getMembers() {
-        return members;
+        return this.members;
     }
 
     public void setMembers(ArrayList<User> members) {

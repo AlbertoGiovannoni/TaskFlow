@@ -8,7 +8,7 @@ import java.util.UUID;
 
 
 @Document
-public class Project {
+public class Project implements UuidInterface{
     
     @Id
     private String id;

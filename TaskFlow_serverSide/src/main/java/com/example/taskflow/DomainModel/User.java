@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 @Document
-public class User {
+public class User implements UuidInterface{
     
     @Id
     private String id;

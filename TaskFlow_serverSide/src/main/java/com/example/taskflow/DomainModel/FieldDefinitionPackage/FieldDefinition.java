@@ -4,8 +4,10 @@ import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.example.taskflow.DomainModel.UuidInterface;
+
 @Document
-public abstract class FieldDefinition {
+public abstract class FieldDefinition implements UuidInterface{
 
     @Id
     String id;

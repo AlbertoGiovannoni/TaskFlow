@@ -3,9 +3,8 @@ import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-//TODO aggiungi questa classe nel class diagram
 @Document
-public class UserInfo {
+public class UserInfo implements UuidInterface{
     
     @Id
     private String id;

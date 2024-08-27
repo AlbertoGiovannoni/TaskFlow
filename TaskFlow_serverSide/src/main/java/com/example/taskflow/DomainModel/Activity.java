@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 
 @Document
-public class Activity {
+public class Activity implements UuidInterface{
 
     @Id
     private String id;
@@ -58,4 +58,16 @@ public class Activity {
         this.fields = fields;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        boolean value = false;
+
+        if (obj != null && obj instanceof Activity){
+            if (obj instanceof Activity){
+                value = (this.uuid.equals(((Activity)obj).getUuid()));  
+            }
+        }
+
+        return value;
+    }
 }
