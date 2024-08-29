@@ -45,22 +45,4 @@ public abstract class Field implements UuidInterface{
     public abstract void setValue(Object value);
 
     public abstract void setValues(ArrayList<?> values);
-
-    public Notification getNotification() {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
-    }
-
-    public void setNotification(Notification notification) {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
-    }
-
-    public void removeNotification(){
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
-    }
 }

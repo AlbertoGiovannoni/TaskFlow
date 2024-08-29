@@ -30,17 +30,16 @@ public class Date extends Field{
         this.notification = notification;
     }
 
-    @Override
     public Notification getNotification() {
         return this.notification;
     }
 
-    @Override
     public void setNotification(Notification notification) {
-        this.notification = notification;
+        if (notification != null){
+            this.notification = notification;
+        }
     }
 
-    @Override
     public void removeNotification(){
         if (this.notification != null){
             this.notification = null;
@@ -61,10 +60,11 @@ public class Date extends Field{
     public void removeValue(Object value) {
         this.value = null;
     }
-    
+
     @Override
     public void reset() {
         this.value = null;
+        this.notification = null;
     }
 
     @Override
