@@ -2,6 +2,7 @@ package com.example.taskflow.DomainModel.FieldPackage;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 public class SingleSelection extends Field{
@@ -78,8 +79,34 @@ public class SingleSelection extends Field{
 
     @Override
     public void setValues(ArrayList<?> values) {
-        this.reset();
-        this.addValues(values);
+        boolean valuesAreUsers = this.checkArrayListValidity();
+        
+        if (valuesAreUsers){
+            this.reset();
+            for (Object value : values){
+                if (value != null){
+                    if (value instanceof String){
+                        this.values.add((String)value);
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean checkArrayListValidity(){
+        boolean valuesAreStrings = false;
+        
+        if (values != null){
+            for (Object value : values){
+                if (value != null){
+                    if (value instanceof String){
+                        valuesAreStrings = true;
+                    }
+                }
+            }
+        }
+
+        return valuesAreStrings;
     }
 
     @Override
