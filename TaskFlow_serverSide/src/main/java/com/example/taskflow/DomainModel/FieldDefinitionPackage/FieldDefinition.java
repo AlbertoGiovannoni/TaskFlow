@@ -4,10 +4,8 @@ import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.UuidInterface;
 
-import java.lang.UnsupportedOperationException;
 import java.util.ArrayList;
 
 @Document
@@ -27,6 +25,14 @@ public abstract class FieldDefinition implements UuidInterface{
         this.name = name;
         this.uuid = UUID.randomUUID();
     }
+
+    public abstract void addSingleEntry(Object obj);
+
+    public abstract void addMultipleEntry(ArrayList<?> obj);
+
+    public abstract void removeEntry(Object obj);
+
+    public abstract void removeMultipleEntry(ArrayList<?> objs);
     
     @Override
     public boolean equals(Object obj) {
@@ -40,14 +46,6 @@ public abstract class FieldDefinition implements UuidInterface{
 
         return value;
     }
-
-    public abstract void addSingleEntry(Object obj);
-
-    public abstract void addMultipleEntry(ArrayList<Object> obj);
-
-    public abstract void removeEntry(Object obj);
-
-    public abstract void removeMultipleEntry(ArrayList<Object> objs);
 
     // getter e setter
     public String getName() {

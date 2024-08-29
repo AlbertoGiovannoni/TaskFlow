@@ -25,7 +25,7 @@ public class SingleSelectionDefinition extends FieldDefinition {
     }
 
     @Override
-    public void addMultipleEntry(ArrayList<Object> objs){
+    public void addMultipleEntry(ArrayList<?> objs){
         for (Object obj : objs){
             this.addSingleEntry(obj);
         }

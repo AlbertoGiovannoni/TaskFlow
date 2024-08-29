@@ -17,7 +17,7 @@ public class SimpleFieldDefinition extends FieldDefinition {
     }
 
     @Override
-    public void addMultipleEntry(ArrayList<Object> obj) {
+    public void addMultipleEntry(ArrayList<?> obj) {
         throw new UnsupportedOperationException(this.getClass().getSimpleName() + " doesn't implement method " + this.getClass().getEnclosingMethod().toString());
     }
 
@@ -27,7 +27,7 @@ public class SimpleFieldDefinition extends FieldDefinition {
     }
 
     @Override
-    public void removeMultipleEntry(ArrayList<Object> objs) {
+    public void removeMultipleEntry(ArrayList<?> objs) {
         throw new UnsupportedOperationException(this.getClass().getSimpleName() + " doesn't implement method " + this.getClass().getEnclosingMethod().toString());
     }
 }

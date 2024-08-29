@@ -48,7 +48,7 @@ public class AssigneeDefinition extends FieldDefinition {
     }
 
     @Override
-    public void addMultipleEntry(ArrayList<Object> objs){
+    public void addMultipleEntry(ArrayList<?> objs){
         this.mergeWithoutRepetition(this.possibleAssigneeUsers, this.castToUser(objs));
     }
 
@@ -64,7 +64,7 @@ public class AssigneeDefinition extends FieldDefinition {
     }
 
     @Override
-    public void removeMultipleEntry(ArrayList<Object> objs) {
+    public void removeMultipleEntry(ArrayList<?> objs) {
         for (Object obj : objs){
             this.removeEntry(obj);
         }
@@ -78,7 +78,7 @@ public class AssigneeDefinition extends FieldDefinition {
         }
     }
 
-    private ArrayList<User> castToUser(ArrayList<Object> objs){
+    private ArrayList<User> castToUser(ArrayList<?> objs){
         ArrayList<User> users = new ArrayList<>();
 
         for (Object obj : objs){
