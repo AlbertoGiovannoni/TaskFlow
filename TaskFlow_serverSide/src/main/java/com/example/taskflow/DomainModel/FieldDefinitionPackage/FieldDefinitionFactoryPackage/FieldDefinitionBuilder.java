@@ -15,23 +15,17 @@ public abstract class FieldDefinitionBuilder {
         this.type = type;
     }
 
-    public FieldDefinitionBuilder addCommonAttributes(String name) {
+    public FieldDefinitionBuilder setName(String name) {
         this.name = name;
-        return self();
+        return this;
     }
 
-    public FieldDefinitionBuilder setUsers(ArrayList<User> values){
-        throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
-    }
+    public abstract FieldDefinitionBuilder addParameters(ArrayList<?> values);
 
-    public FieldDefinitionBuilder setString(ArrayList<String> values){
-        throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
-    }
+    public abstract FieldDefinitionBuilder addParameter(Object value);
 
-    //TODO: fare altri metodi per aggiunta di array e per set di un solo valore;
-
-    abstract FieldDefinitionBuilder self();
-
+    public abstract void reset();
+    
     public abstract FieldDefinition build();
 }
 

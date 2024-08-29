@@ -14,27 +14,35 @@ public class SingleSelectionDefinitionBuilder extends FieldDefinitionBuilder{
         this.possibleSelections = new ArrayList<>();
     }
 
-    
-    @Override
-    public SingleSelectionDefinitionBuilder setString(ArrayList<String> values){
-        this.possibleSelections = values;
-        return this.self();
-    }
-
-    @Override
-    protected SingleSelectionDefinitionBuilder self() {
-        return this;
-    }
-
     @Override
     public SingleSelectionDefinition build() {
         return new SingleSelectionDefinition(this.name, this.type, possibleSelections);
     }
 
-    private void checkMyPossibleSelections(){
-        if (this.possibleSelections == null){
-            throw new IllegalArgumentException(this.getClass().getSimpleName() + " possibleSelections is null");
+
+    @Override
+    public FieldDefinitionBuilder addParameters(ArrayList<?> values) {
+        for (Object value : values){
+            this.addParameter(value);
         }
+        return this;
+    }
+
+
+    @Override
+    public FieldDefinitionBuilder addParameter(Object value) {
+        if (value != null){
+            if (value instanceof String){
+                this.possibleSelections.add((String)value);
+            }
+        }
+        return this;
+    }
+
+
+    @Override
+    public void reset() {
+        this.possibleSelections.clear();
     }
 }
 

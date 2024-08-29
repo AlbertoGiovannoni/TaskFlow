@@ -1,14 +1,9 @@
 package com.example.taskflow;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.UserInfo;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.AssigneeDefinitionBuilder;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionBuilder;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
-import com.example.taskflow.DomainModel.FieldPackage.Assignee;
-import com.mongodb.client.result.UpdateResult;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -16,8 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.expression.spel.ast.Assign;
 import org.springframework.test.context.ActiveProfiles;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -74,8 +67,8 @@ public class FieldDefinitionTest {
     @Test
     public void testInsertAndFindAssigneeFieldDefinition() {
         FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.ASSIGNEE)
-                                    .addCommonAttributes("Partecipanti")
-                                    .setUsers(this.someUsers)
+                                    .setName("Partecipanti")
+                                    .addParameters(this.someUsers)
                                     .build();
 
         this.fieldDefinitionDAO.save(fieldDefinition);
@@ -88,8 +81,8 @@ public class FieldDefinitionTest {
     @Test
     public void testInsertAndFindSingleSelectionFieldDefinition() {
         FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.SINGLE_SELECTION)
-                                    .addCommonAttributes("Status")
-                                    .setString(this.someSingleSelections)
+                                    .setName("Status")
+                                    .addParameters(this.someSingleSelections)
                                     .build();
 
         FieldDefinition fieldDefinitionFromDB = this.fieldDefinitionDAO.save(fieldDefinition);
@@ -120,8 +113,8 @@ public class FieldDefinitionTest {
 
     private FieldDefinition pushGetRandomFieldDefinitionToDatabase(FieldType type){
         FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(type)
-                                    .addCommonAttributes(RandomString.make(10))
-                                    .setUsers(this.someUsers)
+                                    .setName(RandomString.make(10))
+                                    .addParameters(this.someUsers)
                                     .build();
 
         return this.fieldDefinitionDAO.save(fieldDefinition);
