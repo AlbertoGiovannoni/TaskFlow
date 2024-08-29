@@ -45,4 +45,18 @@ public class SimpleFieldDefinition extends FieldDefinition {
                                                 + " doesn't implement method " 
                                                 + this.getClass().getEnclosingMethod().toString());
     }
+
+    @Override
+    public ArrayList<?> getAllEntries() {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
+                                                + " doesn't implement method " 
+                                                + this.getClass().getEnclosingMethod().toString());
+    }
+
+    @Override
+    public Object getSingleEntry() {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
+                                                + " doesn't implement method " 
+                                                + this.getClass().getEnclosingMethod().toString());
+    }
 }

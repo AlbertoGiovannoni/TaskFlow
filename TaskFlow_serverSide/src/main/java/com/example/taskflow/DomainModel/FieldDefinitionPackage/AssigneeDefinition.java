@@ -96,4 +96,20 @@ public class AssigneeDefinition extends FieldDefinition {
     public void reset() {
         this.possibleAssigneeUsers.clear();
     }
+
+    @Override
+    public ArrayList<?> getAllEntries() {
+        return this.possibleAssigneeUsers;
+    }
+
+    @Override
+    public Object getSingleEntry() {
+        User user = null;
+
+        if (!this.possibleAssigneeUsers.isEmpty()){
+            user = this.possibleAssigneeUsers.get(0);
+        }
+
+        return user;
+    }
 }

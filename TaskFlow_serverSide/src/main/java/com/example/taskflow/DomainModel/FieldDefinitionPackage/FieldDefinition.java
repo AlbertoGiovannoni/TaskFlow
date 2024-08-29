@@ -35,23 +35,31 @@ public abstract class FieldDefinition implements UuidInterface{
     public abstract void removeMultipleEntry(ArrayList<?> objs);
 
     public abstract void reset();
+
+    public abstract ArrayList<?> getAllEntries();
+
+    public abstract Object getSingleEntry();
     
     @Override
     public boolean equals(Object obj) {
         boolean value = false;
-
+        
         if (obj != null){
             if (obj instanceof FieldDefinition){
                 value = this.uuid.equals(((FieldDefinition)obj).getUuid());
             }
         }
-
+        
         return value;
     }
-
+    
     // getter e setter
     public String getName() {
         return name;
+    }
+    
+    public void setName(String name){
+        this.name = name;
     }
     
     public String getId() {

@@ -1,6 +1,8 @@
 package com.example.taskflow.DomainModel.FieldDefinitionPackage;
 import java.util.ArrayList;
 
+import com.example.taskflow.DomainModel.User;
+
 public class SingleSelectionDefinition extends FieldDefinition {
 
     private ArrayList<String> possibleSelections;
@@ -54,5 +56,21 @@ public class SingleSelectionDefinition extends FieldDefinition {
     @Override
     public void reset() {
         this.possibleSelections.clear();
+    }
+
+    @Override
+    public ArrayList<?> getAllEntries() {
+        return this.possibleSelections;
+    }
+
+    @Override
+    public Object getSingleEntry() {
+        String string = null;
+
+        if (!this.possibleSelections.isEmpty()){
+            string = this.possibleSelections.get(0);
+        }
+
+        return string;
     }
 }

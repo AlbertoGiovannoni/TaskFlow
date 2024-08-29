@@ -65,6 +65,19 @@ public class FieldDefinitionTest {
     }
 
     @Test
+    public void testInsertAndFindSimpleFieldDefinition() {
+        FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.DATE)
+                                    .setName("Data scadenza")
+                                    .build();
+
+        this.fieldDefinitionDAO.save(fieldDefinition);
+
+        FieldDefinition fieldDefinitionFromDB = fieldDefinitionDAO.findById(fieldDefinition.getId()).orElse(null);
+
+        assertEquals(fieldDefinition, fieldDefinitionFromDB);
+    }
+
+    @Test
     public void testInsertAndFindAssigneeFieldDefinition() {
         FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.ASSIGNEE)
                                     .setName("Partecipanti")
@@ -89,14 +102,26 @@ public class FieldDefinitionTest {
 
         assertEquals(fieldDefinition, fieldDefinitionFromDB);
     }
-    
+
     @Test
-    public void updateFieldDefinition(){
+    public void testModifyAssigneeDefintion(){
         FieldDefinition fieldDefinition = this.pushGetRandomFieldDefinitionToDatabase(FieldType.ASSIGNEE);
 
         User newUserForAssignee = this.addGetRandomUserToDatabase();
         
+        fieldDefinition.reset();
+        String anotherName = RandomString.make(10);
+        fieldDefinition.setName(anotherName);
+        assertEquals(anotherName, fieldDefinition.getName());
+
+        fieldDefinition.reset();
         fieldDefinition.addSingleEntry(newUserForAssignee);
+        assertEquals(fieldDefinition.getSingleEntry(), newUserForAssignee);
+
+        fieldDefinition.reset();
+        ArrayList<User> someUsers = this.addGetMultipleRandomUserToDatabase(5);
+        fieldDefinition.addMultipleEntry(someUsers);
+        assertEquals(fieldDefinition.getAllEntries(), someUsers);
 
         FieldDefinition fieldDefinitionPushed = this.fieldDefinitionDAO.save(fieldDefinition);
 
@@ -109,6 +134,16 @@ public class FieldDefinitionTest {
 
         User user = new User(info, RandomString.make(10));
         return this.userDAO.save(user);
+    }
+
+    private ArrayList<User> addGetMultipleRandomUserToDatabase(int n){
+        ArrayList<User> users = new ArrayList<>();
+
+        for (int i = 0; i < n; i++){
+            users.add(this.addGetRandomUserToDatabase());
+        }
+
+        return users;
     }
 
     private FieldDefinition pushGetRandomFieldDefinitionToDatabase(FieldType type){
