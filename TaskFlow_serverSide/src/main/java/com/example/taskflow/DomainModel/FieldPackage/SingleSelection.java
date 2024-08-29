@@ -68,8 +68,12 @@ public class SingleSelection extends Field{
 
     @Override
     public void setValue(Object value) {
-        this.reset();
-        this.addValue(value);
+        if (value != null){
+            if (value instanceof String){
+                this.reset();
+                this.addValue(value);
+            }
+        }
     }
 
     @Override
