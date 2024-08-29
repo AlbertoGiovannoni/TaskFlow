@@ -91,4 +91,9 @@ public class AssigneeDefinition extends FieldDefinition {
 
         return users;
     }
+
+    @Override
+    public void reset() {
+        this.possibleAssigneeUsers.clear();
+    }
 }

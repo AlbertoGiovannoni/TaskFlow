@@ -45,9 +45,14 @@ public class SingleSelectionDefinition extends FieldDefinition {
     }
 
     @Override
-    public void removeMultipleEntry(ArrayList<Object> objs) {
+    public void removeMultipleEntry(ArrayList<?> objs) {
         for (Object obj : objs){
             this.removeEntry(obj);
         }
+    }
+
+    @Override
+    public void reset() {
+        this.possibleSelections.clear();
     }
 }

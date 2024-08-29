@@ -33,6 +33,8 @@ public abstract class FieldDefinition implements UuidInterface{
     public abstract void removeEntry(Object obj);
 
     public abstract void removeMultipleEntry(ArrayList<?> objs);
+
+    public abstract void reset();
     
     @Override
     public boolean equals(Object obj) {

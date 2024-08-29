@@ -13,21 +13,36 @@ public class SimpleFieldDefinition extends FieldDefinition {
 
     @Override
     public void addSingleEntry(Object obj) {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + " doesn't implement method " + this.getClass().getEnclosingMethod().toString());
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
+                                                + " doesn't implement method " 
+                                                + this.getClass().getEnclosingMethod().toString());
     }
 
     @Override
     public void addMultipleEntry(ArrayList<?> obj) {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + " doesn't implement method " + this.getClass().getEnclosingMethod().toString());
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
+                                                + " doesn't implement method " 
+                                                + this.getClass().getEnclosingMethod().toString());
     }
 
     @Override
     public void removeEntry(Object obj) {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + " doesn't implement method " + this.getClass().getEnclosingMethod().toString());
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
+                                                + " doesn't implement method " 
+                                                + this.getClass().getEnclosingMethod().toString());
     }
 
     @Override
     public void removeMultipleEntry(ArrayList<?> objs) {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + " doesn't implement method " + this.getClass().getEnclosingMethod().toString());
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
+                                                + " doesn't implement method " 
+                                                + this.getClass().getEnclosingMethod().toString());
+    }
+
+    @Override
+    public void reset() {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
+                                                + " doesn't implement method " 
+                                                + this.getClass().getEnclosingMethod().toString());
     }
 }

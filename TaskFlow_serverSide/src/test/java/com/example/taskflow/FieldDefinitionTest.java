@@ -91,7 +91,7 @@ public class FieldDefinitionTest {
     }
     
     @Test
-    public void updateFieldDefinitionWithObject(){
+    public void updateFieldDefinition(){
         FieldDefinition fieldDefinition = this.pushGetRandomFieldDefinitionToDatabase(FieldType.ASSIGNEE);
 
         User newUserForAssignee = this.addGetRandomUserToDatabase();
