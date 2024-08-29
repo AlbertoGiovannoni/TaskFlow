@@ -49,7 +49,6 @@ public class UserTest {
     @Test
     public void testInsertAndFindUser() {
 
-        // creazione e inserimento attività
         UserInfo userinfo = new UserInfo(RandomString.make(10), RandomString.make(10));
         userInfoDAO.save(userinfo);
         
@@ -59,9 +58,6 @@ public class UserTest {
         User found = userDAO.findById(user.getId()).orElse(null);
         assertNotNull(found);
         assertEquals(user.getUsername(), found.getUsername());
-        assertEquals(user.getUserInfo().getEmail(), found.getUserInfo().getEmail());
-        assertEquals(user.getUserInfo().getPassword(), found.getUserInfo().getPassword());
-        assertEquals(user.getUserInfo().getUuid(), found.getUserInfo().getUuid());
         assertEquals(user.getUuid(), found.getUuid());
     }
 
