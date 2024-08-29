@@ -2,7 +2,6 @@ package com.example.taskflow.DomainModel.FieldPackage;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 public class SingleSelection extends Field{
