@@ -1,30 +1,32 @@
 package com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import com.example.taskflow.DomainModel.FieldPackage.Date;
+import com.example.taskflow.DomainModel.FieldPackage.DateInfo;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
-import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
 public class DateBuilder extends FieldBuilder{
-    private LocalDateTime date;
-    private Notification notification;
-
-    
+    private DateInfo dateInfo;
 
     DateBuilder(FieldType type) {
         super(type);
     }
 
     @Override
-    public DateBuilder setDate(LocalDateTime date){
-        this.date = date;
-        return this.self();
+    public FieldBuilder addParameters(ArrayList<?> values){
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
+                                                + "doesn't implement method " 
+                                                + this.getClass().getEnclosingMethod().toString());
     }
 
     @Override
-    public DateBuilder setNotification(Notification notification){
-        this.notification = notification;
-        return this.self();
+    public FieldBuilder addParameter(Object value){
+        if (value != null){
+            if (value instanceof DateInfo){
+                this.dateInfo = (DateInfo)value;                   
+            }
+        }
+        return this;
     }
 
     @Override
@@ -34,14 +36,14 @@ public class DateBuilder extends FieldBuilder{
 
     @Override
     public Field build() {
-        if (this.date == null){
+        if (this.dateInfo == null){
             throw new IllegalAccessError("date is null");
         }
-        if (this.notification == null){
-            return new Date(this.fieldDefinition, date);
+        if (this.dateInfo.getNotification() == null){
+            return new Date(this.fieldDefinition, dateInfo.getValue());
         }
         else{
-            return new Date(this.fieldDefinition, this.date,  this.notification);
+            return new Date(this.fieldDefinition, dateInfo);
         }
     }
 }

@@ -2,7 +2,6 @@ package com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage;
 
 import java.util.ArrayList;
 
-import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldPackage.SingleSelection;
 
@@ -32,7 +31,7 @@ public class SingleSelectionBuilder extends FieldBuilder{
         }
         return this;
     }
-    
+
     @Override
     protected SingleSelectionBuilder self() {
         return this;

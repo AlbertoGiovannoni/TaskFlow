@@ -19,15 +19,14 @@ public class Date extends Field{
 
     public Date(FieldDefinition fieldDefinition, LocalDateTime value) {
         super(fieldDefinition);
-
         this.value = value;
         this.uuid = UUID.randomUUID();
     }
 
-    public Date(FieldDefinition fieldDefinition, LocalDateTime value, Notification notification) {
+    public Date(FieldDefinition fieldDefinition, DateInfo dateInfo) {
         super(fieldDefinition);
-
-        this.notification = notification;
+        this.notification = dateInfo.getNotification();
+        this.value = dateInfo.getValue();
     }
 
     public Notification getNotification() {
