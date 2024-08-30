@@ -27,6 +27,14 @@ public class Notification implements UuidInterface{
         this.uuid = UUID.randomUUID();
     }
 
+    public void addReceiver(User newUser) {
+        receivers.add(newUser);
+    }
+
+    public boolean deleteReceiver(User userToRemove) {
+        return receivers.remove(userToRemove);
+    }
+
     // getter e setter
 
     public String getId() {
@@ -53,5 +61,17 @@ public class Notification implements UuidInterface{
     public UUID getUuid() {
         return this.uuid;
     }
-    
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean value = false;
+
+        if (obj != null && obj instanceof Notification) {
+            if (obj instanceof Notification){
+                value = (this.uuid.equals(((Notification)obj).getUuid()));  
+            }
+        }
+
+        return value;
+    }
 }
