@@ -2,6 +2,7 @@ package com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage;
 
 import java.util.ArrayList;
 
+import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldPackage.SingleSelection;
 
@@ -15,11 +16,23 @@ public class SingleSelectionBuilder extends FieldBuilder{
     }
 
     @Override
-    public SingleSelectionBuilder setSelection(ArrayList<String> values){
-        this.selections = values;
-        return this.self();
+    public FieldBuilder addParameters(ArrayList<?> values){
+        for (Object value : values){
+            this.addParameter(value);
+        }
+        return this;
     }
 
+    @Override
+    public FieldBuilder addParameter(Object value){
+        if (value != null){
+            if (value instanceof String){
+                this.selections.add((String)value);
+            }
+        }
+        return this;
+    }
+    
     @Override
     protected SingleSelectionBuilder self() {
         return this;
