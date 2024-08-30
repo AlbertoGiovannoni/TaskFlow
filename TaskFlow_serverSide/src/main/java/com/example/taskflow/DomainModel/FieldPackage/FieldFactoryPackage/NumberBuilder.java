@@ -1,7 +1,9 @@
 package com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.Number;
+import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
+import java.util.ArrayList;
 
 public class NumberBuilder extends FieldBuilder{
     private Float value;
@@ -11,9 +13,20 @@ public class NumberBuilder extends FieldBuilder{
     }
 
     @Override
-    public NumberBuilder setNumber(Float value){
-        this.value = value;
-        return this.self();
+    public FieldBuilder addParameters(ArrayList<?> values) {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
+                                                + "doesn't implement method " 
+                                                + this.getClass().getEnclosingMethod().toString());
+    }
+
+    @Override
+    public NumberBuilder addParameter(Object value){
+        if (value != null){
+            if (value instanceof User){
+                this.value = (Float)value;
+            }
+        }
+        return this;
     }
 
     @Override

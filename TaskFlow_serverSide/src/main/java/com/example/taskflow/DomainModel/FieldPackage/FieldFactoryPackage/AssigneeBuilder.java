@@ -14,9 +14,21 @@ public class AssigneeBuilder extends FieldBuilder{
     }
 
     @Override
-    public AssigneeBuilder setUsers(ArrayList<User> users){
-        this.assignees = users;
-        return this.self();
+    public FieldBuilder addParameters(ArrayList<?> values){
+        for (Object value : values){
+            this.addParameter(value);
+        }
+        return this;
+    }
+
+    @Override
+    public FieldBuilder addParameter(Object value){
+        if (value != null){
+            if (value instanceof User){
+                this.assignees.add((User)value);
+            }
+        }
+        return this;
     }
 
     @Override

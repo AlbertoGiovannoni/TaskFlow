@@ -9,6 +9,8 @@ public class DateBuilder extends FieldBuilder{
     private LocalDateTime date;
     private Notification notification;
 
+    
+
     DateBuilder(FieldType type) {
         super(type);
     }

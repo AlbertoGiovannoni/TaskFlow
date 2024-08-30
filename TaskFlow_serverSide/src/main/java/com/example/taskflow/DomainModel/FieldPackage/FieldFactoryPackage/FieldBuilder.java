@@ -11,6 +11,7 @@ import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionBuilder;
 
 public abstract class FieldBuilder {
     FieldType type;
@@ -25,39 +26,39 @@ public abstract class FieldBuilder {
         return self();
     }
 
-    public FieldBuilder setUsers(ArrayList<User> values){
-        throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
-    }
+    public abstract FieldBuilder addParameters(ArrayList<?> values);
+
+    public abstract FieldBuilder addParameter(Object value);
 
     public FieldBuilder setSelection(ArrayList<String> values){
         throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
     }
 
-    public FieldBuilder setDate( LocalDateTime date){
+    public FieldBuilder setDate(LocalDateTime date){
         throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
     }
 
-    public FieldBuilder setNotification( Notification notification){
+    public FieldBuilder setNotification(Notification notification){
         throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
     }
     
-    public FieldBuilder setNumber( Float number){
+    public FieldBuilder setNumber(Float number){
         throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
     }
 
-    public FieldBuilder setText( String text){
+    public FieldBuilder setText(String text){
         throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
     }
 
-    public FieldBuilder setDocumentName( String name){
+    public FieldBuilder setDocumentName(String name){
         throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
     }
 
-    public FieldBuilder setDocumentFileType( String fileType){
+    public FieldBuilder setDocumentFileType(String fileType){
         throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
     }
 
-    public FieldBuilder setDocumentObjectId( ObjectId value){
+    public FieldBuilder setDocumentObjectId(ObjectId value){
         throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
     }
 
