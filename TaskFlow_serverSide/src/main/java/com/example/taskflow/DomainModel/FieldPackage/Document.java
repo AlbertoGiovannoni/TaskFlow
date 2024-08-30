@@ -18,7 +18,10 @@ public class Document extends Field{
     private UUID uuid;
     
     // costruttore di default
-    public Document(){
+    public Document(DocumentInfo documentInfo){
+        this.name = documentInfo.getName();
+        this.fileType = documentInfo.getFileType();
+        this.value = documentInfo.getValue();
     }
 
     public Document(ObjectId value, FieldDefinition fieldDefinition, String name, String fileType) {

@@ -1,36 +1,35 @@
 package com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage;
 
-import org.bson.types.ObjectId;
-
+import java.util.ArrayList;
+import com.example.taskflow.DomainModel.FieldPackage.DateInfo;
 import com.example.taskflow.DomainModel.FieldPackage.Document;
+import com.example.taskflow.DomainModel.FieldPackage.DocumentInfo;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
 public class DocumentBuilder extends FieldBuilder{
-    private String name;
-    private String fileType;
-    private ObjectId value;
+    
+    private DocumentInfo documentInfo; 
 
     DocumentBuilder(FieldType type) {
         super(type);
     }
 
     @Override
-    public DocumentBuilder setDocumentName(String name){
-        this.name = name;
-        return this.self();
+    public FieldBuilder addParameters(ArrayList<?> values){
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
+                                                + "doesn't implement method " 
+                                                + this.getClass().getEnclosingMethod().toString());
     }
 
     @Override
-    public DocumentBuilder setDocumentFileType(String fileType){
-        this.fileType = fileType;
-        return this.self();
-    }
-
-    @Override
-    public DocumentBuilder setDocumentObjectId(ObjectId value){
-        this.value = value;
-        return this.self();
+    public FieldBuilder addParameter(Object value){
+        if (value != null){
+            if (value instanceof DateInfo){
+                this.documentInfo = (DocumentInfo)value;                   
+            }
+        }
+        return this;
     }
 
     @Override
@@ -40,16 +39,16 @@ public class DocumentBuilder extends FieldBuilder{
 
     @Override
     public Field build() {
-        if (this.name == null ){
+        if (this.documentInfo.getName() == null ){
             throw new IllegalAccessError("name is null");
         }
-        if (this.value == null ){
+        if (this.documentInfo.getValue() == null ){
             throw new IllegalAccessError("ObjectId is null");
         }
-        if (this.fileType == null ){
+        if (this.documentInfo.getFileType() == null ){
             throw new IllegalAccessError("fileType is null");
         }
-        return new Document( this.value, this.fieldDefinition, this.name, this.fileType);
+        return new Document(documentInfo);
         
     }
 }
