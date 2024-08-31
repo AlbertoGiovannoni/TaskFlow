@@ -8,13 +8,11 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 public class Assignee extends Field{
 
     private ArrayList<User> values;
-    private UUID uuid;
 
     public Assignee(FieldDefinition fieldDefinition, ArrayList<User> values) {
         super(fieldDefinition);
 
         this.values = values;
-        this.uuid = UUID.randomUUID();
     }
 
     @Override

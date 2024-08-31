@@ -6,7 +6,6 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 public class Number extends Field{
 
     private Float value;
-    private UUID uuid;
 
     // costruttore di default
     public Number(){
@@ -16,7 +15,6 @@ public class Number extends Field{
         super(fieldDefinition);
 
         this.value = value;
-        this.uuid = UUID.randomUUID();
     }
 
     @Override

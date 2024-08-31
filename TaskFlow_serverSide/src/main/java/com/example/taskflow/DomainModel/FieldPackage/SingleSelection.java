@@ -7,7 +7,6 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 public class SingleSelection extends Field{
 
     private ArrayList<String> values;
-    private UUID uuid;
 
     // costruttore di default
     public SingleSelection(){
@@ -17,7 +16,6 @@ public class SingleSelection extends Field{
         super(fieldDefinition);
 
         this.values = values;
-        this.uuid = UUID.randomUUID();
     }
 
     @Override

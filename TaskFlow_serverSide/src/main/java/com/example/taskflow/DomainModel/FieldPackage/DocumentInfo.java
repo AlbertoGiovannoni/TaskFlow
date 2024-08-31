@@ -8,7 +8,7 @@ public class DocumentInfo {
     private String fileType;
     private ObjectId value;
 
-    public DocumentInfo(String name, String FileType, ObjectId value){
+    public DocumentInfo(String name, String fileType, ObjectId value){
         this.name = name;
         this.fileType = fileType;
         this.value = value;

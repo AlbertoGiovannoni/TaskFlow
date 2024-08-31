@@ -1,5 +1,6 @@
 package com.example.taskflow.DomainModel.FieldPackage;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
@@ -10,6 +11,7 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 public abstract class Field implements UuidInterface{
     @DBRef
     FieldDefinition fieldDefinition;
+    UUID uuid;
 
     // costruttore di default
     public Field() {
@@ -17,6 +19,7 @@ public abstract class Field implements UuidInterface{
 
     public Field(FieldDefinition fieldDefinition) {
         this.fieldDefinition = fieldDefinition;
+        this.uuid = UUID.randomUUID();
     }
 
     public FieldDefinition getFieldDefinition() {

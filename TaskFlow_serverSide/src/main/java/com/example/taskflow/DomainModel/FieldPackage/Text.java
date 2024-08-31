@@ -8,7 +8,6 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 public class Text extends Field{
 
     private String value;
-    private UUID uuid;
 
     // costruttore di default
     public Text(){
@@ -18,7 +17,6 @@ public class Text extends Field{
         super(fieldDefinition);
 
         this.value = value;
-        this.uuid = UUID.randomUUID();
     }
 
     @Override

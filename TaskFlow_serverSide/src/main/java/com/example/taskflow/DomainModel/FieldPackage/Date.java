@@ -11,7 +11,6 @@ public class Date extends Field{
     @DBRef
     private Notification notification;
     private LocalDateTime value;
-    private UUID uuid;
     
     // costruttore di default
     public Date() {
@@ -20,7 +19,6 @@ public class Date extends Field{
     public Date(FieldDefinition fieldDefinition, LocalDateTime value) {
         super(fieldDefinition);
         this.value = value;
-        this.uuid = UUID.randomUUID();
     }
 
     public Date(FieldDefinition fieldDefinition, DateInfo dateInfo) {

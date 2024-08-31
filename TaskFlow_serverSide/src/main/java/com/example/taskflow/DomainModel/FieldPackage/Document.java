@@ -15,7 +15,6 @@ public class Document extends Field{
     private String name;
     private String fileType;
     private ObjectId value;
-    private UUID uuid;
     
     // costruttore di default
     public Document(DocumentInfo documentInfo){
@@ -30,7 +29,6 @@ public class Document extends Field{
         this.value = value;
         this.name = name;
         this.fileType = fileType;
-        this.uuid = UUID.randomUUID();
     }
 
     public String getName() {
