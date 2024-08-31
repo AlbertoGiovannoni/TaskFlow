@@ -39,6 +39,5 @@ public class TextBuilder extends FieldBuilder{
             throw new IllegalAccessError("value is null");
         }
         return new Text(this.fieldDefinition, text);
-        
     }
 }

@@ -19,9 +19,9 @@ public abstract class FieldBuilder {
         this.type = type;
     }
 
-    public FieldBuilder addCommonAttributes(FieldDefinition fieldDefinition) {
+    public FieldBuilder addFieldDefinition(FieldDefinition fieldDefinition) {
         this.fieldDefinition = fieldDefinition;
-        return self();
+        return this;
     }
 
     public abstract FieldBuilder addParameters(ArrayList<?> values);
