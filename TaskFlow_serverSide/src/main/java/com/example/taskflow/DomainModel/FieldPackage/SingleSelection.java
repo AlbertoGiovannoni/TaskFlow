@@ -89,9 +89,9 @@ public class SingleSelection extends Field{
 
     @Override
     public void setValues(ArrayList<?> values) {
-        boolean valuesAreUsers = this.checkArrayListValidity();
+        boolean valuesAreString = this.checkArrayListValidity();
         
-        if (valuesAreUsers){
+        if (valuesAreString){
             this.reset();
             for (Object value : values){
                 if (value != null){
@@ -107,11 +107,14 @@ public class SingleSelection extends Field{
                             }
                         }
                     }
+                    else{
+                        throw new IllegalArgumentException("Value is not of type String: \n" + value);
+                    }
+                }
+                else{
+                    throw new IllegalArgumentException("Value is null: \n" + value);
                 }
             }
-        }
-        else{
-            throw new IllegalArgumentException("Some values are not of type String: \n" + values);
         }
     }
 
@@ -124,8 +127,17 @@ public class SingleSelection extends Field{
                     if (value instanceof String){
                         valuesAreStrings = true;
                     }
+                    else{
+                        throw new IllegalArgumentException("Value is not of type String: \n" + value);
+                    }
+                }
+                else{
+                    throw new IllegalArgumentException("Value is null: \n" + value);
                 }
             }
+        }
+        else{
+            throw new IllegalArgumentException("Values is null: \n" + values);
         }
 
         return valuesAreStrings;
