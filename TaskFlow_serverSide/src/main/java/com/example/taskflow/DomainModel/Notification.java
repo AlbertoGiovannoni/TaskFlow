@@ -1,4 +1,5 @@
 package com.example.taskflow.DomainModel;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ public class Notification implements UuidInterface{
     @Id
     private String id;
     private String message;
+    private LocalDateTime notificationDateTime;
     private UUID uuid;
 
     @DBRef
@@ -23,9 +25,10 @@ public class Notification implements UuidInterface{
     public Notification(){
     }
 
-    public Notification(ArrayList<User> receivers, String message) {
+    public Notification(ArrayList<User> receivers, LocalDateTime notificationDateTime, String message) {
         this.receivers = receivers;
         this.message = message;
+        this.notificationDateTime = notificationDateTime;
         this.uuid = UUID.randomUUID();
     }
 
@@ -65,6 +68,10 @@ public class Notification implements UuidInterface{
         this.receivers = receivers;
     }
 
+    public void setNotificationDateTime(LocalDateTime notificationDateTime) {
+        this.notificationDateTime = notificationDateTime;
+    }
+
     @Override
     public UUID getUuid() {
         return this.uuid;
@@ -81,5 +88,9 @@ public class Notification implements UuidInterface{
         }
 
         return value;
+    }
+
+    public LocalDateTime getNotificationDateTime() {
+        return notificationDateTime;
     }
 }
