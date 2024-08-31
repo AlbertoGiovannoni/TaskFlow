@@ -8,39 +8,27 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 public class Date extends Field{
     
-    @DBRef
-    private Notification notification;
-    private LocalDateTime value;
+    private DateData dateData;
     
     // costruttore di default
     public Date() {
     }
 
-    public Date(FieldDefinition fieldDefinition, LocalDateTime value) {
+    public Date(FieldDefinition fieldDefinition, DateData dateData) {
         super(fieldDefinition);
-        this.value = value;
-    }
-
-    public Date(FieldDefinition fieldDefinition, DateInfo dateInfo) {
-        super(fieldDefinition);
-        this.notification = dateInfo.getNotification();
-        this.value = dateInfo.getValue();
+        this.dateData = dateData;
     }
 
     public Notification getNotification() {
-        return this.notification;
+        return this.dateData.getNotification();
     }
 
     public void setNotification(Notification notification) {
-        if (notification != null){
-            this.notification = notification;
-        }
+        this.dateData.setNotification(notification);
     }
 
     public void removeNotification(){
-        if (this.notification != null){
-            this.notification = null;
-        }
+        this.dateData.removeNotification();
     }
 
     @Override
@@ -50,27 +38,34 @@ public class Date extends Field{
 
     @Override
     public Object getValue() {
-        return this.value;
-    }
-
-    @Override
-    public void removeValue(Object value) {
-        this.value = null;
+        return this.dateData;
     }
 
     @Override
     public void reset() {
-        this.value = null;
-        this.notification = null;
+        this.dateData = null;
     }
 
     @Override
     public void setValue(Object value) {
         if (value != null){
-            if (value instanceof LocalDateTime){
-                this.value = (LocalDateTime)value;
+            if (value instanceof DateData){
+                this.dateData = (DateData)value;
+            }
+            else{
+                throw new IllegalArgumentException("Value is not of type DateData: " + value);
             }
         }
+        else{
+            throw new IllegalArgumentException("Value is null: " + value);
+        }
+    }
+
+    @Override
+    public void removeValue(Object value) {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
+                                                + " doesn't implement method " 
+                                                + this.getClass().getEnclosingMethod().toString());
     }
 
     @Override
