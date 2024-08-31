@@ -39,6 +39,8 @@ public abstract class FieldDefinition implements UuidInterface{
     public abstract ArrayList<?> getAllEntries();
 
     public abstract Object getSingleEntry();
+
+    public abstract boolean validateValue(Object obj);
     
     @Override
     public boolean equals(Object obj) {

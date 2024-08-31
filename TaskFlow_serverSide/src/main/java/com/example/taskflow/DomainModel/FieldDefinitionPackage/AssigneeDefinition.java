@@ -112,4 +112,15 @@ public class AssigneeDefinition extends FieldDefinition {
 
         return user;
     }
+
+    @Override
+    public boolean validateValue(Object obj) {
+        boolean validation = false;
+        if (obj != null){
+            if (obj instanceof User){
+                validation = this.possibleAssigneeUsers.contains((User)obj);
+            }
+        }
+        return validation;
+    }
 }

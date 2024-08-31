@@ -71,4 +71,17 @@ public class SingleSelectionDefinition extends FieldDefinition {
 
         return string;
     }
+
+    @Override
+    public boolean validateValue(Object obj) {
+        boolean validation = false;
+        
+        if (obj != null){
+            if (obj instanceof String){
+                validation = this.possibleSelections.contains((String)obj);
+            }
+        }
+
+        return validation;
+    }
 }
