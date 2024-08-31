@@ -30,11 +30,6 @@ public class NumberBuilder extends FieldBuilder{
     }
 
     @Override
-    protected NumberBuilder self() {
-        return this;
-    }
-
-    @Override
     public Field build() {
         if (this.value != null){
             throw new IllegalAccessError("value is null");

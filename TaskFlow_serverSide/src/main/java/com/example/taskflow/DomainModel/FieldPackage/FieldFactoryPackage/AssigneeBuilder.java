@@ -32,11 +32,6 @@ public class AssigneeBuilder extends FieldBuilder{
     }
 
     @Override
-    protected AssigneeBuilder self() {
-        return this;
-    }
-
-    @Override
     public Field build() {
         if (this.assignees == null){
             throw new IllegalAccessError("possibleAssignees are null");

@@ -28,27 +28,5 @@ public abstract class FieldBuilder {
 
     public abstract FieldBuilder addParameter(Object value);
 
-    public FieldBuilder setDate(LocalDateTime date){
-        throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
-    }
-
-    public FieldBuilder setNotification(Notification notification){
-        throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
-    }
-    
-    public FieldBuilder setDocumentName(String name){
-        throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
-    }
-
-    public FieldBuilder setDocumentFileType(String fileType){
-        throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
-    }
-
-    public FieldBuilder setDocumentObjectId(ObjectId value){
-        throw new IllegalAccessError(this.self().getClass().getSimpleName() + " not implement method addSpecificField()");
-    }
-
-    abstract FieldBuilder self();
-
     public abstract Field build();
 }

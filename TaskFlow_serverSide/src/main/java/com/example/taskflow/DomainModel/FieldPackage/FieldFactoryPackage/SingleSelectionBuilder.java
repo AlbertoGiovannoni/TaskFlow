@@ -33,11 +33,6 @@ public class SingleSelectionBuilder extends FieldBuilder{
     }
 
     @Override
-    protected SingleSelectionBuilder self() {
-        return this;
-    }
-
-    @Override
     public SingleSelection build() {
         return new SingleSelection(this.fieldDefinition, selections);
     }

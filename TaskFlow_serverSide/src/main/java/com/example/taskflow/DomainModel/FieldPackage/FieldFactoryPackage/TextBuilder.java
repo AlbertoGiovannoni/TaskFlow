@@ -29,11 +29,6 @@ public class TextBuilder extends FieldBuilder{
     }
 
     @Override
-    protected TextBuilder self() {
-        return this;
-    }
-
-    @Override
     public Field build() {
         if (this.text == null){
             throw new IllegalAccessError("value is null");

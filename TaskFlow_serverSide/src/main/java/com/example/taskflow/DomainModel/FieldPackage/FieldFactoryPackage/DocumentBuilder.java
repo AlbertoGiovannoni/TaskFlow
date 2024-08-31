@@ -1,7 +1,7 @@
 package com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage;
 
 import java.util.ArrayList;
-import com.example.taskflow.DomainModel.FieldPackage.DateInfo;
+import com.example.taskflow.DomainModel.FieldPackage.DateData;
 import com.example.taskflow.DomainModel.FieldPackage.Document;
 import com.example.taskflow.DomainModel.FieldPackage.DocumentInfo;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
@@ -25,15 +25,10 @@ public class DocumentBuilder extends FieldBuilder{
     @Override
     public FieldBuilder addParameter(Object value){
         if (value != null){
-            if (value instanceof DateInfo){
+            if (value instanceof DateData){
                 this.documentInfo = (DocumentInfo)value;                   
             }
         }
-        return this;
-    }
-
-    @Override
-    protected DocumentBuilder self() {
         return this;
     }
 
