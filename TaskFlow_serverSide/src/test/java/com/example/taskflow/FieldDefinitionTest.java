@@ -128,6 +128,20 @@ public class FieldDefinitionTest {
         assertEquals(fieldDefinition.getId(), fieldDefinitionPushed.getId());
     }
 
+    @Test
+    public void testModifySimpleDefintion(){
+        FieldDefinition fieldDefinition = this.pushGetRandomFieldDefinitionToDatabase(FieldType.TEXT);
+        
+        fieldDefinition.reset();
+        String anotherName = RandomString.make(10);
+        fieldDefinition.setName(anotherName);
+        assertEquals(anotherName, fieldDefinition.getName());
+
+        FieldDefinition fieldDefinitionPushed = this.fieldDefinitionDAO.save(fieldDefinition);
+
+        assertEquals(fieldDefinition.getId(), fieldDefinitionPushed.getId());
+    }
+
     private User addGetRandomUserToDatabase(){
         UserInfo info = new UserInfo(RandomString.make(10), RandomString.make(10));
         this.userInfoDAO.save(info);
@@ -149,7 +163,6 @@ public class FieldDefinitionTest {
     private FieldDefinition pushGetRandomFieldDefinitionToDatabase(FieldType type){
         FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(type)
                                     .setName(RandomString.make(10))
-                                    .addParameters(this.someUsers)
                                     .build();
 
         return this.fieldDefinitionDAO.save(fieldDefinition);

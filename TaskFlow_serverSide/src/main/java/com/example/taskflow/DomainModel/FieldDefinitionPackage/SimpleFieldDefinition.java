@@ -12,6 +12,11 @@ public class SimpleFieldDefinition extends FieldDefinition {
     }
 
     @Override
+    public void reset() {
+        this.name = "";
+    }
+
+    @Override
     public void addSingleEntry(Object obj) {
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
@@ -34,13 +39,6 @@ public class SimpleFieldDefinition extends FieldDefinition {
 
     @Override
     public void removeMultipleEntry(ArrayList<?> objs) {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
-    }
-
-    @Override
-    public void reset() {
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
                                                 + this.getClass().getEnclosingMethod().toString());
