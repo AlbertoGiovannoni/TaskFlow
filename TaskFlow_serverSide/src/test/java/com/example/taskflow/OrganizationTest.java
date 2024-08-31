@@ -3,9 +3,6 @@ import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.UserInfo;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -13,11 +10,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
 import com.example.taskflow.DAOs.ProjectDAO;
@@ -30,7 +27,11 @@ import java.time.LocalDateTime;
 
 @DataMongoTest
 @ActiveProfiles("test")
+@ComponentScan(basePackages = "com.example.taskflow")
 public class OrganizationTest {
+
+    @Autowired
+    private TestUtil testUtil;
 
     @Autowired
     OrganizationDAO OrganizationDAO;
@@ -54,24 +55,10 @@ public class OrganizationTest {
 
     @BeforeEach
     public void setupDatabase(){
-        if (template.collectionExists("fieldDefinition")){
-            template.dropCollection("fieldDefinition");
-        }
-        if (template.collectionExists("user")){
-            template.dropCollection("user");
-        }
-        if (template.collectionExists("userInfo")){
-            template.dropCollection("userInfo");
-        }
-        if (template.collectionExists("project")){
-            template.dropCollection("project");
-        }
-        if (template.collectionExists("organization")){
-            template.dropCollection("organization");
-        }
+        this.testUtil.cleanDatabase();
 
-        addGetMultipleRandomUserToDatabase(5);
-        addMultipleRandomProjectsToDatabase(5);
+        this.testUtil.addGetMultipleRandomUserToDatabase(5);
+        this.testUtil.addMultipleRandomProjectsToDatabase(5);
 
         this.someUsers = this.userDAO.findAll().stream().collect(Collectors.toCollection(ArrayList::new));
         this.someOwners = new ArrayList<>();
@@ -88,59 +75,28 @@ public class OrganizationTest {
 
     @Test
     public void testInsertAndFindOrganization() {
-
         Organization found = OrganizationDAO.findById(anOrganization.getId()).orElse(null);
         assertNotNull(found);
-        assertEquals(anOrganization.getName(), found.getName());
-        assertEquals(anOrganization.getCreationDate(), found.getCreationDate());
-
-        for(int i=0; i<anOrganization.getOwners().size(); i++)
-            assertEquals(anOrganization.getOwners().get(i).getUsername(), found.getOwners().get(i).getUsername());
-
-        for(int i=0; i<anOrganization.getMembers().size(); i++)
-            assertEquals(anOrganization.getMembers().get(i).getUsername(), found.getMembers().get(i).getUsername());
-
-        for(int i=0; i<anOrganization.getProjects().size(); i++)
-            assertEquals(anOrganization.getProjects().get(i).getName(), found.getProjects().get(i).getName());
-
-        assertEquals(anOrganization.getUuid(), found.getUuid());
+        this.testUtil.checkEqualOrganizations(anOrganization, found);
     }
 
     @Test
     public void testMondifyOrganization() {
-    }
-    
-    private User addRandomUserToDatabase(){
-        UserInfo info = new UserInfo(RandomString.make(10), RandomString.make(10));
-        this.userInfoDAO.save(info);
+        Organization org_v1 = OrganizationDAO.findById(anOrganization.getId()).orElse(null);
 
-        User user = new User(info, RandomString.make(10));
-        return this.userDAO.save(user);
-    }
+        User newUser = this.testUtil.addGetRandomUserToDatabase(); 
+        User newOwner = this.testUtil.addGetRandomUserToDatabase(); 
+        Project newProject = this.testUtil.addRandomProjectToDatabase();
 
-    private ArrayList<User> addGetMultipleRandomUserToDatabase(int n){
-        ArrayList<User> users = new ArrayList<>();
+        org_v1.setName("i nove nani");
+        org_v1.addMember(newUser);
+        org_v1.addProject(newProject);
+        org_v1.addOwner(newOwner);
 
-        for (int i = 0; i < n; i++){
-            users.add(this.addRandomUserToDatabase());
-        }
-
-        return users;
-    }
-
-    private Project addRandomProjectToDatabase(){
-        Project project = new Project(RandomString.make(10));
-        return this.projectDAO.save(project);
-    }
-
-    private ArrayList<Project> addMultipleRandomProjectsToDatabase(int n){
-        ArrayList<Project> projects = new ArrayList<>();
-
-        for (int i = 0; i < n; i++){
-            projects.add(this.addRandomProjectToDatabase());
-        }
-
-        return projects;
+        this.OrganizationDAO.save(org_v1);
+        Organization org_v2 = OrganizationDAO.findById(anOrganization.getId()).orElse(null);
+        
+        this.testUtil.checkEqualOrganizations(org_v1, org_v2);
     }
 }
 

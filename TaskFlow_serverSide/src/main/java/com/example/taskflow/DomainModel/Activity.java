@@ -18,6 +18,12 @@ public class Activity implements UuidInterface{
     public Activity() {
     }
 
+    public Activity(String name) {
+        this.name = name;
+        this.fields = new ArrayList<Field>();
+        this.uuid = UUID.randomUUID();
+    }
+
     public Activity(String name, ArrayList<Field> fields) {
         this.name = name;
         this.fields = fields;

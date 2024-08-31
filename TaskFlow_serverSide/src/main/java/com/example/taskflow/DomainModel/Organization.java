@@ -46,6 +46,21 @@ public class Organization implements UuidInterface{
         return members.remove(user);
     }
 
+    public void addProject(Project project) { 
+        projects.add(project);
+    }
+
+    public boolean removeProject(Project project) {
+        return projects.remove(project);
+    }
+    
+    public void addOwner(User user) { 
+        owners.add(user);
+    }
+
+    public boolean removeOwner(User user) {
+        return owners.remove(user);
+    }
     // getter e setter
 
     public String getId() {
