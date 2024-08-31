@@ -1,5 +1,7 @@
 package com.example.taskflow;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -14,8 +16,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.junit.jupiter.api.Test;
 
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
+import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
+import com.example.taskflow.DomainModel.Organization;
+import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.UserInfo;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
@@ -35,6 +40,8 @@ public class TestUtil {
     private UserInfoDAO userInfoDAO;
     @Autowired
     private UserDAO userDAO;
+    @Autowired
+    private ProjectDAO projectDAO;
 
     public void cleanDatabase(){
         Set<String> allCollections = this.template.getCollectionNames();
@@ -68,5 +75,37 @@ public class TestUtil {
         }
 
         return users;
+    }
+
+    public Project addRandomProjectToDatabase(){
+        Project project = new Project(RandomString.make(10));
+        return this.projectDAO.save(project);
+    }
+
+    public ArrayList<Project> addMultipleRandomProjectsToDatabase(int n){
+        ArrayList<Project> projects = new ArrayList<>();
+
+        for (int i = 0; i < n; i++){
+            projects.add(this.addRandomProjectToDatabase());
+        }
+
+        return projects;
+    }
+
+    public void checkEqualOrganizations(Organization o1, Organization o2){
+
+        assertEquals(o1.getName(), o2.getName());
+        assertEquals(o1.getCreationDate(), o2.getCreationDate());
+
+        for(int i=0; i<o1.getOwners().size(); i++)
+            assertEquals(o1.getOwners().get(i).getUsername(), o2.getOwners().get(i).getUsername());
+
+        for(int i=0; i<o1.getMembers().size(); i++)
+            assertEquals(o1.getMembers().get(i).getUsername(), o2.getMembers().get(i).getUsername());
+
+        for(int i=0; i<o1.getProjects().size(); i++)
+            assertEquals(o1.getProjects().get(i).getName(), o2.getProjects().get(i).getName());
+
+        assertEquals(o1.getUuid(), o2.getUuid());
     }
 }
