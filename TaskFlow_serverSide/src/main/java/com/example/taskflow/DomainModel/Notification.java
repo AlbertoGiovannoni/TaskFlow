@@ -2,6 +2,7 @@ package com.example.taskflow.DomainModel;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,6 +16,7 @@ public class Notification implements UuidInterface{
     private UUID uuid;
 
     @DBRef
+    @Lazy
     ArrayList<User> receivers;
 
     // costruttore di default
@@ -29,6 +31,12 @@ public class Notification implements UuidInterface{
 
     public void addReceiver(User newUser) {
         receivers.add(newUser);
+    }
+
+    public void addReceivers(ArrayList<User> users) {
+        for (User user : users){
+            this.addReceiver(user);
+        }
     }
 
     public boolean deleteReceiver(User userToRemove) {
