@@ -36,7 +36,7 @@ public class NumberBuilder extends FieldBuilder{
 
     @Override
     public Field build() {
-        if (this.value != null){            //TODO da testare se funziona questa verifica
+        if (this.value != null){
             throw new IllegalAccessError("value is null");
         }
         return new Number(this.fieldDefinition, this.value);
