@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.time.format.DateTimeFormatter;
 
 @Document
 public class Organization implements UuidInterface{
@@ -13,7 +14,7 @@ public class Organization implements UuidInterface{
     private String id;
     private UUID uuid;
     private String name;
-    private LocalDateTime creationDate;
+    private String creationDate;
 
     @DBRef
     private ArrayList<User> owners;
@@ -28,12 +29,12 @@ public class Organization implements UuidInterface{
     public Organization() {
     }
 
-    public Organization(String name, ArrayList<User> owners, ArrayList<Project> projects, ArrayList<User> members) {
+    public Organization(String name, ArrayList<User> owners, ArrayList<Project> projects, ArrayList<User> members, String creationDate) {
         this.name = name;
         this.owners = owners;
         this.projects = projects;
         this.members = members;
-        this.creationDate = LocalDateTime.now();
+        this.creationDate = creationDate;
         this.uuid = UUID.randomUUID();
     }
 
@@ -63,11 +64,11 @@ public class Organization implements UuidInterface{
         this.name = name;
     }
 
-    public LocalDateTime getCreationDate() {
+    public String getCreationDate() {
         return this.creationDate;
     }
 
-    public void setCreationDate(LocalDateTime creationDate) {
+    public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
     }
 

@@ -24,6 +24,10 @@ public class Project implements UuidInterface{
     // costruttore di default
     public Project(){
     }
+
+    public Project(String name){
+        this.name = name;
+    }
     
     public Project(String name, ArrayList<FieldDefinition> fieldsTemplate, ArrayList<Activity> activities) {
         this.name = name;
