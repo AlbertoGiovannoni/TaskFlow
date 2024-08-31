@@ -2,8 +2,10 @@ package com.example.taskflow;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
@@ -18,9 +20,13 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
+import com.example.taskflow.DAOs.NotificationDAO;
+import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
+import com.example.taskflow.DomainModel.FieldPackage.Date;
+import com.example.taskflow.DomainModel.FieldPackage.DateData;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
 
@@ -38,6 +44,8 @@ public class FieldTest {
     private FieldDAO fieldDao;
     @Autowired
     private FieldDefinitionDAO fieldDefinitionDao;
+    @Autowired
+    private NotificationDAO notificationDao;
 
     @Autowired
     private MongoTemplate template;
@@ -172,5 +180,33 @@ public class FieldTest {
         assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.addValue(this.testUtil.addGetRandomUserToDatabase());});
         assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.addValues(this.testUtil.addGetMultipleRandomUserToDatabase(3));});
         assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.setValues((this.testUtil.addGetMultipleRandomUserToDatabase(3)));});
+    }
+
+    @Test
+    public void testDateField(){
+        FieldDefinition fieldDefinition = this.testUtil.pushGetRandomFieldDefinitionToDatabase(FieldType.DATE);
+        ArrayList<User> someUsers = this.testUtil.addGetMultipleRandomUserToDatabase(10);
+        Notification notification = new Notification(someUsers, LocalDateTime.now(), RandomString.make(10));
+
+        this.notificationDao.save(notification);
+
+        Field field = FieldFactory.getBuilder(FieldType.DATE)
+                                .addFieldDefinition(fieldDefinition)
+                                .addParameter(new DateData(LocalDateTime.now(), notification))
+                                .build();
+
+        Field fieldFromDB = this.fieldDao.save(field);
+
+        assertEquals(field, fieldFromDB);
+        assertEquals(field.getFieldDefinition(), fieldDefinition);
+        assertEquals(((Date)fieldFromDB).getNotification(), notification);
+
+        Notification anotherNotification = new Notification(someUsers, LocalDateTime.now(), RandomString.make(10));
+
+        ((Date)fieldFromDB).setNotification(anotherNotification);
+        assertEquals(((Date)fieldFromDB).getNotification(), anotherNotification);
+
+        ((Date)fieldFromDB).reset();
+        assertNull(fieldFromDB.getValue());
     }
 }

@@ -18,6 +18,8 @@ import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.NotificationDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @DataMongoTest
@@ -78,7 +80,7 @@ public class NotificationTest {
             userDAO.save(user);
         }
 
-        Notification notification = new Notification(users, RandomString.make(10));
+        Notification notification = new Notification(users, LocalDateTime.now(), RandomString.make(10));
         notificationDAO.save(notification);
 
         Notification notificationFromDB = notificationDAO.findById(notification.getId()).orElse(null);
@@ -94,7 +96,7 @@ public class NotificationTest {
             userDAO.save(user);
         }
 
-        Notification notification = new Notification(users, RandomString.make(10));
+        Notification notification = new Notification(users, LocalDateTime.now(), RandomString.make(10));
         notificationDAO.save(notification);
 
         String newMessage = RandomString.make(10);
