@@ -27,6 +27,8 @@ public class Project implements UuidInterface{
 
     public Project(String name){
         this.name = name;
+        this.activities = new ArrayList<Activity>();
+        this.fieldsTemplate = new ArrayList<FieldDefinition>();
     }
     
     public Project(String name, ArrayList<FieldDefinition> fieldsTemplate, ArrayList<Activity> activities) {

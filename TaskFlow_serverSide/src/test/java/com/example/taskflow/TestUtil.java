@@ -15,10 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.test.context.ActiveProfiles;
 import org.junit.jupiter.api.Test;
 
+import com.example.taskflow.DAOs.ActivityDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
+import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.User;
@@ -42,6 +44,8 @@ public class TestUtil {
     private UserDAO userDAO;
     @Autowired
     private ProjectDAO projectDAO;
+    @Autowired
+    private ActivityDAO activityDAO;
 
     public void cleanDatabase(){
         Set<String> allCollections = this.template.getCollectionNames();
@@ -77,6 +81,21 @@ public class TestUtil {
         return users;
     }
 
+    public Activity addRandomActivityToDatabase(){
+        Activity activity = new Activity(RandomString.make(10));
+        return this.activityDAO.save(activity);
+    }
+
+    public ArrayList<Activity> addMultipleRandomActivitiesToDatabase(int n){
+        ArrayList<Activity> activities = new ArrayList<>();
+
+        for (int i = 0; i < n; i++){
+            activities.add(this.addRandomActivityToDatabase());
+        }
+
+        return activities;
+    }
+
     public Project addRandomProjectToDatabase(){
         Project project = new Project(RandomString.make(10));
         return this.projectDAO.save(project);
@@ -107,5 +126,13 @@ public class TestUtil {
             assertEquals(o1.getProjects().get(i).getName(), o2.getProjects().get(i).getName());
 
         assertEquals(o1.getUuid(), o2.getUuid());
+    }
+
+    public void checkEqualProject(Project p1, Project p2){
+        assertEquals(p1.getName(), p2.getName());
+        assertEquals(p1.getUuid(), p2.getUuid());
+        for(int i=0; i<p1.getActivities().size(); i++){
+            assertEquals(p1.getActivities().get(i).getUuid(), p2.getActivities().get(i).getUuid());
+        }
     }
 }
