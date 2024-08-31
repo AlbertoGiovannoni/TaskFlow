@@ -59,7 +59,14 @@ public class Assignee extends Field{
     public void addValue(Object value) {
         if (value != null){
             if (value instanceof User){
-                this.addUserIfNotInList((User)value);
+                if (this.fieldDefinition.validateValue(value)){
+                    this.addUserIfNotInList((User)value);
+                }
+                else{
+                    throw new IllegalArgumentException((User)value + 
+                                            " cannot be added if corresponding AssigneeDefinition doesn't have it as a selection: \n" + 
+                                            this.fieldDefinition.getAllEntries());
+                }
             }
         }
     }
@@ -96,7 +103,14 @@ public class Assignee extends Field{
             for (Object value : values){
                 if (value != null){
                     if (value instanceof User){
-                        this.values.add((User)value);
+                        if (this.fieldDefinition.validateValue(value)){
+                            this.addUserIfNotInList((User)value);
+                        }
+                        else{
+                            throw new IllegalArgumentException((User)value + 
+                                                    " cannot be added if corresponding AssigneeDefinition doesn't have it as a selection: \n" + 
+                                                    this.fieldDefinition.getAllEntries());
+                        }
                     }
                 }
             }

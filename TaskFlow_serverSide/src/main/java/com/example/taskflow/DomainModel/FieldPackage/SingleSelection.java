@@ -56,7 +56,7 @@ public class SingleSelection extends Field{
                     }
                     else{
                         throw new IllegalArgumentException((String)value + 
-                                                " cannot be added if corrispondig SingleSelection don't have it as a selection: \n" + 
+                                                " cannot be added if corresponding SingleSelection doesn't have it as a selection: \n" + 
                                                 this.fieldDefinition.getAllEntries());
                     }
                 }
@@ -91,7 +91,14 @@ public class SingleSelection extends Field{
                 if (value != null){
                     if (value instanceof String){
                         if (!this.values.contains((String)value)){
-                            this.values.add((String)value);
+                            if (this.fieldDefinition.validateValue((String)value)){
+                                this.values.add((String)value);
+                            }
+                            else{
+                                throw new IllegalArgumentException((String)value + 
+                                                        " cannot be added if corresponding SingleSelection doesn't have it as a selection: \n" + 
+                                                        this.fieldDefinition.getAllEntries());
+                            }
                         }
                     }
                 }
