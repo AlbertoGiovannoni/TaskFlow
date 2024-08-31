@@ -1,15 +1,10 @@
 package com.example.taskflow;
 import com.example.taskflow.DomainModel.Activity;
-import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.User;
-import com.example.taskflow.DomainModel.UserInfo;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
-import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
-
-import net.bytebuddy.utility.RandomString;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
@@ -26,10 +20,6 @@ import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.ActivityDAO;
 import com.example.taskflow.DAOs.OrganizationDAO;
 import java.util.ArrayList;
-
-import java.util.stream.Collectors;
-import java.time.format.DateTimeFormatter;
-import java.time.LocalDateTime;
 
 @DataMongoTest
 @ActiveProfiles("test")

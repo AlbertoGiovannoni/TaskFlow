@@ -2,9 +2,6 @@ package com.example.taskflow;
 import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.User;
-import com.example.taskflow.DomainModel.UserInfo;
-
-import net.bytebuddy.utility.RandomString;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;

@@ -1,6 +1,5 @@
 package com.example.taskflow;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -8,14 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.example.taskflow.DAOs.FieldDAO;
@@ -46,9 +43,6 @@ public class FieldTest {
     private FieldDefinitionDAO fieldDefinitionDao;
     @Autowired
     private NotificationDAO notificationDao;
-
-    @Autowired
-    private MongoTemplate template;
 
     @BeforeEach
     public void setupDatabase(){
