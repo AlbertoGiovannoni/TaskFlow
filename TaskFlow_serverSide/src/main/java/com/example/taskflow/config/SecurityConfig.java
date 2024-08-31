@@ -12,7 +12,6 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.example.taskflow.DomainModel.User;
-import com.example.taskflow.service.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -29,11 +28,6 @@ public class SecurityConfig {
             .httpBasic(basic -> basic.disable()); // Disabilita l'autenticazione di base
 
         return http.build();
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new CustomUserDetailsService();
     }
 
     @Bean
