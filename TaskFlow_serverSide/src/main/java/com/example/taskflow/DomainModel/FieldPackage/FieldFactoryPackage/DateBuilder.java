@@ -25,6 +25,12 @@ public class DateBuilder extends FieldBuilder{
             if (value instanceof DateInfo){
                 this.dateInfo = (DateInfo)value;                   
             }
+            else{
+                throw new IllegalArgumentException("value is not of type DateInfo:" + value);
+            }
+        }
+        else{
+            throw new IllegalArgumentException("value is null:" + value)
         }
         return this;
     }
