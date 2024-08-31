@@ -61,6 +61,9 @@ public class SingleSelection extends Field{
                     }
                 }
             }
+            else{
+                throw new IllegalArgumentException("Value is not of type String: \n" + value);
+            }
         }
     }
 
@@ -78,6 +81,9 @@ public class SingleSelection extends Field{
                 this.reset();
                 this.addValue(value);
             }
+        }
+        else{
+            throw new IllegalArgumentException("Value is not of type String: \n" + value);
         }
     }
 
@@ -103,6 +109,9 @@ public class SingleSelection extends Field{
                     }
                 }
             }
+        }
+        else{
+            throw new IllegalArgumentException("Some values are not of type String: \n" + values);
         }
     }
 

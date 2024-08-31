@@ -101,11 +101,13 @@ public class FieldTest {
 
         ArrayList<String> someSelections = new ArrayList<>();
         ArrayList<String> subsetOfSomeSelections = new ArrayList<>();
+        ArrayList<String> someSelectionsNotValid = new ArrayList<>();
 
         String randomString = RandomString.make(10);
 
         for (int i = 0; i < 10; i++){
             someSelections.add(randomString);
+            someSelectionsNotValid.add(RandomString.make(10));
             if (i % 2 == 0){
                 subsetOfSomeSelections.add(randomString);
             }
@@ -134,10 +136,11 @@ public class FieldTest {
             assertEquals((String)value, subsetOfSomeSelections.get(i));
             i++;
         }
+        assertEquals(field, this.fieldDao.save(fieldFromDB));
 
         assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.addValue("a string not accepted");});
-
-        assertEquals(field, this.fieldDao.save(fieldFromDB));
+        assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.addValues(someSelectionsNotValid);});
+        assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.setValues(someSelectionsNotValid);});
     }
 
     @Test

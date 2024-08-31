@@ -41,6 +41,9 @@ public class Assignee extends Field{
                 }
             }
         }
+        else{
+            throw new IllegalArgumentException("Value is null: \n" + value);
+        }
     }
 
     @Override
@@ -68,6 +71,12 @@ public class Assignee extends Field{
                                             this.fieldDefinition.getAllEntries());
                 }
             }
+            else{
+                throw new IllegalArgumentException("Value is not of type User: \n" + value);
+            }
+        }
+        else{
+            throw new IllegalArgumentException("Value is null: \n" + value);
         }
     }
 
@@ -123,7 +132,13 @@ public class Assignee extends Field{
                         valuesAreUsers = false;
                     }
                 }
+                else{
+                    throw new IllegalArgumentException("Value is not of type User: \n" + value);
+                }
             }
+        }
+        else{
+            throw new IllegalArgumentException("Values is null: \n" + values);
         }
 
         return valuesAreUsers;
