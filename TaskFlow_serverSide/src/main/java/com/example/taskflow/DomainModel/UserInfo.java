@@ -2,13 +2,18 @@ package com.example.taskflow.DomainModel;
 import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.index.Indexed;
+
 
 @Document
 public class UserInfo implements UuidInterface{
     
     @Id
     private String id;
+
+    @Indexed(unique = true)
     private String email;
+
     private String password;
     private UUID uuid;
 
