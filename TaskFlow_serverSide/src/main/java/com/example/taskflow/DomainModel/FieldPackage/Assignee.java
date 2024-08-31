@@ -101,30 +101,26 @@ public class Assignee extends Field{
         if (valuesAreUsers){
             this.reset();
             for (Object value : values){
-                if (value != null){
-                    if (value instanceof User){
-                        if (this.fieldDefinition.validateValue(value)){
-                            this.addUserIfNotInList((User)value);
-                        }
-                        else{
-                            throw new IllegalArgumentException((User)value + 
-                                                    " cannot be added if corresponding AssigneeDefinition doesn't have it as a selection: \n" + 
-                                                    this.fieldDefinition.getAllEntries());
-                        }
-                    }
+                if (this.fieldDefinition.validateValue(value)){
+                    this.addUserIfNotInList((User)value);
+                }
+                else{
+                    throw new IllegalArgumentException((User)value + 
+                                            " cannot be added if corresponding AssigneeDefinition doesn't have it as a selection: \n" + 
+                                            this.fieldDefinition.getAllEntries());
                 }
             }
         }
     }
 
     private boolean checkArrayListValidity(){
-        boolean valuesAreUsers = false;
+        boolean valuesAreUsers = true;
         
         if (values != null){
             for (Object value : values){
                 if (value != null){
-                    if (value instanceof User){
-                        valuesAreUsers = true;
+                    if (!(value instanceof User)){
+                        valuesAreUsers = false;
                     }
                 }
             }

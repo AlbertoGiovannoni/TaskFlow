@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -144,13 +145,14 @@ public class FieldTest {
         FieldDefinition fieldDefinition = this.testUtil.pushGetRandomFieldDefinitionToDatabase(FieldType.ASSIGNEE);
 
         ArrayList<User> someUsers = this.testUtil.addGetMultipleRandomUserToDatabase(5);
+        ArrayList<User> subsetOfSomeUsers = new ArrayList<>(Arrays.asList(someUsers.get(0), someUsers.get(3)));
 
         fieldDefinition.addMultipleEntry(someUsers);
         this.fieldDefinitionDao.save(fieldDefinition);
 
         Field field = FieldFactory.getBuilder(FieldType.ASSIGNEE)
                                 .addFieldDefinition(fieldDefinition)
-                                .addParameter(someUsers.get(1))
+                                .addParameter(someUsers.get(0))
                                 .build();
 
         Field fieldFromDB = this.fieldDao.save(field);
@@ -158,6 +160,14 @@ public class FieldTest {
         assertEquals(field, fieldFromDB);
         assertEquals(field.getFieldDefinition(), fieldDefinition);
 
+        fieldFromDB.setValues(subsetOfSomeUsers);
+        assertEquals(field, fieldFromDB);
 
+        fieldFromDB.reset();
+        assertEquals(0, fieldFromDB.getValues().size());
+
+        assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.addValue(this.testUtil.addGetRandomUserToDatabase());});
+        assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.addValues(this.testUtil.addGetMultipleRandomUserToDatabase(3));});
+        assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.setValues((this.testUtil.addGetMultipleRandomUserToDatabase(3)));});
     }
 }
