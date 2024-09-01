@@ -2,6 +2,7 @@ package com.example.taskflow.DomainModel.FieldPackage;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import com.example.taskflow.DomainModel.UuidInterface;
@@ -9,6 +10,8 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
 public abstract class Field implements UuidInterface{
+    @Id
+    String id;
     @DBRef
     FieldDefinition fieldDefinition;
     UUID uuid;
@@ -28,6 +31,10 @@ public abstract class Field implements UuidInterface{
 
     public FieldType getType(){
         return this.fieldDefinition.getType();
+    }
+
+    public String getId(){
+        return this.id;
     }
 
     public abstract Object getValue();

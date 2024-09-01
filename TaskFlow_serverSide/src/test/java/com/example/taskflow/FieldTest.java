@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -202,5 +203,8 @@ public class FieldTest {
 
         ((Date)fieldFromDB).reset();
         assertNull(fieldFromDB.getValue());
+
+        fieldDao.delete(fieldFromDB);
+        assertEquals(fieldDao.findById(fieldFromDB.getId()), Optional.empty());
     }
 }
