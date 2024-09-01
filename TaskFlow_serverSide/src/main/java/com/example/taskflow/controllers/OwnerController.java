@@ -33,22 +33,13 @@ public class OwnerController {
     @Autowired
     private OrganizationDAO organizationDAO;
 
-    // TODO questo deve essere removeUser dall org. Delete in Admin
-
     @PostMapping("/removeUser")
-    public ResponseEntity<Map<String, String>> removeUser(@RequestBody Map<String, String> requestBody) {
+    public ResponseEntity<Map<String, String>> removeUser(
+            @RequestBody Map<String, String> requestBody) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
 
-        // Verifica se l'utente ha il ruolo OWNER o ADMIN
-        if (authentication == null || !authentication.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_OWNER") ||
-                        grantedAuthority.getAuthority().equals("ROLE_ADMIN"))) {
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Access Denied");
-            return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
-        }
-
-        // Recupera i dati dalla richiesta
+        // Ottieni i dati dalla richiesta
         String userId = requestBody.get("userId");
         String organizationId = requestBody.get("organizationId");
 
@@ -58,20 +49,16 @@ public class OwnerController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
-        // Trova l'utente
-        Optional<User> optionalUser = userDAO.findById(userId);
-
-        if (!optionalUser.isPresent()) {
+        // Trova l'utente corrente
+        Optional<User> currentUser = userDAO.findByUsername(currentUsername);
+        if (!currentUser.isPresent()) {
             Map<String, String> response = new HashMap<>();
-            response.put("message", "User not found");
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            response.put("message", "Current user not found");
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
-
-        User user = optionalUser.get();
 
         // Trova l'organizzazione
         Optional<Organization> optionalOrganization = organizationDAO.findById(organizationId);
-
         if (!optionalOrganization.isPresent()) {
             Map<String, String> response = new HashMap<>();
             response.put("message", "Organization not found");
@@ -79,10 +66,31 @@ public class OwnerController {
         }
 
         Organization organization = optionalOrganization.get();
+        // Verifica se l'utente corrente è OWNER di questa specifica organizzazione
+        if (!organization.getOwners().contains(currentUser.get()) && !authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"))) {
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Access Denied: You are not an owner of this organization");
+            return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+        }
 
+        // Trova l'utente da rimuovere
+        Optional<User> optionalUser = userDAO.findById(userId);
+        if (!optionalUser.isPresent()) {
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "User not found");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+
+        return removeUserFromOrg(optionalUser, organization);
+    }
+
+    private ResponseEntity<Map<String, String>> removeUserFromOrg(Optional<User> optionalUser,
+            Organization organization) {
+        User user = optionalUser.get();
+
+        // Rimuove l'utente dai membri o proprietari dell'organizzazione specifica
         boolean userRemoved = false;
-
-        // Rimuove l'utente dai membri e/o proprietari dell'organizzazione
         if (organization.getOwners().contains(user)) {
             organization.removeOwner(user);
             userRemoved = true;

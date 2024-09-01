@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/owner/**").hasAnyRole("OWNER", "ADMIN") // Solo OWNER può accedere
-                        .requestMatchers("/api/user/**").permitAll() // Accessibile sia a USER che OWNER
+                        .requestMatchers("/api/user/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // Solo OWNER può accedere
                         .anyRequest().authenticated()) // Tutte le altre richieste richiedono autenticazione
                 .httpBasic(withDefaults()) // Autenticazione di base
@@ -44,51 +44,3 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
-
-// @Configuration
-// @EnableWebSecurity
-// public class SecurityConfig {
-
-// // TODO implementa baseAuth o Token
-// @Bean
-// public SecurityFilterChain securityFilterChain(HttpSecurity http) throws
-// Exception {
-// http
-// .csrf(csrf -> csrf.disable()) // Disabilita CSRF per semplicità durante lo
-// sviluppo
-// .authorizeHttpRequests(requests -> requests
-// .requestMatchers("/api/user/**").authenticated() // Permetti l'accesso a
-// tutti gli endpoint API
-// .requestMatchers("/api/owner/**").permitAll()// Solo OWNER può accedere
-// .anyRequest().permitAll())
-// .httpBasic(withDefaults()); // Abilita l'autenticazione di base
-
-// return http.build();
-// }
-
-// @Bean
-// public UserDetailsService userDetailsService() {
-// // Configura utenti e ruoli
-
-// // TODO al momento gli user e gli owner hanno user e password fissi per
-// tutti, migliorare mettendo che ogni utente accede con le sue credenziali e il
-// sistema riconosce se è owner o meno per questa organizzazione
-
-// User.UserBuilder users = User.withUsername("user")
-// .passwordEncoder(passwordEncoder()::encode); // Usa BCryptPasswordEncoder per
-// codificare la password
-
-// InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-// // Crea un utente con ruolo USER
-// manager.createUser(users.username("user").password("password").roles("USER").build());
-// // Crea un utente con ruolo OWNER
-// manager.createUser(users.username("owner").password("ownerpass").roles("OWNER").build());
-
-// return manager;
-// }
-
-// @Bean
-// public PasswordEncoder passwordEncoder() {
-// return new BCryptPasswordEncoder();
-// }
-// }

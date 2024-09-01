@@ -1,4 +1,5 @@
 package com.example.taskflow.service;
+
 import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DAOs.OrganizationDAO;
@@ -26,10 +27,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userDao.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
-    
+
         // Ottieni le autorità (ruoli) per l'utente
         List<GrantedAuthority> authorities = getAuthoritiesForUser(user);
-    
+
         // Crea e ritorna l'oggetto UserDetails con i ruoli appropriati
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(), user.getUserInfo().getPassword(), authorities);

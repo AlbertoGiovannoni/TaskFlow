@@ -38,17 +38,17 @@ public class AdminController {
     public ResponseEntity<Map<String, String>> deleteUser(@RequestBody Map<String, String> requestBody) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // Verifica se l'utente ha il ruolo OWNER
-        if (authentication == null || !authentication.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"))) {
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Access Denied");
-            return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
-        }
+        // //Verifica se l'utente ha il ruolo ADMIN
+        // if (authentication == null || !authentication.getAuthorities().stream()
+        //         .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"))) {
+        //     Map<String, String> response = new HashMap<>();
+        //     response.put("message", "Access Denied");
+        //     return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+        // }
 
         // Logica di rimozione dell'utente
         Map<String, String> response = new HashMap<>();
-        String userId = requestBody.get("id");
+        String userId = requestBody.get("userId");
 
         if (userId == null || userId.trim().isEmpty()) {
             response.put("message", "Id cannot be empty");
