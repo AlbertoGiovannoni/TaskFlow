@@ -29,7 +29,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/owner/**").hasRole("OWNER") // Solo OWNER può accedere
+                        .requestMatchers("/api/owner/**").hasAnyRole("OWNER", "ADMIN") // Solo OWNER può accedere
                         .requestMatchers("/api/user/**").permitAll() // Accessibile sia a USER che OWNER
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // Solo OWNER può accedere
                         .anyRequest().authenticated()) // Tutte le altre richieste richiedono autenticazione
