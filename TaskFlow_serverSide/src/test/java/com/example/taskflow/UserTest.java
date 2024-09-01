@@ -52,7 +52,7 @@ public class UserTest {
         UserInfo userinfo = new UserInfo(RandomString.make(10), RandomString.make(10));
         userInfoDAO.save(userinfo);
         
-        User user = new User(userinfo, RandomString.make(10));
+        User user = new User(userinfo, RandomString.make(10), false);
         user = userDAO.save(user);
 
         User found = userDAO.findById(user.getId()).orElse(null);
@@ -66,7 +66,7 @@ public class UserTest {
         UserInfo userinfo = new UserInfo(RandomString.make(10), RandomString.make(10));
         userInfoDAO.save(userinfo);
 
-        User user = new User(userinfo, RandomString.make(10));
+        User user = new User(userinfo, RandomString.make(10), false);
         user = userDAO.save(user);
 
         user.setUserInfo(userinfo);
