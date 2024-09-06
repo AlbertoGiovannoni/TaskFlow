@@ -65,6 +65,8 @@ public class UserController {
         String email = requestBody.get("email");
         String password = requestBody.get("password");
         String username = requestBody.get("username");
+        boolean isAdmin = Boolean.valueOf(requestBody.get("isAdmin"));
+
 
         // Controllo se l'email è già utilizzata
         if (userInfoDAO.findByEmail(email).isPresent()) {
@@ -81,9 +83,9 @@ public class UserController {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String hashedPassword = passwordEncoder.encode(password);
 
-        UserInfo userInfo = new UserInfo(email, password);
+        UserInfo userInfo = new UserInfo(email, hashedPassword);
         userInfoDAO.save(userInfo);
-        User user = new User(userInfo, username);
+        User user = new User(userInfo, username, isAdmin);
         userDAO.save(user);
 
         response.put("message", "User creato");

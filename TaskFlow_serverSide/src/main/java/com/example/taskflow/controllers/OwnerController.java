@@ -10,11 +10,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import com.example.taskflow.DAOs.OrganizationDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
+import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.UserInfo;
-
+import com.example.taskflow.service.OrganizationService;
 
 @RestController
 @RequestMapping("/api/owner")
@@ -26,146 +29,86 @@ public class OwnerController {
     @Autowired
     UserDAO userDAO;
 
+    @Autowired
+    private OrganizationDAO organizationDAO;
 
-    @PostMapping("/deleteUser")
-    public ResponseEntity<Map<String, String>> deleteUser(@RequestBody Map<String, String> requestBody) {
-        // Controllo se l'utente è autenticato e ha il ruolo OWNER
+    @PostMapping("/removeUser")
+    public ResponseEntity<Map<String, String>> removeUser(
+            @RequestBody Map<String, String> requestBody) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        
-        if (authentication == null || !authentication.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_OWNER"))) {
+        String currentUsername = authentication.getName();
+
+        // Ottieni i dati dalla richiesta
+        String userId = requestBody.get("userId");
+        String organizationId = requestBody.get("organizationId");
+
+        if (userId == null || userId.trim().isEmpty() || organizationId == null || organizationId.trim().isEmpty()) {
             Map<String, String> response = new HashMap<>();
-            response.put("message", "Access Denied");
-            return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
-        }
-
-        Map<String, String> response = new HashMap<>();
-        String userId = requestBody.get("id");
-
-        if (userId == null || userId.trim().isEmpty()) {
-            response.put("message", "Id cannot be empty");
+            response.put("message", "User ID and Organization ID cannot be empty");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
+        // Trova l'utente corrente
+        Optional<User> currentUser = userDAO.findByUsername(currentUsername);
+        if (!currentUser.isPresent()) {
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Current user not found");
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
+
+        // Trova l'organizzazione
+        Optional<Organization> optionalOrganization = organizationDAO.findById(organizationId);
+        if (!optionalOrganization.isPresent()) {
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Organization not found");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+
+        Organization organization = optionalOrganization.get();
+        // Verifica se l'utente corrente è OWNER di questa specifica organizzazione
+        if (!organization.getOwners().contains(currentUser.get()) && !authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"))) {
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Access Denied: You are not an owner of this organization");
+            return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+        }
+
+        // Trova l'utente da rimuovere
         Optional<User> optionalUser = userDAO.findById(userId);
-
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            UserInfo userInfo = user.getUserInfo();
-
-            userInfoDAO.delete(userInfo);
-            userDAO.delete(user);
-            response.put("message", "User removed");
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } else {
+        if (!optionalUser.isPresent()) {
+            Map<String, String> response = new HashMap<>();
             response.put("message", "User not found");
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
+
+        return removeUserFromOrg(optionalUser, organization);
     }
-    
-    // TODO stesse operazioni di user, le rimettiamo anche in owner?
 
-    // private ResponseEntity<Map<String, String>> validateFields(Map<String, String> requestBody) {
-    //     String email = requestBody.get("email");
-    //     String password = requestBody.get("password");
-    //     String username = requestBody.get("username");
+    private ResponseEntity<Map<String, String>> removeUserFromOrg(Optional<User> optionalUser,
+            Organization organization) {
+        User user = optionalUser.get();
 
-    //     Map<String, String> response = new HashMap<>();
+        // Rimuove l'utente dai membri o proprietari dell'organizzazione specifica
+        boolean userRemoved = false;
+        if (organization.getOwners().contains(user)) {
+            organization.removeOwner(user);
+            userRemoved = true;
+        }
+        if (organization.getMembers().contains(user)) {
+            organization.removeMember(user);
+            userRemoved = true;
+        }
 
-    //     if (email == null || email.trim().isEmpty()) {
-    //         response.put("message", "Email cannot be empty");
-    //         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    //     }
-
-    //     if (password == null || password.trim().isEmpty()) {
-    //         response.put("message", "Password cannot be empty");
-    //         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    //     }
-
-    //     if (username == null || username.trim().isEmpty()) {
-    //         response.put("message", "Username cannot be empty");
-    //         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    //     }
-
-    //     return null; // Nessun errore trovato
-    // }
-
-    // @PostMapping("/createUser")
-    // public ResponseEntity<Map<String, String>> createNewUser(@RequestBody Map<String, String> requestBody) {
-    //     Map<String, String> response = new HashMap<>();
-
-    //     ResponseEntity<Map<String, String>> validationResponse = validateFields(requestBody);
-
-    //     if (validationResponse != null) {
-    //         return validationResponse;
-    //     }
-
-    //     String email = requestBody.get("email");
-    //     String password = requestBody.get("password");
-    //     String username = requestBody.get("username");
-
-    //     // Controllo se l'email è già utilizzata
-    //     if (userInfoDAO.findByEmail(email).isPresent()) {
-    //         response.put("error", "Email già esistente");
-    //         return new ResponseEntity<>(response, HttpStatus.CREATED);
-    //     }
-
-    //     // Controllo se l'username è già utilizzata
-    //     if (userDAO.findByUsername(username).isPresent()) {
-    //         response.put("error", "Username già esistente");
-    //         return new ResponseEntity<>(response, HttpStatus.CREATED);
-    //     }
-
-    //     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    //     String hashedPassword = passwordEncoder.encode(password);
-
-    //     UserInfo userInfo = new UserInfo(email, hashedPassword);
-    //     userInfoDAO.save(userInfo);
-    //     User user = new User(userInfo, username);
-    //     userDAO.save(user);
-
-    //     response.put("message", "User creato");
-    //     return new ResponseEntity<>(response, HttpStatus.CREATED);
-    // }
-
-    // @PostMapping("/updateUser")
-    // public ResponseEntity<Map<String, String>> updateUser(@RequestBody Map<String, String> requestBody) {
-
-    //     Map<String, String> response = new HashMap<>();
-    //     String userId = requestBody.get("id");
-
-    //     if (userId == null || userId.trim().isEmpty()) {
-    //         response.put("message", "Id cannot be empty");
-    //         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    //     }
-
-    //     Optional<User> optionalUser = userDAO.findById(requestBody.get("id"));
-
-    //     if (optionalUser.isPresent()) {
-
-    //         ResponseEntity<Map<String, String>> validationResponse = validateFields(requestBody);
-
-    //         if (validationResponse != null) {
-    //             return validationResponse;
-    //         }
-
-    //         User user = optionalUser.get();
-    //         UserInfo userInfo = user.getUserInfo();
-
-    //         userInfo.setEmail(requestBody.get("email"));
-    //         userInfo.setPassword(requestBody.get("password"));
-    //         user.setUsername(requestBody.get("username"));
-
-    //         userInfoDAO.save(userInfo);
-    //         userDAO.save(user);
-    //     } else {
-    //         response.put("message", "User not found");
-    //     }
-
-    //     response.put("message", "User aggiornato");
-    //     return new ResponseEntity<>(response, HttpStatus.CREATED);
-    // }
-
-
-
+        // Salva l'organizzazione aggiornata
+        if (userRemoved) {
+            organizationDAO.save(organization);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "User removed from the organization");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "User not found in the specified organization");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
 }

@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.example.taskflow.DAOs.ActivityDAO;
@@ -41,91 +42,96 @@ public class TestUtil {
     @Autowired
     private ActivityDAO activityDAO;
 
-    public void cleanDatabase(){
+    public void cleanDatabase() {
         Set<String> allCollections = this.template.getCollectionNames();
-        
-        for (String collectionName : allCollections){
+
+        for (String collectionName : allCollections) {
             this.template.dropCollection(collectionName);
         }
     }
 
-    public FieldDefinition pushGetRandomFieldDefinitionToDatabase(FieldType type){
+    public FieldDefinition pushGetRandomFieldDefinitionToDatabase(FieldType type) {
         FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(type)
-                                    .setName(RandomString.make(10))
-                                    .build();
+                .setName(RandomString.make(10))
+                .build();
 
         return this.fieldDefinitionDAO.save(fieldDefinition);
     }
 
-    public User addGetRandomUserToDatabase(){
-        UserInfo info = new UserInfo(RandomString.make(10), RandomString.make(10));
+    public User addGetRandomUserToDatabase() {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        String plainPassword = "password";
+        String hashedPassword = passwordEncoder.encode(plainPassword);
+
+        UserInfo info = new UserInfo(RandomString.make(10), hashedPassword);
         this.userInfoDAO.save(info);
 
-        User user = new User(info, RandomString.make(10));
+        User user = new User(info, RandomString.make(10), false);
         return this.userDAO.save(user);
     }
 
-    public ArrayList<User> addGetMultipleRandomUserToDatabase(int n){
+    public ArrayList<User> addGetMultipleRandomUserToDatabase(int n) {
         ArrayList<User> users = new ArrayList<>();
 
-        for (int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             users.add(this.addGetRandomUserToDatabase());
         }
 
         return users;
     }
 
-    public Activity addRandomActivityToDatabase(){
+    public Activity addRandomActivityToDatabase() {
         Activity activity = new Activity(RandomString.make(10));
         return this.activityDAO.save(activity);
     }
 
-    public ArrayList<Activity> addMultipleRandomActivitiesToDatabase(int n){
+    public ArrayList<Activity> addMultipleRandomActivitiesToDatabase(int n) {
         ArrayList<Activity> activities = new ArrayList<>();
 
-        for (int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             activities.add(this.addRandomActivityToDatabase());
         }
 
         return activities;
     }
 
-    public Project addRandomProjectToDatabase(){
+    public Project addRandomProjectToDatabase() {
         Project project = new Project(RandomString.make(10));
         return this.projectDAO.save(project);
     }
 
-    public ArrayList<Project> addMultipleRandomProjectsToDatabase(int n){
+    public ArrayList<Project> addMultipleRandomProjectsToDatabase(int n) {
         ArrayList<Project> projects = new ArrayList<>();
 
-        for (int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             projects.add(this.addRandomProjectToDatabase());
         }
 
         return projects;
     }
 
-    public void checkEqualOrganizations(Organization o1, Organization o2){
+    public void checkEqualOrganizations(Organization o1, Organization o2) {
 
         assertEquals(o1.getName(), o2.getName());
         assertEquals(o1.getCreationDate(), o2.getCreationDate());
 
-        for(int i=0; i<o1.getOwners().size(); i++)
+        for (int i = 0; i < o1.getOwners().size(); i++)
             assertEquals(o1.getOwners().get(i).getUsername(), o2.getOwners().get(i).getUsername());
 
-        for(int i=0; i<o1.getMembers().size(); i++)
+        for (int i = 0; i < o1.getMembers().size(); i++)
             assertEquals(o1.getMembers().get(i).getUsername(), o2.getMembers().get(i).getUsername());
 
-        for(int i=0; i<o1.getProjects().size(); i++)
+        for (int i = 0; i < o1.getProjects().size(); i++)
             assertEquals(o1.getProjects().get(i).getName(), o2.getProjects().get(i).getName());
 
         assertEquals(o1.getUuid(), o2.getUuid());
     }
 
-    public void checkEqualProject(Project p1, Project p2){
+    public void checkEqualProject(Project p1, Project p2) {
         assertEquals(p1.getName(), p2.getName());
         assertEquals(p1.getUuid(), p2.getUuid());
-        for(int i=0; i<p1.getActivities().size(); i++){
+        for (int i = 0; i < p1.getActivities().size(); i++) {
             assertEquals(p1.getActivities().get(i).getUuid(), p2.getActivities().get(i).getUuid());
         }
     }
