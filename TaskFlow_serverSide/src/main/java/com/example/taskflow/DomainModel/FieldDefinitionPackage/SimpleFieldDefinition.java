@@ -18,50 +18,64 @@ public class SimpleFieldDefinition extends FieldDefinition {
 
     @Override
     public void addSingleEntry(Object obj) {
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+                                                + methodName);
     }
 
     @Override
     public void addMultipleEntry(ArrayList<?> obj) {
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+                                                + methodName);
     }
 
     @Override
     public void removeEntry(Object obj) {
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+                                                + methodName);
     }
 
     @Override
     public void removeMultipleEntry(ArrayList<?> objs) {
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+                                                + methodName);
     }
 
     @Override
     public ArrayList<?> getAllEntries() {
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+                                                + methodName);
     }
 
     @Override
     public Object getSingleEntry() {
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+                                                + methodName);
     }
 
     @Override
     public boolean validateValue(Object obj) {
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+                                                + methodName);
     }
 }
