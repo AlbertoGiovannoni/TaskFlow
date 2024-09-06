@@ -16,7 +16,7 @@ public class DocumentBuilder extends FieldBuilder{
     }
 
     @Override
-    public FieldBuilder addParameters(ArrayList<?> values){
+    public FieldBuilder addParameters(ArrayList<?> values){ //TODO se si usa sempre add parameters anche se hanno 1 solo parametro qui bisogna chiamare addparameter e non mandare eccezione
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + "doesn't implement method " 
                                                 + this.getClass().getEnclosingMethod().toString());

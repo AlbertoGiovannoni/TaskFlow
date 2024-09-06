@@ -11,11 +11,15 @@ public class TextBuilder extends FieldBuilder{
         super(type);
     }
 
+    // @Override
+    // public FieldBuilder addParameters(ArrayList<?> values){
+    //     throw new UnsupportedOperationException(this.getClass().getSimpleName() 
+    //                                             + "doesn't implement method " 
+    //                                             + this.getClass().getEnclosingMethod().toString());
+    // }
     @Override
     public FieldBuilder addParameters(ArrayList<?> values){
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + "doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+        return this.addParameter(values.get(0));
     }
 
     @Override

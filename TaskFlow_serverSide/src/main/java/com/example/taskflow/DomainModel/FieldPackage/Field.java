@@ -9,7 +9,7 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
 public abstract class Field implements UuidInterface{
-    @DBRef
+    //@DBRef
     FieldDefinition fieldDefinition;
     UUID uuid;
 

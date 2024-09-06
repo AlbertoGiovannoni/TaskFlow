@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -48,8 +49,12 @@ public class UserTest {
 
     @Test
     public void testInsertAndFindUser() {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-        UserInfo userinfo = new UserInfo(RandomString.make(10), RandomString.make(10));
+        String plainPassword = "password";
+        String hashedPassword = passwordEncoder.encode(plainPassword);
+
+        UserInfo userinfo = new UserInfo(RandomString.make(10), hashedPassword);
         userInfoDAO.save(userinfo);
         
         User user = new User(userinfo, RandomString.make(10), false);

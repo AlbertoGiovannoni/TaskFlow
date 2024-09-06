@@ -20,48 +20,47 @@ public class SimpleFieldDefinition extends FieldDefinition {
     public void addSingleEntry(Object obj) {
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+                                                );
     }
 
     @Override
     public void addMultipleEntry(ArrayList<?> obj) {
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+                                                + " doesn't implement method " );
     }
 
     @Override
     public void removeEntry(Object obj) {
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+                                                );
     }
 
     @Override
     public void removeMultipleEntry(ArrayList<?> objs) {
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+                                                );
     }
 
     @Override
     public ArrayList<?> getAllEntries() {
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+                                                );
     }
 
     @Override
     public Object getSingleEntry() {
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+                                                );
     }
 
     @Override
     public boolean validateValue(Object obj) {
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+                                                );
     }
 }
