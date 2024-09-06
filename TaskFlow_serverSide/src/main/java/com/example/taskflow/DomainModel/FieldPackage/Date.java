@@ -63,44 +63,56 @@ public class Date extends Field{
 
     @Override
     public void removeValue(Object value) {
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+                                                + methodName);
     }
 
     @Override
     public ArrayList<?> getValues() {
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+                                                + methodName);
     }
 
     @Override
     public void removeValues(ArrayList<?> values) {
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+                                                + methodName);
     }
 
     @Override
     public void addValue(Object value) {
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+                                                + methodName);
     }
 
     @Override
     public void addValues(ArrayList<?> values) {
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+                                                + methodName);
     }
 
     @Override
     public void setValues(ArrayList<?> values) {
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+                                                + methodName);
     }
     
 }

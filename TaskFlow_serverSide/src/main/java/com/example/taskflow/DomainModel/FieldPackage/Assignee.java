@@ -27,9 +27,11 @@ public class Assignee extends Field{
 
     @Override
     public Object getValue() {
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+
         throw new UnsupportedOperationException(this.getClass().getSimpleName() 
                                                 + " doesn't implement method " 
-                                                + this.getClass().getEnclosingMethod().toString());
+                                                + methodName);
     }
 
     @Override
