@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.example.taskflow.DAOs.ActivityDAO;
+import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
@@ -23,6 +24,10 @@ import com.example.taskflow.DomainModel.UserInfo;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
+import com.example.taskflow.DomainModel.FieldPackage.Field;
+import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldBuilder;
+import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
+import java.util.Random;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -41,6 +46,8 @@ public class TestUtil {
     private ProjectDAO projectDAO;
     @Autowired
     private ActivityDAO activityDAO;
+    @Autowired
+    private FieldDAO fieldDao;
 
     public void cleanDatabase() {
         Set<String> allCollections = this.template.getCollectionNames();
@@ -109,6 +116,30 @@ public class TestUtil {
         }
 
         return projects;
+    }
+
+    public ArrayList<Field> pushGetNumberFields(int n){
+        Field field;
+        FieldDefinition fieldDefinition;
+        Random randomGenerator = new Random();
+        ArrayList<Field> allFieldsGenerated = new ArrayList<>();
+
+        for (int i = 0; i < n; i++){
+            fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.NUMBER)
+                                .setName(RandomString.make(10))
+                                .build();
+            field = FieldFactory.getBuilder(FieldType.NUMBER)
+                        .addFieldDefinition(fieldDefinition)
+                        .addParameter(randomGenerator.nextInt(1000))
+                        .build();
+            
+            allFieldsGenerated.add(field);
+
+            this.fieldDefinitionDAO.save(fieldDefinition);
+            this.fieldDao.save(field);
+        }
+
+        return allFieldsGenerated;
     }
 
     public void checkEqualOrganizations(Organization o1, Organization o2) {

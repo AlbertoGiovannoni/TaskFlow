@@ -50,6 +50,8 @@ public class FieldTest {
         this.testUtil.cleanDatabase();
     }
 
+    // TODO: testare document e ragionare su come implementarlo per bene
+
     @Test
     public void testTextField(){
         FieldDefinition fieldDefinition = this.testUtil.pushGetRandomFieldDefinitionToDatabase(FieldType.TEXT);
