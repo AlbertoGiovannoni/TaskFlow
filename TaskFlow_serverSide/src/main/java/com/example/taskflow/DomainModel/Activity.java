@@ -2,6 +2,7 @@ package com.example.taskflow.DomainModel;
 import java.util.ArrayList;
 import java.util.UUID;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 
@@ -11,6 +12,7 @@ public class Activity implements UuidInterface{
     @Id
     private String id;
     private String name;
+    @DBRef
     private ArrayList<Field> fields;
     private UUID uuid;
 
