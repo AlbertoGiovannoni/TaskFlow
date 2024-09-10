@@ -2,7 +2,11 @@ package com.example.taskflow.DomainModel.FieldPackage;
 import java.util.ArrayList;
 import java.util.UUID;
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.TypeAlias;
+
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
+
+@TypeAlias("Document")
 public class Document extends Field{ 
     
     // TODO non so se il tipo ObjectId va bene per quello che dobbiamo fare

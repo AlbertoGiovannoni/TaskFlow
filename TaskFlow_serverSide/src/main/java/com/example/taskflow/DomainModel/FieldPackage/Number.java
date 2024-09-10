@@ -1,8 +1,12 @@
 package com.example.taskflow.DomainModel.FieldPackage;
 import java.util.ArrayList;
 import java.util.UUID;
+
+import org.springframework.data.annotation.TypeAlias;
+
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
+//@TypeAlias("Number")
 public class Number extends Field{
 
     private Float value;

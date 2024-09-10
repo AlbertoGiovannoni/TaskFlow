@@ -3,8 +3,11 @@ package com.example.taskflow.DomainModel.FieldPackage;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import org.springframework.data.annotation.TypeAlias;
+
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
+//@TypeAlias("Text")
 public class Text extends Field{
 
     private String value;

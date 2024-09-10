@@ -51,7 +51,7 @@ public class OrganizationTest {
 
     @BeforeEach
     public void setupDatabase(){
-        //this.testUtil.cleanDatabase();
+        this.testUtil.cleanDatabase();
 
         this.testUtil.addGetMultipleRandomUserToDatabase(5);
         this.testUtil.addMultipleRandomProjectsToDatabase(5);

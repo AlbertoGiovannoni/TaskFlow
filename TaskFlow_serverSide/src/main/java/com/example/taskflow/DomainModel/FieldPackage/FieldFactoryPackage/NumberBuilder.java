@@ -22,16 +22,14 @@ public class NumberBuilder extends FieldBuilder{
     @Override
     public NumberBuilder addParameter(Object value){
         if (value != null){
-            if (value instanceof User){
-                this.value = (Float)value;
-            }
+            this.value = (Float)value;
         }
         return this;
     }
 
     @Override
     public Field build() {
-        if (this.value != null){
+        if (this.value == null){
             throw new IllegalAccessError("value is null");
         }
         return new Number(this.fieldDefinition, this.value);

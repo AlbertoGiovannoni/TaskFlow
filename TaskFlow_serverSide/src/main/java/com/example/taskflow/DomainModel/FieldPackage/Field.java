@@ -5,10 +5,12 @@ import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
+import org.springframework.data.mongodb.core.mapping.Document;
 import com.example.taskflow.DomainModel.UuidInterface;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
+@Document("field") 
 public abstract class Field implements UuidInterface{
     @Id
     String id;
@@ -54,4 +56,17 @@ public abstract class Field implements UuidInterface{
     public abstract void setValue(Object value);
 
     public abstract void setValues(ArrayList<?> values);
+    
+    @Override
+    public boolean equals(Object obj) {
+        boolean value = false;
+
+        if (obj != null && obj instanceof Field) {
+            if (obj instanceof Field){
+                value = (this.uuid.equals(((Field)obj).getUuid()));  
+            }
+        }
+
+        return value;
+    }
 }

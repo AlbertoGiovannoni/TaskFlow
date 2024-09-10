@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 
-@Document
+@Document("activity")
 public class Activity implements UuidInterface{
 
     @Id

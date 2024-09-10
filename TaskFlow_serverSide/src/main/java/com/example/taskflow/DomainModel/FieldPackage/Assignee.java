@@ -3,15 +3,16 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
+@TypeAlias("Assignee")
 public class Assignee extends Field{
 
     @DBRef
-    @Lazy
     private ArrayList<User> values;
 
     public Assignee(FieldDefinition fieldDefinition, ArrayList<User> values) {

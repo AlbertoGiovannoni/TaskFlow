@@ -2,8 +2,11 @@ package com.example.taskflow.DomainModel.FieldPackage;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import org.springframework.data.annotation.TypeAlias;
+
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
+@TypeAlias("SingleSelection")
 public class SingleSelection extends Field{
 
     private ArrayList<String> values;

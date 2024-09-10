@@ -62,7 +62,9 @@ public class FieldTest {
                                 .build();
 
         Field fieldFromDB = this.fieldDao.save(field);
+        Field found = this.fieldDao.findById(field.getId()).orElse(null);
 
+        assertEquals(field, found);
         assertEquals(field, fieldFromDB);
         assertEquals(field.getFieldDefinition(), fieldDefinition);
 
@@ -164,8 +166,9 @@ public class FieldTest {
                                 .build();
 
         Field fieldFromDB = this.fieldDao.save(field);
+        Field found = this.fieldDao.findById(field.getId()).orElse(null);
 
-        assertEquals(field, fieldFromDB);
+        assertEquals(field, found);
         assertEquals(field.getFieldDefinition(), fieldDefinition);
 
         fieldFromDB.setValues(subsetOfSomeUsers);

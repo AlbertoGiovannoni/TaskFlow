@@ -32,8 +32,6 @@ import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
-import com.example.taskflow.DomainModel.FieldPackage.Date;
-import com.example.taskflow.DomainModel.FieldPackage.DateData;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
 
@@ -60,32 +58,39 @@ public class ActivityTest {
     @BeforeEach
     public void setupDatabase(){
         this.testUtil.cleanDatabase();
+        ArrayList<Field> fields = new ArrayList<Field>();
+
+        FieldDefinition fieldDefinition1 = this.testUtil.pushGetRandomFieldDefinitionToDatabase(FieldType.TEXT);
+        FieldDefinition fieldDefinition2 = this.testUtil.pushGetRandomFieldDefinitionToDatabase(FieldType.NUMBER);
+
+        ArrayList<User> someUsers = this.testUtil.addGetMultipleRandomUserToDatabase(5);
+
+        this.fieldDefinitionDao.save(fieldDefinition1);
+        this.fieldDefinitionDao.save(fieldDefinition2);
+
+        Field field1 = FieldFactory.getBuilder(FieldType.TEXT)
+                .addFieldDefinition(fieldDefinition1)
+                .addParameter("diocan")
+                .build();
+
+        Float value = new Float("2");
+        Field field2 = FieldFactory.getBuilder(FieldType.NUMBER)
+                .addFieldDefinition(fieldDefinition2)
+                .addParameter(value)
+                .build();
+
+        field1 = this.fieldDao.save(field1);
+        field2 = this.fieldDao.save(field2);
+
+        fields.add(field1);
+        fields.add(field2);
+
+        this.activity = new Activity(RandomString.make(10), fields);
+        activityDAO.save(this.activity);
     }
 
     @Test
     public void testInsertAndFindActivity() {
-        ArrayList<Field> fields = new ArrayList<Field>();
-
-        FieldDefinition fieldDefinition = this.testUtil.pushGetRandomFieldDefinitionToDatabase(FieldType.ASSIGNEE);
-
-        ArrayList<User> someUsers = this.testUtil.addGetMultipleRandomUserToDatabase(5);
-
-        fieldDefinition.addMultipleEntry(someUsers);
-        this.fieldDefinitionDao.save(fieldDefinition);
-
-        Field field = FieldFactory.getBuilder(FieldType.ASSIGNEE)
-                .addFieldDefinition(fieldDefinition)
-                .addParameter(someUsers.get(0))
-                .build();
-
-        field = this.fieldDao.save(field);
-
-        fields.add(field);
-
-        this.activity = new Activity(RandomString.make(10), fields);
-        this.activity.setFields(fields);
-        activityDAO.save(activity);
-
         Activity found = activityDAO.findById(activity.getId()).orElse(null);
         assertNotNull(found);
         this.testUtil.checkEqualActivities(activity, found);
@@ -101,16 +106,19 @@ public class ActivityTest {
                 .addParameter("foo")
                 .build();
 
+        Float value = new Float("2");
         Field field2 = FieldFactory.getBuilder(FieldType.NUMBER)
                 .addFieldDefinition(fieldDefinition2)
-                .addParameter(4)
+                .addParameter(value)
                 .build();
 
         ArrayList<Field> fields = new ArrayList<Field>();
         fields.add(field1);
         fields.add(field2);
 
-        Activity found1 = activityDAO.findById(activity.getId()).orElse(null);
+        field1 = this.fieldDao.save(field1);
+        field2 = this.fieldDao.save(field2);
+        Activity found1 = activityDAO.findById(this.activity.getId()).orElse(null);
         found1.setFields(fields);
         activityDAO.save(found1);
         Activity found2 = activityDAO.findById(activity.getId()).orElse(null);
