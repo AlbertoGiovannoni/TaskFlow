@@ -11,6 +11,9 @@ public class DateData {
     private Notification notification;
     private LocalDateTime dateTime;
 
+	public DateData(){
+	}
+	
     public DateData(LocalDateTime dateTime, Notification notification) {
         this.dateTime = dateTime;
         this.notification = notification;
