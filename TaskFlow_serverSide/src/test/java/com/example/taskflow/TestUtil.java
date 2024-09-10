@@ -159,6 +159,14 @@ public class TestUtil {
         assertEquals(o1.getUuid(), o2.getUuid());
     }
 
+    public void checkEqualActivities(Activity a1, Activity a2) {
+        assertEquals(a1.getName(), a2.getName());
+        assertEquals(a1.getUuid(), a2.getUuid());
+        for (int i = 0; i < a1.getFields().size(); i++) {
+            assertEquals(a1.getFields().get(i).getUuid(), a2.getFields().get(i).getUuid());
+        }
+    }
+
     public void checkEqualProject(Project p1, Project p2) {
         assertEquals(p1.getName(), p2.getName());
         assertEquals(p1.getUuid(), p2.getUuid());
@@ -166,4 +174,5 @@ public class TestUtil {
             assertEquals(p1.getActivities().get(i).getUuid(), p2.getActivities().get(i).getUuid());
         }
     }
+    
 }
