@@ -40,9 +40,7 @@ import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFa
 
 import org.json.JSONObject;
 import org.json.JSONArray;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
+import org.json.JSONException;
 
 @RestController
 @RequestMapping("/api")
@@ -120,10 +118,10 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
 
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String hashedPassword = passwordEncoder.encode(password);
+        // BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        // String hashedPassword = passwordEncoder.encode(password);
 
-        UserInfo userInfo = new UserInfo(email, hashedPassword);
+        UserInfo userInfo = new UserInfo(email, password);
         userInfoDAO.save(userInfo);
         User user = new User(userInfo, username, isAdmin);
         userDAO.save(user);
@@ -206,21 +204,15 @@ public class UserController {
 
                 }
 
-                // Return the list of User objects
                 return userPar;
 
             case SINGLE_SELECTION:
                 ArrayList<String> stringPar = new ArrayList<>();
-
-                // Assuming 'parameters' is a JSONArray
-                // Accessing the JSON object at the current index
                 JSONObject paramObject = parameter;
 
-                // Checking if "value" is a JSON array
                 if (paramObject.has("value") && paramObject.get("value") instanceof JSONArray) {
                     JSONArray valueArray = paramObject.getJSONArray("value");
 
-                    // Iterating over the array to add each string to stringPar
                     for (int j = 0; j < valueArray.length(); j++) {
                         stringPar.add(valueArray.getString(j));
                     }
@@ -300,7 +292,7 @@ public class UserController {
 
             parameter = convertParameter(fieldsJson.getJSONObject(i), fieldType);
 
-            if (fieldType == fieldType.ASSIGNEE) {
+            if (fieldType == fieldType.ASSIGNEE || fieldType == fieldType.SINGLE_SELECTION) {
                 fieldDefinition.addMultipleEntry(parameter); // TODO restituire fieldDefinition dal metodo di parameter?
             }
 
@@ -311,7 +303,6 @@ public class UserController {
                     .addParameters(parameter)
                     .build();
 
-
             field = fieldDAO.save(field);
             fields.add(field);
         }
@@ -320,6 +311,68 @@ public class UserController {
         activityDAO.save(activity);
 
         response.put("message", "Attività creata");
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("user/addField") // TODO fare check anche per name type e value che siano non nulli sia qui che in create activity??
+    public ResponseEntity<Map<String, String>> addField(@RequestBody Map<String, Object> requestBody) {
+        Map<String, String> response = new HashMap<>();
+
+        String activityId = (String) requestBody.get("activityId");
+        Object fieldObject = requestBody.get("field");
+
+        if (activityId == null || activityId.trim().isEmpty()) {
+            response.put("message", "activityId cannot be empty");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        // Controllo che field sia un JSON valido
+        if (!(fieldObject instanceof Map)) {
+            response.put("message", "field must be a JSON object");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        // Se field è un JSON valido, convertilo in JSONObject
+        JSONObject fieldJson;
+        try {
+            fieldJson = new JSONObject((Map<?, ?>) fieldObject);
+        } catch (JSONException e) {
+            response.put("message", "field must be a valid JSON object");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        String fieldTypeString;
+        FieldType fieldType;
+        ArrayList<?> parameter;
+
+        fieldTypeString = fieldJson.getString("type");
+        fieldType = FieldType.valueOf(fieldTypeString.toUpperCase());
+
+        FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(fieldType)
+                .setName(fieldJson.getString("name"))
+                .build();
+
+        parameter = convertParameter(fieldJson, fieldType);
+
+        if (fieldType == fieldType.ASSIGNEE || fieldType == fieldType.SINGLE_SELECTION) {
+            fieldDefinition.addMultipleEntry(parameter); // TODO restituire fieldDefinition dal metodo di parameter?
+        }
+
+        fieldDefinitionDAO.save(fieldDefinition);
+
+        Field field = FieldFactory.getBuilder(fieldType)
+                .addFieldDefinition(fieldDefinition)
+                .addParameters(parameter)
+                .build();
+
+        field = fieldDAO.save(field);
+
+        Activity activity = activityDAO.findById(activityId).orElse(null);
+        activity.addField(field);
+
+        activityDAO.save(activity);
+
+        response.put("message", "Field aggiunto");
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -346,19 +399,21 @@ public class UserController {
 
             Activity activity = optionalActivity.get();
 
-            //TODO modifica activity (addField in query separata?)
+            // TODO modifica activity (addField in query separata?)
 
-            // userInfo.setEmail((String) requestBody.get("email"));
-            // userInfo.setPassword((String) requestBody.get("password"));
-            // user.setUsername((String) requestBody.get("username"));
+            // TODo come facciamo update? passiamo tutti i field e li ricreiamo per
+            // applicare le modifiche o facciamo api di modifica field
+
+            activity.setName((String) requestBody.get("name"));
 
             activityDAO.save(activity);
         } else {
             response.put("message", "User not found");
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
 
         response.put("message", "User aggiornato");
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-    
+
 }
