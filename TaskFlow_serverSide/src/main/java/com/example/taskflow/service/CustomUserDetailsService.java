@@ -56,9 +56,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
         // Se nessun ruolo trovato, default a USER
-        if (authorities.isEmpty()) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        }
+        // if (authorities.isEmpty()) { //TODO controlla se va messo o meno
+        //     authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        // }
 
         return authorities;
     }
