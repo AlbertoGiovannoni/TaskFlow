@@ -76,9 +76,8 @@ public class TestUtil {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         String plainPassword = "password";
-        String hashedPassword = passwordEncoder.encode(plainPassword);
 
-        UserInfo info = new UserInfo(RandomString.make(10), hashedPassword);
+        UserInfo info = new UserInfo(RandomString.make(10), plainPassword);
         this.userInfoDAO.save(info);
 
         User user = new User(info, RandomString.make(10), false);
