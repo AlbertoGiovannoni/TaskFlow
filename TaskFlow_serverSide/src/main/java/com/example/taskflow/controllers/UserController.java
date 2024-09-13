@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.*;
 import com.example.taskflow.DAOs.ActivityDAO;
 import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
+import com.example.taskflow.DAOs.NotificationDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
 import com.example.taskflow.DomainModel.Activity;
+import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.UserInfo;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
@@ -48,6 +50,9 @@ public class UserController {
 
     @Autowired
     UserInfoDAO userInfoDAO;
+
+    @Autowired
+    NotificationDAO notificationDAO;
 
     @Autowired
     ActivityDAO activityDAO;
@@ -230,8 +235,58 @@ public class UserController {
                 JSONObject obj = parameter;
                 String dateString = obj.getString("value");
 
-                DateData dateData = new DateData(LocalDateTime.parse(dateString));
-                datePar.add(dateData);
+                // creazione notifica
+
+                if (obj.has("notification")) {
+                    Object notif = obj.get("notification");
+
+                    JSONObject notificationJson = new JSONObject(notif.toString());
+
+                    ArrayList<User> receivers = new ArrayList<>();
+
+                    JSONArray userIdsR = notificationJson.getJSONArray("receivers");
+
+                    for (int j = 0; j < userIdsR.length(); j++) {
+                        String userId = userIdsR.getString(j);
+
+                        // Check if the user ID is valid
+                        if (userId == null || userId.trim().isEmpty()) {
+                            throw new IllegalArgumentException("User ID cannot be null or empty.");
+                        }
+
+                        try {
+                            // Attempt to find the user by ID using the userDAO
+                            Optional<User> tmp = userDAO.findById(userId);
+
+                            // Check if the user is found
+                            if (tmp.isPresent()) {
+                                receivers.add(tmp.get());
+                            } else {
+                                throw new IllegalArgumentException("User with ID " + userId + " not found.");
+                            }
+
+                        } catch (Exception e) {
+                            System.err.println("Error fetching user with ID " + userId + ": " + e.getMessage());
+                            throw e;
+                        }
+                    }
+
+                    LocalDateTime date = LocalDateTime.parse(dateString);
+                    Integer advanceHours = notificationJson.getInt("advanceHours");
+                    Notification notification = new Notification(receivers, date.minusHours(advanceHours),
+                            notificationJson.getString("message"));
+                    this.notificationDAO.save(notification);
+
+                    DateData dateData = new DateData(date, notification);
+                    datePar.add(dateData);
+
+                } else {
+                    LocalDateTime date = LocalDateTime.parse(dateString);
+                    DateData dateData = new DateData(date);
+                    datePar.add(dateData);
+
+                }
+                // datePar.add(dateData);
 
                 return datePar;
 
@@ -314,7 +369,8 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PostMapping("user/addField") // TODO fare check anche per name type e value che siano non nulli sia qui che in create activity??
+    @PostMapping("user/addField") // TODO fare check anche per name type e value che siano non nulli sia qui che
+                                  // in create activity??
     public ResponseEntity<Map<String, String>> addField(@RequestBody Map<String, Object> requestBody) {
         Map<String, String> response = new HashMap<>();
 
