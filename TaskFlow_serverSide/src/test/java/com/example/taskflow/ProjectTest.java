@@ -6,6 +6,8 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 
+import net.bytebuddy.utility.RandomString;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +74,14 @@ public class ProjectTest {
     }
 
     @Test
-    public void testMondifyOrganization() {
-        //TODO prendi il progetto e modificalo
+    public void testMondifyProject() {
+        Project found1 = projectDAO.findById(project.getId()).orElse(null);
+        this.someActivities = this.testUtil.addMultipleRandomActivitiesToDatabase(5);
+        found1.setActivities(someActivities);
+        found1.setName(RandomString.make(10));
+        
+        this.projectDAO.save(found1);
+        Project found2 = projectDAO.findById(project.getId()).orElse(null);
+        this.testUtil.checkEqualProject(found1, found2);
     }
 }
