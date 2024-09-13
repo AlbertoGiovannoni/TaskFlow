@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -51,6 +52,7 @@ public class ActivityTest {
     private FieldDefinitionDAO fieldDefinitionDao;
 
     private Activity activity;
+    private ArrayList<Field> someFields;
 
     @Autowired
     private ActivityDAO activityDAO;
@@ -87,6 +89,8 @@ public class ActivityTest {
 
         this.activity = new Activity(RandomString.make(10), fields);
         activityDAO.save(this.activity);
+
+        this.someFields = fields;
     }
 
     @Test
@@ -125,7 +129,11 @@ public class ActivityTest {
         this.testUtil.checkEqualActivities(found1, found2);
     }
 
-    public void test(){
+    @Test
+    public void testFieldInActivity(){
+        Activity activityFromDatabase = this.activityDAO.findById(this.activity.getId()).orElse(null);
 
+        assertEquals(activityFromDatabase.getFields().get(0), this.someFields.get(0));
+        assertEquals(activityFromDatabase.getFields().get(1), this.someFields.get(1));
     }
 }
