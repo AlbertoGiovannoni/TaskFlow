@@ -60,8 +60,8 @@ public class ActivityTest {
         this.testUtil.cleanDatabase();
         ArrayList<Field> fields = new ArrayList<Field>();
 
-        FieldDefinition fieldDefinition1 = this.testUtil.pushGetRandomFieldDefinitionToDatabase(FieldType.TEXT);
-        FieldDefinition fieldDefinition2 = this.testUtil.pushGetRandomFieldDefinitionToDatabase(FieldType.NUMBER);
+        FieldDefinition fieldDefinition1 = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.TEXT);
+        FieldDefinition fieldDefinition2 = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.NUMBER);
 
         ArrayList<User> someUsers = this.testUtil.addGetMultipleRandomUserToDatabase(5);
 
@@ -98,8 +98,8 @@ public class ActivityTest {
 
     @Test
     public void modifyActivity(){
-        FieldDefinition fieldDefinition1 = this.testUtil.pushGetRandomFieldDefinitionToDatabase(FieldType.TEXT);
-        FieldDefinition fieldDefinition2 = this.testUtil.pushGetRandomFieldDefinitionToDatabase(FieldType.NUMBER);
+        FieldDefinition fieldDefinition1 = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.TEXT);
+        FieldDefinition fieldDefinition2 = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.NUMBER);
 
         Field field1 = FieldFactory.getBuilder(FieldType.TEXT)
                 .addFieldDefinition(fieldDefinition1)
@@ -123,5 +123,9 @@ public class ActivityTest {
         activityDAO.save(found1);
         Activity found2 = activityDAO.findById(activity.getId()).orElse(null);
         this.testUtil.checkEqualActivities(found1, found2);
+    }
+
+    public void test(){
+
     }
 }

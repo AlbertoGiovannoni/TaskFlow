@@ -54,7 +54,7 @@ public class FieldTest {
 
     @Test
     public void testTextField(){
-        FieldDefinition fieldDefinition = this.testUtil.pushGetRandomFieldDefinitionToDatabase(FieldType.TEXT);
+        FieldDefinition fieldDefinition = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.TEXT);
 
         Field field = FieldFactory.getBuilder(FieldType.TEXT)
                                 .addFieldDefinition(fieldDefinition)
@@ -80,7 +80,7 @@ public class FieldTest {
 
     @Test
     public void testNumberField(){
-        FieldDefinition fieldDefinition = this.testUtil.pushGetRandomFieldDefinitionToDatabase(FieldType.NUMBER);
+        FieldDefinition fieldDefinition = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.NUMBER);
 
         Field field = FieldFactory.getBuilder(FieldType.NUMBER)
                                 .addFieldDefinition(fieldDefinition)
@@ -104,7 +104,7 @@ public class FieldTest {
 
     @Test
     public void testSingleSelectionField(){
-        FieldDefinition fieldDefinition = this.testUtil.pushGetRandomFieldDefinitionToDatabase(FieldType.SINGLE_SELECTION);
+        FieldDefinition fieldDefinition = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.SINGLE_SELECTION);
 
         ArrayList<String> someSelections = new ArrayList<>();
         ArrayList<String> subsetOfSomeSelections = new ArrayList<>();
@@ -152,7 +152,7 @@ public class FieldTest {
 
     @Test
     public void testAssigneeField(){
-        FieldDefinition fieldDefinition = this.testUtil.pushGetRandomFieldDefinitionToDatabase(FieldType.ASSIGNEE);
+        FieldDefinition fieldDefinition = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.ASSIGNEE);
 
         ArrayList<User> someUsers = this.testUtil.addGetMultipleRandomUserToDatabase(5);
         ArrayList<User> subsetOfSomeUsers = new ArrayList<>(Arrays.asList(someUsers.get(0), someUsers.get(3)));
@@ -184,7 +184,7 @@ public class FieldTest {
 
     @Test
     public void testDateField(){
-        FieldDefinition fieldDefinition = this.testUtil.pushGetRandomFieldDefinitionToDatabase(FieldType.DATE);
+        FieldDefinition fieldDefinition = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.DATE);
         ArrayList<User> someUsers = this.testUtil.addGetMultipleRandomUserToDatabase(10);
         Notification notification = new Notification(someUsers, LocalDateTime.now(), RandomString.make(10));
 

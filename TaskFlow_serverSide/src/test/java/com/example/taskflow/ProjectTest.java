@@ -58,7 +58,7 @@ public class ProjectTest {
     @BeforeEach
     public void setupDatabase(){
         this.testUtil.cleanDatabase();        
-        this.fieldDef = this.testUtil.pushGetRandomFieldDefinitionToDatabase(FieldType.TEXT);
+        this.fieldDef = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.TEXT);
         this.project = this.testUtil.addRandomProjectToDatabase();
         this.project.addFieldDefinition(fieldDef);
         this.someActivities = this.testUtil.addMultipleRandomActivitiesToDatabase(5);

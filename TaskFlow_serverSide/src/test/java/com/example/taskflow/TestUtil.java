@@ -64,7 +64,7 @@ public class TestUtil {
         userDAO.save(admin);
     }
 
-    public FieldDefinition pushGetRandomFieldDefinitionToDatabase(FieldType type) {
+    public FieldDefinition pushGetFieldDefinitionToDatabase(FieldType type) {
         FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(type)
                 .setName(RandomString.make(10))
                 .build();
