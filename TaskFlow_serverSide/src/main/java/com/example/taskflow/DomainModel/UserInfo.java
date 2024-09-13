@@ -2,8 +2,8 @@ package com.example.taskflow.DomainModel;
 import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.data.mongodb.core.index.Indexed;
-
 
 @Document
 public class UserInfo implements UuidInterface{
@@ -22,8 +22,10 @@ public class UserInfo implements UuidInterface{
     }
 
     public UserInfo(String email, String password){
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        
         this.email = email;
-        this.password = password; // TODO: cripta password
+        this.password = passwordEncoder.encode(password);
         this.uuid = UUID.randomUUID();
     }
 
@@ -50,7 +52,9 @@ public class UserInfo implements UuidInterface{
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        this.password = passwordEncoder.encode(password);
     }
 
     @Override

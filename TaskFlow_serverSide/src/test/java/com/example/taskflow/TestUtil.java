@@ -55,6 +55,13 @@ public class TestUtil {
         for (String collectionName : allCollections) {
             this.template.dropCollection(collectionName);
         }
+
+        
+        UserInfo userInfo = new UserInfo("admin@gmail.com", "password");
+        userInfoDAO.save(userInfo);
+
+        User admin = new User(userInfo, "admin", true);
+        userDAO.save(admin);
     }
 
     public FieldDefinition pushGetRandomFieldDefinitionToDatabase(FieldType type) {

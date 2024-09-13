@@ -29,12 +29,13 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/owner/**").hasAnyRole("OWNER", "ADMIN") // Solo OWNER può accedere
-                        .requestMatchers("/api/user/**").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN") // Solo OWNER può accedere
-                        .anyRequest().authenticated()) // Tutte le altre richieste richiedono autenticazione
-                .httpBasic(withDefaults()) // Autenticazione di base
-                .userDetailsService(customUserDetailsService); // Usa CustomUserDetailsService
+                        .requestMatchers("/api/public/register").permitAll() 
+                        .requestMatchers("/api/user/**").authenticated()
+                        .requestMatchers("/api/owner/**").hasAnyRole("OWNER", "ADMIN")
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN") 
+                        .anyRequest().authenticated())
+                .httpBasic(withDefaults()) 
+                .userDetailsService(customUserDetailsService); 
 
         return http.build();
     }
