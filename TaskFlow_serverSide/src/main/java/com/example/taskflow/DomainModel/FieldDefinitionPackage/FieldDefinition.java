@@ -8,7 +8,7 @@ import com.example.taskflow.DomainModel.UuidInterface;
 
 import java.util.ArrayList;
 
-@Document
+@Document("fieldDefinition")
 public abstract class FieldDefinition implements UuidInterface{
 
     @Id

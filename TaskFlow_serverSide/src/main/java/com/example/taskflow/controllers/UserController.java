@@ -317,6 +317,7 @@ public class UserController {
     public ResponseEntity<Map<String, String>> createNewActivity(@RequestBody Map<String, Object> requestBody) {
 
         Map<String, String> response = new HashMap<>();
+
         String name = (String) requestBody.get("activityName");
         Object fieldsObject = requestBody.get("activityFields");
 
@@ -436,7 +437,7 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PostMapping("/user/updateActivity")
+    @PostMapping("/user/updateActivity") // TODO rendi PATCH
     public ResponseEntity<Map<String, String>> updateActivity(@RequestBody Map<String, Object> requestBody) {
 
         Map<String, String> response = new HashMap<>();
@@ -476,53 +477,51 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PostMapping("/user/createProject")
-    public ResponseEntity<Map<String, String>> createProject(@RequestBody Map<String, Object> requestBody) {
-
+    @PostMapping("/user/updateField") // TODO PATCH + da testare
+    public ResponseEntity<Map<String, String>> updateField(@RequestBody Map<String, Object> requestBody) {
         Map<String, String> response = new HashMap<>();
-        String name = (String) requestBody.get("projectName");
 
-        // Controllo e conversione dell'input
-        if (name == null || name.trim().isEmpty()) {
-            response.put("message", "projectName cannot be empty");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        String fieldId = (String) requestBody.get("fieldId");
+        Optional<Field> optionalField = fieldDAO.findById(fieldId);
+        ArrayList<?> parameter;
+        FieldType fieldType;
+        String fieldTypeString;
+
+        if (optionalField.isPresent()) {
+            Field field = optionalField.get();
+
+            System.out.println(field.getId());
+
+            // Recupera il campo "field" come una mappa
+            Map<String, Object> newFieldMap = (Map<String, Object>) requestBody.get("field");
+
+            if (newFieldMap != null) {
+                // Se vuoi un JSONObject, converti la mappa in un JSONObject
+                JSONObject newField = new JSONObject(newFieldMap);
+
+                fieldTypeString = newField.getString("type");
+                fieldType = FieldType.valueOf(fieldTypeString.toUpperCase());
+                parameter = convertParameter(newField, fieldType);
+
+                field.setValues(parameter);
+
+                FieldDefinition fieldDefinition = field.getFieldDefinition();
+
+                fieldDefinition.setName(newField.getString("name"));
+                fieldDefinitionDAO.save(fieldDefinition);
+
+                fieldDAO.save(field);
+            } else {
+                response.put("error", "Il campo 'field' è nullo o mancante");
+                return ResponseEntity.badRequest().body(response);
+            }
+        } else {
+            response.put("error", "Field non trovato");
+            return ResponseEntity.badRequest().body(response);
         }
 
-        Project project = new Project(name);
-        projectDAO.save(project);
-
-        response.put("message", "Progetto creato");
+        response.put("message", "Field aggiornato");
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PostMapping("/user/renameProject")
-    public ResponseEntity<Map<String, String>> renameProject(@RequestBody Map<String, Object> requestBody) {
-
-        Map<String, String> response = new HashMap<>();
-        String name = (String) requestBody.get("newName");
-        String projectId = (String) requestBody.get("projectId");
-
-        // Controllo e conversione dell'input
-        if (name == null || name.trim().isEmpty()) {
-            response.put("message", "projectName cannot be empty");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-
-        if (projectId == null) {
-            response.put("message", "projectId cannot be empty");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-
-        Project project = projectDAO.findById(projectId).orElse(null);
-        
-        if (project == null) {
-            response.put("message", "wrong projectId");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-        project.setName(name);
-        projectDAO.save(project);
-
-        response.put("message", "Progetto rinominato");
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
-    }
 }
