@@ -109,13 +109,17 @@ public class Date extends Field{
                                                 + methodName);
     }
 
+    // @Override
+    // public void setValues(ArrayList<?> values) {
+    //     String methodName = new Throwable().getStackTrace()[0].getMethodName();
+
+    //     throw new UnsupportedOperationException(this.getClass().getSimpleName() 
+    //                                             + " doesn't implement method " 
+    //                                             + methodName);
+    // }
     @Override
     public void setValues(ArrayList<?> values) {
-        String methodName = new Throwable().getStackTrace()[0].getMethodName();
-
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + " doesn't implement method " 
-                                                + methodName);
+    setValue(values.get(0));
     }
     
 }

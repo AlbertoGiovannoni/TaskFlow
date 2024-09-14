@@ -23,6 +23,8 @@ public class UserTest {
     @Autowired
     FieldDefinitionDAO fieldDefinitionDAO;
     @Autowired
+    private TestUtil testUtil;
+    @Autowired
     UserDAO userDAO;
     @Autowired
     UserInfoDAO userInfoDAO;
@@ -35,15 +37,7 @@ public class UserTest {
 
     @BeforeEach
     public void setupDatabase(){
-        if (template.collectionExists("fieldDefinition")){
-            template.dropCollection("fieldDefinition");
-        }
-        if (template.collectionExists("user")){
-            template.dropCollection("user");
-        }
-        if (template.collectionExists("userInfo")){
-            template.dropCollection("userInfo");
-        }
+        this.testUtil.cleanDatabase();
     }
 
     @Test

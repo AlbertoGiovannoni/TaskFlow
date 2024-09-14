@@ -22,10 +22,12 @@ import com.example.taskflow.DAOs.ActivityDAO;
 import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.NotificationDAO;
+import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
 import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.Notification;
+import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.UserInfo;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
@@ -54,6 +56,8 @@ public class UserController {
     @Autowired
     NotificationDAO notificationDAO;
 
+    @Autowired
+    ProjectDAO projectDAO;
     @Autowired
     ActivityDAO activityDAO;
     @Autowired
@@ -313,6 +317,7 @@ public class UserController {
     public ResponseEntity<Map<String, String>> createNewActivity(@RequestBody Map<String, Object> requestBody) {
 
         Map<String, String> response = new HashMap<>();
+
         String name = (String) requestBody.get("activityName");
         Object fieldsObject = requestBody.get("activityFields");
 
@@ -432,7 +437,7 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PostMapping("/user/updateActivity")
+    @PostMapping("/user/updateActivity") // TODO rendi PATCH
     public ResponseEntity<Map<String, String>> updateActivity(@RequestBody Map<String, Object> requestBody) {
 
         Map<String, String> response = new HashMap<>();
@@ -472,4 +477,52 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @PostMapping("/user/updateField") // TODO PATCH + da testare
+    public ResponseEntity<Map<String, String>> updateField(@RequestBody Map<String, Object> requestBody) {
+        Map<String, String> response = new HashMap<>();
+
+        String fieldId = (String) requestBody.get("fieldId");
+        Optional<Field> optionalField = fieldDAO.findById(fieldId);
+        ArrayList<?> parameter;
+        FieldType fieldType;
+        String fieldTypeString;
+
+        if (optionalField.isPresent()) {
+            Field field = optionalField.get();
+
+            System.out.println(field.getId());
+
+            // Recupera il campo "field" come una mappa
+            Map<String, Object> newFieldMap = (Map<String, Object>) requestBody.get("field");
+
+            if (newFieldMap != null) {
+                // Se vuoi un JSONObject, converti la mappa in un JSONObject
+                JSONObject newField = new JSONObject(newFieldMap);
+
+                fieldTypeString = newField.getString("type");
+                fieldType = FieldType.valueOf(fieldTypeString.toUpperCase());
+                parameter = convertParameter(newField, fieldType);
+
+                field.setValues(parameter);
+
+                FieldDefinition fieldDefinition = field.getFieldDefinition();
+
+                fieldDefinition.setName(newField.getString("name"));
+                fieldDefinitionDAO.save(fieldDefinition);
+
+                fieldDAO.save(field);
+            } else {
+                response.put("error", "Il campo 'field' è nullo o mancante");
+                return ResponseEntity.badRequest().body(response);
+            }
+        } else {
+            response.put("error", "Field non trovato");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        response.put("message", "Field aggiornato");
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
 }
+
+

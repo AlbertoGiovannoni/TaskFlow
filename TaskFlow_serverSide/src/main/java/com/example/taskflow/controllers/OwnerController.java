@@ -12,9 +12,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.taskflow.DAOs.OrganizationDAO;
+import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
 import com.example.taskflow.DomainModel.Organization;
+import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.UserInfo;
 import com.example.taskflow.service.OrganizationService;
@@ -28,6 +30,9 @@ public class OwnerController {
 
     @Autowired
     UserDAO userDAO;
+
+    @Autowired
+    ProjectDAO projectDAO;
 
     @Autowired
     private OrganizationDAO organizationDAO;
@@ -110,5 +115,59 @@ public class OwnerController {
             response.put("message", "User not found in the specified organization");
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
+    }
+    
+    @PostMapping("/createProject")
+    public ResponseEntity<Map<String, String>> createProject(@RequestBody Map<String, Object> requestBody) {
+
+        //TODO autenticazione owner
+
+        Map<String, String> response = new HashMap<>();
+        String name = (String) requestBody.get("projectName");
+
+        // Controllo e conversione dell'input
+        if (name == null || name.trim().isEmpty()) {
+            response.put("message", "projectName cannot be empty");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        Project project = new Project(name);
+        projectDAO.save(project);
+
+        response.put("message", "Progetto creato");
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/renameProject")
+    public ResponseEntity<Map<String, String>> renameProject(@RequestBody Map<String, Object> requestBody) {
+
+        //TODO autenticazione owner
+        
+        Map<String, String> response = new HashMap<>();
+
+        String name = (String) requestBody.get("newName");
+        String projectId = (String) requestBody.get("projectId");
+
+        // Controllo e conversione dell'input
+        if (name == null || name.trim().isEmpty()) {
+            response.put("message", "projectName cannot be empty");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        if (projectId == null) {
+            response.put("message", "projectId cannot be empty");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        Project project = projectDAO.findById(projectId).orElse(null);
+        if (project == null) {
+            response.put("message", "wrong projectId");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        project.setName(name);
+        projectDAO.save(project);
+
+        response.put("message", "Progetto rinominato");
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }
