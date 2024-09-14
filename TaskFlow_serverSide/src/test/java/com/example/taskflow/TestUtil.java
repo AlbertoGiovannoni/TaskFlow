@@ -124,6 +124,29 @@ public class TestUtil {
         return projects;
     }
 
+    public ArrayList<Field> pushGetNumberFieldsWithSameDefinition(int n){
+        Field field;
+        FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.NUMBER)
+                                            .setName(RandomString.make(10))
+                                            .build();
+        Random randomGenerator = new Random();
+        ArrayList<Field> allFieldsGenerated = new ArrayList<>();
+
+        for (int i = 0; i < n; i++){
+            field = FieldFactory.getBuilder(FieldType.NUMBER)
+                        .addFieldDefinition(fieldDefinition)
+                        .addParameter(randomGenerator.nextInt(1000))
+                        .build();
+            
+            allFieldsGenerated.add(field);
+
+            this.fieldDefinitionDAO.save(fieldDefinition);
+            this.fieldDao.save(field);
+        }
+
+        return allFieldsGenerated;
+    }
+
     public ArrayList<Field> pushGetNumberFields(int n){
         Field field;
         FieldDefinition fieldDefinition;
