@@ -129,18 +129,19 @@ public class TestUtil {
         FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.NUMBER)
                                             .setName(RandomString.make(10))
                                             .build();
+
+        this.fieldDefinitionDAO.save(fieldDefinition);
+
         Random randomGenerator = new Random();
         ArrayList<Field> allFieldsGenerated = new ArrayList<>();
 
         for (int i = 0; i < n; i++){
             field = FieldFactory.getBuilder(FieldType.NUMBER)
                         .addFieldDefinition(fieldDefinition)
-                        .addParameter(randomGenerator.nextInt(1000))
+                        .addParameter((float)randomGenerator.nextInt(1000))
                         .build();
             
             allFieldsGenerated.add(field);
-
-            this.fieldDefinitionDAO.save(fieldDefinition);
             this.fieldDao.save(field);
         }
 
@@ -159,7 +160,7 @@ public class TestUtil {
                                 .build();
             field = FieldFactory.getBuilder(FieldType.NUMBER)
                         .addFieldDefinition(fieldDefinition)
-                        .addParameter(randomGenerator.nextInt(1000))
+                        .addParameter((float)randomGenerator.nextInt(1000))
                         .build();
             
             allFieldsGenerated.add(field);
