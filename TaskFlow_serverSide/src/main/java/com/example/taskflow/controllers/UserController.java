@@ -22,10 +22,12 @@ import com.example.taskflow.DAOs.ActivityDAO;
 import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.NotificationDAO;
+import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
 import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.Notification;
+import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.UserInfo;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
@@ -54,6 +56,8 @@ public class UserController {
     @Autowired
     NotificationDAO notificationDAO;
 
+    @Autowired
+    ProjectDAO projectDAO;
     @Autowired
     ActivityDAO activityDAO;
     @Autowired
@@ -472,4 +476,53 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @PostMapping("/user/createProject")
+    public ResponseEntity<Map<String, String>> createProject(@RequestBody Map<String, Object> requestBody) {
+
+        Map<String, String> response = new HashMap<>();
+        String name = (String) requestBody.get("projectName");
+
+        // Controllo e conversione dell'input
+        if (name == null || name.trim().isEmpty()) {
+            response.put("message", "projectName cannot be empty");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        Project project = new Project(name);
+        projectDAO.save(project);
+
+        response.put("message", "Progetto creato");
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/user/renameProject")
+    public ResponseEntity<Map<String, String>> renameProject(@RequestBody Map<String, Object> requestBody) {
+
+        Map<String, String> response = new HashMap<>();
+        String name = (String) requestBody.get("newName");
+        String projectId = (String) requestBody.get("projectId");
+
+        // Controllo e conversione dell'input
+        if (name == null || name.trim().isEmpty()) {
+            response.put("message", "projectName cannot be empty");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        if (projectId == null) {
+            response.put("message", "projectId cannot be empty");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        Project project = projectDAO.findById(projectId).orElse(null);
+        
+        if (project == null) {
+            response.put("message", "wrong projectId");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        project.setName(name);
+        projectDAO.save(project);
+
+        response.put("message", "Progetto rinominato");
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
 }
