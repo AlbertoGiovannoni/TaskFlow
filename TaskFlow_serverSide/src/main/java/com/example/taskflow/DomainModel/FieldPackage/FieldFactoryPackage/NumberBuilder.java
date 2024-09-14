@@ -24,7 +24,7 @@ public class NumberBuilder extends FieldBuilder {
             if (value instanceof Float) {
                 this.value = (Float) value;
             } else {
-                throw new IllegalArgumentException("value is not of type DateData:" + value);
+                throw new IllegalArgumentException("value is not of type Float:" + value);
             }
         } else {
             throw new IllegalArgumentException("value is null:" + value);
