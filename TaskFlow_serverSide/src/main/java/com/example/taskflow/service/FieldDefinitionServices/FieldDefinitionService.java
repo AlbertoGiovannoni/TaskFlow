@@ -33,11 +33,11 @@ public class FieldDefinitionService {
         this.fieldDefinitionDao.delete(fieldDefinition);
     }
 
-    public FieldDefinition saveFieldDefinition(FieldDefinition fieldDefinition){
+    public FieldDefinition createFieldDefinition(FieldDefinition fieldDefinition){
         return this.fieldDefinitionDao.save(fieldDefinition);
     }
 
-    public FieldDefinition saveFieldDefinition(FieldType type, String name){
+    public FieldDefinition createFieldDefinition(FieldType type, String name){
         FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(type)
                                             .setName(name)
                                             .build();
@@ -46,7 +46,7 @@ public class FieldDefinitionService {
         return fieldDefinition;
     }
 
-    public FieldDefinition saveFieldDefinition(FieldType type, String name, ArrayList<?> parameters){
+    public FieldDefinition createFieldDefinition(FieldType type, String name, ArrayList<?> parameters){
         FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(type)
                                             .setName(name)
                                             .addParameters(parameters)
