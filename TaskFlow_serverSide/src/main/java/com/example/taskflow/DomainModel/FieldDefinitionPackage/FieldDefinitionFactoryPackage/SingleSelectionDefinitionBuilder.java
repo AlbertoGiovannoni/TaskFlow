@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.SingleSelectionDefinition;
 
+// FIXME: costruire senza ripetizion o direttamente qua o costruendo l'oggetto e aggiungendo
+// i parametri utilizzando il metodo di singleSelectionDefinition 
 public class SingleSelectionDefinitionBuilder extends FieldDefinitionBuilder{
     
     private ArrayList<String> possibleSelections;
