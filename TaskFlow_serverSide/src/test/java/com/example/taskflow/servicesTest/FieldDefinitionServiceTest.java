@@ -2,8 +2,6 @@ package com.example.taskflow.servicesTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.ArgumentMatchers.assertArg;
 
 import java.util.ArrayList;
 
@@ -17,13 +15,12 @@ import org.springframework.test.context.ActiveProfiles;
 import com.example.taskflow.TestUtil;
 import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
-import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
-import com.example.taskflow.service.FieldDefinitionService;
+import com.example.taskflow.service.FieldDefinitionService.FieldDefinitionService;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -40,8 +37,6 @@ public class FieldDefinitionServiceTest {
     private FieldDefinitionDAO fieldDefinitionDao;
     @Autowired
     private FieldDAO fieldDao;
-    @Autowired
-    private UserDAO userDao;
 
     @BeforeEach
     public void setupDatabase(){
