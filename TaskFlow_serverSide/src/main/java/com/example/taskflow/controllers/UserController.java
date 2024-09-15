@@ -42,6 +42,8 @@ import com.example.taskflow.DomainModel.FieldPackage.DateData;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
 
+import jakarta.websocket.server.PathParam;
+
 import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -118,13 +120,13 @@ public class UserController {
         // Controllo se l'email è già utilizzata
         if (userInfoDAO.findByEmail(email).isPresent()) {
             response.put("error", "Email già esistente");
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
         // Controllo se l'username è già utilizzata
         if (userDAO.findByUsername(username).isPresent()) {
             response.put("error", "Username già esistente");
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
         // BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -139,14 +141,14 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PostMapping("/user/updateUser")
-    public ResponseEntity<Map<String, String>> updateUser(@RequestBody Map<String, Object> requestBody) {
+    @PatchMapping("/user/{userId}") // TODO PATCH
+    public ResponseEntity<Map<String, String>> updateUser(@PathVariable String userId,
+            @RequestBody Map<String, Object> requestBody) {
 
         Map<String, String> response = new HashMap<>();
-        String userId = (String) requestBody.get("userId");
 
         if (userId == null || userId.trim().isEmpty()) {
-            response.put("message", "userId cannot be empty");
+            response.put("message", "userId non può essere vuoto");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
@@ -170,7 +172,8 @@ public class UserController {
             userInfoDAO.save(userInfo);
             userDAO.save(user);
         } else {
-            response.put("message", "User not found");
+            response.put("message", "User non trovato");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
         response.put("message", "User aggiornato");
@@ -192,7 +195,7 @@ public class UserController {
 
                     // Check if the user ID is valid
                     if (userId == null || userId.trim().isEmpty()) {
-                        throw new IllegalArgumentException("User ID cannot be null or empty.");
+                        throw new IllegalArgumentException("User ID non può essere nullo o vuoto");
                     }
 
                     try {
@@ -203,7 +206,7 @@ public class UserController {
                         if (tmp.isPresent()) {
                             userPar.add(tmp.get());
                         } else {
-                            throw new IllegalArgumentException("User with ID " + userId + " not found.");
+                            throw new IllegalArgumentException("User con ID " + userId + " non trovato");
                         }
 
                     } catch (Exception e) {
@@ -227,7 +230,7 @@ public class UserController {
                     }
                 } else {
 
-                    throw new IllegalArgumentException("Expected 'value' to be a JSON array of strings.");
+                    throw new IllegalArgumentException("'value' deve essere un array di JSON");
                 }
 
                 return stringPar;
@@ -255,7 +258,7 @@ public class UserController {
 
                         // Check if the user ID is valid
                         if (userId == null || userId.trim().isEmpty()) {
-                            throw new IllegalArgumentException("User ID cannot be null or empty.");
+                            throw new IllegalArgumentException("User ID non può essere nullo o vuoto");
                         }
 
                         try {
@@ -266,7 +269,7 @@ public class UserController {
                             if (tmp.isPresent()) {
                                 receivers.add(tmp.get());
                             } else {
-                                throw new IllegalArgumentException("User with ID " + userId + " not found.");
+                                throw new IllegalArgumentException("User con ID " + userId + " non trovato");
                             }
 
                         } catch (Exception e) {
@@ -313,7 +316,7 @@ public class UserController {
 
     }
 
-    @PostMapping("/user/createActivity")
+    @PostMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities")
     public ResponseEntity<Map<String, String>> createNewActivity(@RequestBody Map<String, Object> requestBody) {
 
         Map<String, String> response = new HashMap<>();
@@ -323,40 +326,34 @@ public class UserController {
 
         // Controllo e conversione dell'input
         if (name == null || fieldsObject == null || name.trim().isEmpty()) {
-            response.put("message", "activityName or activityFields cannot be empty");
+            response.put("message", "activityName e activityFields non possono essere vuoti");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
         // Verifica che activityFields sia un array JSON
         if (!(fieldsObject instanceof ArrayList)) {
-            response.put("message", "activityFields must be a JSON array");
+            response.put("message", "activityFields deve essere un array di JSON");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
         JSONArray fieldsJson = new JSONArray((ArrayList<?>) fieldsObject);
         ArrayList<Field> fields = new ArrayList<>();
-
-        String fieldTypeString;
-        FieldType fieldType;
         ArrayList<?> parameter;
 
         JSONObject fieldJson = new JSONObject();
         for (int i = 0; i < fieldsJson.length(); i++) {
             fieldJson = fieldsJson.getJSONObject(i);
-            fieldTypeString = fieldJson.getString("type");
-            fieldType = FieldType.valueOf(fieldTypeString.toUpperCase());
 
-            FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(fieldType)
-                    .setName(fieldJson.getString("name"))
-                    .build();
-
-            parameter = convertParameter(fieldsJson.getJSONObject(i), fieldType);
-
-            if (fieldType == fieldType.ASSIGNEE || fieldType == fieldType.SINGLE_SELECTION) {
-                fieldDefinition.addMultipleEntry(parameter); // TODO restituire fieldDefinition dal metodo di parameter?
+            FieldDefinition fieldDefinition = fieldDefinitionDAO.findById(fieldJson.getString("fieldDefinitionId"))
+                    .orElse(null);
+            if (fieldDefinition == null) {
+                response.put("message", "wrong fieldDefinitionId");
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
 
-            fieldDefinitionDAO.save(fieldDefinition);
+            FieldType fieldType = fieldDefinition.getType();
+
+            parameter = convertParameter(fieldsJson.getJSONObject(i), fieldType);
 
             Field field = FieldFactory.getBuilder(fieldType)
                     .addFieldDefinition(fieldDefinition)
@@ -374,22 +371,62 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PostMapping("user/addField") // TODO fare check anche per name type e value che siano non nulli sia qui che
-                                  // in create activity??
-    public ResponseEntity<Map<String, String>> addField(@RequestBody Map<String, Object> requestBody) {
+    @PatchMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}")
+    public ResponseEntity<Map<String, String>> renameActivity(@PathVariable String activityId,
+            @RequestBody Map<String, Object> requestBody) {
+
         Map<String, String> response = new HashMap<>();
 
-        String activityId = (String) requestBody.get("activityId");
-        Object fieldObject = requestBody.get("field");
+        String name = (String) requestBody.get("name");
+
+        if (name == null || name.trim().length() == 0) {
+            response.put("message", "name non poò essere vuoto");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
 
         if (activityId == null || activityId.trim().isEmpty()) {
-            response.put("message", "activityId cannot be empty");
+            response.put("message", "activityId non può essere vuoto");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        Activity activity = activityDAO.findById(activityId).orElse(null);
+
+        if (activity == null) {
+            response.put("message", "wrong activityId");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        activity.setName(name);
+        activityDAO.save(activity);
+
+        response.put("message", "Nome activity aggiornato");
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    // TODO fare check anche per name type e value che siano non nulli sia qui che
+    // in create activity??
+    @PostMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields")
+    public ResponseEntity<Map<String, String>> addField(@PathVariable String activityId,
+            @RequestBody Map<String, Object> requestBody) {
+        Map<String, String> response = new HashMap<>();
+
+        Object fieldObject = requestBody.get("field");
+
+        Activity activity = activityDAO.findById(activityId).orElse(null);
+
+        if (activity == null) {
+            response.put("message", "wrong activityId");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        if (activityId == null || activityId.trim().isEmpty()) {
+            response.put("message", "activityId non poò essere vuoto");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
         // Controllo che field sia un JSON valido
         if (!(fieldObject instanceof Map)) {
-            response.put("message", "field must be a JSON object");
+            response.put("message", "field deve essere un JSON");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
@@ -398,20 +435,20 @@ public class UserController {
         try {
             fieldJson = new JSONObject((Map<?, ?>) fieldObject);
         } catch (JSONException e) {
-            response.put("message", "field must be a valid JSON object");
+            response.put("message", "field deve essere un JSON valido");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
-        String fieldTypeString;
-        FieldType fieldType;
         ArrayList<?> parameter;
 
-        fieldTypeString = fieldJson.getString("type");
-        fieldType = FieldType.valueOf(fieldTypeString.toUpperCase());
+        FieldDefinition fieldDefinition = fieldDefinitionDAO.findById(fieldJson.getString("fieldDefinitionId"))
+                .orElse(null);
+        if (fieldDefinition == null) {
+            response.put("message", "wrong fieldDefinitionId");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
 
-        FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(fieldType)
-                .setName(fieldJson.getString("name"))
-                .build();
+        FieldType fieldType = fieldDefinition.getType();
 
         parameter = convertParameter(fieldJson, fieldType);
 
@@ -428,7 +465,6 @@ public class UserController {
 
         field = fieldDAO.save(field);
 
-        Activity activity = activityDAO.findById(activityId).orElse(null);
         activity.addField(field);
 
         activityDAO.save(activity);
@@ -437,92 +473,56 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PostMapping("/user/updateActivity") // TODO rendi PATCH
-    public ResponseEntity<Map<String, String>> updateActivity(@RequestBody Map<String, Object> requestBody) {
-
-        Map<String, String> response = new HashMap<>();
-        String activityId = (String) requestBody.get("activityId");
-
-        if (activityId == null || activityId.trim().isEmpty()) {
-            response.put("message", "activityId cannot be empty");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-
-        Optional<Activity> optionalActivity = activityDAO.findById(activityId);
-
-        if (optionalActivity.isPresent()) {
-
-            ResponseEntity<Map<String, String>> validationResponse = validateFields(requestBody);
-
-            if (validationResponse != null) {
-                return validationResponse;
-            }
-
-            Activity activity = optionalActivity.get();
-
-            // TODO modifica activity (addField in query separata?)
-
-            // TODo come facciamo update? passiamo tutti i field e li ricreiamo per
-            // applicare le modifiche o facciamo api di modifica field
-
-            activity.setName((String) requestBody.get("name"));
-
-            activityDAO.save(activity);
-        } else {
-            response.put("message", "User not found");
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
-        }
-
-        response.put("message", "User aggiornato");
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
-    }
-
-    @PostMapping("/user/updateField") // TODO PATCH + da testare
-    public ResponseEntity<Map<String, String>> updateField(@RequestBody Map<String, Object> requestBody) {
+    @PatchMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields/{fieldId}")                                                                                       // testare
+    public ResponseEntity<Map<String, String>> updateField(@PathVariable String fieldId,
+            @RequestBody Map<String, Object> requestBody) {
         Map<String, String> response = new HashMap<>();
 
-        String fieldId = (String) requestBody.get("fieldId");
-        Optional<Field> optionalField = fieldDAO.findById(fieldId);
+        Field field = fieldDAO.findById(fieldId).orElse(null);
         ArrayList<?> parameter;
         FieldType fieldType;
         String fieldTypeString;
 
-        if (optionalField.isPresent()) {
-            Field field = optionalField.get();
-
-            System.out.println(field.getId());
-
-            // Recupera il campo "field" come una mappa
-            Map<String, Object> newFieldMap = (Map<String, Object>) requestBody.get("field");
-
-            if (newFieldMap != null) {
-                // Se vuoi un JSONObject, converti la mappa in un JSONObject
-                JSONObject newField = new JSONObject(newFieldMap);
-
-                fieldTypeString = newField.getString("type");
-                fieldType = FieldType.valueOf(fieldTypeString.toUpperCase());
-                parameter = convertParameter(newField, fieldType);
-
-                field.setValues(parameter);
-
-                FieldDefinition fieldDefinition = field.getFieldDefinition();
-
-                fieldDefinition.setName(newField.getString("name"));
-                fieldDefinitionDAO.save(fieldDefinition);
-
-                fieldDAO.save(field);
-            } else {
-                response.put("error", "Il campo 'field' è nullo o mancante");
-                return ResponseEntity.badRequest().body(response);
-            }
-        } else {
+        if (field == null) {
             response.put("error", "Field non trovato");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        System.out.println(field.getId());
+
+        // Recupera il campo "field" come una mappa
+        Map<String, Object> newFieldMap = (Map<String, Object>) requestBody.get("field");
+
+        if (newFieldMap != null) {            
+            JSONObject newField = new JSONObject(newFieldMap);
+
+            String name = newField.getString("name");
+
+            if (name == null || name.trim().length() == 0) {
+                response.put("message", "name non poò essere vuoto");
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+
+            fieldTypeString = newField.getString("type");
+            fieldType = FieldType.valueOf(fieldTypeString.toUpperCase());
+            parameter = convertParameter(newField, fieldType);
+
+            field.setValues(parameter);
+
+            FieldDefinition fieldDefinition = field.getFieldDefinition();
+
+            fieldDefinition.setName(name);
+            fieldDefinitionDAO.save(fieldDefinition);
+
+            fieldDAO.save(field);
+        } else {
+            response.put("error", "Il campo 'field' è nullo o mancante");
             return ResponseEntity.badRequest().body(response);
         }
 
         response.put("message", "Field aggiornato");
         return new ResponseEntity<>(response, HttpStatus.CREATED);
-    }
+    }
+
+    // TODO rimuovi field e rimuovi attività
 }
-
-
