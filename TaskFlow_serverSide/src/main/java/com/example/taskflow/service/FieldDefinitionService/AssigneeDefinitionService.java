@@ -1,4 +1,4 @@
-package com.example.taskflow.service;
+package com.example.taskflow.service.FieldDefinitionService;
 
 import java.util.ArrayList;
 
@@ -7,11 +7,11 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinitio
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 public class AssigneeDefinitionService extends FieldDefinitionService{
-    public FieldDefinition addPartecipants(String idFieldDefinition, ArrayList<String> userIds){
+    @Override
+    public FieldDefinition addParameters(String idFieldDefinition, ArrayList<String> userIds){
         User user;
-        FieldDefinition fieldDefinitionFromDatabase = this.fieldDefinitionDao
-                                                        .findById(idFieldDefinition)
-                                                        .orElseThrow();
+        FieldDefinition fieldDefinitionFromDatabase = this.checkFieldDefinitionExistance(idFieldDefinition);
+        
         if (!(fieldDefinitionFromDatabase instanceof AssigneeDefinition)){
             throw new IllegalArgumentException("Expected " + AssigneeDefinition.class.getSimpleName() + ", find " + fieldDefinitionFromDatabase.getClass().getSimpleName());
         }

@@ -1,4 +1,4 @@
-package com.example.taskflow.service;
+package com.example.taskflow.service.FieldDefinitionService;
 
 import java.util.ArrayList;
 
@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.UserDAO;
+import com.example.taskflow.DomainModel.User;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
@@ -61,5 +63,17 @@ public class FieldDefinitionService {
         fieldDefinition.setName(newName);
 
         return this.fieldDefinitionDao.save(fieldDefinition);
+    }
+
+    public FieldDefinition addParameters(String idFieldDefinition, ArrayList<String> userIds){
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
+                                                + " doesn't implement method " 
+                                                + methodName);
+    }
+
+    FieldDefinition checkFieldDefinitionExistance(String fieldDefinitionId){
+        return this.fieldDefinitionDao.findById(fieldDefinitionId).orElseThrow();
     }
 }
