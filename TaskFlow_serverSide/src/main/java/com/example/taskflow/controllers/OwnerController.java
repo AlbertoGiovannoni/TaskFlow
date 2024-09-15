@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +24,7 @@ import com.example.taskflow.DomainModel.UserInfo;
 import com.example.taskflow.service.OrganizationService;
 
 @RestController
-@RequestMapping("/api/owner")
+@RequestMapping("/api/user")
 public class OwnerController {
 
     @Autowired
@@ -37,70 +39,61 @@ public class OwnerController {
     @Autowired
     private OrganizationDAO organizationDAO;
 
-    @PostMapping("/removeUser")
-    public ResponseEntity<Map<String, String>> removeUser(
-            @RequestBody Map<String, String> requestBody) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Map<String, String>> handleAccessDeniedException(AccessDeniedException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Access Denied: You are not authorized to perform this action.");
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    }
 
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER') or "
+            +
+            "@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_ADMIN')")
+    @DeleteMapping("/{userId}/myOrganization/{organizationId}/users/{targetId}")
+    public ResponseEntity<Map<String, String>> removeUser(@PathVariable String targetId, @RequestBody Map<String, String> requestBody) {
+        
+        Map<String, String> response = new HashMap<>();
+    
         // Ottieni i dati dalla richiesta
-        String userId = requestBody.get("userId");
         String organizationId = requestBody.get("organizationId");
 
-        if (userId == null || userId.trim().isEmpty() || organizationId == null || organizationId.trim().isEmpty()) {
-            Map<String, String> response = new HashMap<>();
+        if (targetId == null || targetId.trim().isEmpty() || organizationId == null || organizationId.trim().isEmpty()) {
             response.put("message", "User ID and Organization ID cannot be empty");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-
-        // Trova l'utente corrente
-        Optional<User> currentUser = userDAO.findByUsername(currentUsername);
-        if (!currentUser.isPresent()) {
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Current user not found");
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
 
         // Trova l'organizzazione
         Optional<Organization> optionalOrganization = organizationDAO.findById(organizationId);
         if (!optionalOrganization.isPresent()) {
-            Map<String, String> response = new HashMap<>();
             response.put("message", "Organization not found");
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
         Organization organization = optionalOrganization.get();
-        // Verifica se l'utente corrente è OWNER di questa specifica organizzazione
-        if (!organization.getOwners().contains(currentUser.get()) && !authentication.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"))) {
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Access Denied: You are not an owner of this organization");
-            return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
-        }
 
         // Trova l'utente da rimuovere
-        Optional<User> optionalUser = userDAO.findById(userId);
-        if (!optionalUser.isPresent()) {
-            Map<String, String> response = new HashMap<>();
+        User target = userDAO.findById(targetId).orElse(null);
+
+        if (target == null){
             response.put("message", "User not found");
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
-
-        return removeUserFromOrg(optionalUser, organization);
+            
+        return removeUserFromOrg(target, organization);
     }
 
-    private ResponseEntity<Map<String, String>> removeUserFromOrg(Optional<User> optionalUser,
+    private ResponseEntity<Map<String, String>> removeUserFromOrg(User target,
             Organization organization) {
-        User user = optionalUser.get();
+        
 
         // Rimuove l'utente dai membri o proprietari dell'organizzazione specifica
         boolean userRemoved = false;
-        if (organization.getOwners().contains(user)) {
-            organization.removeOwner(user);
+        if (organization.getOwners().contains(target)) {
+            organization.removeOwner(target);
             userRemoved = true;
         }
-        if (organization.getMembers().contains(user)) {
-            organization.removeMember(user);
+        if (organization.getMembers().contains(target)) {
+            organization.removeMember(target);
             userRemoved = true;
         }
 
@@ -116,11 +109,14 @@ public class OwnerController {
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
     }
-    
-    @PostMapping("/createProject")
+
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER') or "
+    +
+    "@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_ADMIN')")
+    @PostMapping("/{userId}/myOrganization/{organizationId}/projects")
     public ResponseEntity<Map<String, String>> createProject(@RequestBody Map<String, Object> requestBody) {
 
-        //TODO autenticazione owner
+        // TODO autenticazione owner
 
         Map<String, String> response = new HashMap<>();
         String name = (String) requestBody.get("projectName");
@@ -138,15 +134,17 @@ public class OwnerController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PostMapping("/renameProject")
-    public ResponseEntity<Map<String, String>> renameProject(@RequestBody Map<String, Object> requestBody) {
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER') or "
+    +
+    "@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_ADMIN')")
+    @PatchMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}")
+    public ResponseEntity<Map<String, String>> renameProject(@PathVariable String projectId, @RequestBody Map<String, Object> requestBody) {
 
-        //TODO autenticazione owner
-        
+        // TODO autenticazione owner
+
         Map<String, String> response = new HashMap<>();
 
         String name = (String) requestBody.get("newName");
-        String projectId = (String) requestBody.get("projectId");
 
         // Controllo e conversione dell'input
         if (name == null || name.trim().isEmpty()) {
