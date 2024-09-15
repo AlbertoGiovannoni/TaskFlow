@@ -64,7 +64,7 @@ public class FieldDefinitionServiceTest {
         FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.NUMBER)
                                                         .setName(name)
                                                         .build();
-        FieldDefinition fieldDefinitionFromDB = this.fieldDefinitionService.saveFieldDefinition(fieldDefinition);
+        FieldDefinition fieldDefinitionFromDB = this.fieldDefinitionService.createFieldDefinition(fieldDefinition);
 
         assertEquals(fieldDefinition, fieldDefinitionFromDB);
     }
@@ -76,7 +76,7 @@ public class FieldDefinitionServiceTest {
         
         for (FieldType type : FieldType.values()){
             name = RandomString.make(10);
-            fieldDefinition = this.fieldDefinitionService.saveFieldDefinition(type, name);
+            fieldDefinition = this.fieldDefinitionService.createFieldDefinition(type, name);
             assertEquals(fieldDefinition.getName(), name);
             assertEquals(fieldDefinition.getType(), type);
         }
@@ -91,7 +91,7 @@ public class FieldDefinitionServiceTest {
         
         ArrayList<User> users = this.testUtil.addGetMultipleRandomUserToDatabase(10);
         
-        fieldDefinition = this.fieldDefinitionService.saveFieldDefinition(FieldType.ASSIGNEE, name, users);
+        fieldDefinition = this.fieldDefinitionService.createFieldDefinition(FieldType.ASSIGNEE, name, users);
         
         assertEquals(fieldDefinition.getName(), name);
         assertEquals(fieldDefinition.getType(), FieldType.ASSIGNEE);
