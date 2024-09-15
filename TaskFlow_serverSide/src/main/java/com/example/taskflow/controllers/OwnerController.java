@@ -23,6 +23,11 @@ import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.UserInfo;
 import com.example.taskflow.service.OrganizationService;
 
+/*
+    FIXME: fixare tutti i metodi ed utilizzare i DTO! 
+    [probabilmente va cancellato tutto e rifatto da capo :(]
+*/
+
 @RestController
 @RequestMapping("/api/user")
 public class OwnerController {
