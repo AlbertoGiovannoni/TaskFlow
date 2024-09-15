@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.UserDAO;
+import com.example.taskflow.DTOs.FieldDefinitionDTO;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionBuilder;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
 
 
@@ -31,6 +33,25 @@ public class FieldDefinitionService {
         this.fieldDao.deleteFieldByFieldDefinition(fieldDefinition);
 
         this.fieldDefinitionDao.delete(fieldDefinition);
+    }
+    
+    /*
+     * FIXME: Capire se fra controller e services si passano solo DTOs e quindi 
+     *        il mapping è fatto sempre nei services oppure se il mapping
+     *        è fatto nei controllers 
+     */
+
+    // seguendo la filosofia sopra dovrei avere metodi di questo tipo
+    public FieldDefinitionDTO createFieldDefinition(FieldDefinitionDTO fieldDefinitionDto){
+        // mapping da dto a fielddefininition di seguito creo un field 
+        // a caso giusto per avere coerenza
+        FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.NUMBER)
+                                                                .setName("random")
+                                                                .build();
+        //salvo il field definition che ho creato
+        FieldDefinition fieldDefinitionFromDatabase = this.fieldDefinitionDao.save(fieldDefinition);
+        // rimappo il field definition dal database ad un dto e lo ritorno 
+        return new FieldDefinitionDTO();
     }
 
     public FieldDefinition createFieldDefinition(FieldDefinition fieldDefinition){

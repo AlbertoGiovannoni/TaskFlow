@@ -2,13 +2,17 @@ package com.example.taskflow.DTOs;
 
 import java.util.ArrayList;
 
+import javax.validation.constraints.NotNull;
+
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
 public class FieldDefinitionDTO {
+    @NotNull
     private String name;
+    @NotNull
+    private FieldType type;
     private String id;
     private ArrayList<String> parameters;
-    private FieldType type;
 
 
     public String getName() {
