@@ -20,7 +20,7 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
-import com.example.taskflow.service.FieldDefinitionService.FieldDefinitionService;
+import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionService;
 
 import net.bytebuddy.utility.RandomString;
 
