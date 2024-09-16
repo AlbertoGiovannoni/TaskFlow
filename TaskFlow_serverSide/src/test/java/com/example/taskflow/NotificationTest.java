@@ -58,7 +58,7 @@ public class NotificationTest {
         UserInfo info = new UserInfo(RandomString.make(10), RandomString.make(10));
         this.userInfoDAO.save(info);
 
-        User user = new User(info, RandomString.make(10), false);
+        User user = new User(info, RandomString.make(10));
         return this.userDAO.save(user);
     }
 

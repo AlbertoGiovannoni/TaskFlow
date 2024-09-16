@@ -87,7 +87,7 @@ public class userControllerTest {
             UserInfo info = new UserInfo(RandomString.make(10), "password");
             this.userInfoDAO.save(info);
 
-            owner = new User(info, "owner", false);
+            owner = new User(info, "owner");
             this.userDAO.save(owner);
         }
         organization.addOwner(owner);

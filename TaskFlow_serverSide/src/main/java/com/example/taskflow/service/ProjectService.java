@@ -19,11 +19,11 @@ public class ProjectService {
     @Autowired
     UserDAO userDao;
 
-    public void delete(ProjectDTO projectDto){
-        Project project = this.projectDao.findById(projectDto.getId()).orElseThrow();
+    // public void delete(ProjectDTO projectDto){
+    //     Project project = this.projectDao.findById(projectDto.getId()).orElseThrow();
 
-        //TODO cascading
+    //     //TODO cascading
 
-        this.projectDao.delete(project);
-    }
+    //     this.projectDao.delete(project);
+    // }
 }

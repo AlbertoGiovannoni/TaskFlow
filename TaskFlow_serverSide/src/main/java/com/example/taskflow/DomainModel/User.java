@@ -20,7 +20,7 @@ public class User implements UuidInterface{
     public User(){
     }
 
-    public User(UserInfo userInfo, String username, boolean isAdmin) {
+    public User(UserInfo userInfo, String username) {
         this.username = username;
         this.userInfo = userInfo;
         this.uuid = UUID.randomUUID();

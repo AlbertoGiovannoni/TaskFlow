@@ -28,6 +28,7 @@ import com.example.taskflow.DAOs.OrganizationDAO;
 import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
+import com.example.taskflow.DTOs.UserDTO;
 import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.Organization;
@@ -45,6 +46,7 @@ import com.example.taskflow.DomainModel.FieldPackage.Assignee;
 import com.example.taskflow.DomainModel.FieldPackage.DateData;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
+import com.example.taskflow.Mappers.UserMapper;
 
 import jakarta.websocket.server.PathParam;
 
@@ -87,7 +89,6 @@ public class UserController {
         String email = (String) requestBody.get("email");
         String password = (String) requestBody.get("password");
         String username = (String) requestBody.get("username");
-        Object isAdminObj = requestBody.get("isAdmin"); // Extract isAdmin as an Object
 
         Map<String, String> response = new HashMap<>();
 
@@ -105,14 +106,17 @@ public class UserController {
             response.put("message", "Username cannot be empty");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-        if (isAdminObj == null || !(isAdminObj instanceof Boolean)) {
-            response.put("message", "isAdmin must be a non-null boolean");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
 
         return null; // Nessun errore trovato
     }
 
+
+    @PostMapping("/user/test")
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+        User user = UserMapper.INSTANCE.userDTOToUser(userDTO);
+        userDAO.save(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.INSTANCE.userToUserDTO(user));
+    }
 
     @PostMapping("/public/register")
     public ResponseEntity<Map<String, String>> register(@RequestBody Map<String, Object> requestBody) {
@@ -127,7 +131,6 @@ public class UserController {
         String email = (String) requestBody.get("email");
         String password = (String) requestBody.get("password");
         String username = (String) requestBody.get("username");
-        boolean isAdmin = Boolean.valueOf((boolean) requestBody.get("isAdmin"));
 
         // Controllo se l'email è già utilizzata
         if (userInfoDAO.findByEmail(email).isPresent()) {
@@ -141,12 +144,9 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
-        // BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        // String hashedPassword = passwordEncoder.encode(password);
-
         UserInfo userInfo = new UserInfo(email, password);
         userInfoDAO.save(userInfo);
-        User user = new User(userInfo, username, isAdmin);
+        User user = new User(userInfo, username);
         userDAO.save(user);
 
         response.put("message", "User creato");

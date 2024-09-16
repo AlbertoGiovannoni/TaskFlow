@@ -63,7 +63,7 @@ public class TestUtil {
         UserInfo userInfo = new UserInfo("admin@gmail.com", "password");
         userInfoDAO.save(userInfo);
 
-        User admin = new User(userInfo, "admin", true);
+        User admin = new User(userInfo, "admin");
         userDAO.save(admin);
     }
 
@@ -81,7 +81,7 @@ public class TestUtil {
         UserInfo info = new UserInfo(RandomString.make(10), plainPassword);
         this.userInfoDAO.save(info);
 
-        User user = new User(info, RandomString.make(10), false);
+        User user = new User(info, RandomString.make(10));
         return this.userDAO.save(user);
     }
 
