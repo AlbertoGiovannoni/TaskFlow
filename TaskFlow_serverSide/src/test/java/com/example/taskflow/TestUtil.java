@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import com.example.taskflow.DAOs.ActivityDAO;
 import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
+import com.example.taskflow.DAOs.OrganizationDAO;
 import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
@@ -48,6 +49,8 @@ public class TestUtil {
     private ActivityDAO activityDAO;
     @Autowired
     private FieldDAO fieldDao;
+    @Autowired
+    private OrganizationDAO organizationDAO;
 
     public void cleanDatabase() {
         Set<String> allCollections = this.template.getCollectionNames();
@@ -73,8 +76,6 @@ public class TestUtil {
     }
 
     public User addGetRandomUserToDatabase() {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
         String plainPassword = "password";
 
         UserInfo info = new UserInfo(RandomString.make(10), plainPassword);
@@ -122,6 +123,11 @@ public class TestUtil {
         }
 
         return projects;
+    }
+
+    public Organization addRandomOrganizationToDatabase() {
+        Organization organization = new Organization(RandomString.make(10), new ArrayList<User>(), new ArrayList<Project>(), new ArrayList<User>(), null);
+        return this.organizationDAO.save(organization);
     }
 
     public ArrayList<Field> pushGetNumberFieldsWithSameDefinition(int n){
