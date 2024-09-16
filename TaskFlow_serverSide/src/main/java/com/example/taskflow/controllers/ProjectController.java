@@ -30,7 +30,7 @@ import com.example.taskflow.service.OrganizationService;
 
 @RestController
 @RequestMapping("/api/user")
-public class OwnerController {
+public class ProjectController {
 
     @Autowired
     UserInfoDAO userInfoDAO;
@@ -49,70 +49,6 @@ public class OwnerController {
         Map<String, String> response = new HashMap<>();
         response.put("message", "Access Denied: You are not authorized to perform this action.");
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
-    }
-
-    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER') or "
-            +
-            "@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_ADMIN')")
-    @DeleteMapping("/{userId}/myOrganization/{organizationId}/users/{targetId}")
-    public ResponseEntity<Map<String, String>> removeUser(@PathVariable String targetId, @RequestBody Map<String, String> requestBody) {
-        
-        Map<String, String> response = new HashMap<>();
-    
-        // Ottieni i dati dalla richiesta
-        String organizationId = requestBody.get("organizationId");
-
-        if (targetId == null || targetId.trim().isEmpty() || organizationId == null || organizationId.trim().isEmpty()) {
-            response.put("message", "User ID and Organization ID cannot be empty");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-
-        // Trova l'organizzazione
-        Optional<Organization> optionalOrganization = organizationDAO.findById(organizationId);
-        if (!optionalOrganization.isPresent()) {
-            response.put("message", "Organization not found");
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-        }
-
-        Organization organization = optionalOrganization.get();
-
-        // Trova l'utente da rimuovere
-        User target = userDAO.findById(targetId).orElse(null);
-
-        if (target == null){
-            response.put("message", "User not found");
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-        }
-            
-        return removeUserFromOrg(target, organization);
-    }
-
-    private ResponseEntity<Map<String, String>> removeUserFromOrg(User target,
-            Organization organization) {
-        
-
-        // Rimuove l'utente dai membri o proprietari dell'organizzazione specifica
-        boolean userRemoved = false;
-        if (organization.getOwners().contains(target)) {
-            organization.removeOwner(target);
-            userRemoved = true;
-        }
-        if (organization.getMembers().contains(target)) {
-            organization.removeMember(target);
-            userRemoved = true;
-        }
-
-        // Salva l'organizzazione aggiornata
-        if (userRemoved) {
-            organizationDAO.save(organization);
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "User removed from the organization");
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } else {
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "User not found in the specified organization");
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-        }
     }
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER') or "

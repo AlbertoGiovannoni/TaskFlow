@@ -35,6 +35,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/public/register").permitAll() 
                         .requestMatchers("/api/user/**").authenticated()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") 
+                        .requestMatchers("/**").hasAuthority("ROLE_ADMIN") // Permetti l'accesso a tutto agli ADMIN
                         .anyRequest().authenticated())
                 .httpBasic(withDefaults()); 
 
