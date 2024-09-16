@@ -1,18 +1,15 @@
-package com.example.taskflow.DTOs;
-
-import java.util.ArrayList;
+package com.example.taskflow.DTOs.FieldDefinition;
 
 import javax.validation.constraints.NotNull;
 
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
-public class FieldDefinitionDTO {
+public abstract class FieldDefinitionDTO {
     @NotNull
     private String name;
     @NotNull
     private FieldType type;
     private String id;
-    private ArrayList<String> parameters;
 
 
     public String getName() {
@@ -29,14 +26,6 @@ public class FieldDefinitionDTO {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public ArrayList<String> getParameters() {
-        return parameters;
-    }
-
-    public void setParameters(ArrayList<String> parameters) {
-        this.parameters = parameters;
     }
 
     public FieldType getType() {

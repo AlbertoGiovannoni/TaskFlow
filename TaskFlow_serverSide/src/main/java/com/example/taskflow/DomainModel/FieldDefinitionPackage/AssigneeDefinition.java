@@ -6,21 +6,6 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import com.example.taskflow.DomainModel.User;
 
 public class AssigneeDefinition extends FieldDefinition {
-
-    /*
-        FIXME: forse qua dobbiamo avere una reference ad organization?
-               Quando vado a costruire un nuovo FieldDefinition almeno 
-               non avrei bisogno di creare tutti gli oggetti
-               di tipo User?
-               Inoltre se aggiungo users duplicati questa cosa andrebbe gestita
-               qua se metto una reference diretta agli users mentre se metto
-               reference a organization posso gestirla in quella classe
-               (che secondo me ha senso perché l'organizzazione ha la
-               responsabilità di tenere gli utenti come un 'set').
-               No scherzo forse ha senso metterci direttamente gli users,
-               però allora l'utente ha possibilità di modificare la lista 
-               degli utenti ammessi a questo campo?
-    */ 
     @DBRef
     private ArrayList<User> possibleAssigneeUsers;
 
