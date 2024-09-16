@@ -12,8 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.example.taskflow.service.CustomUserDetailsService;
-
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +22,6 @@ import org.springframework.security.core.userdetails.User;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService; //TODO file da rimuovere
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -34,8 +29,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/public/register").permitAll() 
                         .requestMatchers("/api/user/**").authenticated()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN") 
-                        .requestMatchers("/**").hasAuthority("ROLE_ADMIN") // Permetti l'accesso a tutto agli ADMIN
                         .anyRequest().authenticated())
                 .httpBasic(withDefaults()); 
 

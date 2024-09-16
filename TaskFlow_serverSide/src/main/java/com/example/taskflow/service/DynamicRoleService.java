@@ -53,10 +53,6 @@ public class DynamicRoleService {
             return Set.of("ROLE_OWNER"); // Se l'utente è un owner
         }
 
-        if(currentUser.get().isAdmin()){
-            return Set.of("ROLE_ADMIN");
-        }
-
         // Altrimenti restituisci i ruoli standard o vuoto
         return Set.of("ROLE_USER");
     }

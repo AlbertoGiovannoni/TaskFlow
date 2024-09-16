@@ -51,9 +51,7 @@ public class ProjectController {
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
 
-    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER') or "
-    +
-    "@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_ADMIN')")
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @PostMapping("/{userId}/myOrganization/{organizationId}/projects")
     public ResponseEntity<Map<String, String>> createProject(@RequestBody Map<String, Object> requestBody) {
 
@@ -75,9 +73,7 @@ public class ProjectController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER') or "
-    +
-    "@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_ADMIN')")
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @PatchMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}")
     public ResponseEntity<Map<String, String>> renameProject(@PathVariable String projectId, @RequestBody Map<String, Object> requestBody) {
 

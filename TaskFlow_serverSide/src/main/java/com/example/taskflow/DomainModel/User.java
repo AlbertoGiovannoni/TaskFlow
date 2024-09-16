@@ -15,7 +15,6 @@ public class User implements UuidInterface{
 
     private UUID uuid;
     private String username;
-    private boolean isAdmin;
 
     // costruttore di default
     public User(){
@@ -24,7 +23,6 @@ public class User implements UuidInterface{
     public User(UserInfo userInfo, String username, boolean isAdmin) {
         this.username = username;
         this.userInfo = userInfo;
-        this.isAdmin = isAdmin;
         this.uuid = UUID.randomUUID();
     }
 
@@ -66,10 +64,6 @@ public class User implements UuidInterface{
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public boolean isAdmin() {
-        return isAdmin;
     }
     
 }

@@ -192,9 +192,7 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER') or "
-            +
-            "@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_ADMIN')")
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @DeleteMapping("/user/{userId}/myOrganization/{organizationId}/users/{targetId}")
     public ResponseEntity<Map<String, String>> removeUser(@PathVariable String targetId, @PathVariable String organizationId, @RequestBody Map<String, String> requestBody) {
         
