@@ -15,8 +15,11 @@ import java.util.stream.Collectors;
 
 import jakarta.validation.Valid;
 
+import java.util.UUID;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
@@ -67,20 +70,37 @@ public interface FieldDefinitionMapper {
         }
     }
 
-    @Mapping(source = "possibleAssigneeUsers", target = "possibleAssigneeUserIds", qualifiedByName = "mapUsersToIds")
+    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidToUuidString")
+    @Mapping(source="possibleAssigneeUsers", target="possibleAssigneeUserIds", qualifiedByName = "mapUsersToIds")
     AssigneeDefinitionDTO toDto(AssigneeDefinition assigneeDefinition);
 
+    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidToUuidString")
     SingleSelectionDefinitionDTO toDto(SingleSelectionDefinition singleSelectionDefinition);
 
+    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidToUuidString")
     SimpleFieldDefinitionDTO toDto(SimpleFieldDefinition simpleFieldDefinition);
 
+    @Named("mapUsersToIds")
     default ArrayList<String> mapUsersToIds(ArrayList<User> users) {
         return (ArrayList<String>) users.stream().map(User::getId).collect(Collectors.toList());
     }
 
+    @Named("mapUuidToUuidString")
+    default String mapUuidToUuidString(UUID uuid){
+        return uuid.toString();
+    }
+
+    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidStringToUuid")
     AssigneeDefinition toEntity(AssigneeDefinitionDTO assigneeDefinitionDto);
 
+    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidStringToUuid")
     SingleSelectionDefinition toEntity(SingleSelectionDefinitionDTO singleSelectionDefinitionDto);
 
+    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidStringToUuid")
     SimpleFieldDefinition toEntity(SimpleFieldDefinitionDTO simpleFieldDefinitionDto);
+
+    @Named("mapUuidStringToUuid")
+    default UUID mapUuidStringToUuid(String uuid){
+        return UUID.fromString(uuid);
+    }
 }

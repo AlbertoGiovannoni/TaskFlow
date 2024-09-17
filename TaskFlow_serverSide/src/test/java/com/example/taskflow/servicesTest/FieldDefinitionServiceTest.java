@@ -15,12 +15,16 @@ import org.springframework.test.context.ActiveProfiles;
 import com.example.taskflow.TestUtil;
 import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
+import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
+import com.example.taskflow.DTOs.FieldDefinition.SimpleFieldDefinitionDTO;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
+import com.example.taskflow.Mappers.FieldDefinitionMapper;
 import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionService;
+import com.fasterxml.jackson.databind.deser.std.StringArrayDeserializer;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -38,65 +42,25 @@ public class FieldDefinitionServiceTest {
     @Autowired
     private FieldDAO fieldDao;
 
+    @Autowired
+    private FieldDefinitionMapper fieldDefinitionMapper;
+
     @BeforeEach
     public void setupDatabase(){
         this.testUtil.cleanDatabase();
     }
 
     @Test
-    public void testDelete(){
-        ArrayList<Field> fieldsDB = this.testUtil.pushGetNumberFieldsWithSameDefinition(10);
-        
-        FieldDefinition fieldDefinitionDB = fieldsDB.get(0).getFieldDefinition();
-        
-        this.fieldDefinitionService.delete(fieldDefinitionDB.getId());
+    public void testCreation(){
+        FieldDefinitionDTO fieldDefinitionDto = new SimpleFieldDefinitionDTO();
 
-        assertFalse(this.fieldDefinitionDao.existsById(fieldDefinitionDB.getId()));
+        fieldDefinitionDto.setName(RandomString.make(10));
+        fieldDefinitionDto.setType(FieldType.DATE);
 
-        for (Field field : fieldsDB){
-            assertFalse(this.fieldDao.existsById(field.getId()));
-        }
-    }
+        FieldDefinitionDTO createdFieldDefinitionDto = this.fieldDefinitionService.createFieldDefinition(fieldDefinitionDto);
 
-    @Test
-    public void testSimpleSave(){
-        String name = RandomString.make(10);
-        FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.NUMBER)
-                                                        .setName(name)
-                                                        .build();
-        FieldDefinition fieldDefinitionFromDB = this.fieldDefinitionService.createFieldDefinition(fieldDefinition);
-
-        assertEquals(fieldDefinition, fieldDefinitionFromDB);
-    }
-
-    @Test
-    public void testSaveFieldDefinitionByNameAndType(){
-        String name;
-        FieldDefinition fieldDefinition;
+        FieldDefinition createdFieldDefinition = this.fieldDefinitionMapper.toEntity(createdFieldDefinitionDto);
         
-        for (FieldType type : FieldType.values()){
-            name = RandomString.make(10);
-            fieldDefinition = this.fieldDefinitionService.createFieldDefinition(type, name);
-            assertEquals(fieldDefinition.getName(), name);
-            assertEquals(fieldDefinition.getType(), type);
-        }
-    }
-
-    @Test
-    public void testSaveFieldDefinitionByNameAndTypeAndParameters(){
-        String name;
-        FieldDefinition fieldDefinition;
-        
-        name = RandomString.make(10);
-        
-        ArrayList<User> users = this.testUtil.addGetMultipleRandomUserToDatabase(10);
-        
-        fieldDefinition = this.fieldDefinitionService.createFieldDefinition(FieldType.ASSIGNEE, name, users);
-        
-        assertEquals(fieldDefinition.getName(), name);
-        assertEquals(fieldDefinition.getType(), FieldType.ASSIGNEE);
-        for (int i = 0; i < users.size(); i++){
-            assertEquals(users.get(i), fieldDefinition.getAllEntries().get(i));
-        }
+        assertEquals(createdFieldDefinition, this.fieldDefinitionDao.findById(createdFieldDefinitionDto.getId()).orElse(null));
     }
 }

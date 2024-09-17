@@ -41,7 +41,7 @@ public class FieldDefinitionService {
 
         switch(fieldDefinitionDto.getType()){
             case ASSIGNEE:
-                ArrayList<User> users = this.getUsersById(((AssigneeDefinitionDTO)fieldDefinitionDto).getUserIds());
+                ArrayList<User> users = this.getUsersById(((AssigneeDefinitionDTO)fieldDefinitionDto).getPossibleAssigneeUserIds());
                 fieldDefinitionBuilder.addParameters(users);
             case SINGLE_SELECTION:
                 fieldDefinitionBuilder.addParameters(((SingleSelectionDefinitionDTO)fieldDefinitionDto).getSelections());       

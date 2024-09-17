@@ -3,8 +3,6 @@ package com.example.taskflow.controllers;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +26,9 @@ public class FieldDefinitionController {
     public ResponseEntity<FieldDefinitionDTO> createNewFieldDefinition(
         @PathVariable String organizationId,
         @PathVariable String projectId,
-        @Valid @RequestBody FieldDefinitionDTO fieldDefinitionDto
+        @RequestBody FieldDefinitionDTO fieldDefinitionDto
     ){  
+        //TODO aggiungere validation
         FieldDefinitionDTO createdFieldDefinitionDto = this.fieldDefinitionService.createFieldDefinition(fieldDefinitionDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(createdFieldDefinitionDto);

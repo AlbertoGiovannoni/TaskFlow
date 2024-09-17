@@ -6,10 +6,11 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
 public abstract class FieldDefinitionDTO {
     @NotNull
-    private String name;
+    String name;
     @NotNull
-    private FieldType type;
-    private String id;
+    FieldType type;
+    String id;
+    String uuid;
 
 
     public String getName() {
@@ -34,5 +35,13 @@ public abstract class FieldDefinitionDTO {
 
     public void setType(FieldType type) {
         this.type = type;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }

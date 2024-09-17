@@ -108,4 +108,12 @@ public class AssigneeDefinition extends FieldDefinition {
         }
         return validation;
     }
+
+    public ArrayList<User> getPossibleAssigneeUsers() {
+        return possibleAssigneeUsers;
+    }
+
+    public void setPossibleAssigneeUsers(ArrayList<User> possibleAssigneeUsers) {
+        this.possibleAssigneeUsers = possibleAssigneeUsers;
+    }
 }
