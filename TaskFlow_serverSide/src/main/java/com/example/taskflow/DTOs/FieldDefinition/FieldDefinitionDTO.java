@@ -1,6 +1,6 @@
 package com.example.taskflow.DTOs.FieldDefinition;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 

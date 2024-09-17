@@ -1,6 +1,7 @@
 
 package com.example.taskflow.controllers;
 
+import java.lang.invoke.MethodHandle;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -8,6 +9,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 
 import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
@@ -18,6 +23,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.taskflow.DAOs.ActivityDAO;
@@ -29,6 +35,7 @@ import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
 import com.example.taskflow.DTOs.UserDTO;
+import com.example.taskflow.DTOs.UserWithInfoDTO;
 import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.Organization;
@@ -47,7 +54,9 @@ import com.example.taskflow.DomainModel.FieldPackage.DateData;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
 import com.example.taskflow.Mappers.UserMapper;
+import com.example.taskflow.service.UserService;
 
+import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 
 import org.json.JSONObject;
@@ -74,6 +83,9 @@ public class UserController {
     FieldDefinitionDAO fieldDefinitionDAO;
     @Autowired
     OrganizationDAO organizationDAO;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     UserDAO userDAO;
@@ -110,48 +122,65 @@ public class UserController {
         return null; // Nessun errore trovato
     }
 
-
-    @PostMapping("/user/test")
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
-        User user = UserMapper.INSTANCE.userDTOToUser(userDTO);
-        userDAO.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.INSTANCE.userToUserDTO(user));
-    }
-
+    
     @PostMapping("/public/register")
-    public ResponseEntity<Map<String, String>> register(@RequestBody Map<String, Object> requestBody) {
-        Map<String, String> response = new HashMap<>();
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserWithInfoDTO userWithInfoDTO) {
 
-        ResponseEntity<Map<String, String>> validationResponse = validateFields(requestBody);
-
-        if (validationResponse != null) {
-            return validationResponse;
+        //Controllo se l'email è già utilizzata
+        if (userInfoDAO.findByEmail(userWithInfoDTO.getEmail()).isPresent()) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Email già esistente");
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(errorResponse);
         }
 
-        String email = (String) requestBody.get("email");
-        String password = (String) requestBody.get("password");
-        String username = (String) requestBody.get("username");
-
-        // Controllo se l'email è già utilizzata
-        if (userInfoDAO.findByEmail(email).isPresent()) {
-            response.put("error", "Email già esistente");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        //Controllo se l'username è già utilizzata
+        if (userDAO.findByUsername(userWithInfoDTO.getUsername()).isPresent()) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Username già esistente");
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(errorResponse);
         }
-
-        // Controllo se l'username è già utilizzata
-        if (userDAO.findByUsername(username).isPresent()) {
-            response.put("error", "Username già esistente");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-
-        UserInfo userInfo = new UserInfo(email, password);
-        userInfoDAO.save(userInfo);
-        User user = new User(userInfo, username);
-        userDAO.save(user);
-
-        response.put("message", "User creato");
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        
+        return userService.createUser(userWithInfoDTO);
     }
+
+    // @PostMapping("/public/register2")
+    // public ResponseEntity<Map<String, String>> register(@RequestBody Map<String, Object> requestBody) {
+    //     Map<String, String> response = new HashMap<>();
+
+    //     ResponseEntity<Map<String, String>> validationResponse = validateFields(requestBody);
+
+    //     if (validationResponse != null) {
+    //         return validationResponse;
+    //     }
+
+    //     String email = (String) requestBody.get("email");
+    //     String password = (String) requestBody.get("password");
+    //     String username = (String) requestBody.get("username");
+
+    //     // Controllo se l'email è già utilizzata
+    //     if (userInfoDAO.findByEmail(email).isPresent()) {
+    //         response.put("error", "Email già esistente");
+    //         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    //     }
+
+    //     // Controllo se l'username è già utilizzata
+    //     if (userDAO.findByUsername(username).isPresent()) {
+    //         response.put("error", "Username già esistente");
+    //         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    //     }
+
+    //     UserInfo userInfo = new UserInfo(email, password);
+    //     userInfoDAO.save(userInfo);
+    //     User user = new User(userInfo, username);
+    //     userDAO.save(user);
+
+    //     response.put("message", "User creato");
+    //     return new ResponseEntity<>(response, HttpStatus.CREATED);
+    // }
 
     @PatchMapping("/user/{userId}")
     public ResponseEntity<Map<String, String>> updateUser(@PathVariable String userId,
@@ -194,11 +223,13 @@ public class UserController {
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @DeleteMapping("/user/{userId}/myOrganization/{organizationId}/users/{targetId}")
-    public ResponseEntity<Map<String, String>> removeUser(@PathVariable String targetId, @PathVariable String organizationId, @RequestBody Map<String, String> requestBody) {
-        
+    public ResponseEntity<Map<String, String>> removeUser(@PathVariable String targetId,
+            @PathVariable String organizationId, @RequestBody Map<String, String> requestBody) {
+
         Map<String, String> response = new HashMap<>();
-    
-        if (targetId == null || targetId.trim().isEmpty() || organizationId == null || organizationId.trim().isEmpty()) {
+
+        if (targetId == null || targetId.trim().isEmpty() || organizationId == null
+                || organizationId.trim().isEmpty()) {
             response.put("message", "User ID and Organization ID cannot be empty");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
@@ -215,17 +246,16 @@ public class UserController {
         // Trova l'utente da rimuovere
         User target = userDAO.findById(targetId).orElse(null);
 
-        if (target == null){
+        if (target == null) {
             response.put("message", "User not found");
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
-            
+
         return removeUserFromOrg(target, organization);
     }
 
     private ResponseEntity<Map<String, String>> removeUserFromOrg(User target,
             Organization organization) {
-        
 
         // Rimuove l'utente dai membri o proprietari dell'organizzazione specifica
         boolean userRemoved = false;
@@ -249,6 +279,19 @@ public class UserController {
             response.put("message", "User not found in the specified organization");
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex){
+        Map<String, String> errors = new HashMap<>();
+
+        ex.getBindingResult().getAllErrors().forEach((error) ->{
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
     }
 
 }

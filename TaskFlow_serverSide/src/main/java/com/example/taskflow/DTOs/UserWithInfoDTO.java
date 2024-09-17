@@ -1,16 +1,22 @@
 package com.example.taskflow.DTOs;
 
-import javax.validation.constraints.NotNull;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class UserWithInfoDTO {
 
     private String id;   
     
-    @NotNull
-    private String password; 
-    @NotNull  
-    private String name;
-    @NotNull
+    @NotBlank(message = "Password non può essere vuota")
+    private String password;
+
+    @NotBlank(message = "Username non può essere vuoto")
+    private String username;
+
+    @NotBlank(message = "Email non può essere vuota")
     private String email;
     
     public String getId() {
@@ -25,11 +31,11 @@ public class UserWithInfoDTO {
     public void setPassword(String password) {
         this.password = password;
     }
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
     public String getEmail() {
         return email;
