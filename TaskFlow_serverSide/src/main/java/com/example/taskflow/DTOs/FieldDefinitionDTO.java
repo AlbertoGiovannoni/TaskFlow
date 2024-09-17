@@ -2,7 +2,7 @@ package com.example.taskflow.DTOs;
 
 import java.util.ArrayList;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 

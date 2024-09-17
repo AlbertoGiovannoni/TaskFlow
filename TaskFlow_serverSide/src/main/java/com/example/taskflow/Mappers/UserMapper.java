@@ -1,23 +1,26 @@
 package com.example.taskflow.Mappers;
 
 import com.example.taskflow.DTOs.UserDTO;
+import com.example.taskflow.DTOs.UserWithInfoDTO;
 import com.example.taskflow.DomainModel.User;
+import com.example.taskflow.DomainModel.UserInfo;
+import com.example.taskflow.service.UserService;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
+import org.mapstruct.Named;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-@Mapper
+@Mapper(componentModel = "spring")
+@Component
 public interface UserMapper {
 
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+    // Mappa da UserWithInfoDTO a User (senza creare UserInfo)
+    @Mapping(target = "userInfo", ignore = true)  // UserInfo viene gestito nel servizio
+    User toEntity(UserWithInfoDTO dto);
 
-    // Mappatura da User a UserDTO
-    @Mapping(source = "user.id", target = "id")
-    @Mapping(source = "user.username", target = "username")
-    @Mapping(source = "user.userInfo.email", target = "email")  // Mappatura da UserInfo a email
-    UserDTO userToUserDTO(User user); //TODO devo creare/linkare al userInfo, crea service per user per farlo e salvare il tutto
-
-    // Mappatura da UserDTO a User
-    @Mapping(target = "userInfo.email", source = "email")
-    User userDTOToUser(UserDTO userDTO);
+    // Mappa da User a UserDTO
+    @Mapping(source = "userInfo.email", target = "email")
+    UserDTO toDto(User user);
 }
