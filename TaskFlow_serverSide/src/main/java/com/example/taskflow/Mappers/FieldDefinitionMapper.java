@@ -13,13 +13,14 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.SingleSelectionDe
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface FieldDefinitionMapper {
 
     //TODO: finire quella cosa del @Mapping
@@ -69,7 +70,6 @@ public interface FieldDefinitionMapper {
     @Mapping(source = "possibleAssigneeUsers", target = "possibleAssigneeUserIds", qualifiedByName = "mapUsersToIds")
     AssigneeDefinitionDTO toDto(AssigneeDefinition assigneeDefinition);
 
-    @Mapping(source = "possibleSelections", target = "possibleSelections")
     SingleSelectionDefinitionDTO toDto(SingleSelectionDefinition singleSelectionDefinition);
 
     SimpleFieldDefinitionDTO toDto(SimpleFieldDefinition simpleFieldDefinition);
