@@ -3,13 +3,13 @@ package com.example.taskflow.DTOs.FieldDefinition;
 import java.util.ArrayList;
 
 public class SingleSelectionDefinitionDTO extends FieldDefinitionDTO{
-    ArrayList<String> selections;
+    ArrayList<String> possibleSelections;
 
     public ArrayList<String> getSelections() {
-        return selections;
+        return possibleSelections;
     }
 
     public void setSelections(ArrayList<String> selections) {
-        this.selections = selections;
+        this.possibleSelections = selections;
     }
 }

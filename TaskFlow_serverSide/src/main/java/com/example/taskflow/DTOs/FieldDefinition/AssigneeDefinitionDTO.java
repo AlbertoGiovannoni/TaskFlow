@@ -3,13 +3,13 @@ package com.example.taskflow.DTOs.FieldDefinition;
 import java.util.ArrayList;
 
 public class AssigneeDefinitionDTO extends FieldDefinitionDTO{
-    ArrayList<String> userIds;
+    ArrayList<String> possibleAssigneeUserIds;
 
     public ArrayList<String> getUserIds() {
-        return userIds;
+        return possibleAssigneeUserIds;
     }
 
     public void setUserIds(ArrayList<String> userIds) {
-        this.userIds = userIds;
+        this.possibleAssigneeUserIds = userIds;
     }
 }
