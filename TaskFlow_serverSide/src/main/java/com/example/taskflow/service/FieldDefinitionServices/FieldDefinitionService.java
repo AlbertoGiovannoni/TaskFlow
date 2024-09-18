@@ -3,6 +3,7 @@ package com.example.taskflow.service.FieldDefinitionServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.SimpleFieldDefinitionDTO;
@@ -14,6 +15,8 @@ import com.example.taskflow.Mappers.FieldDefinitionMapper;
 public class FieldDefinitionService {
     @Autowired
     FieldDefinitionDAO fieldDefinitionDao;
+    @Autowired
+    FieldDAO fieldDao;
     @Autowired
     FieldDefinitionMapper fieldDefinitionMapper;
 
@@ -35,4 +38,19 @@ public class FieldDefinitionService {
 
         return this.fieldDefinitionMapper.toDto(fieldDefinitionFromDatabase);
     };
+
+    public void deleteFieldDefinition(FieldDefinitionDTO fieldDefinitionDTO){
+        FieldDefinition fieldDefinition = this.fieldDefinitionMapper.toEntity(fieldDefinitionDTO);
+
+        this.deleteFieldDefinitionCascading(fieldDefinition);
+    }
+
+    private void deleteFieldDefinitionCascading(FieldDefinition fieldDefinition){
+        if (fieldDefinition == null){
+            throw new IllegalArgumentException("FieldDefinition is null");
+        }
+
+        this.fieldDao.deleteFieldByFieldDefinition(fieldDefinition);
+        this.fieldDefinitionDao.delete(fieldDefinition);
+    }
 }
