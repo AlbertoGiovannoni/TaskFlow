@@ -13,6 +13,11 @@ public class ActivityDTO {
     private String name;
     private ArrayList<Field> fields;
 
+    public ActivityDTO(String name, String id, ArrayList<Field> fields){
+        this.name = name;
+        this.fields = fields;
+        this.id = id;
+    }
     public String getId() {
         return id;
     }
