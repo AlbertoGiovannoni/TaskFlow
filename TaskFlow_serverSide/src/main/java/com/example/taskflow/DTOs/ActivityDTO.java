@@ -9,7 +9,7 @@ public class ActivityDTO {
     private String id;
     @NotNull
     private String name;
-    private ArrayList<String> fieldsId;
+    private ArrayList<String> fieldsId; // todo valutare uso di arraylist di fieldDTO per richieste get
 
     public String getId() {
         return id;

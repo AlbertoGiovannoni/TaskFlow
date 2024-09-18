@@ -147,41 +147,6 @@ public class UserController {
         return userService.createUser(userWithInfoDTO);
     }
 
-    // @PostMapping("/public/register2")
-    // public ResponseEntity<Map<String, String>> register(@RequestBody Map<String, Object> requestBody) {
-    //     Map<String, String> response = new HashMap<>();
-
-    //     ResponseEntity<Map<String, String>> validationResponse = validateFields(requestBody);
-
-    //     if (validationResponse != null) {
-    //         return validationResponse;
-    //     }
-
-    //     String email = (String) requestBody.get("email");
-    //     String password = (String) requestBody.get("password");
-    //     String username = (String) requestBody.get("username");
-
-    //     // Controllo se l'email è già utilizzata
-    //     if (userInfoDAO.findByEmail(email).isPresent()) {
-    //         response.put("error", "Email già esistente");
-    //         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    //     }
-
-    //     // Controllo se l'username è già utilizzata
-    //     if (userDAO.findByUsername(username).isPresent()) {
-    //         response.put("error", "Username già esistente");
-    //         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    //     }
-
-    //     UserInfo userInfo = new UserInfo(email, password);
-    //     userInfoDAO.save(userInfo);
-    //     User user = new User(userInfo, username);
-    //     userDAO.save(user);
-
-    //     response.put("message", "User creato");
-    //     return new ResponseEntity<>(response, HttpStatus.CREATED);
-    // }
-
     @PatchMapping("/user/{userId}")
     public ResponseEntity<Map<String, String>> updateUser(@PathVariable String userId,
             @RequestBody Map<String, Object> requestBody) {
