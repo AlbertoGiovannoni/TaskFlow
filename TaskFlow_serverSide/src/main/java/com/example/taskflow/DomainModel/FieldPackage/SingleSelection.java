@@ -1,4 +1,5 @@
 package com.example.taskflow.DomainModel.FieldPackage;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -7,143 +8,75 @@ import org.springframework.data.annotation.TypeAlias;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 @TypeAlias("SingleSelection")
-public class SingleSelection extends Field{
+public class SingleSelection extends Field {
 
-    private ArrayList<String> values;
+    private String value;
 
     // costruttore di default
-    public SingleSelection(){
+    public SingleSelection() {
     }
 
-    public SingleSelection(FieldDefinition fieldDefinition, ArrayList<String> values) {
+    public SingleSelection(FieldDefinition fieldDefinition, String value) {
         super(fieldDefinition);
 
-        this.values = values;
+        this.value = value;
     }
 
     @Override
-    public ArrayList<?> getValues() {
-        return this.values;
-    }
-
-    @Override
-    public void removeValue(Object value) {
-        if (value != null){
-            if (value instanceof String){
-                if (this.values.contains((String)value)){
-                    this.values.remove((String)value);
-                }
-            }
-        }
-    }
-
-    @Override
-    public void removeValues(ArrayList<?> values) {
-        for (Object value : values){
-            this.removeValue(value);
-        }
-    }
-
-    @Override
-    public void reset() {
-        this.values.clear();
-    }
-
-    @Override
-    public void addValue(Object value) {
-        if (value != null){
-            if (value instanceof String){
-                if (!this.values.contains((String)value)){
-                    if (this.fieldDefinition.validateValue((String)value)){
-                        this.values.add((String)value);
-                    }
-                    else{
-                        throw new IllegalArgumentException((String)value + 
-                                                " cannot be added if corresponding SingleSelection doesn't have it as a selection: \n" + 
-                                                this.fieldDefinition.getAllEntries());
-                    }
-                }
-            }
-            else{
-                throw new IllegalArgumentException("Value is not of type String: \n" + value);
-            }
-        }
-    }
-
-    @Override
-    public void addValues(ArrayList<?> values) {
-        for (Object value : values){
-            this.addValue(value);
-        }
+    public Object getValue() {
+        return this.value;
     }
 
     @Override
     public void setValue(Object value) {
-        if (value != null){
-            if (value instanceof String){
-                this.reset();
-                this.addValue(value);
+        if (value != null) {
+            if (value instanceof String) {
+                this.value = (String) value;
             }
-        }
-        else{
+        } else {
             throw new IllegalArgumentException("Value is not of type String: \n" + value);
         }
     }
 
     @Override
     public void setValues(ArrayList<?> values) {
-        boolean valuesAreString = this.checkArrayListValidity();
-        
-        if (valuesAreString){
-            this.reset();
-            for (Object value : values){
-                if (value != null){
-                    if (value instanceof String){
-                        if (!this.values.contains((String)value)){
-                            if (this.fieldDefinition.validateValue((String)value)){
-                                this.values.add((String)value);
-                            }
-                            else{
-                                throw new IllegalArgumentException((String)value + 
-                                                        " cannot be added if corresponding SingleSelection doesn't have it as a selection: \n" + 
-                                                        this.fieldDefinition.getAllEntries());
-                            }
-                        }
-                    }
-                    else{
-                        throw new IllegalArgumentException("Value is not of type String: \n" + value);
-                    }
-                }
-                else{
-                    throw new IllegalArgumentException("Value is null: \n" + value);
-                }
-            }
-        }
+        setValue(values.get(0));
     }
 
-    private boolean checkArrayListValidity(){
-        boolean valuesAreStrings = false;
+    @Override
+    public void removeValue(Object value) {
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
         
-        if (values != null){
-            for (Object value : values){
-                if (value != null){
-                    if (value instanceof String){
-                        valuesAreStrings = true;
-                    }
-                    else{
-                        throw new IllegalArgumentException("Value is not of type String: \n" + value);
-                    }
-                }
-                else{
-                    throw new IllegalArgumentException("Value is null: \n" + value);
-                }
-            }
-        }
-        else{
-            throw new IllegalArgumentException("Values is null: \n" + values);
-        }
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
+        + " doesn't implement method " 
+        + methodName);
+    }
 
-        return valuesAreStrings;
+    @Override
+    public void removeValues(ArrayList<?> values) {
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+        
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
+        + " doesn't implement method " 
+        + methodName);
+    }
+
+    @Override
+    public void addValue(Object value) {
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+        
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
+        + " doesn't implement method " 
+        + methodName);
+    }
+
+    @Override
+    public void addValues(ArrayList<?> values) {
+        String methodName = new Throwable().getStackTrace()[0].getMethodName();
+        
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
+        + " doesn't implement method " 
+        + methodName);
     }
 
     @Override
@@ -152,11 +85,16 @@ public class SingleSelection extends Field{
     }
 
     @Override
-    public Object getValue() {
+    public ArrayList<?> getValues() {
         String methodName = new Throwable().getStackTrace()[0].getMethodName();
 
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + " doesn't implement method " 
-                                                + methodName);
+        throw new UnsupportedOperationException(this.getClass().getSimpleName()
+                + " doesn't implement method "
+                + methodName);
+    }
+
+    @Override
+    public void reset() {
+        this.value = "";
     }
 }
