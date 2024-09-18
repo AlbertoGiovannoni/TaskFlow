@@ -54,4 +54,6 @@ public class UserService {
                 .status(HttpStatus.CREATED)
                 .body(savedUserDTO);
     }
+
+    //TODO metodo load user che non crea l'userinfo ma lo recupera da db?
 }
