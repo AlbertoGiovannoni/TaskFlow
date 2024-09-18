@@ -2,6 +2,7 @@ package com.example.taskflow.DTOs;
 
 import java.util.ArrayList;
 
+import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
@@ -12,9 +13,16 @@ public class ProjectDTO {
     private String id;
     @NotNull
     private String name;
-    private ArrayList<FieldDefinition> fieldsTemplate;
-    private ArrayList<Activity> activities;
+    private ArrayList<FieldDefinitionDTO> fieldsTemplate;
+    private ArrayList<ActivityDTO> activities;
 
+    public ProjectDTO(String id, @NotNull String name, ArrayList<FieldDefinitionDTO> fieldsTemplate,
+            ArrayList<ActivityDTO> activities) {
+        this.id = id;
+        this.name = name;
+        this.fieldsTemplate = fieldsTemplate;
+        this.activities = activities;
+    }
     public String getId() {
         return id;
     }
@@ -27,16 +35,16 @@ public class ProjectDTO {
     public void setName(String name) {
         this.name = name;
     }
-    public ArrayList<FieldDefinition> getFieldsTemplate() {
+    public ArrayList<FieldDefinitionDTO> getFieldsTemplate() {
         return fieldsTemplate;
     }
-    public void setFieldsTemplate(ArrayList<FieldDefinition> fieldsTemplate) {
+    public void setFieldsTemplate(ArrayList<FieldDefinitionDTO> fieldsTemplate) {
         this.fieldsTemplate = fieldsTemplate;
     }
-    public ArrayList<Activity> getActivities() {
+    public ArrayList<ActivityDTO> getActivities() {
         return activities;
     }
-    public void setActivities(ArrayList<Activity> activities) {
+    public void setActivities(ArrayList<ActivityDTO> activities) {
         this.activities = activities;
     }
 }

@@ -2,8 +2,6 @@ package com.example.taskflow.DTOs;
 
 import java.util.ArrayList;
 
-import com.example.taskflow.DomainModel.FieldPackage.Field;
-
 import jakarta.validation.constraints.NotNull;
 
 public class ActivityDTO {
@@ -11,9 +9,9 @@ public class ActivityDTO {
     private String id;
     @NotNull
     private String name;
-    private ArrayList<Field> fields;
+    private ArrayList<FieldDTO> fields;
 
-    public ActivityDTO(String name, String id, ArrayList<Field> fields){
+    public ActivityDTO(String name, String id, ArrayList<FieldDTO> fields){
         this.name = name;
         this.fields = fields;
         this.id = id;
@@ -30,11 +28,10 @@ public class ActivityDTO {
     public void setName(String name) {
         this.name = name;
     }
-    public ArrayList<Field> getFields() {
+    public ArrayList<FieldDTO> getFields() {
         return fields;
     }
-    public void setFields(ArrayList<Field> fields) {
+    public void setFields(ArrayList<FieldDTO> fields) {
         this.fields = fields;
     }
-
 }
