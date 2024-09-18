@@ -1,13 +1,14 @@
 package com.example.taskflow.DTOs.FieldDefinition;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
 public abstract class FieldDefinitionDTO {
-    @NotNull
+    @NotBlank(message = "Nome non può essere vuoto")
     String name;
-    @NotNull
+    @NotBlank(message = "Type non può essere vuoto")
     FieldType type;
     String id;
     String uuid;

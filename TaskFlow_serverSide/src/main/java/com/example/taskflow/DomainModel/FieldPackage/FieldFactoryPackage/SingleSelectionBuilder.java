@@ -7,26 +7,23 @@ import com.example.taskflow.DomainModel.FieldPackage.SingleSelection;
 
 public class SingleSelectionBuilder extends FieldBuilder{
     
-    private ArrayList<String> selections;
+    private String selection;
     
     SingleSelectionBuilder(FieldType type) {
         super(type);
-        this.selections = new ArrayList<>();
+        this.selection = "";
     }
 
     @Override
     public FieldBuilder addParameters(ArrayList<?> values){
-        for (Object value : values){
-            this.addParameter(value);
-        }
-        return this;
+        return this.addParameter(values.get(0));
     }
 
     @Override
     public FieldBuilder addParameter(Object value){
         if (value != null){
             if (value instanceof String){
-                this.selections.add((String)value);
+                this.selection = (String)value;
             }
         }
         return this;
@@ -34,7 +31,7 @@ public class SingleSelectionBuilder extends FieldBuilder{
 
     @Override
     public SingleSelection build() {
-        return new SingleSelection(this.fieldDefinition, selections);
+        return new SingleSelection(this.fieldDefinition, selection);
     }
 }
 
