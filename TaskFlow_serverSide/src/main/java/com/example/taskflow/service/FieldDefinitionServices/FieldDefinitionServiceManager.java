@@ -1,23 +1,31 @@
 package com.example.taskflow.service.FieldDefinitionServices;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 
 @Service
 public class FieldDefinitionServiceManager {
+    @Autowired
+    private FieldDefinitionService fieldDefinitionService;
+
+    @Autowired
+    private AssigneeDefinitionService assigneeDefinitionService;
+
+    @Autowired
+    private SingleSelectionsDefinitionService singleSelectionsDefinitionService;
+
     public FieldDefinitionService getFieldDefinitionService(FieldDefinitionDTO fieldDefinitionDto){
         switch (fieldDefinitionDto.getType()) {
             case ASSIGNEE:
-                return new AssigneeDefinitionService();
+                return this.assigneeDefinitionService;
             case SINGLE_SELECTION:
-                return new SingleSelectionsDefinitionService();
+                return this.singleSelectionsDefinitionService;
             case NUMBER:
-                return new FieldDefinitionService();
             case TEXT:
-                return new FieldDefinitionService();
             case DATE:
-                return new FieldDefinitionService();
+                return this.fieldDefinitionService;
             case DOCUMENT:
                 //TODO
                 throw new IllegalArgumentException("Document need implementation");
