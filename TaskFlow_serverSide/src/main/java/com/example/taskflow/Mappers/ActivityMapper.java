@@ -3,24 +3,20 @@ package com.example.taskflow.Mappers;
 import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DomainModel.Activity;
-import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import org.mapstruct.ReportingPolicy;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 @Component
 public interface ActivityMapper {
 
-    public static final FieldMapper mapper = null;
+    public static final FieldMapper mapper = null;              //FIXME
 
     @Mapping(source = "fields", target = "fields", ignore = true)
     Activity toEntity(ActivityDTO dto);

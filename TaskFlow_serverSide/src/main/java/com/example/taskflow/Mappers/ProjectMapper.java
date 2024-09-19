@@ -1,51 +1,48 @@
 package com.example.taskflow.Mappers;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
-import java.util.ArrayList;
-
 import com.example.taskflow.DTOs.ActivityDTO;
-import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.ProjectDTO;
-import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
-import com.example.taskflow.DomainModel.FieldPackage.Field;
+import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public class ProjectMapper {
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import org.springframework.stereotype.Component;
 
-    ProjectDTO toDto(Project project) {
+import java.util.ArrayList;
 
-        ActivityMapper activityMapper = new ActivityMapper();
-        ArrayList<ActivityDTO> activities = new ArrayList<ActivityDTO>();
-        for (Activity activity : project.getActivities()) {
-            activities.add(activityMapper.toDto(activity));
+@Mapper(componentModel = "spring")
+@Component
+public interface ProjectMapper {
+
+    public static final ActivityMapper activityMapper = null;                   //FIXME          
+    public static final FieldDefinitionMapper fieldDefinitionMapper = null;     //FIXME
+
+    @Mapping(source = "fieldsTemplate", target = "fieldsTemplate", ignore = true)
+    @Mapping(source = "activities", target = "activities", ignore = true, qualifiedByName = "getAllActivities")
+    Project toEntity(ProjectDTO dto);
+
+    @Named("mapFieldsDefinitionToFieldDefinitionDTO")
+    default ArrayList<FieldDefinitionDTO> mapFieldsDefinitionToFieldDefinitionDTO(ArrayList<FieldDefinition> fieldDefs) {
+        ArrayList<FieldDefinitionDTO> fieldsDTO = new ArrayList<FieldDefinitionDTO>();
+        for(FieldDefinition fieldDef:fieldDefs){
+            fieldsDTO.add(fieldDefinitionMapper.toDto(fieldDef));
         }
-
-        ArrayList<FieldDefinitionDTO> template = new ArrayList<FieldDefinitionDTO>();
-        for (FieldDefinition fieldDefinition : project.getFieldsTemplate()) {
-            //TODO: converti fieldDefinition in fieldDefinitionDTO e aggiungilo alla lista template
-        }
-
-        ProjectDTO projectDTO = new ProjectDTO(project.getId(), project.getName(), template, activities);
-        return projectDTO;
-    };
-
-    Project toEntity(ProjectDTO projectDto) {
-
-        ArrayList<Activity> activities = new ArrayList<Activity>();
-        for (ActivityDTO activity : projectDto.getActivities()) {
-            //TODO: converti activity in ActivityDTO e aggiungilo alla lista activities
-        }
-
-        ArrayList<FieldDefinition> template = new ArrayList<FieldDefinition>();
-        for (FieldDefinitionDTO fieldDefinition : projectDto.getFieldsTemplate()) {
-            //TODO: converti fieldDefinition in fieldDefinitionDTO e aggiungilo alla lista template
-        }
-
-        Project project = new Project(projectDto.getId(), projectDto.getName(), template, activities);
-        return project;
+        return fieldsDTO;
     }
+
+    @Named("mapActivitiesToActivitiesDTO")
+    default ArrayList<ActivityDTO> mapActivitiesToActivitiesDTO(ArrayList<Activity> activities) {
+        ArrayList<ActivityDTO> activitiesDTO = new ArrayList<ActivityDTO>();
+        for(Activity activity:activities){
+            activitiesDTO.add(activityMapper.toDto(activity));
+        }
+        return activitiesDTO;
+    }
+    @Mapping(source = "fieldsTemplate", target = "fieldsTemplate", qualifiedByName = "mapFieldsDefinitionToFieldDefinitionDTO")
+    @Mapping(source = "activities", target = "activities", qualifiedByName = "mapActivitiesToActivitiesDTO")
+    ProjectDTO toDto(Project dto);
 }
