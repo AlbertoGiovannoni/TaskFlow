@@ -23,11 +23,13 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
 import com.example.taskflow.DomainModel.FieldPackage.Assignee;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
+import com.example.taskflow.DomainModel.FieldPackage.SingleSelection;
 import com.example.taskflow.DomainModel.FieldPackage.Text;
 import com.example.taskflow.Mappers.FieldMapper;
 import com.example.taskflow.service.FieldService.FieldServiceManager;
 import com.example.taskflow.DTOs.Field.AssigneeDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
+import com.example.taskflow.DTOs.Field.NumberDTO;
 import com.example.taskflow.DTOs.Field.StringDTO;
 
 @DataMongoTest
@@ -114,13 +116,81 @@ public class FieldServiceTest {
         fieldDto.setValuesDto(v);
 
         FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).createField(fieldDto);
-        System.out.println("null");
+
         Field createdField = this.fieldMapper.toEntity(createdFieldDto);
+        FieldDefinition foundFD = fieldDefinitionDao.findById(createdFieldDto.getFieldDefinitionId()).orElse(null);
+        
+        
+        createdField.setFieldDefinition(foundFD);
 
         Text found = (Text) this.fieldDao.findById(createdFieldDto.getId()).orElse(null);
 
         assertEquals(createdField, found);
     }
 
+    @Test
+    public void testCreationSingleSelection() {
+        FieldDTO fieldDto = new StringDTO();
+
+        fieldDto.setType(FieldType.SINGLE_SELECTION);
+        ArrayList<String> selections = new ArrayList<String>();
+        selections.add("Ready");
+        selections.add("In progress");
+        selections.add("Done");
+        FieldDefinition fd = FieldDefinitionFactory.getBuilder(fieldDto.getType())
+                .setName("meet")
+                .addParameters(selections)
+                .build();
+
+        this.fieldDefinitionDao.save(fd);
+        fieldDto.setFieldDefinitionId(fd.getId());
+        fieldDto.setUuid(UUID.randomUUID().toString());
+
+        ArrayList<String> v = new ArrayList<String>();
+        v.add("Reawcwdy"); //TODO non viene fatto il controllo se questo è un valore di fieldDefinition, si potrebbe fare qui direttamente o nel nuovo metodo di singleselection per assegnare la selection
+        fieldDto.setValuesDto(v);
+
+        FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).createField(fieldDto);
+        Field createdField = this.fieldMapper.toEntity(createdFieldDto);
+        FieldDefinition foundFD = fieldDefinitionDao.findById(createdFieldDto.getFieldDefinitionId()).orElse(null);
+        
+        
+        createdField.setFieldDefinition(foundFD);
+
+        SingleSelection found = (SingleSelection) this.fieldDao.findById(createdFieldDto.getId()).orElse(null);
+
+        assertEquals(createdField, found);
+    }
+
+
+    @Test
+    public void testCreationNumber() {
+        FieldDTO fieldDto = new NumberDTO();
+
+        fieldDto.setType(FieldType.NUMBER);
+        FieldDefinition fd = FieldDefinitionFactory.getBuilder(fieldDto.getType())
+                .setName("meet")
+                .build();
+
+        this.fieldDefinitionDao.save(fd);
+        fieldDto.setFieldDefinitionId(fd.getId());
+        fieldDto.setUuid(UUID.randomUUID().toString());
+
+        ArrayList<String> v = new ArrayList<String>();
+        v.add("8.2");
+        fieldDto.setValuesDto(v);
+
+        FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).createField(fieldDto);
+
+        Field createdField = this.fieldMapper.toEntity(createdFieldDto);
+        FieldDefinition foundFD = fieldDefinitionDao.findById(createdFieldDto.getFieldDefinitionId()).orElse(null);
+        
+        
+        createdField.setFieldDefinition(foundFD);
+
+        Field found = this.fieldDao.findById(createdFieldDto.getId()).orElse(null);
+
+        assertEquals(createdField, found);
+    }
 
 }

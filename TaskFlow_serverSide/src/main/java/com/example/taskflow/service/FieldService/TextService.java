@@ -13,6 +13,7 @@ import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
+import com.example.taskflow.DomainModel.FieldPackage.Text;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
 import com.example.taskflow.Mappers.FieldMapper;
 import java.util.ArrayList;

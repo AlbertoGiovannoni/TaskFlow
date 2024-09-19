@@ -49,11 +49,9 @@ public class Number extends Field{
 
     @Override
     public ArrayList<?> getValues() {
-        String methodName = new Throwable().getStackTrace()[0].getMethodName();
-
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + " doesn't implement method " 
-                                                + methodName);
+        ArrayList<Float> tmp = new ArrayList<Float>();
+        tmp.add(this.number);
+        return tmp;
     }
 
     @Override
@@ -85,11 +83,7 @@ public class Number extends Field{
 
     @Override
     public void setValues(ArrayList<?> values) {
-        String methodName = new Throwable().getStackTrace()[0].getMethodName();
-
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + " doesn't implement method " 
-                                                + methodName);
+        this.setValue(values.get(0));
     }
 
     public Float getNumber() {

@@ -86,11 +86,9 @@ public class SingleSelection extends Field {
 
     @Override
     public ArrayList<?> getValues() {
-        String methodName = new Throwable().getStackTrace()[0].getMethodName();
-
-        throw new UnsupportedOperationException(this.getClass().getSimpleName()
-                + " doesn't implement method "
-                + methodName);
+        ArrayList<String> tmp = new ArrayList<String>();
+        tmp.add(this.selection);
+        return tmp;
     }
 
     @Override
@@ -103,6 +101,7 @@ public class SingleSelection extends Field {
     }
 
     public void setSelection(String selection) {
+        //TODO da fare controllo se la selection è in fielddefinition di singleselection
         this.selection = selection;
     }
 
