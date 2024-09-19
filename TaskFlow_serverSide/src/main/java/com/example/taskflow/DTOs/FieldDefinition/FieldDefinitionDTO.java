@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
-public abstract class FieldDefinitionDTO {
+public class FieldDefinitionDTO {
     @NotBlank(message = "Nome non può essere vuoto")
     String name;
     @NotBlank(message = "Type non può essere vuoto")
