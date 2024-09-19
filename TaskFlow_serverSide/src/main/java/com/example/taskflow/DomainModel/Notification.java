@@ -1,7 +1,6 @@
 package com.example.taskflow.DomainModel;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.UUID;
 
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.annotation.Id;
@@ -15,7 +14,7 @@ public class Notification implements UuidInterface{
     private String id;
     private String message;
     private LocalDateTime notificationDateTime;
-    private UUID uuid;
+    private String uuid;
 
     @DBRef
     @Lazy
@@ -29,7 +28,7 @@ public class Notification implements UuidInterface{
         this.receivers = receivers;
         this.message = message;
         this.notificationDateTime = notificationDateTime;
-        this.uuid = UUID.randomUUID();
+        this.uuid = this.createUuid();
     }
 
     public void addReceiver(User newUser) {
@@ -73,7 +72,7 @@ public class Notification implements UuidInterface{
     }
 
     @Override
-    public UUID getUuid() {
+    public String getUuid() {
         return this.uuid;
     }
 
@@ -92,5 +91,10 @@ public class Notification implements UuidInterface{
 
     public LocalDateTime getNotificationDateTime() {
         return notificationDateTime;
+    }
+
+    @Override
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }

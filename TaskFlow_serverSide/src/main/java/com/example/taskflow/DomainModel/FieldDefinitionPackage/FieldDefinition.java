@@ -1,5 +1,4 @@
 package com.example.taskflow.DomainModel.FieldDefinitionPackage;
-import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,7 +14,7 @@ public abstract class FieldDefinition implements UuidInterface{
     String id;
     String name;
     FieldType type;
-    UUID uuid;
+    String uuid;
 
     // Costruttore di default
     public FieldDefinition() {}
@@ -23,7 +22,7 @@ public abstract class FieldDefinition implements UuidInterface{
     public FieldDefinition(String name, FieldType type) {
         this.type = type;
         this.name = name;
-        this.uuid = UUID.randomUUID();
+        this.uuid = this.createUuid();
     }
 
     public abstract void addSingleEntry(Object obj);
@@ -76,16 +75,16 @@ public abstract class FieldDefinition implements UuidInterface{
         this.type = type;
     }
 
-    public UUID getUuid() {
+    public FieldType getType(){
+        return this.type;
+    }
+
+    public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(UUID uuid){
+    public void setUuid(String uuid) {
         this.uuid = uuid;
-    }
-
-    public FieldType getType(){
-        return this.type;
     }
 }
 

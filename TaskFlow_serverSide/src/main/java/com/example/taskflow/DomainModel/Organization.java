@@ -3,14 +3,13 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.ArrayList;
-import java.util.UUID;
 
 @Document
 public class Organization implements UuidInterface{
 
     @Id
     private String id;
-    private UUID uuid;
+    private String uuid;
     private String name;
     private String creationDate;
 
@@ -27,13 +26,19 @@ public class Organization implements UuidInterface{
     public Organization() {
     }
 
+    public Organization(String name, ArrayList<User> owners) {
+        this.name = name;
+        this.owners = owners;
+        this.uuid = this.createUuid();
+    }
+
     public Organization(String name, ArrayList<User> owners, ArrayList<Project> projects, ArrayList<User> members, String creationDate) {
         this.name = name;
         this.owners = owners;
         this.projects = projects;
         this.members = members;
         this.creationDate = creationDate;
-        this.uuid = UUID.randomUUID();
+        this.uuid = this.createUuid();
     }
 
     public void addMember(User user) { 
@@ -69,7 +74,7 @@ public class Organization implements UuidInterface{
         this.id = id;
     }
 
-    public UUID getUuid() {
+    public String getUuid() {
         return this.uuid;
     }
 
@@ -124,5 +129,10 @@ public class Organization implements UuidInterface{
         }
 
         return value;
+    }
+
+    @Override
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }
