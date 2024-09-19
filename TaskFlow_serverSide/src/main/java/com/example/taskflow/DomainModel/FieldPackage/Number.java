@@ -1,12 +1,10 @@
 package com.example.taskflow.DomainModel.FieldPackage;
-import java.util.ArrayList;
-import java.util.UUID;
 
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 public class Number extends Field{
 
-    private Float number;
+    private Float value;
 
     // costruttore di default
     public Number(){
@@ -15,90 +13,24 @@ public class Number extends Field{
     public Number(FieldDefinition fieldDefinition, Float value) {
         super(fieldDefinition);
 
-        this.number = value;
+        this.value = value;
     }
 
-    @Override
-    public UUID getUuid() {
-        return this.uuid;
+    public Number(FieldDefinition fieldDefinition, Integer value) {
+        super(fieldDefinition);
+
+        this.value = (float)value;
     }
 
-    @Override
-    public Object getValue() {
-        return this.number;
+    public Float getValue() {
+        return value;
     }
 
-    @Override
-    public void removeValue(Object value) {
-        this.number = Float.NaN;
+    public void setValue(Float value) {
+        this.value = value;
     }
 
-    @Override
-    public void reset() {
-        this.number = Float.NaN;
+    public void setValue(Integer value) {
+        this.value = (float)value;
     }
-
-    @Override
-    public void setValue(Object value) {
-        if (value != null){
-            if (value instanceof Float){
-                this.number = (Float)value;
-            }
-        }
-    }
-
-    @Override
-    public ArrayList<?> getValues() {
-        String methodName = new Throwable().getStackTrace()[0].getMethodName();
-
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + " doesn't implement method " 
-                                                + methodName);
-    }
-
-    @Override
-    public void removeValues(ArrayList<?> values) {
-        String methodName = new Throwable().getStackTrace()[0].getMethodName();
-
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + " doesn't implement method " 
-                                                + methodName);
-    }
-
-    @Override
-    public void addValue(Object value) {
-        String methodName = new Throwable().getStackTrace()[0].getMethodName();
-
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + " doesn't implement method " 
-                                                + methodName);
-    }
-
-    @Override
-    public void addValues(ArrayList<?> values) {
-        String methodName = new Throwable().getStackTrace()[0].getMethodName();
-
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + " doesn't implement method " 
-                                                + methodName);
-    }
-
-    @Override
-    public void setValues(ArrayList<?> values) {
-        String methodName = new Throwable().getStackTrace()[0].getMethodName();
-
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + " doesn't implement method " 
-                                                + methodName);
-    }
-
-    public Float getNumber() {
-        return number;
-    }
-
-    public void setNumber(Float number) {
-        this.number = number;
-    }
-    
-    
 }

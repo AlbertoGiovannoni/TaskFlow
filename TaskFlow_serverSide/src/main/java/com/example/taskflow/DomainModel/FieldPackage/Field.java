@@ -16,7 +16,7 @@ public abstract class Field implements UuidInterface{
     String id;
     @DBRef
     FieldDefinition fieldDefinition;
-    UUID uuid;
+    String uuid;
 
     // costruttore di default
     public Field() {
@@ -24,7 +24,7 @@ public abstract class Field implements UuidInterface{
 
     public Field(FieldDefinition fieldDefinition) {
         this.fieldDefinition = fieldDefinition;
-        this.uuid = UUID.randomUUID();
+        this.uuid = this.createUuid();
     }
 
     public FieldDefinition getFieldDefinition() {
@@ -39,24 +39,22 @@ public abstract class Field implements UuidInterface{
         return this.id;
     }
 
-    public abstract Object getValue();
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public abstract ArrayList<?> getValues();
+    public void setFieldDefinition(FieldDefinition fieldDefinition) {
+        this.fieldDefinition = fieldDefinition;
+    }
 
-    public abstract void removeValue(Object value);
+    public String getUuid() {
+        return uuid;
+    }
 
-    public abstract void removeValues(ArrayList<?> values);
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 
-    public abstract void reset();
-
-    public abstract void addValue(Object value);
-
-    public abstract void addValues(ArrayList<?> values);
-
-    public abstract void setValue(Object value);
-
-    public abstract void setValues(ArrayList<?> values);
-    
     @Override
     public boolean equals(Object obj) {
         boolean value = false;
@@ -68,21 +66,5 @@ public abstract class Field implements UuidInterface{
         }
 
         return value;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setFieldDefinition(FieldDefinition fieldDefinition) {
-        this.fieldDefinition = fieldDefinition;
-    }
-
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
     }
 }
