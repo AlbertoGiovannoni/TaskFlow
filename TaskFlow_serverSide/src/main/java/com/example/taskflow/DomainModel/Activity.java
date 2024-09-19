@@ -66,6 +66,9 @@ public class Activity implements UuidInterface{
         this.fields = fields;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
     @Override
     public boolean equals(Object obj) {
         boolean value = false;

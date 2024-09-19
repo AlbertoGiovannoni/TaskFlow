@@ -9,12 +9,21 @@ public abstract class FieldDTO {
 
     String id;
     String uuid;
+    FieldType type;
     
     @NotBlank(message = "FieldDefinition non può essere vuoto")
     String fieldDefinitionId;
 
     public String getId() {
         return id;
+    }
+
+    public FieldType getType() {
+        return type;
+    }
+
+    public void setType(FieldType type) {
+        this.type = type;
     }
 
     public void setId(String id) {
