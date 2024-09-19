@@ -14,7 +14,8 @@ public class FieldFactory {
             case NUMBER:
                 return new NumberBuilder(type);
             case DOCUMENT:
-                return new DocumentBuilder(type);
+                //TODO: need implementation
+                throw new IllegalArgumentException("Unsopported type: " + type);
             case TEXT:
                 return new TextBuilder(type);
             default:

@@ -25,6 +25,11 @@ public class Date extends Field{
         this.dateTime = dateTime;
     }
 
+    public Date(FieldDefinition fieldDefinition, LocalDateTime dateTime) {
+        super(fieldDefinition);
+        this.dateTime = dateTime;
+    }
+
     public Notification getNotification() {
         return notification;
     }
