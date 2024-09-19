@@ -2,12 +2,8 @@ package com.example.taskflow.Mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-
-import com.example.taskflow.DAOs.ProjectDAO;
-import com.example.taskflow.DAOs.UserDAO;
 
 import com.example.taskflow.DTOs.OrganizationDTO;
 import com.example.taskflow.DomainModel.Organization;
