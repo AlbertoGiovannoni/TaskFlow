@@ -3,34 +3,40 @@ package com.example.taskflow.Mappers;
 import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DomainModel.Activity;
+import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public class ActivityMapper {
+@Mapper(componentModel = "spring")
+@Component
+public interface ActivityMapper {
 
-    ActivityDTO toDto(Activity activity) {
-        ArrayList<FieldDTO> fields = new ArrayList<FieldDTO>();
-        for (Field field : activity.getFields()) {
-            //TODO: converti field in fieldDTO e aggiungilo alla lista fields
+    public static final FieldMapper mapper = null;
+
+    @Mapping(source = "fields", target = "fields", ignore = true)
+    Activity toEntity(ActivityDTO dto);
+
+    @Named("mapFieldsToFieldDTO")
+    default ArrayList<FieldDTO> mapFieldsToFieldDTO(ArrayList<Field> fields) {
+        ArrayList<FieldDTO> fieldsDTO = new ArrayList<FieldDTO>();
+        for(Field field:fields){
+            fieldsDTO.add(mapper.toDto(field));
         }
-        ActivityDTO activityDTO = new ActivityDTO(activity.getName(), activity.getId(), fields);
-        return activityDTO;
-    };
-
-    Activity toEntity(ActivityDTO activityDto) {
-        
-        ArrayList<Field> fields = new ArrayList<Field>();
-        for (FieldDTO fieldDto : activityDto.getFields()) {
-            //TODO: converti fieldDTO in field e aggiungilo alla lista fields
-        }
-        Activity activity = new Activity(activityDto.getId(), activityDto.getName(), fields);
-        activity.setId(activityDto.getId());
-        return activity;
+        return fieldsDTO;
     }
+
+    @Mapping(source = "fields", target = "fields", qualifiedByName = "mapFieldsToFieldDTO")
+    ActivityDTO toDto(Activity user);
 }
+
 
 

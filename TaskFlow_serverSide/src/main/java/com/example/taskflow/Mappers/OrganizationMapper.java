@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.example.taskflow.DTOs.OrganizationDTO;
 import com.example.taskflow.DomainModel.Organization;
@@ -23,15 +24,18 @@ public interface OrganizationMapper {
     @Mapping(source = "projectsId", target = "projects", ignore = true)
     Organization toEntity(OrganizationDTO dto);
 
+    
     @Named("mapUsersToIds")
-    default String mapUsersToIds(User user) {
-        return user.getId();
-    }   
+    default ArrayList<String> mapUsersToIds(ArrayList<User> users) {
+        return (ArrayList<String>) users.stream().map(User::getId).collect(Collectors.toList());
+    }  
 
+    
     @Named("mapProjectsToIds")
-    default String mapProjectsToIds(Project project) {
-        return project.getId();
-    }   
+    default ArrayList<String> mapProjectsToIds(ArrayList<Project> projects) {
+        return (ArrayList<String>) projects.stream().map(Project::getId).collect(Collectors.toList());
+    } 
+
     @Mapping(source = "owners", target = "ownersId", qualifiedByName = "mapUsersToIds")
     @Mapping(source = "members", target = "membersId", qualifiedByName = "mapUsersToIds")
     @Mapping(source = "projects", target = "projectsId", qualifiedByName = "mapProjectsToIds")
