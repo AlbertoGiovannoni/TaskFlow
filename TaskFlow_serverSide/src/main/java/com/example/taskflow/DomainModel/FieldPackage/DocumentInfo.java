@@ -13,6 +13,9 @@ public class DocumentInfo {
         this.fileType = fileType;
         this.value = value;
     }
+
+	public DocumentInfo(){}
+
 	public String getName() {
 		return name;
 	}

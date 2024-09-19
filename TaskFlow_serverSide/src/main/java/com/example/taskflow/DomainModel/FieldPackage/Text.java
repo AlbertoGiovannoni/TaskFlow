@@ -10,7 +10,7 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 //@TypeAlias("Text")
 public class Text extends Field{
 
-    private String value;
+    private String text;
 
     // costruttore di default
     public Text(){
@@ -19,7 +19,7 @@ public class Text extends Field{
     public Text(FieldDefinition fieldDefinition, String value) {
         super(fieldDefinition);
 
-        this.value = value;
+        this.text = value;
     }
 
     @Override
@@ -29,30 +29,28 @@ public class Text extends Field{
 
     @Override
     public Object getValue() {
-        return this.value;
+        return this.text;
     }
 
     @Override
     public void reset() {
-        this.value = "";
+        this.text = "";
     }
 
     @Override
     public void setValue(Object value) {
         if (value != null){
             if (value instanceof String){
-                this.value = (String)value;
+                this.text = (String)value;
             }
         }
     }
 
     @Override
     public ArrayList<?> getValues() {
-        String methodName = new Throwable().getStackTrace()[0].getMethodName();
-
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + " doesn't implement method " 
-                                                + methodName);
+        ArrayList<String> tmp = new ArrayList<String>();
+        tmp.add(this.text);
+        return tmp;
     }
 
     @Override
@@ -93,15 +91,16 @@ public class Text extends Field{
 
     @Override
     public void setValues(ArrayList<?> values) {
-    setValue(values.get(0));
+        setValue(values.get(0));
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
     
-    // @Override
-    // public void setValues(ArrayList<?> values) {
-    //     String methodName = new Throwable().getStackTrace()[0].getMethodName();
-
-    //     throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-    //                                             + " doesn't implement method " 
-    //                                             + methodName);
-    // }
+    
 }

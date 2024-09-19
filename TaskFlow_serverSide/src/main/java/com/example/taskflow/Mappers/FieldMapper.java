@@ -6,25 +6,19 @@ import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.Field.NumberDTO;
 import com.example.taskflow.DTOs.Field.StringDTO;
 import com.example.taskflow.DTOs.FieldDefinition.AssigneeDefinitionDTO;
-import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
-import com.example.taskflow.DTOs.FieldDefinition.SimpleFieldDefinitionDTO;
-import com.example.taskflow.DTOs.FieldDefinition.SingleSelectionDefinitionDTO;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.SimpleFieldDefinition;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.SingleSelectionDefinition;
 import com.example.taskflow.DomainModel.FieldPackage.Assignee;
 import com.example.taskflow.DomainModel.FieldPackage.Date;
 import com.example.taskflow.DomainModel.FieldPackage.Number;
 import com.example.taskflow.DomainModel.FieldPackage.SingleSelection;
 import com.example.taskflow.DomainModel.FieldPackage.Text;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
+import org.mapstruct.Named;
+import org.mapstruct.Qualifier;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
-
-import jakarta.validation.Valid;
 
 import java.util.UUID;
 
@@ -59,7 +53,7 @@ public interface FieldMapper {
                 throw new IllegalArgumentException(field.getType() + " not recognized");
 
         }
-    };
+    }
 
     default Field toEntity(FieldDTO fieldDto) {
 
@@ -72,9 +66,9 @@ public interface FieldMapper {
             case NUMBER:
                 return this.toEntity((NumberDTO) fieldDto);
             case SINGLE_SELECTION:
-                return this.toEntity((StringDTO) fieldDto);
+                return this.toEntitySingleSelection((StringDTO) fieldDto);
             case TEXT:
-                return this.toEntity((StringDTO) fieldDto);
+                return this.toEntityText((StringDTO) fieldDto);
             case DOCUMENT:
                 // TODO
                 throw new IllegalArgumentException(fieldDto.getType() + " not implemented!");
@@ -82,5 +76,64 @@ public interface FieldMapper {
                 throw new IllegalArgumentException(fieldDto.getType() + " not recognized");
 
         }
+    }
+
+    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidToUuidString")
+    @Mapping(source="users", target="valuesDto", qualifiedByName = "mapUsersToIds")
+    AssigneeDTO toDto(Assignee assignee);
+
+    @Named("mapUsersToIds")
+    default ArrayList<String> mapUsersToIds(ArrayList<User> users) {
+        return (ArrayList<String>) users.stream().map(User::getId).collect(Collectors.toList());
+    }
+
+    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidToUuidString")
+    @Mapping(source = "notification", target = "notification")
+    @Mapping(source = "date", target = "valuesDto", ignore = true)//todo fix
+    DateDTO toDto(Date date);
+
+    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidToUuidString")
+    @Mapping(source = "number", target = "valuesDto", ignore = true)//todo fix
+    NumberDTO toDto(Number number);
+
+    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidToUuidString")
+    @Mapping(source = "selection", target = "valuesDto", ignore = true)//todo fix
+    StringDTO toDto(SingleSelection singleSelection);
+
+    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidToUuidString")
+    @Mapping(source = "text", target = "valuesDto", ignore = true)//todo fix
+    StringDTO toDto(Text text);
+
+    @Named("mapUuidToUuidString")
+    default String mapUuidToUuidString(UUID uuid) {
+        return uuid.toString();
+    }
+
+    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidStringToUuid")
+    //@Mapping(source = "valuesDto", target="users", ignore = true)
+    @Mapping(source = "valuesDto", target="values", ignore = true)
+    @Mapping(source = "fieldDefinitionId", target="fieldDefinition",ignore = true)
+    Assignee toEntity(AssigneeDTO assigneeDto);
+
+    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidStringToUuid")
+    @Mapping(source = "notification", target = "notification")
+    @Mapping(source = "dateTime", target = "date")
+    Date toEntity(DateDTO dateDto);
+
+    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidStringToUuid")
+    @Mapping(source = "number", target = "number")
+    Number toEntity(NumberDTO numberDto);
+
+    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidStringToUuid")
+    @Mapping(source = "stringValue", target = "selection")
+    SingleSelection toEntitySingleSelection(StringDTO singleSelectionDto);
+
+    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidStringToUuid")
+    @Mapping(source = "stringValue", target = "text")
+    Text toEntityText(StringDTO textDto);
+
+    @Named("mapUuidStringToUuid")
+    default UUID mapUuidStringToUuid(String uuid) {
+        return UUID.fromString(uuid);
     }
 }

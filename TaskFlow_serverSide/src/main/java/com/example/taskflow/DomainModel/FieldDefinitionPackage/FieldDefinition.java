@@ -68,6 +68,14 @@ public abstract class FieldDefinition implements UuidInterface{
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setType(FieldType type) {
+        this.type = type;
+    }
+
     public UUID getUuid() {
         return uuid;
     }

@@ -1,5 +1,6 @@
 package com.example.taskflow.DomainModel.FieldPackage;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -28,6 +29,14 @@ public class Date extends Field{
 
     public void setNotification(Notification notification) {
         this.dateData.setNotification(notification);
+    }
+
+    public LocalDateTime getDate(){
+        return this.dateData.getDateTime();
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.dateData.setDateTime(date);
     }
 
     public void removeNotification(){
