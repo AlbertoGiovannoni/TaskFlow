@@ -2,7 +2,12 @@ package com.example.taskflow.Mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.ArrayList;
+
+import com.example.taskflow.DAOs.ProjectDAO;
+import com.example.taskflow.DAOs.UserDAO;
 
 import com.example.taskflow.DTOs.OrganizationDTO;
 import com.example.taskflow.DomainModel.Organization;
@@ -11,6 +16,11 @@ import com.example.taskflow.DomainModel.User;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public class OrganizationMapper {
+
+    @Autowired
+    UserDAO userDAO;
+    @Autowired
+    ProjectDAO projectDAO;
 
     OrganizationDTO toDto(Organization organization) {
         ArrayList<String> ownersId = new ArrayList<String>();
@@ -32,6 +42,23 @@ public class OrganizationMapper {
     };
 
     Organization toEntity(OrganizationDTO organizationDto) {
-        //TODO lo fo domani
+        
+
+        ArrayList<User> owners = new ArrayList<User>();
+        ArrayList<User> members = new ArrayList<User>();
+        ArrayList<Project> projects = new ArrayList<Project>();
+
+        for (String ownerId : organizationDto.getOwnersId()) {
+            owners.add(userDAO.findById(ownerId).orElse(null));
+        }
+        for (String memberId : organizationDto.getMembersId()) {
+            members.add(userDAO.findById(memberId).orElse(null));
+        }
+        for (String projectId : organizationDto.getProjectsId()) {
+            projects.add(projectDAO.findById(projectId).orElse(null));
+        }
+
+        Organization organization = new Organization(organizationDto.getName(), owners, projects, members, organizationDto.getCreationDate());
+        return organization;
     }
 }
