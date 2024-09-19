@@ -21,6 +21,6 @@ public interface UserMapper {
     User toEntity(UserWithInfoDTO dto);
 
     // Mappa da User a UserDTO
-    @Mapping(source = "userInfo.email", target = "email")
+    @Mapping(source = "email", target = "email")
     UserDTO toDto(User user);
 }

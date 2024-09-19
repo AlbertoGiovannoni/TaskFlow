@@ -10,7 +10,7 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 @TypeAlias("SingleSelection")
 public class SingleSelection extends Field {
 
-    private String value;
+    private String selection;
 
     // costruttore di default
     public SingleSelection() {
@@ -19,19 +19,19 @@ public class SingleSelection extends Field {
     public SingleSelection(FieldDefinition fieldDefinition, String value) {
         super(fieldDefinition);
 
-        this.value = value;
+        this.selection = value;
     }
 
     @Override
     public Object getValue() {
-        return this.value;
+        return this.selection;
     }
 
     @Override
     public void setValue(Object value) {
         if (value != null) {
             if (value instanceof String) {
-                this.value = (String) value;
+                this.selection = (String) value;
             }
         } else {
             throw new IllegalArgumentException("Value is not of type String: \n" + value);
@@ -95,6 +95,16 @@ public class SingleSelection extends Field {
 
     @Override
     public void reset() {
-        this.value = "";
+        this.selection = "";
     }
+
+    public String getSelection() {
+        return selection;
+    }
+
+    public void setSelection(String selection) {
+        this.selection = selection;
+    }
+
+    
 }

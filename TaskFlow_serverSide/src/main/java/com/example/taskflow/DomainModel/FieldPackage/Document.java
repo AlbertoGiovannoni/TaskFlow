@@ -34,6 +34,7 @@ public class Document extends Field{
         this.name = name;
         this.fileType = fileType;
     }
+    public Document(){}
 
     public String getName() {
         return name;

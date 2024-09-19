@@ -1,5 +1,7 @@
 package com.example.taskflow.DTOs.Field;
 
+import java.util.ArrayList;
+
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
@@ -10,6 +12,7 @@ public abstract class FieldDTO {
     String id;
     String uuid;
     FieldType type;
+    ArrayList<String> valuesDto;
     
     @NotBlank(message = "FieldDefinition non può essere vuoto")
     String fieldDefinitionId;
@@ -44,6 +47,14 @@ public abstract class FieldDTO {
 
     public void setFieldDefinitionId(String fieldDefinitionId) {
         this.fieldDefinitionId = fieldDefinitionId;
+    }
+
+    public ArrayList<String> getValuesDto() {
+        return valuesDto;
+    }
+
+    public void setValuesDto(ArrayList<String> values) {
+        this.valuesDto = values;
     }
     
     

@@ -65,5 +65,13 @@ public class User implements UuidInterface{
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public String getEmail(){
+        return userInfo.getEmail();
+    }
+    
+    public void setEmail(String email){
+         this.userInfo.setEmail(email);
+    }
     
 }

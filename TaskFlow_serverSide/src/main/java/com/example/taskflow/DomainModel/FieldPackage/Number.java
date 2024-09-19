@@ -6,7 +6,7 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 public class Number extends Field{
 
-    private Float value;
+    private Float number;
 
     // costruttore di default
     public Number(){
@@ -15,7 +15,7 @@ public class Number extends Field{
     public Number(FieldDefinition fieldDefinition, Float value) {
         super(fieldDefinition);
 
-        this.value = value;
+        this.number = value;
     }
 
     @Override
@@ -25,24 +25,24 @@ public class Number extends Field{
 
     @Override
     public Object getValue() {
-        return this.value;
+        return this.number;
     }
 
     @Override
     public void removeValue(Object value) {
-        this.value = Float.NaN;
+        this.number = Float.NaN;
     }
 
     @Override
     public void reset() {
-        this.value = Float.NaN;
+        this.number = Float.NaN;
     }
 
     @Override
     public void setValue(Object value) {
         if (value != null){
             if (value instanceof Float){
-                this.value = (Float)value;
+                this.number = (Float)value;
             }
         }
     }
@@ -91,5 +91,14 @@ public class Number extends Field{
                                                 + " doesn't implement method " 
                                                 + methodName);
     }
+
+    public Float getNumber() {
+        return number;
+    }
+
+    public void setNumber(Float number) {
+        this.number = number;
+    }
+    
     
 }
