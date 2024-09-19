@@ -2,6 +2,8 @@ package com.example.taskflow.DTOs;
 
 import java.util.ArrayList;
 
+import com.example.taskflow.DTOs.Field.FieldDTO;
+
 import jakarta.validation.constraints.NotNull;
 
 public class ActivityDTO {

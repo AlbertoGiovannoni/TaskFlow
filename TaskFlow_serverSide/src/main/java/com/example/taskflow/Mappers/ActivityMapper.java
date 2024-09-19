@@ -1,7 +1,7 @@
 package com.example.taskflow.Mappers;
 
 import com.example.taskflow.DTOs.ActivityDTO;
-import com.example.taskflow.DTOs.FieldDTO;
+import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 

@@ -5,7 +5,7 @@ import org.mapstruct.ReportingPolicy;
 import java.util.ArrayList;
 
 import com.example.taskflow.DTOs.ActivityDTO;
-import com.example.taskflow.DTOs.FieldDTO;
+import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.ProjectDTO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DomainModel.Activity;
