@@ -1,10 +1,9 @@
 package com.example.taskflow.DomainModel.FieldPackage;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.UUID;
 
 import org.springframework.data.annotation.TypeAlias;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
@@ -12,123 +11,35 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 @TypeAlias("Date")
 public class Date extends Field{
     
-    private DateData dateData;
+    @DBRef
+    private Notification notification;
+    private LocalDateTime dateTime;
     
     // costruttore di default
     public Date() {
     }
 
-    public Date(FieldDefinition fieldDefinition, DateData dateData) {
+    public Date(FieldDefinition fieldDefinition, Notification notification, LocalDateTime dateTime) {
         super(fieldDefinition);
-        this.dateData = dateData;
+        this.notification = notification;
+        this.dateTime = dateTime;
     }
 
     public Notification getNotification() {
-        return this.dateData.getNotification();
+        return notification;
     }
 
     public void setNotification(Notification notification) {
-        this.dateData.setNotification(notification);
+        this.notification = notification;
     }
 
-    public LocalDateTime getDate(){
-        return this.dateData.getDateTime();
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.dateData.setDateTime(date);
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
-    public void removeNotification(){
-        this.dateData.removeNotification();
-    }
-
-    @Override
-    public UUID getUuid() {
-        return this.uuid;
-    }
-
-    @Override
-    public Object getValue() {
-        return this.dateData;
-    }
-
-    @Override
-    public void reset() {
-        this.dateData = null;
-    }
-
-    @Override
-    public void setValue(Object value) {
-        if (value != null){
-            if (value instanceof DateData){
-                this.dateData = (DateData)value;
-            }
-            else{
-                throw new IllegalArgumentException("Value is not of type DateData: " + value);
-            }
-        }
-        else{
-            throw new IllegalArgumentException("Value is null: " + value);
-        }
-    }
-
-    @Override
-    public void removeValue(Object value) {
-        String methodName = new Throwable().getStackTrace()[0].getMethodName();
-
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + " doesn't implement method " 
-                                                + methodName);
-    }
-
-    @Override
-    public ArrayList<?> getValues() {
-        String methodName = new Throwable().getStackTrace()[0].getMethodName();
-
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + " doesn't implement method " 
-                                                + methodName);
-    }
-
-    @Override
-    public void removeValues(ArrayList<?> values) {
-        String methodName = new Throwable().getStackTrace()[0].getMethodName();
-
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + " doesn't implement method " 
-                                                + methodName);
-    }
-
-    @Override
-    public void addValue(Object value) {
-        String methodName = new Throwable().getStackTrace()[0].getMethodName();
-
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + " doesn't implement method " 
-                                                + methodName);
-    }
-
-    @Override
-    public void addValues(ArrayList<?> values) {
-        String methodName = new Throwable().getStackTrace()[0].getMethodName();
-
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + " doesn't implement method " 
-                                                + methodName);
-    }
-
-    // @Override
-    // public void setValues(ArrayList<?> values) {
-    //     String methodName = new Throwable().getStackTrace()[0].getMethodName();
-
-    //     throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-    //                                             + " doesn't implement method " 
-    //                                             + methodName);
-    // }
-    @Override
-    public void setValues(ArrayList<?> values) {
-    setValue(values.get(0));
-    }
     
 }

@@ -14,6 +14,8 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 public abstract class Field implements UuidInterface{
     @Id
     String id;
+
+    //TODO: rimuovere questo da qua e metterlo nelle classi figlie specifico così che si possa fare controlli ulteriori
     @DBRef
     FieldDefinition fieldDefinition;
     String uuid;
