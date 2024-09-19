@@ -14,13 +14,14 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface ProjectMapper {
+public class ProjectMapper {
 
-    default ProjectDTO toDto(Project project) {
+    ProjectDTO toDto(Project project) {
 
+        ActivityMapper activityMapper = new ActivityMapper();
         ArrayList<ActivityDTO> activities = new ArrayList<ActivityDTO>();
         for (Activity activity : project.getActivities()) {
-            //TODO: converti activity in ActivityDTO e aggiungilo alla lista activities
+            activities.add(activityMapper.toDto(activity));
         }
 
         ArrayList<FieldDefinitionDTO> template = new ArrayList<FieldDefinitionDTO>();
@@ -32,7 +33,7 @@ public interface ProjectMapper {
         return projectDTO;
     };
 
-    default Project toEntity(ProjectDTO projectDto) {
+    Project toEntity(ProjectDTO projectDto) {
 
         ArrayList<Activity> activities = new ArrayList<Activity>();
         for (ActivityDTO activity : projectDto.getActivities()) {
