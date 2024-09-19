@@ -65,6 +65,10 @@ public class Organization implements UuidInterface{
         return this.id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public UUID getUuid() {
         return this.uuid;
     }

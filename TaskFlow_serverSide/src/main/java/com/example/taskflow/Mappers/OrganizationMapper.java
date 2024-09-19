@@ -1,42 +1,39 @@
 package com.example.taskflow.Mappers;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import com.example.taskflow.DTOs.OrganizationDTO;
 import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.User;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public class OrganizationMapper {
+@Mapper(componentModel = "spring")
+@Component
+public interface OrganizationMapper {
 
-    OrganizationDTO toDto(Organization organization) {
-        ArrayList<String> ownersId = new ArrayList<String>();
-        ArrayList<String> membersId = new ArrayList<String>();
-        ArrayList<String> projectsId = new ArrayList<String>();
+    @Mapping(source = "ownersId", target = "owners", ignore = true)
+    @Mapping(source = "membersId", target = "members", ignore = true)
+    @Mapping(source = "projectsId", target = "projects", ignore = true)
+    Organization toEntity(OrganizationDTO dto);
 
-        for (User owner : organization.getOwners()) {
-            ownersId.add(owner.getId());
-        }
-        for (User member : organization.getMembers()) {
-            membersId.add(member.getId());
-        }
-        for (Project project : organization.getProjects()) {
-            projectsId.add(project.getId());
-        }
+    @Named("mapUsersToIds")
+    default String mapUsersToIds(User user) {
+        return user.getId();
+    }   
 
-        OrganizationDTO organizationDTO = new OrganizationDTO(organization.getId(), organization.getName(), organization.getCreationDate(), ownersId, membersId, projectsId);
-        return organizationDTO;
-    };
-
-    Organization toEntity(OrganizationDTO organizationDto) {
-        
-        Organization organization = new Organization();
-        organization.setName(organizationDto.getName());
-        organization.setName(organizationDto.getCreationDate());
-        return organization;
-    }
+    @Named("mapProjectsToIds")
+    default String mapProjectsToIds(Project project) {
+        return project.getId();
+    }   
+    @Mapping(source = "owners", target = "ownersId", qualifiedByName = "mapUsersToIds")
+    @Mapping(source = "members", target = "membersId", qualifiedByName = "mapUsersToIds")
+    @Mapping(source = "projects", target = "projectsId", qualifiedByName = "mapProjectsToIds")
+    OrganizationDTO toDto(Organization user);
 }
