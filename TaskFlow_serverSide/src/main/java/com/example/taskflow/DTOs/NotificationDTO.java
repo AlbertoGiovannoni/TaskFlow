@@ -1,7 +1,6 @@
 package com.example.taskflow.DTOs;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import jakarta.validation.constraints.NotBlank;
 
@@ -12,6 +11,7 @@ public class NotificationDTO {
     private String message;
     @NotBlank(message = "La data della notifica non può essere vuota")
     private LocalDateTime notificationDateTime;
+
     public String getId() {
         return id;
     }
@@ -30,6 +30,4 @@ public class NotificationDTO {
     public void setNotificationDateTime(LocalDateTime notificationDateTime) {
         this.notificationDateTime = notificationDateTime;
     }
-    
-
 }

@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import com.example.taskflow.DomainModel.UuidInterface;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
 @Document("field") 
 public abstract class Field implements UuidInterface{
@@ -24,6 +25,10 @@ public abstract class Field implements UuidInterface{
     public Field(FieldDefinition fieldDefinition) {
         this.fieldDefinition = fieldDefinition;
         this.uuid = this.createUuid();
+    }
+
+    public FieldType getType(){
+        return this.fieldDefinition.getType();
     }
 
     public String getId() {
