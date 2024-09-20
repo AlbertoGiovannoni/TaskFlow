@@ -28,8 +28,10 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
 @Mapper(componentModel = "spring")//, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Component
 public interface FieldMapper {
 
     FieldMapper INSTANCE = Mappers.getMapper(FieldMapper.class);
@@ -132,7 +134,7 @@ public interface FieldMapper {
 
     @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidStringToUuid")
     //@Mapping(source = "valuesDto", target="users", ignore = true)
-    @Mapping(source = "valuesDto", target="values", ignore = true)
+    @Mapping(source = "valuesDto", target="users", ignore = true)
     @Mapping(source = "fieldDefinitionId", target="fieldDefinition",ignore = true)
     Assignee toEntity(AssigneeDTO assigneeDto);
 
@@ -175,5 +177,15 @@ public interface FieldMapper {
     @Named("mapUuidStringToUuid")
     default UUID mapUuidStringToUuid(String uuid) {
         return UUID.fromString(uuid);
+    }
+
+    default ArrayList<FieldDTO> fieldToFieldDto(ArrayList<Field> fields){
+        ArrayList<FieldDTO> fieldDtoList = new ArrayList<FieldDTO>();
+
+        for(Field field : fields){
+            fieldDtoList.add(this.toDto(field));
+        }
+
+        return fieldDtoList;
     }
 }
