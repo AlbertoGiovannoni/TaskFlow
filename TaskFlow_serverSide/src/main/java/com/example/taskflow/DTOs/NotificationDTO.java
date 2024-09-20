@@ -1,6 +1,7 @@
 package com.example.taskflow.DTOs;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import jakarta.validation.constraints.NotBlank;
 
@@ -11,6 +12,10 @@ public class NotificationDTO {
     private String message;
     @NotBlank(message = "La data della notifica non può essere vuota")
     private LocalDateTime notificationDateTime;
+
+    private String uuid;
+
+    private ArrayList<String> receiverIds;
 
     public String getId() {
         return id;
@@ -29,5 +34,17 @@ public class NotificationDTO {
     }
     public void setNotificationDateTime(LocalDateTime notificationDateTime) {
         this.notificationDateTime = notificationDateTime;
+    }
+    public ArrayList<String> getReceiverIds() {
+        return receiverIds;
+    }
+    public void setReceiverIds(ArrayList<String> receiverIds) {
+        this.receiverIds = receiverIds;
+    }
+    public String getUuid() {
+        return uuid;
+    }
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }
