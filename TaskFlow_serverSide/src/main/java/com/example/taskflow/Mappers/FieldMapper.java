@@ -91,7 +91,7 @@ public interface FieldMapper {
 
     @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidToUuidString")
     @Mapping(source = "notification", target = "notification")
-    @Mapping(source = "date", target = "valuesDto", ignore = true)//todo fix
+    @Mapping(source = "date", target = "dateTime")
     @Mapping(source = "fieldDefinition.id", target = "fieldDefinitionId")
     DateDTO toDto(Date date);
 
@@ -139,6 +139,7 @@ public interface FieldMapper {
     @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidStringToUuid")
     @Mapping(source = "notification", target = "notification")
     @Mapping(source = "dateTime", target = "date")
+    @Mapping(source = "fieldDefinitionId", target="fieldDefinition",ignore = true)
     Date toEntity(DateDTO dateDto);
 
     @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidStringToUuid")

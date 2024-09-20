@@ -2,6 +2,7 @@ package com.example.taskflow.servicesTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -16,7 +17,9 @@ import org.springframework.test.context.ActiveProfiles;
 import com.example.taskflow.TestUtil;
 import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
+import com.example.taskflow.DAOs.NotificationDAO;
 import com.example.taskflow.DAOs.UserDAO;
+import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
@@ -28,6 +31,7 @@ import com.example.taskflow.DomainModel.FieldPackage.Text;
 import com.example.taskflow.Mappers.FieldMapper;
 import com.example.taskflow.service.FieldService.FieldServiceManager;
 import com.example.taskflow.DTOs.Field.AssigneeDTO;
+import com.example.taskflow.DTOs.Field.DateDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.Field.NumberDTO;
 import com.example.taskflow.DTOs.Field.StringDTO;
@@ -49,6 +53,8 @@ public class FieldServiceTest {
     private FieldDefinitionDAO fieldDefinitionDao;
     @Autowired
     private UserDAO userDAO;
+    @Autowired
+    private NotificationDAO notificationDao;;
 
     private ArrayList<User> someUsers = new ArrayList<User>();
 
@@ -182,6 +188,42 @@ public class FieldServiceTest {
 
         FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).createField(fieldDto);
 
+        Field createdField = this.fieldMapper.toEntity(createdFieldDto);
+        FieldDefinition foundFD = fieldDefinitionDao.findById(createdFieldDto.getFieldDefinitionId()).orElse(null);
+        
+        
+        createdField.setFieldDefinition(foundFD);
+
+        Field found = this.fieldDao.findById(createdFieldDto.getId()).orElse(null);
+
+        assertEquals(createdField, found);
+    }
+
+    @Test
+    public void testCreationDate() {
+        FieldDTO fieldDto = new DateDTO();
+
+        fieldDto.setType(FieldType.DATE);
+        
+        FieldDefinition fd = FieldDefinitionFactory.getBuilder(fieldDto.getType())
+                .setName("meet")
+                .build();
+
+        this.fieldDefinitionDao.save(fd);
+        fieldDto.setFieldDefinitionId(fd.getId());
+        fieldDto.setUuid(UUID.randomUUID().toString());
+
+        //TODO non uso valuesDTO perche devo impostare sia localdate che notification
+
+        DateDTO dateDto = (DateDTO) fieldDto;
+ 
+        LocalDateTime date = LocalDateTime.now();
+        dateDto.setDateTime(date);
+        Notification n = new Notification(someUsers, date.minusHours(2), "message");
+        notificationDao.save(n);
+        dateDto.setNotification(n);
+
+        FieldDTO createdFieldDto = fieldServiceManager.getFieldService(dateDto).createField(dateDto);
         Field createdField = this.fieldMapper.toEntity(createdFieldDto);
         FieldDefinition foundFD = fieldDefinitionDao.findById(createdFieldDto.getFieldDefinitionId()).orElse(null);
         

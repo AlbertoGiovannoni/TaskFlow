@@ -9,10 +9,9 @@ import org.springframework.data.annotation.TypeAlias;
 import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
-@TypeAlias("Date")
 public class Date extends Field{
     
-    private DateData dateData;
+    private DateData dateData= new DateData();
     
     // costruttore di default
     public Date() {
