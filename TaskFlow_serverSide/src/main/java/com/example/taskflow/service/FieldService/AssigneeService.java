@@ -1,15 +1,8 @@
 package com.example.taskflow.service.FieldService;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.naming.NameNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.taskflow.DTOs.Field.FieldDTO;
@@ -20,11 +13,9 @@ import com.example.taskflow.DTOs.Field.AssigneeDTO;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
-import com.example.taskflow.DomainModel.FieldPackage.Assignee;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
 import com.example.taskflow.Mappers.FieldMapper;
-import com.example.taskflow.Mappers.UserMapper;
 
 @Service
 public class AssigneeService extends FieldService {
@@ -54,33 +45,31 @@ public class AssigneeService extends FieldService {
             throw new IllegalArgumentException("Wrong fieldDefinition id");
         }
 
-        FieldType fieldType = fieldDefinition.getType();
+        ArrayList<User> users = this.getUsersByIds(assigneeDTO.getUserIds());
 
-        Field f = fieldMapper.toEntity(fieldDto);
-        f.setFieldDefinition(fieldDefinition);
+        Field field = FieldFactory.getBuilder(FieldType.ASSIGNEE)
+                .addFieldDefinition(fieldDefinition)
+                .addParameters(users)
+                .build();
 
-        ArrayList<String> ids = assigneeDTO.getValuesDto();
+        field = fieldDao.save(field);
+
+        return fieldMapper.toDto(field);
+    }
+
+    private ArrayList<User> getUsersByIds(ArrayList<String> ids) {
         ArrayList<User> users = new ArrayList<User>();
         User usr;
 
         for (String id : ids){
             usr = userDAO.findById(id).orElse(null);
-            if (usr == null){
-                throw new IllegalArgumentException("User id not found");
+            if (usr != null){
+                users.add(usr);
             }
-            users.add(usr);
         }
 
-        f.setValues(users);
-
-        Field field = FieldFactory.getBuilder(fieldType)
-                .addFieldDefinition(fieldDefinition)
-                .addParameters(f.getValues())
-                .build();
-
-        field = fieldDao.save(field);
-
-
-        return fieldMapper.toDto(field);
+        return users;
     }
+
+
 }
