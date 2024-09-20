@@ -2,7 +2,6 @@ package com.example.taskflow.service;
 
 import com.example.taskflow.DAOs.OrganizationDAO;
 import com.example.taskflow.DomainModel.Organization;
-import com.example.taskflow.DomainModel.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

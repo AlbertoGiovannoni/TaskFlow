@@ -2,7 +2,6 @@ package com.example.taskflow.service;
 
 import java.util.ArrayList;
 
-import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,6 @@ import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.FieldMapper;
 import com.example.taskflow.service.FieldService.FieldServiceManager;
-import com.example.taskflow.DTOs.Field.FieldDTO;
 
 @Service
 public class ActivityService {
