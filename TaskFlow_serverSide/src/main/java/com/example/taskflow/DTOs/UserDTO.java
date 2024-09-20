@@ -8,7 +8,9 @@ public class UserDTO {
     @NotNull
     private String id;   
     private String username;
-    private String email;      
+    private String email;   
+    
+    private String uuid;
 
     public String getId() {
         return id;
@@ -27,5 +29,11 @@ public class UserDTO {
     }
     public void setEmail(String email) {
         this.email = email;
+    }
+    public String getUuid() {
+        return uuid;
+    }
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }
