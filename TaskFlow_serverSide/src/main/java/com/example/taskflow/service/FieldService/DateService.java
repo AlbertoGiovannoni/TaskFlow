@@ -51,12 +51,13 @@ public class DateService extends FieldService {
         }
 
         FieldType fieldType = fieldDefinition.getType();
-        
+        ArrayList<DateData> ddList = new ArrayList<DateData>();
         DateData dd = new DateData(dateDTO.getDateTime(), dateDTO.getNotification());
+        ddList.add(dd);
 
         Field field = FieldFactory.getBuilder(fieldType)
                 .addFieldDefinition(fieldDefinition)
-                .addParameter(dd)
+                .addParameters(ddList)
                 .build();
 
         field = fieldDao.save(field);

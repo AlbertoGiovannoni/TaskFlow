@@ -114,6 +114,10 @@ public class FieldServiceTest {
                 .build();
 
         this.fieldDefinitionDao.save(fd);
+
+        fieldDto.setFieldDefinitionId(fd.getId());
+
+
         fieldDto.setFieldDefinitionId(fd.getId());
         fieldDto.setUuid(UUID.randomUUID().toString());
 
@@ -124,10 +128,9 @@ public class FieldServiceTest {
         FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).createField(fieldDto);
 
         Field createdField = this.fieldMapper.toEntity(createdFieldDto);
-        FieldDefinition foundFD = fieldDefinitionDao.findById(createdFieldDto.getFieldDefinitionId()).orElse(null);
+        //FieldDefinition foundFD = fieldDefinitionDao.findById(createdFieldDto.getFieldDefinitionId()).orElse(null);
         
         
-        createdField.setFieldDefinition(foundFD);
 
         Text found = (Text) this.fieldDao.findById(createdFieldDto.getId()).orElse(null);
 
