@@ -3,8 +3,6 @@ package com.example.taskflow.DTOs;
 import java.util.ArrayList;
 
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
-import com.example.taskflow.DomainModel.Activity;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -23,6 +21,7 @@ public class ProjectDTO {
         this.fieldsTemplate = fieldsTemplate;
         this.activities = activities;
     }
+    
     public String getId() {
         return id;
     }

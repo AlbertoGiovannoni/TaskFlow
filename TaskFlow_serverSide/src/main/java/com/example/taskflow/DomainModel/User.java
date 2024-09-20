@@ -1,5 +1,5 @@
 package com.example.taskflow.DomainModel;
-import java.util.UUID;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -13,7 +13,7 @@ public class User implements UuidInterface{
     @DBRef
     private UserInfo userInfo;
 
-    private UUID uuid;
+    private String uuid;
     private String username;
 
     // costruttore di default
@@ -23,7 +23,7 @@ public class User implements UuidInterface{
     public User(UserInfo userInfo, String username) {
         this.username = username;
         this.userInfo = userInfo;
-        this.uuid = UUID.randomUUID();
+        this.uuid = this.createUuid();
     }
 
     @Override
@@ -54,7 +54,7 @@ public class User implements UuidInterface{
         this.userInfo = userInfo;
     }
 
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
@@ -72,6 +72,11 @@ public class User implements UuidInterface{
     
     public void setEmail(String email){
          this.userInfo.setEmail(email);
+    }
+
+    @Override
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
     
 }
