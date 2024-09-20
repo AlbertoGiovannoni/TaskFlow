@@ -26,8 +26,6 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface FieldDefinitionMapper {
 
-    //TODO: finire quella cosa del @Mapping
-
     FieldDefinitionMapper INSTANCE = Mappers.getMapper(FieldDefinitionMapper.class);
 
     default FieldDefinitionDTO toDto(FieldDefinition fieldDefinition){
@@ -70,14 +68,11 @@ public interface FieldDefinitionMapper {
         }
     }
 
-    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidToUuidString")
     @Mapping(source="possibleAssigneeUsers", target="possibleAssigneeUserIds", qualifiedByName = "mapUsersToIds")
     AssigneeDefinitionDTO toDto(AssigneeDefinition assigneeDefinition);
 
-    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidToUuidString")
     SingleSelectionDefinitionDTO toDto(SingleSelectionDefinition singleSelectionDefinition);
 
-    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidToUuidString")
     SimpleFieldDefinitionDTO toDto(SimpleFieldDefinition simpleFieldDefinition);
 
     @Named("mapUsersToIds")
@@ -90,17 +85,9 @@ public interface FieldDefinitionMapper {
         return uuid.toString();
     }
 
-    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidStringToUuid")
     AssigneeDefinition toEntity(AssigneeDefinitionDTO assigneeDefinitionDto);
 
-    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidStringToUuid")
     SingleSelectionDefinition toEntity(SingleSelectionDefinitionDTO singleSelectionDefinitionDto);
 
-    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidStringToUuid")
     SimpleFieldDefinition toEntity(SimpleFieldDefinitionDTO simpleFieldDefinitionDto);
-
-    @Named("mapUuidStringToUuid")
-    default UUID mapUuidStringToUuid(String uuid){
-        return UUID.fromString(uuid);
-    }
 }
