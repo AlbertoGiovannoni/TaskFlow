@@ -16,7 +16,7 @@ import java.util.ArrayList;
 @Component
 public interface ActivityMapper {
 
-    public static final FieldMapper mapper = null;              //FIXME
+    public static final FieldMapper mapper = null;
 
     @Mapping(source = "fields", target = "fields", ignore = true)
     Activity toEntity(ActivityDTO dto);

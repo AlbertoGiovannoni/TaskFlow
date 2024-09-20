@@ -2,7 +2,6 @@ package com.example.taskflow.DomainModel.FieldPackage;
 
 import java.time.LocalDateTime;
 
-import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import com.example.taskflow.DomainModel.Notification;
@@ -44,6 +43,4 @@ public class Date extends Field{
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
-
-    
 }

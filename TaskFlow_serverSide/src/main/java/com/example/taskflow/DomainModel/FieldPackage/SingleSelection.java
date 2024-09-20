@@ -6,7 +6,7 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 public class SingleSelection extends Field {
 
-    private String selection;
+    private String value;
 
     // costruttore di default
     public SingleSelection() {
@@ -15,16 +15,16 @@ public class SingleSelection extends Field {
     public SingleSelection(FieldDefinition fieldDefinition, String value) {
         super(fieldDefinition);
 
-        this.selection = value;
+        this.value = value;
     }
 
-    public String getSelection() {
-        return selection;
+    public String getValue() {
+        return value;
     }
 
-    public void setSelection(String selection) {
+    public void setValue(String selection) {
         if (((AssigneeDefinition)this.fieldDefinition).validateValue(selection)){
-            this.selection = selection;
+            this.value = selection;
         }
     }
 }

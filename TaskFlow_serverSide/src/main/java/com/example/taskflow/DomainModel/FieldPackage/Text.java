@@ -4,7 +4,7 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 public class Text extends Field{
 
-    private String text;
+    private String value;
 
     // costruttore di default
     public Text(){
@@ -13,13 +13,13 @@ public class Text extends Field{
     public Text(FieldDefinition fieldDefinition, String value) {
         super(fieldDefinition);
 
-        this.text = value;
+        this.value = value;
     }
 
-    public String getText() {
-        return text;
+    public String getValue() {
+        return value;
     }
-    public void setText(String text) {
-        this.text = text;
+    public void setValue(String text) {
+        this.value = text;
     }
 }
