@@ -25,6 +25,14 @@ public class Assignee extends Field {
     }
 
     public void setUsers(ArrayList<User> users) {
-        this.users = users;
+        ArrayList<User> validatedUsers = new ArrayList<>();
+
+        for (User user : users){
+            if (this.fieldDefinition.validateValue(user)){
+                validatedUsers.add(user);
+            };
+        }
+
+        this.users = validatedUsers;
     }
 }
