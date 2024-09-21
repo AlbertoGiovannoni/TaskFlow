@@ -2,6 +2,8 @@ package com.example.taskflow.DomainModel;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @Document
@@ -11,15 +13,15 @@ public class Organization implements UuidInterface{
     private String id;
     private String uuid;
     private String name;
-    private String creationDate;
+    private LocalDateTime creationDate;
 
     @DBRef
-    private ArrayList<User> owners;
+    private ArrayList<User> owners = new ArrayList<User>();
     @DBRef
-    private ArrayList<User> members;
+    private ArrayList<User> members = new ArrayList<User>();
 
     @DBRef
-    private ArrayList<Project> projects;
+    private ArrayList<Project> projects = new ArrayList<Project>();
 
 
     // costruttore di default
@@ -32,7 +34,8 @@ public class Organization implements UuidInterface{
         this.uuid = this.createUuid();
     }
 
-    public Organization(String name, ArrayList<User> owners, ArrayList<Project> projects, ArrayList<User> members, String creationDate) {
+    
+    public Organization(String name, ArrayList<User> owners, ArrayList<Project> projects, ArrayList<User> members, LocalDateTime creationDate) {
         this.name = name;
         this.owners = owners;
         this.projects = projects;
@@ -86,11 +89,11 @@ public class Organization implements UuidInterface{
         this.name = name;
     }
 
-    public String getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return this.creationDate;
     }
 
-    public void setCreationDate(String creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
