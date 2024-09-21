@@ -35,7 +35,6 @@ public class ActivityService {
     
     public ActivityDTO createActivity(ActivityDTO activityDTO) {
 
-
         ArrayList<FieldDTO> fieldsDto = activityDTO.getFields();
         ArrayList<Field> fields = new ArrayList<Field>();
         FieldDefinition fd;
@@ -59,4 +58,12 @@ public class ActivityService {
         return activityMapper.toDto(activity);
     }
     
+    public void deleteActivity(ActivityDTO activityDTO) {
+        
+        Activity activity = this.activityDao.findById(activityDTO.getId()).orElseThrow();
+        for(Field field:activity.getFields()){
+            //fieldService.deleteField(Field);           //PENDING: implement deleteField in fieldService
+        }
+        this.activityDao.delete(activity);
+    }
 }

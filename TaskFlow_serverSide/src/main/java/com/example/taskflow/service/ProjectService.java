@@ -10,6 +10,7 @@ import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.ProjectDTO;
 import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.Project;
+import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.ProjectMapper;
 
 
@@ -18,15 +19,14 @@ public class ProjectService {
 
     @Autowired
     ProjectDAO projectDao;
-
     @Autowired
     UserDAO userDao;
-
     @Autowired
     ProjectMapper projectMapper;
-
     @Autowired
     ActivityService activityService;
+    @Autowired
+    ActivityMapper activityMapper;
 
     public ProjectDTO createProject(ProjectDTO projectDto){
         Project project = projectMapper.toEntity(projectDto);
@@ -41,7 +41,7 @@ public class ProjectService {
     public void deleteProject(ProjectDTO projectDto){
         Project project = this.projectDao.findById(projectDto.getId()).orElseThrow();
         for(Activity activity:project.getActivities()){
-            //activityService.deleteActivity(activity);           //PENDING: implement deleteActivity
+            activityService.deleteActivity(activityMapper.toDto(activity));           
         }
         this.projectDao.delete(project);
     }
