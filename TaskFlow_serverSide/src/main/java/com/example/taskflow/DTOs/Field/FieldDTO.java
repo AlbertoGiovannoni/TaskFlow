@@ -12,7 +12,7 @@ public abstract class FieldDTO {
     String id;
     String uuid;
     FieldType type;
-    ArrayList<String> valuesDto;
+    ArrayList<String> valuesDto; // TODO togliere valuesDto generico e mettere un value di tipo specifico in ogni dto visto che non abbiamo piu i setvalues
     
     @NotBlank(message = "FieldDefinition non può essere vuoto")
     String fieldDefinitionId;

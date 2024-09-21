@@ -65,7 +65,7 @@ public class OrganizationTest {
         LocalDateTime now = LocalDateTime.now();
         String creationDate = now.format(formatter);
 
-        anOrganization = new Organization("i sette nani", someOwners, someProjects, someUsers, creationDate);
+        anOrganization = new Organization("i sette nani", someOwners, someProjects, someUsers, now);
         anOrganization = OrganizationDAO.save(anOrganization);
     }
 
