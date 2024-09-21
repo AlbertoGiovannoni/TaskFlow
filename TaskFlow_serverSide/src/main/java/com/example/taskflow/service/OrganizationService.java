@@ -4,6 +4,7 @@ import com.example.taskflow.DAOs.OrganizationDAO;
 import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.OrganizationDTO;
+import com.example.taskflow.DTOs.UserDTO;
 import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.User;
@@ -55,7 +56,7 @@ public class OrganizationService {
         return false;
     }
 
-    public OrganizationDTO createOrganization(OrganizationDTO organizationDTO){
+    public OrganizationDTO createNewOrganization(OrganizationDTO organizationDTO){
         Organization organization = organizationMapper.toEntity(organizationDTO);
         
         User owner = this.userDAO.findById(organizationDTO.getOwnersId().get(0)).orElseThrow();
@@ -71,7 +72,19 @@ public class OrganizationService {
         return organizationMapper.toDto(organization);
     }
 
-    
+    public OrganizationDTO addMemberToOrganization(OrganizationDTO organizationDTO, UserDTO userDTO){
+        Organization organization = organizationMapper.toEntity(organizationDTO);
+        
+        User user = this.userDAO.findById(userDTO.getId()).orElseThrow();
+        if (user == null){
+            throw new IllegalArgumentException("User not defined");
+        }
+        organization.addMember(user);
+        this.organizationDAO.save(organization);
+
+        return organizationMapper.toDto(organization);
+    }
+
     public void deleteOrganization(OrganizationDTO organizationDTO){
         Organization organization = this.organizationDAO.findById(organizationDTO.getId()).orElseThrow();
         Project project;
