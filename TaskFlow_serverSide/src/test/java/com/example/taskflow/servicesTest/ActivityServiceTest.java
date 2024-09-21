@@ -33,6 +33,7 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFa
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.FieldMapper;
+import com.example.taskflow.service.ActivityService;
 import com.example.taskflow.service.FieldService.FieldServiceManager;
 
 @DataMongoTest
@@ -58,6 +59,8 @@ public class ActivityServiceTest {
     private ActivityMapper activityMapper;
     @Autowired
     private ActivityDAO activityDao;
+    @Autowired
+    private ActivityService activityService;
 
     private ArrayList<User> someUsers = new ArrayList<User>();
 
@@ -78,8 +81,8 @@ public class ActivityServiceTest {
         ActivityDTO activityDTO = new ActivityDTO();
 
         activityDTO.setName("name");
-        // ArrayList<FieldDTO> fieldsDto = new ArrayList<FieldDTO>();
-        ArrayList<Field> fields = new ArrayList<Field>();
+        ArrayList<FieldDTO> fieldsDto = new ArrayList<FieldDTO>();
+        //ArrayList<Field> fields = new ArrayList<Field>();
 
         // ---------------------- ASSIGNEE ---------------------- //
 
@@ -100,9 +103,9 @@ public class ActivityServiceTest {
 
         FieldDTO createdFieldDto = fieldServiceManager.getFieldService(assigneeDto).createField(assigneeDto);
         Field assignee = this.fieldMapper.toEntity(createdFieldDto);
-        // fieldsDto.add(createdFieldDto);
+        fieldsDto.add(createdFieldDto);
 
-        fields.add(assignee);
+        //fields.add(assignee);
 
         // ---------------------- TEXT ---------------------- //
 
@@ -123,8 +126,9 @@ public class ActivityServiceTest {
 
         createdFieldDto = fieldServiceManager.getFieldService(textDto).createField(textDto);
         Field text = this.fieldMapper.toEntity(createdFieldDto);
+        fieldsDto.add(createdFieldDto);
 
-        fields.add(text);
+        //fields.add(text);
 
         // ---------------------- SINGLE SELECTION ---------------------- //
 
@@ -150,8 +154,9 @@ public class ActivityServiceTest {
 
         createdFieldDto = fieldServiceManager.getFieldService(singleSelectionDto).createField(singleSelectionDto);
         Field selection = this.fieldMapper.toEntity(createdFieldDto);
+        fieldsDto.add(createdFieldDto);
 
-        fields.add(selection);
+        //fields.add(selection);
 
         // ---------------------- NUMBER ---------------------- //
 
@@ -172,8 +177,9 @@ public class ActivityServiceTest {
 
         createdFieldDto = fieldServiceManager.getFieldService(numberDto).createField(numberDto);
         Field number = this.fieldMapper.toEntity(createdFieldDto);
+        fieldsDto.add(createdFieldDto);
 
-        fields.add(number);
+        //fields.add(number);
 
         // ---------------------- DATE ---------------------- //
 
@@ -197,16 +203,21 @@ public class ActivityServiceTest {
 
         createdFieldDto = fieldServiceManager.getFieldService(dateDto).createField(dateDto);
         Field date = this.fieldMapper.toEntity(createdFieldDto);
+        fieldsDto.add(createdFieldDto);
 
-        fields.add(date);
+        //fields.add(date);
 
         // ---------------------- DOCUMENT ---------------------- //
         //TODO da implementare
 
 
-        Activity activity = this.activityMapper.toEntity(activityDTO);
-        activity.setFields(fields);
-        activity = activityDao.save(activity);
+        activityDTO.setFields(fieldsDto);
+        activityService.createActivity(activityDTO);
+
+
+        //Activity activity = this.activityMapper.toEntity(activityDTO);
+        //activity.setFields(fields);
+        //activity = activityDao.save(activity);
     }
 
     private ArrayList<String> extractIds(ArrayList<User> users) {
