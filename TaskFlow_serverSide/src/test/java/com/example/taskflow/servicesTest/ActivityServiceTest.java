@@ -28,8 +28,6 @@ import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
-import com.example.taskflow.DomainModel.FieldPackage.Field;
-import com.example.taskflow.Mappers.FieldMapper;
 import com.example.taskflow.Mappers.NotificationMapper;
 import com.example.taskflow.service.ActivityService;
 import com.example.taskflow.service.FieldService.FieldServiceManager;
@@ -45,8 +43,6 @@ public class ActivityServiceTest {
     private TestUtil testUtil;
     @Autowired
     private FieldServiceManager fieldServiceManager;
-    @Autowired
-    private FieldMapper fieldMapper;
     @Autowired
     private FieldDefinitionDAO fieldDefinitionDao;
     @Autowired
@@ -95,7 +91,6 @@ public class ActivityServiceTest {
         assigneeDto.setUserIds(this.extractIds(someUsers));
 
         FieldDTO createdFieldDto = fieldServiceManager.getFieldService(assigneeDto).createField(assigneeDto);
-        Field assignee = this.fieldMapper.toEntity(createdFieldDto);
         fieldsDto.add(createdFieldDto);
 
         // ---------------------- TEXT ---------------------- //
@@ -114,7 +109,6 @@ public class ActivityServiceTest {
         textDto.setValue(RandomString.make(10));
 
         createdFieldDto = fieldServiceManager.getFieldService(textDto).createField(textDto);
-        Field text = this.fieldMapper.toEntity(createdFieldDto);
         fieldsDto.add(createdFieldDto);
 
         //fields.add(text);
@@ -137,10 +131,9 @@ public class ActivityServiceTest {
         singleSelectionDto.setFieldDefinitionId(fd.getId());
         singleSelectionDto.setUuid(UUID.randomUUID().toString());
 
-        singleSelectionDto.setValue(RandomString.make(10));
+        singleSelectionDto.setValue("Done");
 
         createdFieldDto = fieldServiceManager.getFieldService(singleSelectionDto).createField(singleSelectionDto);
-        Field selection = this.fieldMapper.toEntity(createdFieldDto);
         fieldsDto.add(createdFieldDto);
 
         // ---------------------- NUMBER ---------------------- //
@@ -159,7 +152,6 @@ public class ActivityServiceTest {
         numberDto.setValue(new Random().nextFloat());
 
         createdFieldDto = fieldServiceManager.getFieldService(numberDto).createField(numberDto);
-        Field number = this.fieldMapper.toEntity(createdFieldDto);
         fieldsDto.add(createdFieldDto);
 
         // ---------------------- DATE ---------------------- //
@@ -185,10 +177,7 @@ public class ActivityServiceTest {
         dateDto.setNotification(this.notificationMapper.toDto(notification));
 
         createdFieldDto = fieldServiceManager.getFieldService(dateDto).createField(dateDto);
-        Field date = this.fieldMapper.toEntity(createdFieldDto);
         fieldsDto.add(createdFieldDto);
-
-        //fields.add(date);
 
         // ---------------------- DOCUMENT ---------------------- //
         //TODO da implementare

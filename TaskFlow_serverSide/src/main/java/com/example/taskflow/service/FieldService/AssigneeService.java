@@ -13,6 +13,7 @@ import com.example.taskflow.DTOs.Field.AssigneeDTO;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
+import com.example.taskflow.DomainModel.FieldPackage.Assignee;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
 import com.example.taskflow.Mappers.FieldMapper;
@@ -71,5 +72,19 @@ public class AssigneeService extends FieldService {
         return users;
     }
 
+    @Override
+    public Field getField(FieldDTO fieldDto){
+        if (!(fieldDto instanceof AssigneeDTO)){
+            throw new IllegalArgumentException("FieldDto is of type " + fieldDto.getClass().getSimpleName() + " instead of AssigneeDTO");
+        }
+
+        Assignee field = (Assignee)super.getField(fieldDto);
+
+        ArrayList<User> users = this.getUsersByIds(((AssigneeDTO)fieldDto).getUserIds());
+
+        field.setUsers(users);
+
+        return field;
+    }
 
 }

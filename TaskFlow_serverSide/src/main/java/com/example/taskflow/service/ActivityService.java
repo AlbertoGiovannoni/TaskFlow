@@ -39,17 +39,18 @@ public class ActivityService {
 
         for (FieldDTO movingFieldDto : fieldsDto) {
             fields.add(
-                    this.fieldMapper.toEntity(
-                            this.fieldServiceManager
-                                    .getFieldService(movingFieldDto)
-                                    .createField(movingFieldDto)));
+                    this.fieldServiceManager
+                            .getFieldService(movingFieldDto).getField(
+                                    this.fieldServiceManager
+                                            .getFieldService(movingFieldDto)
+                                            .createField(movingFieldDto)));
         }
 
         Activity activity = this.activityMapper.toEntity(activityDTO);
         activity.setFields(fields);
 
         activity = this.activityDao.save(activity);
-        
+
         return this.activityMapper.toDto(this.activityDao.save(activity));
     }
 

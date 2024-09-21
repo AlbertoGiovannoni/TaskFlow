@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-import org.springframework.stereotype.Component;
 
 
 @Mapper(componentModel = "spring")
@@ -118,6 +117,7 @@ public interface FieldMapper {
     @Mapping(source = "fieldDefinitionId", target="fieldDefinition",ignore = true)
     Number toEntity(NumberDTO numberDto);
 
+    @Mapping(source = "value", target = "value", ignore = true)
     @Mapping(source = "fieldDefinitionId", target = "fieldDefinition", ignore = true)
     SingleSelection toEntitySingleSelection(StringDTO singleSelectionDto);
 

@@ -30,7 +30,10 @@ public class Assignee extends Field {
         for (User user : users){
             if (this.fieldDefinition.validateValue(user)){
                 validatedUsers.add(user);
-            };
+            }
+            else{
+                throw new IllegalArgumentException(user + " not allowed by AssigneeDefinition. Allowed users: " + this.fieldDefinition.getAllEntries());
+            }
         }
 
         this.users = validatedUsers;

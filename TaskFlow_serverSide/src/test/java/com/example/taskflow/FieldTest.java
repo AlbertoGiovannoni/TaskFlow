@@ -174,13 +174,9 @@ public class FieldTest {
         assertEquals(field, fieldFromDB);
 
         fieldFromDB.setUsers(new ArrayList<User>());
-
-        // FIXME: cambiare il controllo
-        /*
-        assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.addValue(this.testUtil.addGetRandomUserToDatabase());});
-        assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.addValues(this.testUtil.addGetMultipleRandomUserToDatabase(3));});
-        assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.setValues((this.testUtil.addGetMultipleRandomUserToDatabase(3)));});
-        */
+        
+        assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.setUsers(this.testUtil.addGetMultipleRandomUserToDatabase(3));});
+        assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.setUsers((this.testUtil.addGetMultipleRandomUserToDatabase(3)));});
     }
 
     @Test

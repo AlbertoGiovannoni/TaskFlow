@@ -2,6 +2,7 @@ package com.example.taskflow.DomainModel.FieldPackage;
 
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.SingleSelectionDefinition;
 
 
 public class SingleSelection extends Field {
@@ -22,9 +23,12 @@ public class SingleSelection extends Field {
         return value;
     }
 
-    public void setValue(String selection) {
-        if (((AssigneeDefinition)this.fieldDefinition).validateValue(selection)){
-            this.value = selection;
+    public void setValue(String value) {
+        if (((SingleSelectionDefinition)this.fieldDefinition).validateValue(value)){
+            this.value = value;
+        }
+        else{
+            throw new IllegalArgumentException(value + " not allowed: fieldDefinition = [" + this.fieldDefinition.getAllEntries() + "]");
         }
     }
 }

@@ -11,6 +11,7 @@ import com.example.taskflow.DTOs.Field.StringDTO;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
+import com.example.taskflow.DomainModel.FieldPackage.SingleSelection;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
 import com.example.taskflow.Mappers.FieldMapper;
 
@@ -52,5 +53,18 @@ public class SingleSelectionService extends FieldService{
         field = fieldDao.save(field);
 
         return fieldMapper.toDto(field);
+    }
+
+    @Override
+    public Field getField(FieldDTO fieldDto){
+        if (!(fieldDto instanceof StringDTO)){
+            throw new IllegalArgumentException("Incompatible type: " + fieldDto.getClass().getSimpleName() + " != StringDTO" );
+        }
+
+        SingleSelection field = (SingleSelection)super.getField(fieldDto);
+
+        field.setValue(((StringDTO)fieldDto).getValue());
+
+        return field;
     }
 }

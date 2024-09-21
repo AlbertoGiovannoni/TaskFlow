@@ -3,6 +3,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.temporal.ChronoUnit;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -40,7 +42,7 @@ public class Organization implements UuidInterface{
         this.owners = owners;
         this.projects = projects;
         this.members = members;
-        this.creationDate = creationDate;
+        this.creationDate = creationDate.truncatedTo(ChronoUnit.MINUTES);
         this.uuid = this.createUuid();
     }
 
