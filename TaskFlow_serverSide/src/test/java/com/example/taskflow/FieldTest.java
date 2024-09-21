@@ -1,7 +1,6 @@
 package com.example.taskflow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDateTime;
@@ -23,9 +22,12 @@ import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
+import com.example.taskflow.DomainModel.FieldPackage.Assignee;
 import com.example.taskflow.DomainModel.FieldPackage.Date;
-import com.example.taskflow.DomainModel.FieldPackage.DateData;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
+import com.example.taskflow.DomainModel.FieldPackage.Number;
+import com.example.taskflow.DomainModel.FieldPackage.SingleSelection;
+import com.example.taskflow.DomainModel.FieldPackage.Text;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
 
 import net.bytebuddy.utility.RandomString;
@@ -69,9 +71,9 @@ public class FieldTest {
         assertEquals(field.getFieldDefinition(), fieldDefinition);
 
         String randomString = RandomString.make(10);
-        fieldFromDB.setValue(randomString);
+        ((Text)fieldFromDB).setValue(randomString);
 
-        Field fieldModified = this.fieldDao.save(fieldFromDB);
+        Text fieldModified = (Text)this.fieldDao.save(fieldFromDB);
 
         assertEquals(fieldModified.getValue(), randomString);
         assertEquals(fieldModified.getUuid(), fieldFromDB.getUuid());
@@ -87,7 +89,7 @@ public class FieldTest {
                                 .addParameter((float)Math.random())
                                 .build();
 
-        Field fieldFromDB = this.fieldDao.save(field);
+        Number fieldFromDB = (Number)this.fieldDao.save(field);
 
         assertEquals(field, fieldFromDB);
         assertEquals(field.getFieldDefinition(), fieldDefinition);
@@ -95,7 +97,7 @@ public class FieldTest {
         Float randomFloat = (float)Math.random();
         fieldFromDB.setValue(randomFloat);
 
-        Field fieldModified = this.fieldDao.save(fieldFromDB);
+        Number fieldModified = (Number)this.fieldDao.save(fieldFromDB);
 
         assertEquals(fieldModified.getValue(), randomFloat);
         assertEquals(fieldModified.getUuid(), fieldFromDB.getUuid());
@@ -128,26 +130,23 @@ public class FieldTest {
                                 .addParameter(someSelections.get(1))
                                 .build();
 
-        Field fieldFromDB = this.fieldDao.save(field);
+        SingleSelection fieldFromDB = (SingleSelection)this.fieldDao.save(field);
 
         assertEquals(field, fieldFromDB);
         assertEquals(field.getFieldDefinition(), fieldDefinition);
 
-        fieldFromDB.setValues(subsetOfSomeSelections);
+        fieldFromDB.setValue(subsetOfSomeSelections.get(0));
 
         assertEquals(field, fieldFromDB);
         assertEquals(fieldFromDB.getFieldDefinition(), fieldDefinition);
 
-        int i = 0;
-        for (Object value : fieldFromDB.getValues()){
-            assertEquals((String)value, subsetOfSomeSelections.get(i));
-            i++;
-        }
+        assertEquals(fieldFromDB.getValue(), subsetOfSomeSelections.get(0));
+        
         assertEquals(field, this.fieldDao.save(fieldFromDB));
 
-        assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.addValue("a string not accepted");});
-        assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.addValues(someSelectionsNotValid);});
-        assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.setValues(someSelectionsNotValid);});
+        assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.setValue("a string not accepted");});
+        assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.setValue(someSelectionsNotValid.get(0));});
+        assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.setValue(someSelectionsNotValid.get(1));});
     }
 
     @Test
@@ -165,21 +164,19 @@ public class FieldTest {
                                 .addParameter(someUsers.get(0))
                                 .build();
 
-        Field fieldFromDB = this.fieldDao.save(field);
+        Assignee fieldFromDB = (Assignee)this.fieldDao.save(field);
         Field found = this.fieldDao.findById(field.getId()).orElse(null);
 
         assertEquals(field, found);
         assertEquals(field.getFieldDefinition(), fieldDefinition);
 
-        fieldFromDB.setValues(subsetOfSomeUsers);
+        fieldFromDB.setUsers(subsetOfSomeUsers);
         assertEquals(field, fieldFromDB);
 
-        fieldFromDB.reset();
-        assertEquals(0, fieldFromDB.getValues().size());
-
-        assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.addValue(this.testUtil.addGetRandomUserToDatabase());});
-        assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.addValues(this.testUtil.addGetMultipleRandomUserToDatabase(3));});
-        assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.setValues((this.testUtil.addGetMultipleRandomUserToDatabase(3)));});
+        fieldFromDB.setUsers(new ArrayList<User>());
+        
+        assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.setUsers(this.testUtil.addGetMultipleRandomUserToDatabase(3));});
+        assertThrows(IllegalArgumentException.class, ()->{fieldFromDB.setUsers((this.testUtil.addGetMultipleRandomUserToDatabase(3)));});
     }
 
     @Test
@@ -192,7 +189,8 @@ public class FieldTest {
 
         Field field = FieldFactory.getBuilder(FieldType.DATE)
                                 .addFieldDefinition(fieldDefinition)
-                                .addParameter(new DateData(LocalDateTime.now(), notification))
+                                .addParameter(LocalDateTime.now())
+                                .addParameter(notification)
                                 .build();
 
         Field fieldFromDB = this.fieldDao.save(field);
@@ -205,9 +203,6 @@ public class FieldTest {
 
         ((Date)fieldFromDB).setNotification(anotherNotification);
         assertEquals(((Date)fieldFromDB).getNotification(), anotherNotification);
-
-        ((Date)fieldFromDB).reset();
-        assertNull(fieldFromDB.getValue());
 
         fieldDao.delete(fieldFromDB);
         assertEquals(fieldDao.findById(fieldFromDB.getId()), Optional.empty());

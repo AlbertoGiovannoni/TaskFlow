@@ -18,7 +18,6 @@ import com.example.taskflow.DAOs.OrganizationDAO;
 import java.util.ArrayList;
 
 import java.util.stream.Collectors;
-import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 
 @DataMongoTest
@@ -61,9 +60,7 @@ public class OrganizationTest {
         this.someOwners.add(this.someUsers.remove(0));
         this.someProjects = this.projectDAO.findAll().stream().collect(Collectors.toCollection(ArrayList::new));
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        String creationDate = now.format(formatter);
 
         anOrganization = new Organization("i sette nani", someOwners, someProjects, someUsers, now);
         anOrganization = OrganizationDAO.save(anOrganization);

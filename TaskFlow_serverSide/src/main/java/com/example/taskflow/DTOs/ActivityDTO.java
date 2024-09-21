@@ -13,6 +13,8 @@ public class ActivityDTO {
     private String name;
     private ArrayList<FieldDTO> fields;
 
+    private String uuid;
+
     // public ActivityDTO(String name, String id, ArrayList<FieldDTO> fields){
     //     this.name = name;
     //     this.fields = fields;
@@ -35,5 +37,11 @@ public class ActivityDTO {
     }
     public void setFields(ArrayList<FieldDTO> fields) {
         this.fields = fields;
+    }
+    public String getUuid() {
+        return uuid;
+    }
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }

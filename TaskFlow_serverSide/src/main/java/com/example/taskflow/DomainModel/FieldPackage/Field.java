@@ -1,6 +1,4 @@
 package com.example.taskflow.DomainModel.FieldPackage;
-import java.util.ArrayList;
-import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -14,9 +12,11 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 public abstract class Field implements UuidInterface{
     @Id
     String id;
+
+    //TODO: rimuovere questo da qua e metterlo nelle classi figlie specifico così che si possa fare controlli ulteriori
     @DBRef
     FieldDefinition fieldDefinition;
-    UUID uuid;
+    String uuid;
 
     // costruttore di default
     public Field() {
@@ -24,39 +24,37 @@ public abstract class Field implements UuidInterface{
 
     public Field(FieldDefinition fieldDefinition) {
         this.fieldDefinition = fieldDefinition;
-        this.uuid = UUID.randomUUID();
-    }
-
-    public FieldDefinition getFieldDefinition() {
-        return fieldDefinition;
+        this.uuid = this.createUuid();
     }
 
     public FieldType getType(){
         return this.fieldDefinition.getType();
     }
 
-    public String getId(){
-        return this.id;
+    public String getId() {
+        return id;
     }
 
-    public abstract Object getValue();
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public abstract ArrayList<?> getValues();
+    public FieldDefinition getFieldDefinition() {
+        return fieldDefinition;
+    }
 
-    public abstract void removeValue(Object value);
+    public void setFieldDefinition(FieldDefinition fieldDefinition) {
+        this.fieldDefinition = fieldDefinition;
+    }
 
-    public abstract void removeValues(ArrayList<?> values);
+    public String getUuid() {
+        return uuid;
+    }
 
-    public abstract void reset();
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 
-    public abstract void addValue(Object value);
-
-    public abstract void addValues(ArrayList<?> values);
-
-    public abstract void setValue(Object value);
-
-    public abstract void setValues(ArrayList<?> values);
-    
     @Override
     public boolean equals(Object obj) {
         boolean value = false;
@@ -68,21 +66,5 @@ public abstract class Field implements UuidInterface{
         }
 
         return value;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setFieldDefinition(FieldDefinition fieldDefinition) {
-        this.fieldDefinition = fieldDefinition;
-    }
-
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
     }
 }

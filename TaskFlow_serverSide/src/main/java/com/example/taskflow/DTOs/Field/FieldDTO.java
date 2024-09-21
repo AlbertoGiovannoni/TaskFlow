@@ -1,8 +1,5 @@
 package com.example.taskflow.DTOs.Field;
 
-import java.util.ArrayList;
-
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +9,6 @@ public abstract class FieldDTO {
     String id;
     String uuid;
     FieldType type;
-    ArrayList<String> valuesDto; // TODO togliere valuesDto generico e mettere un value di tipo specifico in ogni dto visto che non abbiamo piu i setvalues
     
     @NotBlank(message = "FieldDefinition non può essere vuoto")
     String fieldDefinitionId;
@@ -48,14 +44,4 @@ public abstract class FieldDTO {
     public void setFieldDefinitionId(String fieldDefinitionId) {
         this.fieldDefinitionId = fieldDefinitionId;
     }
-
-    public ArrayList<String> getValuesDto() {
-        return valuesDto;
-    }
-
-    public void setValuesDto(ArrayList<String> values) {
-        this.valuesDto = values;
-    }
-    
-    
 }

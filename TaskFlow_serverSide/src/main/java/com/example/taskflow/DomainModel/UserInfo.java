@@ -1,5 +1,5 @@
 package com.example.taskflow.DomainModel;
-import java.util.UUID;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,7 +15,7 @@ public class UserInfo implements UuidInterface{
     private String email;
 
     private String password;
-    private UUID uuid;
+    private String uuid;
 
     // costruttore di default
     public UserInfo() {
@@ -26,7 +26,7 @@ public class UserInfo implements UuidInterface{
         
         this.email = email;
         this.password = passwordEncoder.encode(password);
-        this.uuid = UUID.randomUUID();
+        this.uuid = this.createUuid();
     }
 
     // getter e setter
@@ -35,7 +35,7 @@ public class UserInfo implements UuidInterface{
         return id;
     }
 
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
@@ -68,5 +68,10 @@ public class UserInfo implements UuidInterface{
         }
 
         return value;
+    }
+
+    @Override
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }

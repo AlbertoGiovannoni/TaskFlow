@@ -6,17 +6,13 @@ import org.springframework.stereotype.Service;
 import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.UserDAO;
-import com.example.taskflow.DTOs.Field.AssigneeDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.Field.StringDTO;
-import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
-import com.example.taskflow.DomainModel.FieldPackage.Text;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
 import com.example.taskflow.Mappers.FieldMapper;
-import java.util.ArrayList;
 
 @Service
 public class TextService extends FieldService {
@@ -38,27 +34,18 @@ public class TextService extends FieldService {
                     "FieldDto of class " + fieldDto.getClass().getSimpleName() + " instead of StringDTO");
         }
 
-        StringDTO stringDTO = (StringDTO) fieldDto;
+        StringDTO stringDto = (StringDTO) fieldDto;
 
-        FieldDefinition fieldDefinition = fieldDefinitionDAO.findById(stringDTO.getFieldDefinitionId())
+        FieldDefinition fieldDefinition = fieldDefinitionDAO.findById(stringDto.getFieldDefinitionId())
                 .orElse(null);
 
         if (fieldDefinition == null) {
             throw new IllegalArgumentException("Wrong fieldDefinition id");
         }
 
-        FieldType fieldType = fieldDefinition.getType();
-
-        Field f = fieldMapper.toEntity(fieldDto);
-        f.setFieldDefinition(fieldDefinition);
-
-        ArrayList<String> value = stringDTO.getValuesDto();
-
-        f.setValues(value);
-
-        Field field = FieldFactory.getBuilder(fieldType)
+        Field field = FieldFactory.getBuilder(FieldType.TEXT)
                 .addFieldDefinition(fieldDefinition)
-                .addParameters(f.getValues())
+                .addParameter(stringDto.getValue())
                 .build();
 
         field = fieldDao.save(field);

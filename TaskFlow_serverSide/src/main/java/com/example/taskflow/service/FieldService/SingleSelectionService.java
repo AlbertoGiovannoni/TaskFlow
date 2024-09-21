@@ -1,7 +1,5 @@
 package com.example.taskflow.service.FieldService;
 
-import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +11,7 @@ import com.example.taskflow.DTOs.Field.StringDTO;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
+import com.example.taskflow.DomainModel.FieldPackage.SingleSelection;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
 import com.example.taskflow.Mappers.FieldMapper;
 
@@ -33,7 +32,8 @@ public class SingleSelectionService extends FieldService{
 
         if (!(fieldDto instanceof StringDTO)) {
             throw new IllegalArgumentException(
-                    "FieldDto of class " + fieldDto.getClass().getSimpleName() + " instead of StringDTO");
+                "FieldDto of class " + fieldDto.getClass().getSimpleName() + " instead of StringDTO"
+            );
         }
 
         StringDTO stringDTO = (StringDTO) fieldDto;
@@ -45,22 +45,26 @@ public class SingleSelectionService extends FieldService{
             throw new IllegalArgumentException("Wrong fieldDefinition id");
         }
 
-        FieldType fieldType = fieldDefinition.getType();
-
-        Field f = fieldMapper.toEntity(fieldDto);
-        f.setFieldDefinition(fieldDefinition);
-
-        ArrayList<String> value = stringDTO.getValuesDto();
-
-        f.setValues(value);
-
-        Field field = FieldFactory.getBuilder(fieldType)
+        Field field = FieldFactory.getBuilder(FieldType.SINGLE_SELECTION)
                 .addFieldDefinition(fieldDefinition)
-                .addParameters(f.getValues())
+                .addParameter(stringDTO.getValue())
                 .build();
 
         field = fieldDao.save(field);
 
         return fieldMapper.toDto(field);
+    }
+
+    @Override
+    public Field getField(FieldDTO fieldDto){
+        if (!(fieldDto instanceof StringDTO)){
+            throw new IllegalArgumentException("Incompatible type: " + fieldDto.getClass().getSimpleName() + " != StringDTO" );
+        }
+
+        SingleSelection field = (SingleSelection)super.getField(fieldDto);
+
+        field.setValue(((StringDTO)fieldDto).getValue());
+
+        return field;
     }
 }

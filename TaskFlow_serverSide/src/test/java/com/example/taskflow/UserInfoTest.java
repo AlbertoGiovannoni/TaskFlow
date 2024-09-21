@@ -81,20 +81,4 @@ public class UserInfoTest {
         UserInfo userInfoPushed = this.userInfoDAO.save(userInfo);
         assertEquals(userInfo.getId(), userInfoPushed.getId());
     }
-
-    // @Test
-    // public void testCriptedPassword() {
-
-         // BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-         // String plainPassword = RandomString.make(10);
-         // String hashedPassword = passwordEncoder.encode(plainPassword);
-
-    //     UserInfo userInfo = new UserInfo(RandomString.make(10), RandomString.make(10));
-    //     userInfo = userInfoDAO.save(userInfo);
-        
-    //     UserInfo found = userInfoDAO.findById(userInfo.getId()).orElse(null);
-    //     assertTrue(passwordEncoder.matches(plainPassword, found.getPassword()));
-    // }
-
 }

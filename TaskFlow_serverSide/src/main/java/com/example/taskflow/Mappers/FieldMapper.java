@@ -1,14 +1,13 @@
 package com.example.taskflow.Mappers;
 
+import com.example.taskflow.DTOs.NotificationDTO;
 import com.example.taskflow.DTOs.Field.AssigneeDTO;
 import com.example.taskflow.DTOs.Field.DateDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.Field.NumberDTO;
 import com.example.taskflow.DTOs.Field.StringDTO;
-import com.example.taskflow.DTOs.FieldDefinition.AssigneeDefinitionDTO;
+import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.User;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldPackage.Assignee;
 import com.example.taskflow.DomainModel.FieldPackage.Date;
 import com.example.taskflow.DomainModel.FieldPackage.Number;
@@ -16,22 +15,16 @@ import com.example.taskflow.DomainModel.FieldPackage.SingleSelection;
 import com.example.taskflow.DomainModel.FieldPackage.Text;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import org.mapstruct.Named;
-import org.mapstruct.Qualifier;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import java.util.UUID;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
-import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring")//, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-@Component
+
+@Mapper(componentModel = "spring")
 public interface FieldMapper {
 
     FieldMapper INSTANCE = Mappers.getMapper(FieldMapper.class);
@@ -81,8 +74,9 @@ public interface FieldMapper {
         }
     }
 
-    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidToUuidString")
-    @Mapping(source="users", target="valuesDto", qualifiedByName = "mapUsersToIds")
+    // ------------------------------------------------------------------------------------- //
+
+    @Mapping(source="users", target="userIds", qualifiedByName = "mapUsersToIds")
     @Mapping(source = "fieldDefinition.id", target = "fieldDefinitionId")
     AssigneeDTO toDto(Assignee assignee);
 
@@ -91,93 +85,44 @@ public interface FieldMapper {
         return (ArrayList<String>) users.stream().map(User::getId).collect(Collectors.toList());
     }
 
-    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidToUuidString")
-    @Mapping(source = "notification", target = "notification")
-    @Mapping(source = "date", target = "dateTime")
+    @Mapping(source = "notification", target = "notification", qualifiedByName = "mapNotificationToNotificationDto")
     @Mapping(source = "fieldDefinition.id", target = "fieldDefinitionId")
     DateDTO toDto(Date date);
 
-    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidToUuidString")
-    @Mapping(source = "number", target = "valuesDto", qualifiedByName = "floatConverter")
+    @Named("mapNotificationToNotificationDto")
+    default NotificationDTO mapNotificationToNotificationDto(Notification notification){
+        return Mappers.getMapper(NotificationMapper.class).toDto(notification);
+    }
+
     @Mapping(source = "fieldDefinition.id", target = "fieldDefinitionId")
     NumberDTO toDto(Number number);
 
-    @Named("floatConverter")
-    default ArrayList<String> floatConverter(Float f){
-        ArrayList<String> list = new ArrayList<String>();
-        list.add(f.toString());
-        return list;
-    }
-
-    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidToUuidString")
-    @Mapping(source = "selection", target = "valuesDto", qualifiedByName = "listConverter")
     @Mapping(source = "fieldDefinition.id", target = "fieldDefinitionId")
     StringDTO toDto(SingleSelection singleSelection);
 
-    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidToUuidString")
-    @Mapping(source = "text", target = "valuesDto", qualifiedByName = "listConverter")
     @Mapping(source = "fieldDefinition.id", target = "fieldDefinitionId")
     StringDTO toDto(Text text);
 
+    // ------------------------------------------------------------------------------------- //
 
-    @Named("listConverter")
-    default ArrayList<String> listConverter(String string){
-        ArrayList<String> list = new ArrayList<String>();
-        list.add(string);
-        return list;
-    }
-
-    @Named("mapUuidToUuidString")
-    default String mapUuidToUuidString(UUID uuid) {
-        return uuid.toString();
-    }
-
-    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidStringToUuid")
-    //@Mapping(source = "valuesDto", target="users", ignore = true)
-    @Mapping(source = "valuesDto", target="users", ignore = true)
-    @Mapping(source = "fieldDefinitionId", target="fieldDefinition",ignore = true)
+    @Mapping(source = "userIds", target="users", ignore = true)
+    @Mapping(source = "fieldDefinitionId", target="fieldDefinition", ignore = true)
     Assignee toEntity(AssigneeDTO assigneeDto);
 
-    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidStringToUuid")
-    @Mapping(source = "notification", target = "notification")
-    @Mapping(source = "dateTime", target = "date")
-    @Mapping(source = "fieldDefinitionId", target="fieldDefinition",ignore = true)
+    @Mapping(source = "notification", target = "notification", ignore = true)
+    @Mapping(source = "fieldDefinitionId", target="fieldDefinition", ignore = true)
+    @Mapping(source = "dateTime", target = "dateTime")
     Date toEntity(DateDTO dateDto);
 
-    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidStringToUuid")
-    @Mapping(source = "valuesDto", target = "number", qualifiedByName = "floatExtractor")//TODO Qui non viene usato values ma number
     @Mapping(source = "fieldDefinitionId", target="fieldDefinition",ignore = true)
     Number toEntity(NumberDTO numberDto);
 
-    @Named("floatExtractor")
-    default Float floatExtractor(ArrayList<String> list){
-        return Float.parseFloat(list.get(0));
-    }
-
-    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidStringToUuid")
-    @Mapping(source = "valuesDto", target = "selection", qualifiedByName = "stringExtractor")
+    @Mapping(source = "value", target = "value", ignore = true)
     @Mapping(source = "fieldDefinitionId", target = "fieldDefinition", ignore = true)
     SingleSelection toEntitySingleSelection(StringDTO singleSelectionDto);
 
-    @Mapping(source="uuid", target="uuid", qualifiedByName = "mapUuidStringToUuid")
-    @Mapping(source = "valuesDto", target = "values", qualifiedByName = "pippo") //TODO fix pippo
     @Mapping(source = "fieldDefinitionId", target = "fieldDefinition", ignore = true)
     Text toEntityText(StringDTO textDto);
-
-    @Named("pippo")
-    default ArrayList<?> pippo(ArrayList<String> list){
-        return list;
-    }
-
-    @Named("stringExtractor")
-    default String stringExtractor(ArrayList<String> list){
-        return list.get(0);
-    }
-
-    @Named("mapUuidStringToUuid")
-    default UUID mapUuidStringToUuid(String uuid) {
-        return UUID.fromString(uuid);
-    }
 
     default ArrayList<FieldDTO> fieldToFieldDto(ArrayList<Field> fields){
         ArrayList<FieldDTO> fieldDtoList = new ArrayList<FieldDTO>();

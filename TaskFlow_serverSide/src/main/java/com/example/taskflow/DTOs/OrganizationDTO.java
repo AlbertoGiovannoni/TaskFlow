@@ -14,6 +14,8 @@ public class OrganizationDTO {
     private ArrayList<String> membersId;
     private ArrayList<String> projectsId;
 
+    private String uuid;
+
     public String getId() {
         return id;
     }
@@ -50,4 +52,11 @@ public class OrganizationDTO {
     public void setProjectsId(ArrayList<String> projectsId) {
         this.projectsId = projectsId;
     }
+    public String getUuid() {
+        return uuid;
+    }
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+    
 }

@@ -1,20 +1,15 @@
 package com.example.taskflow.service;
 
-import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.User;
-import com.example.taskflow.DAOs.OrganizationDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.GrantedAuthority;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -33,11 +28,5 @@ public class CustomUserDetailsService implements UserDetailsService {
         // Crea e ritorna l'oggetto UserDetails con i ruoli appropriati
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(), user.getUserInfo().getPassword(), authorities);
-    }
-
-    private List<GrantedAuthority> getAuthoritiesForUser(User user) {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-
-        return authorities;
     }
 }

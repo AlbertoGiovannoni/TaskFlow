@@ -1,36 +1,21 @@
 package com.example.taskflow;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.Set;
+import java.util.Random;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.example.taskflow.DAOs.ActivityDAO;
 import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
-import com.example.taskflow.DAOs.NotificationDAO;
-import com.example.taskflow.DAOs.OrganizationDAO;
-import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DomainModel.Activity;
-import com.example.taskflow.DomainModel.Notification;
-import com.example.taskflow.DomainModel.Organization;
-import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
@@ -65,8 +50,6 @@ public class ActivityTest {
         FieldDefinition fieldDefinition1 = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.TEXT);
         FieldDefinition fieldDefinition2 = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.NUMBER);
 
-        ArrayList<User> someUsers = this.testUtil.addGetMultipleRandomUserToDatabase(5);
-
         this.fieldDefinitionDao.save(fieldDefinition1);
         this.fieldDefinitionDao.save(fieldDefinition2);
 
@@ -75,10 +58,9 @@ public class ActivityTest {
                 .addParameter("diocan")
                 .build();
 
-        Float value = new Float("2");
         Field field2 = FieldFactory.getBuilder(FieldType.NUMBER)
                 .addFieldDefinition(fieldDefinition2)
-                .addParameter(value)
+                .addParameter(new Random().nextFloat())
                 .build();
 
         field1 = this.fieldDao.save(field1);
@@ -110,10 +92,9 @@ public class ActivityTest {
                 .addParameter("foo")
                 .build();
 
-        Float value = new Float("2");
         Field field2 = FieldFactory.getBuilder(FieldType.NUMBER)
                 .addFieldDefinition(fieldDefinition2)
-                .addParameter(value)
+                .addParameter(new Random().nextFloat())
                 .build();
 
         ArrayList<Field> fields = new ArrayList<Field>();

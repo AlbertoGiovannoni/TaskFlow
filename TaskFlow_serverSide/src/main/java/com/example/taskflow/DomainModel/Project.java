@@ -4,7 +4,6 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import java.util.ArrayList;
-import java.util.UUID;
 
 
 @Document
@@ -13,7 +12,7 @@ public class Project implements UuidInterface{
     @Id
     private String id;
     private String name;
-    private UUID uuid;
+    private String uuid;
 
     @DBRef
     private ArrayList<FieldDefinition> fieldsTemplate = new ArrayList<FieldDefinition>();
@@ -29,13 +28,14 @@ public class Project implements UuidInterface{
         this.name = name;
         this.activities = new ArrayList<Activity>();
         this.fieldsTemplate = new ArrayList<FieldDefinition>();
+        this.uuid = this.createUuid();
     }
     
     public Project(String name, ArrayList<FieldDefinition> fieldsTemplate, ArrayList<Activity> activities) {
         this.name = name;
         this.fieldsTemplate = fieldsTemplate;
         this.activities = activities;
-        this.uuid = UUID.randomUUID();
+        this.uuid = this.createUuid();
     }
 
     public void addFieldDefinition(FieldDefinition fieldDefinition) {
@@ -60,7 +60,7 @@ public class Project implements UuidInterface{
         return id;
     }
 
-    public UUID getUuid() {
+    public String getUuid() {
         return uuid;
     }
     
@@ -99,5 +99,10 @@ public class Project implements UuidInterface{
         }
 
         return value;
+    }
+
+    @Override
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }

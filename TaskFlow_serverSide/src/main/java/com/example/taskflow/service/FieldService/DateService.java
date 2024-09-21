@@ -1,34 +1,32 @@
 package com.example.taskflow.service.FieldService;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
+import com.example.taskflow.DAOs.NotificationDAO;
 import com.example.taskflow.DAOs.UserDAO;
-import com.example.taskflow.DTOs.Field.AssigneeDTO;
+import com.example.taskflow.DTOs.NotificationDTO;
 import com.example.taskflow.DTOs.Field.DateDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
-import com.example.taskflow.DTOs.Field.StringDTO;
-import com.example.taskflow.DomainModel.User;
+import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
-import com.example.taskflow.DomainModel.FieldPackage.Date;
-import com.example.taskflow.DomainModel.FieldPackage.DateData;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
-import com.example.taskflow.DomainModel.FieldPackage.Text;
+import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldBuilder;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
 import com.example.taskflow.Mappers.FieldMapper;
-import java.util.ArrayList;
-
-import com.example.taskflow.DTOs.Field.FieldDTO;
+import com.example.taskflow.Mappers.NotificationMapper;
 
 @Service
 public class DateService extends FieldService {
     @Autowired
     FieldDefinitionDAO fieldDefinitionDAO;
     @Autowired
+    NotificationDAO notificationDao;
+    @Autowired
     FieldMapper fieldMapper;
+    @Autowired
+    NotificationMapper notificationMapper;
     @Autowired
     FieldDAO fieldDao; 
     @Autowired
@@ -50,15 +48,20 @@ public class DateService extends FieldService {
             throw new IllegalArgumentException("Wrong fieldDefinition id");
         }
 
-        FieldType fieldType = fieldDefinition.getType();
-        ArrayList<DateData> ddList = new ArrayList<DateData>();
-        DateData dd = new DateData(dateDTO.getDateTime(), dateDTO.getNotification());
-        ddList.add(dd);
+        
+        FieldBuilder fieldBuilder = FieldFactory.getBuilder(FieldType.DATE)
+                                        .addFieldDefinition(fieldDefinition)
+                                        .addParameter(dateDTO.getDateTime());
+        
+        NotificationDTO notificationDto = dateDTO.getNotification();
 
-        Field field = FieldFactory.getBuilder(fieldType)
-                .addFieldDefinition(fieldDefinition)
-                .addParameters(ddList)
-                .build();
+        if (notificationDto != null){
+            Notification notification = this.notificationMapper.toEntity(notificationDto);
+            notification = this.notificationDao.save(notification);
+            fieldBuilder.addParameter(notification);
+        }
+
+        Field field = fieldBuilder.build();
 
         field = fieldDao.save(field);
 

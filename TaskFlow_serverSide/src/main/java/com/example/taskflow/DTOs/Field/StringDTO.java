@@ -1,14 +1,13 @@
 package com.example.taskflow.DTOs.Field;
 
 public class StringDTO extends FieldDTO{
-    // private String stringValue;
+    private String value;
 
-    // public String getStringValue() {
-    //     return stringValue;
-    // }
+    public String getValue() {
+        return value;
+    }
 
-    // public void setStringValue(String stringValue) {
-    //     this.stringValue = stringValue;
-    // }
-    
+    public void setValue(String value) {
+        this.value = value;
+    }
 }
