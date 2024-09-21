@@ -2,6 +2,7 @@ package com.example.taskflow.servicesTest;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -14,7 +15,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.example.taskflow.TestUtil;
 import com.example.taskflow.DAOs.ActivityDAO;
-import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.NotificationDAO;
 import com.example.taskflow.DAOs.UserDAO;
@@ -33,7 +33,10 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFa
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.FieldMapper;
+import com.example.taskflow.Mappers.NotificationMapper;
 import com.example.taskflow.service.FieldService.FieldServiceManager;
+
+import net.bytebuddy.utility.RandomString;
 
 @DataMongoTest
 @ActiveProfiles("test")
@@ -44,8 +47,6 @@ public class ActivityServiceTest {
     private TestUtil testUtil;
     @Autowired
     private FieldServiceManager fieldServiceManager;
-    @Autowired
-    private FieldDAO fieldDao;
     @Autowired
     private FieldMapper fieldMapper;
     @Autowired
@@ -58,6 +59,8 @@ public class ActivityServiceTest {
     private ActivityMapper activityMapper;
     @Autowired
     private ActivityDAO activityDao;
+    @Autowired
+    private NotificationMapper notificationMapper;
 
     private ArrayList<User> someUsers = new ArrayList<User>();
 
@@ -96,7 +99,7 @@ public class ActivityServiceTest {
         assigneeDto.setUuid(UUID.randomUUID().toString());
 
         someUsers.remove(0);
-        assigneeDto.setValuesDto(extractIds(someUsers));
+        assigneeDto.setUserIds(this.extractIds(someUsers));
 
         FieldDTO createdFieldDto = fieldServiceManager.getFieldService(assigneeDto).createField(assigneeDto);
         Field assignee = this.fieldMapper.toEntity(createdFieldDto);
@@ -117,9 +120,7 @@ public class ActivityServiceTest {
         textDto.setFieldDefinitionId(fd.getId());
         textDto.setUuid(UUID.randomUUID().toString());
 
-        ArrayList<String> v = new ArrayList<String>();
-        v.add("prova");
-        textDto.setValuesDto(v);
+        textDto.setValue(RandomString.make(10));
 
         createdFieldDto = fieldServiceManager.getFieldService(textDto).createField(textDto);
         Field text = this.fieldMapper.toEntity(createdFieldDto);
@@ -144,9 +145,7 @@ public class ActivityServiceTest {
         singleSelectionDto.setFieldDefinitionId(fd.getId());
         singleSelectionDto.setUuid(UUID.randomUUID().toString());
 
-        ArrayList<String> v2 = new ArrayList<String>();
-        v2.add("Ready"); // TODO check da fare con ss definition
-        singleSelectionDto.setValuesDto(v2);
+        singleSelectionDto.setValue(RandomString.make(10));
 
         createdFieldDto = fieldServiceManager.getFieldService(singleSelectionDto).createField(singleSelectionDto);
         Field selection = this.fieldMapper.toEntity(createdFieldDto);
@@ -166,9 +165,7 @@ public class ActivityServiceTest {
         numberDto.setFieldDefinitionId(fd.getId());
         numberDto.setUuid(UUID.randomUUID().toString());
 
-        ArrayList<String> v3 = new ArrayList<String>();
-        v3.add("8.2");
-        numberDto.setValuesDto(v3);
+        numberDto.setValue(new Random().nextFloat());
 
         createdFieldDto = fieldServiceManager.getFieldService(numberDto).createField(numberDto);
         Field number = this.fieldMapper.toEntity(createdFieldDto);
@@ -191,9 +188,11 @@ public class ActivityServiceTest {
         //creazione DateData con notifica
         LocalDateTime dateTime = LocalDateTime.now();
         dateDto.setDateTime(dateTime);
-        Notification n = new Notification(someUsers, dateTime.minusHours(2), "message");
-        notificationDao.save(n);
-        dateDto.setNotification(n);
+        
+        Notification notification = new Notification(someUsers, dateTime.minusHours(2), "message");
+        
+        notification = notificationDao.save(notification);
+        dateDto.setNotification(this.notificationMapper.toDto(notification));
 
         createdFieldDto = fieldServiceManager.getFieldService(dateDto).createField(dateDto);
         Field date = this.fieldMapper.toEntity(createdFieldDto);

@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.Random;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,11 @@ import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.SingleSelection;
 import com.example.taskflow.DomainModel.FieldPackage.Text;
 import com.example.taskflow.Mappers.FieldMapper;
+import com.example.taskflow.Mappers.NotificationMapper;
 import com.example.taskflow.service.FieldService.FieldServiceManager;
+
+import net.bytebuddy.utility.RandomString;
+
 import com.example.taskflow.DTOs.Field.AssigneeDTO;
 import com.example.taskflow.DTOs.Field.DateDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
@@ -54,7 +59,9 @@ public class FieldServiceTest {
     @Autowired
     private UserDAO userDAO;
     @Autowired
-    private NotificationDAO notificationDao;;
+    private NotificationDAO notificationDao;
+    @Autowired
+    private NotificationMapper notificationMapper;
 
     private ArrayList<User> someUsers = new ArrayList<User>();
 
@@ -70,7 +77,7 @@ public class FieldServiceTest {
 
     @Test
     public void testCreationAssignee() {
-        FieldDTO fieldDto = new AssigneeDTO();
+        AssigneeDTO fieldDto = new AssigneeDTO();
 
         fieldDto.setType(FieldType.ASSIGNEE);
         FieldDefinition fd = FieldDefinitionFactory.getBuilder(FieldType.ASSIGNEE)
@@ -83,7 +90,7 @@ public class FieldServiceTest {
         fieldDto.setUuid(UUID.randomUUID().toString());
         
         someUsers.remove(0);
-        fieldDto.setValuesDto(extractIds(someUsers));
+        fieldDto.setUserIds(extractIds(someUsers));
 
         FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).createField(fieldDto);
 
@@ -106,7 +113,7 @@ public class FieldServiceTest {
 
     @Test
     public void testCreationText() {
-        FieldDTO fieldDto = new StringDTO();
+        StringDTO fieldDto = new StringDTO();
 
         fieldDto.setType(FieldType.TEXT);
         FieldDefinition fd = FieldDefinitionFactory.getBuilder(fieldDto.getType())
@@ -121,9 +128,7 @@ public class FieldServiceTest {
         fieldDto.setFieldDefinitionId(fd.getId());
         fieldDto.setUuid(UUID.randomUUID().toString());
 
-        ArrayList<String> v = new ArrayList<String>();
-        v.add("test");
-        fieldDto.setValuesDto(v);
+        fieldDto.setValue(RandomString.make(10));
 
         FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).createField(fieldDto);
 
@@ -139,7 +144,7 @@ public class FieldServiceTest {
 
     @Test
     public void testCreationSingleSelection() {
-        FieldDTO fieldDto = new StringDTO();
+        StringDTO fieldDto = new StringDTO();
 
         fieldDto.setType(FieldType.SINGLE_SELECTION);
         ArrayList<String> selections = new ArrayList<String>();
@@ -155,9 +160,7 @@ public class FieldServiceTest {
         fieldDto.setFieldDefinitionId(fd.getId());
         fieldDto.setUuid(UUID.randomUUID().toString());
 
-        ArrayList<String> v = new ArrayList<String>();
-        v.add("Reawcwdy"); //TODO non viene fatto il controllo se questo è un valore di fieldDefinition, si potrebbe fare qui direttamente o nel nuovo metodo di singleselection per assegnare la selection
-        fieldDto.setValuesDto(v);
+        fieldDto.setValue("Done");
 
         FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).createField(fieldDto);
         Field createdField = this.fieldMapper.toEntity(createdFieldDto);
@@ -174,7 +177,7 @@ public class FieldServiceTest {
 
     @Test
     public void testCreationNumber() {
-        FieldDTO fieldDto = new NumberDTO();
+        NumberDTO fieldDto = new NumberDTO();
 
         fieldDto.setType(FieldType.NUMBER);
         FieldDefinition fd = FieldDefinitionFactory.getBuilder(fieldDto.getType())
@@ -185,9 +188,7 @@ public class FieldServiceTest {
         fieldDto.setFieldDefinitionId(fd.getId());
         fieldDto.setUuid(UUID.randomUUID().toString());
 
-        ArrayList<String> v = new ArrayList<String>();
-        v.add("8.2");
-        fieldDto.setValuesDto(v);
+        fieldDto.setValue(new Random().nextFloat());
 
         FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).createField(fieldDto);
 
@@ -204,27 +205,23 @@ public class FieldServiceTest {
 
     @Test
     public void testCreationDate() {
-        FieldDTO fieldDto = new DateDTO();
+        DateDTO dateDto = new DateDTO();
 
-        fieldDto.setType(FieldType.DATE);
+        dateDto.setType(FieldType.DATE);
         
-        FieldDefinition fd = FieldDefinitionFactory.getBuilder(fieldDto.getType())
+        FieldDefinition fd = FieldDefinitionFactory.getBuilder(dateDto.getType())
                 .setName("meet")
                 .build();
 
         this.fieldDefinitionDao.save(fd);
-        fieldDto.setFieldDefinitionId(fd.getId());
-        fieldDto.setUuid(UUID.randomUUID().toString());
-
-        //TODO non uso valuesDTO perche devo impostare sia localdate che notification
-
-        DateDTO dateDto = (DateDTO) fieldDto;
+        dateDto.setFieldDefinitionId(fd.getId());
+        dateDto.setUuid(UUID.randomUUID().toString());
  
         LocalDateTime date = LocalDateTime.now();
         dateDto.setDateTime(date);
-        Notification n = new Notification(someUsers, date.minusHours(2), "message");
-        notificationDao.save(n);
-        dateDto.setNotification(n);
+        Notification notification = new Notification(someUsers, date.minusHours(2), "message");
+        notificationDao.save(notification);
+        dateDto.setNotification(this.notificationMapper.toDto(notification));
 
         FieldDTO createdFieldDto = fieldServiceManager.getFieldService(dateDto).createField(dateDto);
         Field createdField = this.fieldMapper.toEntity(createdFieldDto);
