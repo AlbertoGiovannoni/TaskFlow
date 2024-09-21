@@ -11,9 +11,6 @@ import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DomainModel.Activity;
-import com.example.taskflow.DomainModel.User;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.FieldMapper;
@@ -35,53 +32,33 @@ public class ActivityService {
     @Autowired
     FieldDefinitionDAO fieldDefinitionDao;
 
-    
     public ActivityDTO createActivity(ActivityDTO activityDTO) {
 
         ArrayList<FieldDTO> fieldsDto = activityDTO.getFields();
         ArrayList<Field> fields = new ArrayList<Field>();
-        FieldDefinition fd;
 
-        for(FieldDTO fieldDto : fieldsDto){
-            FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).createField(fieldDto);
-            Field f = this.fieldMapper.toEntity(createdFieldDto);
-
-            fd = fieldDefinitionDao.findById(createdFieldDto.getFieldDefinitionId()).orElse(null);
-            if (fd == null){
-                throw new IllegalArgumentException("FieldDefinitionId not found");
-            }
-            f.setFieldDefinition(fd);
-
-            if (fieldDto.getType() == FieldType.ASSIGNEE){
-                ArrayList<User> users = new ArrayList<User>();
-                ArrayList<String> usersIds = createdFieldDto.getValuesDto(); 
-                User usr;
-                for(String id : usersIds){
-                    usr = userDao.findById(id).orElse(null);
-                    if (usr == null) {
-                        throw new IllegalArgumentException("User " + id + " not found");
-                    }
-                    users.add(usr);
-                }
-                f.setValues(users);
-            }
-                 
-            fields.add(f);
+        for (FieldDTO movingFieldDto : fieldsDto) {
+            fields.add(
+                    this.fieldMapper.toEntity(
+                            this.fieldServiceManager
+                                    .getFieldService(movingFieldDto)
+                                    .createField(movingFieldDto)));
         }
 
-        Activity activity = activityMapper.toEntity(activityDTO);
+        Activity activity = this.activityMapper.toEntity(activityDTO);
         activity.setFields(fields);
 
         activity = this.activityDao.save(activity);
-
-        return activityMapper.toDto(activity);
-    }
-    
-    public void deleteActivity(ActivityDTO activityDTO) {
         
+        return this.activityMapper.toDto(this.activityDao.save(activity));
+    }
+
+    public void deleteActivity(ActivityDTO activityDTO) {
+
         Activity activity = this.activityDao.findById(activityDTO.getId()).orElseThrow();
-        for(Field field:activity.getFields()){
-            //fieldService.deleteField(Field);           //PENDING: implement deleteField in fieldService
+        for (Field field : activity.getFields()) {
+            // fieldService.deleteField(Field); //PENDING: implement deleteField in
+            // fieldService
         }
         this.activityDao.delete(activity);
     }

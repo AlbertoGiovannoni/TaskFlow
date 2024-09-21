@@ -100,7 +100,7 @@ public class OrganizationServiceTest {
 
         OrganizationDTO orgDto = organizationMapper.toDto(org);
 
-        orgDto = organizationService.createOrganization(orgDto);
+        orgDto = organizationService.createNewOrganization(orgDto);
 
         Organization orgFromDb = organizationDAO.findById(orgDto.getId()).orElse(null);
 
