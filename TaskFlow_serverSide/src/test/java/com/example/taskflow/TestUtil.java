@@ -126,7 +126,10 @@ public class TestUtil {
     }
 
     public Organization addRandomOrganizationToDatabase() {
-        Organization organization = new Organization(RandomString.make(10), new ArrayList<User>(), new ArrayList<Project>(), new ArrayList<User>(), null);
+        ArrayList<User> members = addGetMultipleRandomUserToDatabase(10);
+        ArrayList<User> owners = addGetMultipleRandomUserToDatabase(1);
+        ArrayList<Project> projects = addMultipleRandomProjectsToDatabase(1);
+        Organization organization = new Organization(RandomString.make(10), owners, projects, members, null);
         return this.organizationDAO.save(organization);
     }
 

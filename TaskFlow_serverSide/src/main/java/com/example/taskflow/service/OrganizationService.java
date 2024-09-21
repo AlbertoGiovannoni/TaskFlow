@@ -75,6 +75,22 @@ public class OrganizationService {
     public OrganizationDTO addMemberToOrganization(OrganizationDTO organizationDTO, UserDTO userDTO){
         Organization organization = organizationMapper.toEntity(organizationDTO);
         
+        ArrayList<User> users = new ArrayList<User>();
+        for(String userId:organizationDTO.getMembersId()){
+            users.add(this.userDAO.findById(userId).orElseThrow());
+        }
+        ArrayList<User> owners = new ArrayList<User>();
+        for(String userId:organizationDTO.getOwnersId()){
+            owners.add(this.userDAO.findById(userId).orElseThrow());
+        }
+        ArrayList<Project> projects = new ArrayList<Project>();
+        for(String projectId:organizationDTO.getProjectsId()){
+            projects.add(this.projectDAO.findById(projectId).orElseThrow());
+        }
+        organization.setMembers(users);
+        organization.setOwners(owners);
+        organization.setProjects(projects);
+        
         User user = this.userDAO.findById(userDTO.getId()).orElseThrow();
         if (user == null){
             throw new IllegalArgumentException("User not defined");

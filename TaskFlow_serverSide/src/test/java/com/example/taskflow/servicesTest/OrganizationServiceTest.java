@@ -23,6 +23,7 @@ import com.example.taskflow.DAOs.OrganizationDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.DTOs.OrganizationDTO;
+import com.example.taskflow.DTOs.UserDTO;
 import com.example.taskflow.DTOs.Field.AssigneeDTO;
 import com.example.taskflow.DTOs.Field.DateDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
@@ -40,6 +41,7 @@ import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.FieldMapper;
 import com.example.taskflow.Mappers.OrganizationMapper;
+import com.example.taskflow.Mappers.UserMapper;
 import com.example.taskflow.service.ActivityService;
 import com.example.taskflow.service.OrganizationService;
 import com.example.taskflow.service.FieldService.FieldServiceManager;
@@ -56,6 +58,8 @@ public class OrganizationServiceTest {
     private FieldDAO fieldDao;
     @Autowired
     private FieldMapper fieldMapper;
+    @Autowired
+    private UserMapper userMapper;
     @Autowired
     private FieldDefinitionDAO fieldDefinitionDao;
     @Autowired
@@ -75,16 +79,14 @@ public class OrganizationServiceTest {
     @Autowired
     private OrganizationDAO organizationDAO;
 
-    private ArrayList<User> someUsers = new ArrayList<User>();
+    private ArrayList<User> someUsers;
+    private Organization organizationToTest;
 
     @BeforeEach
     public void setupDatabase() {
         this.testUtil.cleanDatabase();
-        for (int i = 0; i < 5; i++) {
-            this.testUtil.addGetRandomUserToDatabase();
-        }
-        this.someUsers = this.userDAO.findAll().stream().collect(Collectors.toCollection(ArrayList::new));
-
+        this.someUsers = this.testUtil.addGetMultipleRandomUserToDatabase(5);
+        this.organizationToTest = this.testUtil.addRandomOrganizationToDatabase();
     }
 
     @Test
@@ -100,11 +102,25 @@ public class OrganizationServiceTest {
 
         OrganizationDTO orgDto = organizationMapper.toDto(org);
 
-        orgDto = organizationService.createOrganization(orgDto);
+        orgDto = organizationService.createNewOrganization(orgDto);
 
         Organization orgFromDb = organizationDAO.findById(orgDto.getId()).orElse(null);
 
         assertEquals(orgDto.getId(), orgFromDb.getId());
 
+    }
+
+    @Test
+    public void testAddMemberToOrganization() {
+        User user = this.testUtil.addGetRandomUserToDatabase();
+        UserDTO userDTO = userMapper.toDto(user);
+
+        OrganizationDTO orgDto = organizationMapper.toDto(this.organizationToTest);
+        orgDto = organizationService.addMemberToOrganization(orgDto, userDTO);
+        Organization found = organizationDAO.findById(orgDto.getId()).orElse(null);
+
+        OrganizationDTO foundDto = organizationMapper.toDto(found);
+
+        assertEquals(orgDto.getId(), foundDto.getId());
     }
 }
