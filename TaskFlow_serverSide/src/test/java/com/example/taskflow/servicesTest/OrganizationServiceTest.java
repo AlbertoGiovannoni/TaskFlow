@@ -1,5 +1,7 @@
 package com.example.taskflow.servicesTest;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -17,8 +19,10 @@ import com.example.taskflow.DAOs.ActivityDAO;
 import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.NotificationDAO;
+import com.example.taskflow.DAOs.OrganizationDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.ActivityDTO;
+import com.example.taskflow.DTOs.OrganizationDTO;
 import com.example.taskflow.DTOs.Field.AssigneeDTO;
 import com.example.taskflow.DTOs.Field.DateDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
@@ -35,6 +39,7 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFa
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.FieldMapper;
+import com.example.taskflow.Mappers.OrganizationMapper;
 import com.example.taskflow.service.ActivityService;
 import com.example.taskflow.service.OrganizationService;
 import com.example.taskflow.service.FieldService.FieldServiceManager;
@@ -65,6 +70,10 @@ public class OrganizationServiceTest {
     private ActivityService activityService;
     @Autowired
     private OrganizationService organizationService;
+    @Autowired
+    private OrganizationMapper organizationMapper;
+    @Autowired
+    private OrganizationDAO organizationDAO;
 
     private ArrayList<User> someUsers = new ArrayList<User>();
 
@@ -83,7 +92,20 @@ public class OrganizationServiceTest {
     
         //creazione organizationDto
 
-        Organization org = new Organization("name", someUsers, new ArrayList<Project>(), someUsers, LocalDateTime.now());
+        User owner = this.testUtil.addGetRandomUserToDatabase();
+        ArrayList<User> owners = new ArrayList<User>();
+        owners.add(owner);
+
+        Organization org = new Organization("name", owners, new ArrayList<Project>(), new ArrayList<User>(), LocalDateTime.now());
+
+        organizationDAO.save(org);
+        OrganizationDTO orgDto = organizationMapper.toDto(org);
+
+        orgDto = organizationService.createOrganization(orgDto);
+
+        Organization orgFromDb = organizationDAO.findById(org.getId()).orElse(null);
+
+        assertEquals(org.getId(), orgFromDb.getId());
 
     }
 }

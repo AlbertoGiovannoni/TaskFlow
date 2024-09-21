@@ -17,12 +17,12 @@ public class Organization implements UuidInterface{
     private LocalDateTime creationDate;
 
     @DBRef
-    private ArrayList<User> owners;
+    private ArrayList<User> owners = new ArrayList<User>();
     @DBRef
-    private ArrayList<User> members;
+    private ArrayList<User> members = new ArrayList<User>();
 
     @DBRef
-    private ArrayList<Project> projects;
+    private ArrayList<Project> projects = new ArrayList<Project>();
 
 
     // costruttore di default
