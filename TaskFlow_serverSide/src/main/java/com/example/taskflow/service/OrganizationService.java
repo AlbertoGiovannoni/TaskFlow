@@ -2,9 +2,11 @@ package com.example.taskflow.service;
 
 import com.example.taskflow.DAOs.OrganizationDAO;
 import com.example.taskflow.DAOs.ProjectDAO;
+import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.OrganizationDTO;
 import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.Project;
+import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.Mappers.OrganizationMapper;
 import com.example.taskflow.Mappers.ProjectMapper;
 
@@ -21,6 +23,8 @@ public class OrganizationService {
     private OrganizationDAO organizationDAO;
     @Autowired
     private ProjectDAO projectDAO;
+    @Autowired
+    private UserDAO userDAO;
     @Autowired
     private OrganizationMapper organizationMapper;
     @Autowired
@@ -53,6 +57,12 @@ public class OrganizationService {
 
     public OrganizationDTO createOrganization(OrganizationDTO organizationDTO){
         Organization organization = organizationMapper.toEntity(organizationDTO);
+        
+        User owner = this.userDAO.findById(organizationDTO.getOwnersId().get(0)).orElseThrow();
+        if (owner == null){
+            throw new IllegalArgumentException("An organization must have an owner");
+        }
+        organization.addOwner(owner);
         
         ArrayList<Project> projects = new ArrayList<Project>();
         organization.setProjects(projects);
