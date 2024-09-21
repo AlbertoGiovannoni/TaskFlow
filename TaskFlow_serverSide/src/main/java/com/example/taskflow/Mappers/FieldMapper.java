@@ -123,4 +123,14 @@ public interface FieldMapper {
 
     @Mapping(source = "fieldDefinitionId", target = "fieldDefinition", ignore = true)
     Text toEntityText(StringDTO textDto);
+
+    default ArrayList<FieldDTO> fieldToFieldDto(ArrayList<Field> fields){
+        ArrayList<FieldDTO> fieldDtoList = new ArrayList<FieldDTO>();
+
+        for(Field field : fields){
+            fieldDtoList.add(this.toDto(field));
+        }
+
+        return fieldDtoList;
+    }
 }

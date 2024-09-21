@@ -14,7 +14,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.example.taskflow.TestUtil;
-import com.example.taskflow.DAOs.ActivityDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.NotificationDAO;
 import com.example.taskflow.DAOs.UserDAO;
@@ -24,14 +23,12 @@ import com.example.taskflow.DTOs.Field.DateDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.Field.NumberDTO;
 import com.example.taskflow.DTOs.Field.StringDTO;
-import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
-import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.FieldMapper;
 import com.example.taskflow.Mappers.NotificationMapper;
 import com.example.taskflow.service.ActivityService;
@@ -56,10 +53,6 @@ public class ActivityServiceTest {
     private UserDAO userDAO;
     @Autowired
     private NotificationDAO notificationDao;
-    @Autowired
-    private ActivityMapper activityMapper;
-    @Autowired
-    private ActivityDAO activityDao;
     @Autowired
     private NotificationMapper notificationMapper;
     @Autowired

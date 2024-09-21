@@ -9,12 +9,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.example.taskflow.Mappers.FieldMapper;
-import org.mapstruct.factory.Mappers;
-
-
 import java.util.ArrayList;
 
 @Mapper(componentModel = "spring")
