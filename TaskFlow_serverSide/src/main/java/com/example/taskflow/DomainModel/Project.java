@@ -16,7 +16,7 @@ public class Project implements UuidInterface{
     private UUID uuid;
 
     @DBRef
-    private ArrayList<FieldDefinition> fieldsTemplate;
+    private ArrayList<FieldDefinition> fieldsTemplate = new ArrayList<FieldDefinition>();
 
     @DBRef
     private ArrayList<Activity> activities;

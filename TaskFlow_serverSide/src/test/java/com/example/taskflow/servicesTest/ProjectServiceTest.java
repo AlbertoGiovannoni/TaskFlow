@@ -20,9 +20,11 @@ import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.NotificationDAO;
 import com.example.taskflow.DAOs.OrganizationDAO;
+import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.DTOs.OrganizationDTO;
+import com.example.taskflow.DTOs.ProjectDTO;
 import com.example.taskflow.DTOs.Field.AssigneeDTO;
 import com.example.taskflow.DTOs.Field.DateDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
@@ -40,14 +42,17 @@ import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.FieldMapper;
 import com.example.taskflow.Mappers.OrganizationMapper;
+import com.example.taskflow.Mappers.ProjectMapper;
 import com.example.taskflow.service.ActivityService;
 import com.example.taskflow.service.OrganizationService;
+import com.example.taskflow.service.ProjectService;
 import com.example.taskflow.service.FieldService.FieldServiceManager;
 
 @DataMongoTest
 @ActiveProfiles("test")
 @ComponentScan(basePackages = "com.example.taskflow")
-public class OrganizationServiceTest {
+public class ProjectServiceTest {
+
     @Autowired
     private TestUtil testUtil;
     @Autowired
@@ -74,6 +79,12 @@ public class OrganizationServiceTest {
     private OrganizationMapper organizationMapper;
     @Autowired
     private OrganizationDAO organizationDAO;
+    @Autowired
+    private ProjectService projectService;
+    @Autowired
+    private ProjectMapper projectMapper;
+    @Autowired
+    private ProjectDAO projectDAO;
 
     private ArrayList<User> someUsers = new ArrayList<User>();
 
@@ -88,23 +99,18 @@ public class OrganizationServiceTest {
     }
 
     @Test
-    public void testCreationOrganization() {
-    
-        //creazione organizationDto
+    public void testCreationProject() {
+        // creazione projectDto
+        Project project = new Project("projectName", new ArrayList<FieldDefinition>(), new ArrayList<Activity>());
 
-        User owner = this.testUtil.addGetRandomUserToDatabase();
-        ArrayList<User> owners = new ArrayList<User>();
-        owners.add(owner);
+        ProjectDTO projectDTO = projectMapper.toDto(project);
 
-        Organization org = new Organization("name", owners, new ArrayList<Project>(), new ArrayList<User>(), LocalDateTime.now());
+        projectDTO = projectService.createProject(projectDTO);
 
-        OrganizationDTO orgDto = organizationMapper.toDto(org);
+        Project projectFromDb = projectDAO.findById(projectDTO.getId()).orElse(null);
 
-        orgDto = organizationService.createOrganization(orgDto);
-
-        Organization orgFromDb = organizationDAO.findById(orgDto.getId()).orElse(null);
-
-        assertEquals(orgDto.getId(), orgFromDb.getId());
+        assertEquals(projectDTO.getId(), projectFromDb.getId());
 
     }
+    
 }
