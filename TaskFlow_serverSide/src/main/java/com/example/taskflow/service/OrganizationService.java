@@ -4,6 +4,7 @@ import com.example.taskflow.DAOs.OrganizationDAO;
 import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.OrganizationDTO;
+import com.example.taskflow.DTOs.ProjectDTO;
 import com.example.taskflow.DTOs.UserDTO;
 import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.Project;
@@ -90,12 +91,73 @@ public class OrganizationService {
         organization.setMembers(users);
         organization.setOwners(owners);
         organization.setProjects(projects);
-        
+
         User user = this.userDAO.findById(userDTO.getId()).orElseThrow();
         if (user == null){
             throw new IllegalArgumentException("User not defined");
         }
         organization.addMember(user);
+        this.organizationDAO.save(organization);
+
+        return organizationMapper.toDto(organization);
+    }
+
+    public OrganizationDTO addOwnerToOrganization(OrganizationDTO organizationDTO, UserDTO ownerDTO){
+        Organization organization = organizationMapper.toEntity(organizationDTO);
+        
+        ArrayList<User> users = new ArrayList<User>();
+        for(String userId:organizationDTO.getMembersId()){
+            users.add(this.userDAO.findById(userId).orElseThrow());
+        }
+        ArrayList<User> owners = new ArrayList<User>();
+        for(String userId:organizationDTO.getOwnersId()){
+            owners.add(this.userDAO.findById(userId).orElseThrow());
+        }
+        ArrayList<Project> projects = new ArrayList<Project>();
+        for(String projectId:organizationDTO.getProjectsId()){
+            projects.add(this.projectDAO.findById(projectId).orElseThrow());
+        }
+        organization.setMembers(users);
+        organization.setOwners(owners);
+        organization.setProjects(projects);
+        
+        User owner = this.userDAO.findById(ownerDTO.getId()).orElseThrow();
+        if (owner == null){
+            throw new IllegalArgumentException("owner not defined");
+        }
+        organization.addOwner(owner);
+        this.organizationDAO.save(organization);
+
+        return organizationMapper.toDto(organization);
+    }
+
+    /*
+    aggiunge un nuovo progetto (vuoto)
+    */
+    public OrganizationDTO addNewProjectToOrganization(OrganizationDTO organizationDTO, ProjectDTO projectDTO){
+        Organization organization = organizationMapper.toEntity(organizationDTO);
+        
+        ArrayList<User> users = new ArrayList<User>();
+        for(String userId:organizationDTO.getMembersId()){
+            users.add(this.userDAO.findById(userId).orElseThrow());
+        }
+        ArrayList<User> owners = new ArrayList<User>();
+        for(String userId:organizationDTO.getOwnersId()){
+            owners.add(this.userDAO.findById(userId).orElseThrow());
+        }
+        ArrayList<Project> projects = new ArrayList<Project>();
+        for(String projectId:organizationDTO.getProjectsId()){
+            projects.add(this.projectDAO.findById(projectId).orElseThrow());
+        }
+        organization.setMembers(users);
+        organization.setOwners(owners);
+        organization.setProjects(projects);
+        
+        Project newProject = this.projectDAO.findById(projectDTO.getId()).orElseThrow();
+        if (newProject == null){
+            throw new IllegalArgumentException("owner not defined");
+        }
+        organization.addProject(newProject);
         this.organizationDAO.save(organization);
 
         return organizationMapper.toDto(organization);
