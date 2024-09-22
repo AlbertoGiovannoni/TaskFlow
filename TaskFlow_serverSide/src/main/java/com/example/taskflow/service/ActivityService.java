@@ -62,4 +62,12 @@ public class ActivityService {
 
         this.activityDao.delete(activity);
     }
+
+    public Activity renameActivity(String activityId, String newName){
+        Activity activity = this.activityDao.findById(activityId).orElseThrow();
+
+        activity.setName(newName);
+
+        return this.activityDao.save(activity);
+    }
 }
