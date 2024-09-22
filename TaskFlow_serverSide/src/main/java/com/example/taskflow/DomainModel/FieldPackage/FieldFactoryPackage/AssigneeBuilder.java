@@ -32,6 +32,7 @@ public class AssigneeBuilder extends FieldBuilder{
         if (this.assignees == null){
             throw new IllegalAccessError("possibleAssignees are null");
         }
-        return new Assignee( this.fieldDefinition, assignees);
+
+        return new Assignee(this.fieldDefinition, assignees);
     }
 }

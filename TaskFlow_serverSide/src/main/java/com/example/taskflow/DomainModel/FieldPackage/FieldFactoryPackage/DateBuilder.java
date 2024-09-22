@@ -17,17 +17,23 @@ public class DateBuilder extends FieldBuilder {
         super(fieldDefinition);
     }
 
-
-    public FieldBuilder addParameters(LocalDateTime date, Notification notification) {
-        if (date != null) {
-            this.dateTime = date;
-
-            if (notification != null) {
-                this.notification = notification;
-            }
-        } else {
-            throw new IllegalArgumentException("date is null:" + date);
+    public FieldBuilder addDate(LocalDateTime dateTime){
+        if (dateTime == null){
+            throw new IllegalArgumentException("date is null:");
         }
+
+        this.dateTime = dateTime;
+
+        return this;
+    }
+
+    public FieldBuilder addNotification(Notification notification){
+        if (notification == null){
+            throw new IllegalArgumentException("notification is null:");
+        }
+
+        this.notification = notification;
+
         return this;
     }
 
@@ -35,9 +41,8 @@ public class DateBuilder extends FieldBuilder {
     public Field build() {
         if (this.dateTime == null) {
             throw new IllegalAccessError("dateTime is null");
-        } else if (this.fieldDefinition == null) {
-            throw new IllegalAccessError("fieldDefinition is null: " + this.fieldDefinition);
         }
+
         if (this.notification != null) {
             return new Date(this.fieldDefinition, this.notification, this.dateTime);
         } else {
