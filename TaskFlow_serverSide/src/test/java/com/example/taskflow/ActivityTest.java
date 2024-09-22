@@ -19,8 +19,8 @@ import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
-import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
-
+import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.NumberBuilder;
+import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.TextBuilder;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -53,13 +53,11 @@ public class ActivityTest {
         this.fieldDefinitionDao.save(fieldDefinition1);
         this.fieldDefinitionDao.save(fieldDefinition2);
 
-        Field field1 = FieldFactory.getBuilder(FieldType.TEXT)
-                .addFieldDefinition(fieldDefinition1)
-                .addParameter("diocan")
+        Field field1 = (new TextBuilder(fieldDefinition1))
+                .addText("diocan")
                 .build();
 
-        Field field2 = FieldFactory.getBuilder(FieldType.NUMBER)
-                .addFieldDefinition(fieldDefinition2)
+        Field field2 = (new NumberBuilder(fieldDefinition2))
                 .addParameter(new Random().nextFloat())
                 .build();
 
@@ -87,13 +85,12 @@ public class ActivityTest {
         FieldDefinition fieldDefinition1 = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.TEXT);
         FieldDefinition fieldDefinition2 = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.NUMBER);
 
-        Field field1 = FieldFactory.getBuilder(FieldType.TEXT)
-                .addFieldDefinition(fieldDefinition1)
-                .addParameter("foo")
+        
+        Field field1 = (new TextBuilder(fieldDefinition1))
+                .addText("foo")
                 .build();
 
-        Field field2 = FieldFactory.getBuilder(FieldType.NUMBER)
-                .addFieldDefinition(fieldDefinition2)
+        Field field2 = (new NumberBuilder(fieldDefinition2))
                 .addParameter(new Random().nextFloat())
                 .build();
 

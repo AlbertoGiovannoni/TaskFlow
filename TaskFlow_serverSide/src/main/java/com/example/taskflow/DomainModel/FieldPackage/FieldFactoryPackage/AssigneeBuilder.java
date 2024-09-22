@@ -3,30 +3,26 @@ import java.util.ArrayList;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldPackage.Assignee;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 public class AssigneeBuilder extends FieldBuilder{
     private ArrayList<User>  assignees;
 
-    AssigneeBuilder(FieldType type) {
-        super(type);
+    public AssigneeBuilder(FieldDefinition fieldDefinition) {
+        super(fieldDefinition);
         this.assignees = new ArrayList<>();
     }
 
-    @Override
-    public FieldBuilder addParameters(ArrayList<?> values){
-        for (Object value : values){
-            this.addParameter(value);
+    public FieldBuilder addAssignees(ArrayList<User> values){
+        for (User value : values){
+            this.addAssignee(value);
         }
         return this;
     }
 
-    @Override
-    public FieldBuilder addParameter(Object value){
+    public FieldBuilder addAssignee(User value){
         if (value != null){
-            if (value instanceof User){
-                this.assignees.add((User)value);
-            }
+            this.assignees.add(value);
         }
         return this;
     }

@@ -3,34 +3,30 @@ package com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage;
 
 import java.time.LocalDateTime;
 
-import java.util.ArrayList;
 import com.example.taskflow.DomainModel.FieldPackage.Date;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.Notification;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 public class DateBuilder extends FieldBuilder {
+
     private Notification notification;
     private LocalDateTime dateTime;
 
-    DateBuilder(FieldType type) {
-        super(type);
+    public DateBuilder(FieldDefinition fieldDefinition) {
+        super(fieldDefinition);
     }
 
-    @Override
-    public FieldBuilder addParameter(Object value) {
-        if (value != null) {
-            if (value instanceof Notification) {
-                this.notification = (Notification) value;
-            } 
-            else if (value instanceof LocalDateTime) {
-                this.dateTime = (LocalDateTime) value;
-            }
-            else {
-                throw new IllegalArgumentException("value is not of type DateData:" + value);
+
+    public FieldBuilder addParameters(LocalDateTime date, Notification notification) {
+        if (date != null) {
+            this.dateTime = date;
+
+            if (notification != null) {
+                this.notification = notification;
             }
         } else {
-            throw new IllegalArgumentException("value is null:" + value);
+            throw new IllegalArgumentException("date is null:" + date);
         }
         return this;
     }
@@ -42,17 +38,11 @@ public class DateBuilder extends FieldBuilder {
         } else if (this.fieldDefinition == null) {
             throw new IllegalAccessError("fieldDefinition is null: " + this.fieldDefinition);
         }
-        if (this.notification != null){
+        if (this.notification != null) {
             return new Date(this.fieldDefinition, this.notification, this.dateTime);
-        }
-        else{
+        } else {
             return new Date(this.fieldDefinition, this.dateTime);
         }
-    }
-
-    @Override
-    public FieldBuilder addParameters(ArrayList<?> values) {
-        return this.addParameter(values.get(0));
     }
 
 }

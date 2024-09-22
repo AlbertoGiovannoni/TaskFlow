@@ -9,10 +9,9 @@ import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.Field.NumberDTO;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.SimpleFieldDefinition;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
-import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
+import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.NumberBuilder;
 import com.example.taskflow.Mappers.FieldMapper;
 
 @Service
@@ -46,9 +45,8 @@ public class NumberService extends FieldService{
             throw new IllegalArgumentException("Wrong fieldDefinition type");
         }
 
-        Field field = FieldFactory.getBuilder(FieldType.NUMBER)
-                .addFieldDefinition(fieldDefinition)
-                .addParameter(numberDTO.getValue())
+        Field field = (new NumberBuilder(fieldDefinition)
+                .addParameter(numberDTO.getValue()))
                 .build();
 
         field = fieldDao.save(field);

@@ -6,21 +6,11 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
 public abstract class FieldBuilder {
-    FieldType type;
     FieldDefinition fieldDefinition;
 
-    FieldBuilder(FieldType type){
-        this.type = type;
-    }
-
-    public FieldBuilder addFieldDefinition(FieldDefinition fieldDefinition) {
+    FieldBuilder(FieldDefinition fieldDefinition){
         this.fieldDefinition = fieldDefinition;
-        return this;
     }
-
-    public abstract FieldBuilder addParameters(ArrayList<?> values);
-
-    public abstract FieldBuilder addParameter(Object value);
 
     public abstract Field build();
 }

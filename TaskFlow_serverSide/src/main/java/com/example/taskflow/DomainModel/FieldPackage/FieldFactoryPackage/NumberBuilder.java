@@ -2,29 +2,18 @@ package com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage;
 
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.Number;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
-import java.util.ArrayList;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 public class NumberBuilder extends FieldBuilder {
     private Float value;
 
-    NumberBuilder(FieldType type) {
-        super(type);
+    public NumberBuilder(FieldDefinition fieldDefinition) {
+        super(fieldDefinition);
     }
 
-    @Override
-    public FieldBuilder addParameters(ArrayList<?> values) {
-        return this.addParameter(values.get(0));
-    }
-
-    @Override
-    public NumberBuilder addParameter(Object value) {
+    public NumberBuilder addParameter(Float value) {
         if (value != null) {
-            if (value instanceof Float) {
-                this.value = (Float) value;
-            } else {
-                throw new IllegalArgumentException("value is not of type Float:" + value);
-            }
+            this.value = value;
         } else {
             throw new IllegalArgumentException("value is null:" + value);
         }

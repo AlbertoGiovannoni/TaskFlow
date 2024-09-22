@@ -13,8 +13,9 @@ import com.example.taskflow.DTOs.Field.AssigneeDTO;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
+import com.example.taskflow.DomainModel.FieldPackage.Assignee;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
-import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
+import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.AssigneeBuilder;
 import com.example.taskflow.Mappers.FieldMapper;
 
 @Service
@@ -47,9 +48,8 @@ public class AssigneeService extends FieldService {
 
         ArrayList<User> users = this.getUsersByIds(assigneeDTO.getUserIds());
 
-        Field field = FieldFactory.getBuilder(FieldType.ASSIGNEE)
-                .addFieldDefinition(fieldDefinition)
-                .addParameters(users)
+        Field field = (new AssigneeBuilder(fieldDefinition))
+                .addAssignees(users)
                 .build();
 
         field = fieldDao.save(field);
