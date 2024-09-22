@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.taskflow.DAOs.UserDAO;
+import com.example.taskflow.DTOs.UserDTO;
 import com.example.taskflow.DTOs.FieldDefinition.AssigneeDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DomainModel.User;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
 
@@ -50,6 +52,38 @@ public class AssigneeDefinitionService extends FieldDefinitionService{
         }
 
         return users;
+    }
+
+    public FieldDefinitionDTO addUsers(String fieldDefinitionId, ArrayList<String> userIds){
+        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionId).orElseThrow();
+
+        if (!(fieldDefinition instanceof AssigneeDefinition)){
+            throw new IllegalArgumentException(fieldDefinitionId + " is an Id of " + fieldDefinition.getClass().getSimpleName() + " instead of " + AssigneeDefinition.class.getSimpleName());
+        }
+
+        ArrayList<User> users = new ArrayList<>(this.userDao.findAllById(userIds));
+
+        fieldDefinition.addMultipleEntry(users);
+
+        this.fieldDefinitionDao.save(fieldDefinition);
+
+        return this.fieldDefinitionMapper.toDto(fieldDefinition);
+    }
+
+    public FieldDefinitionDTO removeUsers(String fieldDefinitionId, ArrayList<String> userIds){
+        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionId).orElseThrow();
+
+        if (!(fieldDefinition instanceof AssigneeDefinition)){
+            throw new IllegalArgumentException(fieldDefinitionId + " is an Id of " + fieldDefinition.getClass().getSimpleName() + " instead of " + AssigneeDefinition.class.getSimpleName());
+        }
+
+        ArrayList<User> users = new ArrayList<>(this.userDao.findAllById(userIds));
+
+        fieldDefinition.removeMultipleEntry(users);
+
+        this.fieldDefinitionDao.save(fieldDefinition);
+
+        return this.fieldDefinitionMapper.toDto(fieldDefinition);
     }
     
 }
