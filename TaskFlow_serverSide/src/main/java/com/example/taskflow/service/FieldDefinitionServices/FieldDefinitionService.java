@@ -64,6 +64,13 @@ public abstract class FieldDefinitionService {
         this.fieldDefinitionDao.deleteById(fieldDefinitionId);
     }
 
+    public FieldDefinitionDTO renameFieldDefinition(String fieldDefinitionId, String name){
+        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionId).orElseThrow();
+
+        fieldDefinition.setName(name);
+
+        return this.fieldDefinitionMapper.toDto(fieldDefinition);
+    }
 
     private ArrayList<String> getFieldIds(ArrayList<Field> fields){
         ArrayList<String> fieldIds = new ArrayList<>();
