@@ -11,13 +11,16 @@ import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.DTOs.ProjectDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
+import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.User;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.FieldMapper;
 import com.example.taskflow.Mappers.ProjectMapper;
+import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionService;
 
 
 @Service
@@ -33,6 +36,8 @@ public class ProjectService {
     ProjectMapper projectMapper;
     @Autowired
     ActivityService activityService;
+    @Autowired
+    FieldDefinitionService fieldDefinitionService;
     @Autowired
     ActivityMapper activityMapper;
     @Autowired
@@ -59,12 +64,17 @@ public class ProjectService {
         project.setActivities(activities);
         return project;
     }
-
-    //TODO addFieldTemplate
     
-    /*
-     aggiunge un'attività e i suoi campi (da testare)
-    */
+    public ProjectDTO addFieldDefinitionToProject(String projectId, FieldDefinitionDTO newFieldDefinitionDto){
+
+        Project project = this.projectDao.findById(projectId).orElseThrow();
+        FieldDefinition newFieldDefinition = this.fieldDefinitionService.pushNewFieldDefinition(newFieldDefinitionDto);
+        project.addFieldDefinition(newFieldDefinition);
+        this.projectDao.save(project);
+
+        return projectMapper.toDto(project);
+    }
+
     public ProjectDTO addActivityToProject(String projectId, ActivityDTO newActivityDto){
 
         Project project = this.projectDao.findById(projectId).orElseThrow();

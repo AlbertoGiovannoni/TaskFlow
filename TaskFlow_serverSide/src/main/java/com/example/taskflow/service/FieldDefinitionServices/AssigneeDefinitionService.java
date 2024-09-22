@@ -18,7 +18,7 @@ public class AssigneeDefinitionService extends FieldDefinitionService{
     private UserDAO userDao;
 
     @Override
-    public FieldDefinitionDTO createFieldDefinition(FieldDefinitionDTO fieldDefinitionDto) {
+    public FieldDefinition pushNewFieldDefinition(FieldDefinitionDTO fieldDefinitionDto) {
         if (fieldDefinitionDto == null){
             throw new IllegalArgumentException("FieldDefinitionDTO is null");
         }
@@ -35,7 +35,7 @@ public class AssigneeDefinitionService extends FieldDefinitionService{
 
         FieldDefinition fieldDefinitionFromDatabase = this.fieldDefinitionDao.save(fieldDefinitionCreated);
 
-        return this.fieldDefinitionMapper.toDto(fieldDefinitionFromDatabase);
+        return fieldDefinitionFromDatabase;
     }
 
     private ArrayList<User> getUsersById(ArrayList<String> userIds){

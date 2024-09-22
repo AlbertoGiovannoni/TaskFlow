@@ -49,7 +49,7 @@ public class FieldDefinitionServiceTest {
 
         FieldDefinitionDTO createdFieldDefinitionDto = this.fieldDefinitionServiceManager
                                                         .getFieldDefinitionService(fieldDefinitionDto)
-                                                        .createFieldDefinition(fieldDefinitionDto);
+                                                        .pushNewFieldDefinition(fieldDefinitionDto);
 
         FieldDefinition createdFieldDefinition = this.fieldDefinitionMapper.toEntity(createdFieldDefinitionDto);
         

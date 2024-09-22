@@ -28,7 +28,7 @@ public class FieldDefinitionController {
     ){  
         FieldDefinitionDTO createdFieldDefinitionDto = this.fieldDefinitionServiceManager
                                                         .getFieldDefinitionService(fieldDefinitionDto)
-                                                        .createFieldDefinition(fieldDefinitionDto);
+                                                        .pushNewFieldDefinitionDTO(fieldDefinitionDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(createdFieldDefinitionDto);
     }
