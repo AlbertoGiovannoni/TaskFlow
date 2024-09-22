@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.taskflow.DTOs.Field.FieldDTO;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
 @Service
 public class FieldServiceManager {
@@ -22,8 +23,12 @@ public class FieldServiceManager {
     TextService textService;
 
     public FieldService getFieldService(FieldDTO fieldDto) {
+        return this.getFieldService(fieldDto.getType());
+    }
 
-        switch (fieldDto.getType()) {
+    public FieldService getFieldService(FieldType type) {
+
+        switch (type) {
             case ASSIGNEE:
                 return this.assigneeService;
             case SINGLE_SELECTION:
@@ -38,9 +43,8 @@ public class FieldServiceManager {
                 // TODO
                 throw new IllegalArgumentException("Document need implementation");
             default:
-                throw new IllegalArgumentException(fieldDto.getType().toString() + " not recognized");
+                throw new IllegalArgumentException(type.toString() + " not recognized");
         }
-
     }
 
 }
