@@ -1,4 +1,5 @@
 package com.example.taskflow.service.FieldService;
+
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.taskflow.DAOs.FieldDAO;
@@ -12,8 +13,8 @@ import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
+import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.DateBuilder;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldBuilder;
-import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
 import com.example.taskflow.Mappers.FieldMapper;
 import com.example.taskflow.Mappers.NotificationMapper;
 
@@ -28,7 +29,7 @@ public class DateService extends FieldService {
     @Autowired
     NotificationMapper notificationMapper;
     @Autowired
-    FieldDAO fieldDao; 
+    FieldDAO fieldDao;
     @Autowired
     UserDAO userDAO;
 
@@ -48,20 +49,17 @@ public class DateService extends FieldService {
             throw new IllegalArgumentException("Wrong fieldDefinition id");
         }
 
-        
-        FieldBuilder fieldBuilder = FieldFactory.getBuilder(FieldType.DATE)
-                                        .addFieldDefinition(fieldDefinition)
-                                        .addParameter(dateDTO.getDateTime());
-        
         NotificationDTO notificationDto = dateDTO.getNotification();
+        Notification notification = null;
 
-        if (notificationDto != null){
-            Notification notification = this.notificationMapper.toEntity(notificationDto);
+        if (notificationDto != null) {
+            notification = this.notificationMapper.toEntity(notificationDto);
             notification = this.notificationDao.save(notification);
-            fieldBuilder.addParameter(notification);
         }
 
-        Field field = fieldBuilder.build();
+        Field field = (new DateBuilder(fieldDefinition))
+                .addParameters(dateDTO.getDateTime(), notification)
+                .build();
 
         field = fieldDao.save(field);
 

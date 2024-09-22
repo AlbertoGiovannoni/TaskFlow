@@ -12,7 +12,7 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.SingleSelection;
-import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
+import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.SingleSelectionBuilder;
 import com.example.taskflow.Mappers.FieldMapper;
 
 @Service
@@ -45,9 +45,8 @@ public class SingleSelectionService extends FieldService{
             throw new IllegalArgumentException("Wrong fieldDefinition id");
         }
 
-        Field field = FieldFactory.getBuilder(FieldType.SINGLE_SELECTION)
-                .addFieldDefinition(fieldDefinition)
-                .addParameter(stringDTO.getValue())
+        Field field = (new SingleSelectionBuilder(fieldDefinition))
+                .addSelection(stringDTO.getValue())
                 .build();
 
         field = fieldDao.save(field);

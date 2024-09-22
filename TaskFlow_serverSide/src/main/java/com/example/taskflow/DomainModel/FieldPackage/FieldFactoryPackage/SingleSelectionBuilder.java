@@ -1,37 +1,31 @@
 package com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage;
 
-import java.util.ArrayList;
-
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldPackage.SingleSelection;
 
-public class SingleSelectionBuilder extends FieldBuilder{
-    
+public class SingleSelectionBuilder extends FieldBuilder {
+
     private String selection;
-    
-    SingleSelectionBuilder(FieldType type) {
-        super(type);
+
+    public SingleSelectionBuilder(FieldDefinition fieldDefinition) {
+        super(fieldDefinition);
         this.selection = "";
     }
 
-    @Override
-    public FieldBuilder addParameters(ArrayList<?> values){
-        return this.addParameter(values.get(0));
-    }
-
-    @Override
-    public FieldBuilder addParameter(Object value){
-        if (value != null){
-            if (value instanceof String){
-                this.selection = (String)value;
-            }
+    public FieldBuilder addSelection(String value) {
+        if (value != null) {
+            this.selection = value;
+        } else {
+            throw new IllegalArgumentException("selection is null:" + value);
         }
         return this;
     }
 
     @Override
     public SingleSelection build() {
+        if (this.selection == null) {
+            throw new IllegalAccessError("selection is null");
+        }
         return new SingleSelection(this.fieldDefinition, selection);
     }
 }
-

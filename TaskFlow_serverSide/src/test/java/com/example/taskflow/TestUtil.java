@@ -25,7 +25,8 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
-import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.FieldFactory;
+import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.NumberBuilder;
+
 import java.util.Random;
 
 import net.bytebuddy.utility.RandomString;
@@ -143,8 +144,7 @@ public class TestUtil {
         ArrayList<Field> allFieldsGenerated = new ArrayList<>();
 
         for (int i = 0; i < n; i++){
-            field = FieldFactory.getBuilder(FieldType.NUMBER)
-                        .addFieldDefinition(fieldDefinition)
+            field = (new NumberBuilder(fieldDefinition))
                         .addParameter((float)randomGenerator.nextInt(1000))
                         .build();
             
@@ -165,8 +165,7 @@ public class TestUtil {
             fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.NUMBER)
                                 .setName(RandomString.make(10))
                                 .build();
-            field = FieldFactory.getBuilder(FieldType.NUMBER)
-                        .addFieldDefinition(fieldDefinition)
+            field = (new NumberBuilder(fieldDefinition))
                         .addParameter((float)randomGenerator.nextInt(1000))
                         .build();
             
