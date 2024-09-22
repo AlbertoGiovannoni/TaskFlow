@@ -65,22 +65,26 @@ public class ProjectService {
     /*
      aggiunge un'attività e i suoi campi (da testare)
     */
-    public ProjectDTO addActivityToProject(ProjectDTO projectDto, ActivityDTO newActivityDto){
+    public ProjectDTO addActivityToProject(String projectId, ActivityDTO newActivityDto){
 
-        Project project = this.getProject(projectDto);
+        Project project = this.projectDao.findById(projectId).orElseThrow();
 
-        Activity newActivity = activityService.getActivity(activityService.createActivity());       //PENDING
+        Activity newActivity = this.activityService.pushNewActivity(newActivityDto);
+
         project.addActivity(newActivity);
+
         this.projectDao.save(project);
 
         return projectMapper.toDto(project);
     }
     
-    public void deleteProject(ProjectDTO projectDto){
-        Project project = this.projectDao.findById(projectDto.getId()).orElseThrow();
-        for(Activity activity:project.getActivities()){
-            activityService.deleteActivity(activityMapper.toDto(activity));           
+    public void deleteProject(String projectId){
+        Project project = this.projectDao.findById(projectId).orElseThrow();
+
+        for(Activity activity : project.getActivities()){
+            activityService.deleteActivity(activity.getId());           
         }
+
         this.projectDao.delete(project);
     }
 }
