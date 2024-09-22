@@ -15,7 +15,6 @@ import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.FieldMapper;
-import com.example.taskflow.service.FieldService.FieldService;
 import com.example.taskflow.service.FieldService.FieldServiceManager;
 
 @Service
@@ -57,7 +56,6 @@ public class ActivityService {
     }
 
     public void deleteActivityAndFields(String activityId) {
-
         Activity activity = this.activityDao.findById(activityId).orElseThrow();
 
         this.fieldDao.deleteAll(activity.getFields());
@@ -71,15 +69,5 @@ public class ActivityService {
         activity.setName(newName);
 
         return this.activityDao.save(activity);
-    }
-
-    private ArrayList<String> getFieldIds(ArrayList<Field> fields){
-        ArrayList<String> fieldIds = new ArrayList<>();
-
-        for (Field field : fields){
-            fieldIds.add(field.getId());
-        }
-
-        return fieldIds;
     }
 }

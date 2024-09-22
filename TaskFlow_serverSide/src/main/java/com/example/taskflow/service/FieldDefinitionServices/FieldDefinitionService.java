@@ -59,7 +59,7 @@ public abstract class FieldDefinitionService {
 
         this.fieldDao.deleteAll(fieldsToRemove);
 
-        this.activityDao.removeFieldsFromActivities(fieldToRemoveIds);
+        this.activityDao.deleteFieldsFromActivities(fieldToRemoveIds);
 
         this.fieldDefinitionDao.deleteById(fieldDefinitionId);
     }

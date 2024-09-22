@@ -3,6 +3,6 @@ package com.example.taskflow.DAOs;
 import java.util.List;
 
 public interface ActivityCustomInterfaceDAO {
-    void removeFieldFromActivity(String fieldId);
-    void removeFieldsFromActivities(List<String> fieldIds);
+    void deleteFieldFromActivity(String fieldId);
+    void deleteFieldsFromActivities(List<String> fieldIds);
 }

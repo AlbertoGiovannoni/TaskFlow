@@ -36,14 +36,14 @@ public abstract class FieldService {
     abstract public Field pushNewField(FieldDTO fieldDto);
 
     public void deleteFieldAndActivityReference(String fieldId){
-        this.activityDao.removeFieldFromActivity(fieldId);
+        this.activityDao.deleteFieldFromActivity(fieldId);
         this.fieldDao.deleteById(fieldId);
     }
 
     public ArrayList<String> deleteFieldsAndActivityReferences(ArrayList<Field> fields){
         ArrayList<String> fieldIds = this.getFieldIds(fields);
 
-        this.activityDao.removeFieldsFromActivities(fieldIds);
+        this.activityDao.deleteFieldsFromActivities(fieldIds);
 
         this.fieldDao.deleteAll(fields);
 

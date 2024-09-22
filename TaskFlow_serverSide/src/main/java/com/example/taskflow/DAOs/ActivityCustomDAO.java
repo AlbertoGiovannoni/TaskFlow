@@ -18,7 +18,7 @@ public class ActivityCustomDAO implements ActivityCustomInterfaceDAO{
     private MongoTemplate mongoTemplate;
 
     @Override
-    public void removeFieldFromActivity(String fieldId) {
+    public void deleteFieldFromActivity(String fieldId) {
         Query query = new Query();
         query.addCriteria(Criteria.where("fields.$id").is(fieldId));
 
@@ -28,7 +28,7 @@ public class ActivityCustomDAO implements ActivityCustomInterfaceDAO{
     }
 
     @Override
-    public void removeFieldsFromActivities(List<String> fieldIds) {
+    public void deleteFieldsFromActivities(List<String> fieldIds) {
         List<ObjectId> objectIds = fieldIds.stream()
                                            .map(ObjectId::new)
                                            .collect(Collectors.toList());
