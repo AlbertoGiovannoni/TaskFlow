@@ -17,7 +17,7 @@ public class DateBuilder extends FieldBuilder {
         super(fieldDefinition);
     }
 
-    public FieldBuilder addDate(LocalDateTime dateTime){
+    public DateBuilder addDate(LocalDateTime dateTime){
         if (dateTime == null){
             throw new IllegalArgumentException("date is null:");
         }
@@ -27,7 +27,7 @@ public class DateBuilder extends FieldBuilder {
         return this;
     }
 
-    public FieldBuilder addNotification(Notification notification){
+    public DateBuilder addNotification(Notification notification){
         if (notification == null){
             throw new IllegalArgumentException("notification is null:");
         }

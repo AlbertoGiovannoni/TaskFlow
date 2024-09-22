@@ -11,7 +11,7 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFa
 public class SingleSelectionsDefinitionService extends FieldDefinitionService{
 
     @Override
-    public FieldDefinitionDTO createFieldDefinition(FieldDefinitionDTO fieldDefinitionDto) {
+    public FieldDefinition pushNewFieldDefinition(FieldDefinitionDTO fieldDefinitionDto) {
         if (fieldDefinitionDto == null){
             throw new IllegalArgumentException("FieldDefinitionDTO is null");
         }
@@ -28,7 +28,7 @@ public class SingleSelectionsDefinitionService extends FieldDefinitionService{
 
         FieldDefinition fieldDefinitionFromDatabase = this.fieldDefinitionDao.save(fieldDefinitionCreated);
 
-        return this.fieldDefinitionMapper.toDto(fieldDefinitionFromDatabase);
+        return fieldDefinitionFromDatabase;
     }
     
 }

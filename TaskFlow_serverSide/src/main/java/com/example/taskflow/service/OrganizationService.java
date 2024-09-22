@@ -168,7 +168,7 @@ public class OrganizationService {
         Project project;
         for(String projectId:organizationDTO.getProjectsId()){
             project = this.projectDAO.findById(projectId).orElseThrow();           
-            projectService.deleteProject(projectMapper.toDto(project));
+            projectService.deleteProject(project.getId());
         }
         this.organizationDAO.delete(organization);
     }

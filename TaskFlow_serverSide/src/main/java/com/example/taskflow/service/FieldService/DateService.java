@@ -52,14 +52,16 @@ public class DateService extends FieldService {
         NotificationDTO notificationDto = dateDTO.getNotification();
         Notification notification = null;
 
+        DateBuilder builder = (new DateBuilder(fieldDefinition))
+                .addDate(dateDTO.getDateTime());
+
         if (notificationDto != null) {
             notification = this.notificationMapper.toEntity(notificationDto);
             notification = this.notificationDao.save(notification);
+            builder.addNotification(notification);
         }
 
-        Field field = (new DateBuilder(fieldDefinition))
-                .addParameters(dateDTO.getDateTime(), notification)
-                .build();
+        Field field = builder.build();
 
         field = fieldDao.save(field);
 

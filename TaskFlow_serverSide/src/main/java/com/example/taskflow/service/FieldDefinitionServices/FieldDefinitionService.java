@@ -20,7 +20,12 @@ public class FieldDefinitionService {
     @Autowired
     FieldDefinitionMapper fieldDefinitionMapper;
 
-    public FieldDefinitionDTO createFieldDefinition(FieldDefinitionDTO fieldDefinitionDto){
+    public FieldDefinitionDTO pushNewFieldDefinitionDTO(FieldDefinitionDTO fieldDefinitionDto){
+        FieldDefinition fieldDefinition = this.pushNewFieldDefinition(fieldDefinitionDto);
+        return this.fieldDefinitionMapper.toDto(fieldDefinition);
+    }
+
+    public FieldDefinition pushNewFieldDefinition(FieldDefinitionDTO fieldDefinitionDto){
         if (fieldDefinitionDto == null){
             throw new IllegalArgumentException("FieldDefinitionDTO is null");
         }
@@ -36,7 +41,7 @@ public class FieldDefinitionService {
 
         FieldDefinition fieldDefinitionFromDatabase = this.fieldDefinitionDao.save(fieldDefinitionCreated);
 
-        return this.fieldDefinitionMapper.toDto(fieldDefinitionFromDatabase);
+        return fieldDefinitionFromDatabase;
     };
 
     public void deleteFieldDefinition(FieldDefinitionDTO fieldDefinitionDTO){
