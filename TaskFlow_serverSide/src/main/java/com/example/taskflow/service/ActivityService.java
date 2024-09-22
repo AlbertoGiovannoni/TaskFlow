@@ -32,7 +32,7 @@ public class ActivityService {
     @Autowired
     FieldDefinitionDAO fieldDefinitionDao;
 
-    public ActivityDTO createActivity(ActivityDTO activityDTO) {
+    public Activity pushNewActivity(ActivityDTO activityDTO) {
 
         ArrayList<FieldDTO> fieldsDto = activityDTO.getFields();
         ArrayList<Field> fields = new ArrayList<Field>();
@@ -40,10 +40,8 @@ public class ActivityService {
         for (FieldDTO movingFieldDto : fieldsDto) {
             fields.add(
                     this.fieldServiceManager
-                            .getFieldService(movingFieldDto).getField(
-                                    this.fieldServiceManager
-                                            .getFieldService(movingFieldDto)
-                                            .createField(movingFieldDto)));
+                            .getFieldService(movingFieldDto)
+                                            .pushNewField(movingFieldDto));
         }
 
         Activity activity = this.activityMapper.toEntity(activityDTO);
@@ -51,16 +49,17 @@ public class ActivityService {
 
         activity = this.activityDao.save(activity);
 
-        return this.activityMapper.toDto(this.activityDao.save(activity));
+        return activity;
     }
 
-    public void deleteActivity(ActivityDTO activityDTO) {
+    public void deleteActivity(String activityId) {
 
-        Activity activity = this.activityDao.findById(activityDTO.getId()).orElseThrow();
+        Activity activity = this.activityDao.findById(activityId).orElseThrow();
+
         for (Field field : activity.getFields()) {
-            // fieldService.deleteField(Field); //PENDING: implement deleteField in
-            // fieldService
+            this.fieldServiceManager.getFieldService(field.getType()).deleteField(field.getId());
         }
+
         this.activityDao.delete(activity);
     }
 }
