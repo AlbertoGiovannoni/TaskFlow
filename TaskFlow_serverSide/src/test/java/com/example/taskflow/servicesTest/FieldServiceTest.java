@@ -92,7 +92,7 @@ public class FieldServiceTest {
         someUsers.remove(0);
         fieldDto.setUserIds(extractIds(someUsers));
 
-        FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).createField(fieldDto);
+        FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).pushNewField(fieldDto);
 
         Field createdField = this.fieldMapper.toEntity(createdFieldDto);
 
@@ -130,7 +130,7 @@ public class FieldServiceTest {
 
         fieldDto.setValue(RandomString.make(10));
 
-        FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).createField(fieldDto);
+        FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).pushNewField(fieldDto);
 
         Field createdField = this.fieldMapper.toEntity(createdFieldDto);
         //FieldDefinition foundFD = fieldDefinitionDao.findById(createdFieldDto.getFieldDefinitionId()).orElse(null);
@@ -162,7 +162,7 @@ public class FieldServiceTest {
 
         fieldDto.setValue("Done");
 
-        FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).createField(fieldDto);
+        FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).pushNewField(fieldDto);
         Field createdField = this.fieldMapper.toEntity(createdFieldDto);
         FieldDefinition foundFD = fieldDefinitionDao.findById(createdFieldDto.getFieldDefinitionId()).orElse(null);
         
@@ -190,7 +190,7 @@ public class FieldServiceTest {
 
         fieldDto.setValue(new Random().nextFloat());
 
-        FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).createField(fieldDto);
+        FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).pushNewField(fieldDto);
 
         Field createdField = this.fieldMapper.toEntity(createdFieldDto);
         FieldDefinition foundFD = fieldDefinitionDao.findById(createdFieldDto.getFieldDefinitionId()).orElse(null);
@@ -223,7 +223,7 @@ public class FieldServiceTest {
         notificationDao.save(notification);
         dateDto.setNotification(this.notificationMapper.toDto(notification));
 
-        FieldDTO createdFieldDto = fieldServiceManager.getFieldService(dateDto).createField(dateDto);
+        FieldDTO createdFieldDto = fieldServiceManager.getFieldService(dateDto).pushNewField(dateDto);
         Field createdField = this.fieldMapper.toEntity(createdFieldDto);
         FieldDefinition foundFD = fieldDefinitionDao.findById(createdFieldDto.getFieldDefinitionId()).orElse(null);
         
