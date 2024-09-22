@@ -92,7 +92,7 @@ public class ProjectService {
         Project project = this.projectDao.findById(projectId).orElseThrow();
 
         for(Activity activity : project.getActivities()){
-            activityService.deleteActivity(activity.getId());           
+            activityService.deleteActivityAndFields(activity.getId());           
         }
 
         this.projectDao.delete(project);

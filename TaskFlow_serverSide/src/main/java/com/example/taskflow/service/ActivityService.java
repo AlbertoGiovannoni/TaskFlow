@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.taskflow.DAOs.ActivityDAO;
+import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.ActivityDTO;
@@ -14,6 +15,7 @@ import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.FieldMapper;
+import com.example.taskflow.service.FieldService.FieldService;
 import com.example.taskflow.service.FieldService.FieldServiceManager;
 
 @Service
@@ -25,6 +27,8 @@ public class ActivityService {
     FieldMapper fieldMapper;
     @Autowired
     FieldServiceManager fieldServiceManager;
+    @Autowired
+    FieldDAO fieldDao;
     @Autowired
     ActivityDAO activityDao;
     @Autowired
@@ -52,13 +56,11 @@ public class ActivityService {
         return activity;
     }
 
-    public void deleteActivity(String activityId) {
+    public void deleteActivityAndFields(String activityId) {
 
         Activity activity = this.activityDao.findById(activityId).orElseThrow();
 
-        for (Field field : activity.getFields()) {
-            this.fieldServiceManager.getFieldService(field.getType()).deleteField(field.getId());
-        }
+        this.fieldDao.deleteAll(activity.getFields());
 
         this.activityDao.delete(activity);
     }
@@ -69,5 +71,15 @@ public class ActivityService {
         activity.setName(newName);
 
         return this.activityDao.save(activity);
+    }
+
+    private ArrayList<String> getFieldIds(ArrayList<Field> fields){
+        ArrayList<String> fieldIds = new ArrayList<>();
+
+        for (Field field : fields){
+            fieldIds.add(field.getId());
+        }
+
+        return fieldIds;
     }
 }

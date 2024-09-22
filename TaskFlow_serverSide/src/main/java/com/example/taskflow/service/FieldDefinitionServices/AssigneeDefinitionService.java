@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.taskflow.DAOs.UserDAO;
-import com.example.taskflow.DTOs.UserDTO;
 import com.example.taskflow.DTOs.FieldDefinition.AssigneeDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DomainModel.User;
