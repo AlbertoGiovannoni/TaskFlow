@@ -1,5 +1,7 @@
 package com.example.taskflow.service.FieldService;
 
+import java.util.ArrayList;
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -33,8 +35,28 @@ public abstract class FieldService {
 
     abstract public Field pushNewField(FieldDTO fieldDto);
 
-    public void deleteField(String fieldId){
+    public void deleteFieldAndActivityReference(String fieldId){
         this.activityDao.removeFieldFromActivity(fieldId);
         this.fieldDao.deleteById(fieldId);
+    }
+
+    public ArrayList<String> deleteFieldsAndActivityReferences(ArrayList<Field> fields){
+        ArrayList<String> fieldIds = this.getFieldIds(fields);
+
+        this.activityDao.removeFieldsFromActivities(fieldIds);
+
+        this.fieldDao.deleteAll(fields);
+
+        return fieldIds;
+    }
+
+    private ArrayList<String> getFieldIds(ArrayList<Field> fields){
+        ArrayList<String> fieldIds = new ArrayList<>();
+
+        for (Field field : fields){
+            fieldIds.add(field.getId());
+        }
+
+        return fieldIds;
     }
 }

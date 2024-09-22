@@ -1,24 +1,30 @@
 package com.example.taskflow.service.FieldDefinitionServices;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.taskflow.DAOs.ActivityDAO;
 import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.SimpleFieldDefinitionDTO;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
+import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.FieldDefinitionMapper;
 
 @Service
-public class FieldDefinitionService {
+public abstract class FieldDefinitionService {
     @Autowired
     FieldDefinitionDAO fieldDefinitionDao;
     @Autowired
     FieldDAO fieldDao;
     @Autowired
     FieldDefinitionMapper fieldDefinitionMapper;
+    @Autowired
+    ActivityDAO activityDao;
 
     public FieldDefinitionDTO pushNewFieldDefinitionDTO(FieldDefinitionDTO fieldDefinitionDto){
         FieldDefinition fieldDefinition = this.pushNewFieldDefinition(fieldDefinitionDto);
@@ -44,18 +50,28 @@ public class FieldDefinitionService {
         return fieldDefinitionFromDatabase;
     };
 
-    public void deleteFieldDefinition(FieldDefinitionDTO fieldDefinitionDTO){
-        FieldDefinition fieldDefinition = this.fieldDefinitionMapper.toEntity(fieldDefinitionDTO);
+    public void deleteFieldDefinitionAndFieldsAndReferenceToFieldsInActivity(String fieldDefinitionId){
+        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionId).orElseThrow();
 
-        this.deleteFieldDefinitionCascading(fieldDefinition);
+        ArrayList<Field> fieldsToRemove = new ArrayList<>(this.fieldDao.findFieldByFieldDefinition(fieldDefinition));
+
+        ArrayList<String> fieldToRemoveIds = this.getFieldIds(fieldsToRemove);
+
+        this.fieldDao.deleteAll(fieldsToRemove);
+
+        this.activityDao.removeFieldsFromActivities(fieldToRemoveIds);
+
+        this.fieldDefinitionDao.deleteById(fieldDefinitionId);
     }
 
-    private void deleteFieldDefinitionCascading(FieldDefinition fieldDefinition){
-        if (fieldDefinition == null){
-            throw new IllegalArgumentException("FieldDefinition is null");
+
+    private ArrayList<String> getFieldIds(ArrayList<Field> fields){
+        ArrayList<String> fieldIds = new ArrayList<>();
+
+        for (Field field : fields){
+            fieldIds.add(field.getId());
         }
 
-        this.fieldDao.deleteFieldByFieldDefinition(fieldDefinition);
-        this.fieldDefinitionDao.delete(fieldDefinition);
+        return fieldIds;
     }
 }
