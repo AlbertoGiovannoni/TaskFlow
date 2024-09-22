@@ -8,9 +8,9 @@ import com.example.taskflow.DomainModel.FieldPackage.Field;
 public class DocumentService extends FieldService{
 
     @Override
-    public FieldDTO createField(FieldDTO fieldDTO) {
+    public Field pushNewField(FieldDTO fieldDto) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'createField'");
     }
-    //TODO implementa
+    
 }

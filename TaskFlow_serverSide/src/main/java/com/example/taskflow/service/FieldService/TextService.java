@@ -27,7 +27,7 @@ public class TextService extends FieldService {
     UserDAO userDAO;
 
     @Override
-    public FieldDTO createField(FieldDTO fieldDto) {
+    public Field pushNewField(FieldDTO fieldDto) {
 
         if (!(fieldDto instanceof StringDTO)) {
             throw new IllegalArgumentException(
@@ -50,6 +50,6 @@ public class TextService extends FieldService {
 
         field = fieldDao.save(field);
 
-        return fieldMapper.toDto(field);
+        return field;
     }
 }

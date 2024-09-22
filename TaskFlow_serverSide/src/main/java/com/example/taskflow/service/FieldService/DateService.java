@@ -33,7 +33,7 @@ public class DateService extends FieldService {
     UserDAO userDAO;
 
     @Override
-    public FieldDTO createField(FieldDTO fieldDto) {
+    public Field pushNewField(FieldDTO fieldDto) {
         if (!(fieldDto instanceof DateDTO)) {
             throw new IllegalArgumentException(
                     "FieldDto of class " + fieldDto.getClass().getSimpleName() + " instead of DateDTO");
@@ -65,6 +65,6 @@ public class DateService extends FieldService {
 
         field = fieldDao.save(field);
 
-        return fieldMapper.toDto(field);
+        return field;
     }
 }
