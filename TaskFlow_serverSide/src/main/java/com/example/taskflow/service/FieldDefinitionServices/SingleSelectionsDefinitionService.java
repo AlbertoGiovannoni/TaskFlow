@@ -1,5 +1,7 @@
 package com.example.taskflow.service.FieldDefinitionServices;
 
+import java.util.ArrayList;
+
 import org.springframework.stereotype.Service;
 
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
@@ -30,5 +32,25 @@ public class SingleSelectionsDefinitionService extends FieldDefinitionService{
 
         return fieldDefinitionFromDatabase;
     }
+
+    public FieldDefinitionDTO addSelections(String fieldDefinitionId, ArrayList<String> selections){
+        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionId).orElseThrow();
+
+        fieldDefinition.addMultipleEntry(selections);
+
+        this.fieldDefinitionDao.save(fieldDefinition);
+
+        return this.fieldDefinitionMapper.toDto(fieldDefinition);
+    } 
+
+    public FieldDefinitionDTO removeSelections(String fieldDefinitionId, ArrayList<String> selections){
+        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionId).orElseThrow();
+
+        fieldDefinition.removeMultipleEntry(selections);
+
+        this.fieldDefinitionDao.save(fieldDefinition);
+
+        return this.fieldDefinitionMapper.toDto(fieldDefinition);
+    } 
     
 }
