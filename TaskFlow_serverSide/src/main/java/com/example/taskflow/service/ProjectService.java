@@ -48,12 +48,8 @@ public class ProjectService {
         return projectMapper.toDto(project);
     }
 
-    //TODO addFieldTemplate
-    
-    /*
-     aggiunge un'attività e i suoi campi (da testare)
-    */
-    public ProjectDTO addActivityToProject(ProjectDTO projectDto, ActivityDTO newActivityDto){
+    private Project getProject(ProjectDTO projectDto){
+
         Project project = projectMapper.toEntity(projectDto);
         
         ArrayList<Activity> activities = new ArrayList<Activity>();
@@ -61,11 +57,19 @@ public class ProjectService {
             activities.add(this.activityDao.findById(activityDto.getId()).orElseThrow());
         }
         project.setActivities(activities);
+        return project;
+    }
 
-        Activity newActivity = activityMapper.toEntity(newActivityDto);
-        for(FieldDTO fieldDto:newActivityDto.getFields()){
-            newActivity.addField(fieldMapper.toEntity(fieldDto));
-        }
+    //TODO addFieldTemplate
+    
+    /*
+     aggiunge un'attività e i suoi campi (da testare)
+    */
+    public ProjectDTO addActivityToProject(ProjectDTO projectDto, ActivityDTO newActivityDto){
+
+        Project project = this.getProject(projectDto);
+
+        Activity newActivity = activityService.getActivity(activityService.createActivity());       //PENDING
         project.addActivity(newActivity);
         this.projectDao.save(project);
 
