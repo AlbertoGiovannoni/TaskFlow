@@ -19,14 +19,14 @@ public interface ActivityMapper {
     @Mapping(source = "fields", target = "fields", ignore = true)
     Activity toEntity(ActivityDTO dto);
 
+    @Mapping(source = "fields", target = "fields", qualifiedByName = "mapFieldsToFieldDTO")
+    ActivityDTO toDto(Activity user);
+
     @Named("mapFieldsToFieldDTO")
     default ArrayList<FieldDTO> mapFieldsToFieldDTO(ArrayList<Field> fields) {
         ArrayList<FieldDTO> fieldsDTO = new ArrayList<FieldDTO>();
         fieldsDTO = fieldToFieldDto(fields);
 
-        // for(Field field:fields){
-        //     fieldsDTO.add(INSTANCE.toDto(field));
-        // }
         return fieldsDTO;
     }
 
@@ -34,8 +34,15 @@ public interface ActivityMapper {
         return Mappers.getMapper(FieldMapper.class).fieldToFieldDto(fields);
     }
 
-    @Mapping(source = "fields", target = "fields", qualifiedByName = "mapFieldsToFieldDTO")
-    ActivityDTO toDto(Activity user);
+    default ArrayList<ActivityDTO> activityToActivityDto(ArrayList<Activity> activities){
+        ArrayList<ActivityDTO> activityDtoList = new ArrayList<ActivityDTO>();
+
+        for(Activity activity : activities){
+            activityDtoList.add(this.toDto(activity));
+        }
+
+        return activityDtoList;
+    }
 }
 
 

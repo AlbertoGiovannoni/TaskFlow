@@ -56,5 +56,14 @@ public class ProjectServiceTest {
         assertEquals(projectDTO.getId(), projectFromDb.getId());
 
     }
+
+    @Test
+    public void testAddActivity(){
+        ArrayList<Field> fields = new ArrayList<Field>();
+
+        
+        Activity activity = new Activity("activity", fields);
+        
+    }
     
 }

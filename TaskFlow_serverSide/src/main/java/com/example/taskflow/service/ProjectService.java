@@ -10,13 +10,10 @@ import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.DTOs.ProjectDTO;
-import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.Project;
-import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
-import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.FieldMapper;
 import com.example.taskflow.Mappers.ProjectMapper;
@@ -78,11 +75,8 @@ public class ProjectService {
     public ProjectDTO addActivityToProject(String projectId, ActivityDTO newActivityDto){
 
         Project project = this.projectDao.findById(projectId).orElseThrow();
-
         Activity newActivity = this.activityService.pushNewActivity(newActivityDto);
-
         project.addActivity(newActivity);
-
         this.projectDao.save(project);
 
         return projectMapper.toDto(project);

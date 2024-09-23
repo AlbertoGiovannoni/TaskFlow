@@ -1,5 +1,6 @@
 package com.example.taskflow.Mappers;
 
+import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.FieldDefinition.AssigneeDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.SimpleFieldDefinitionDTO;
@@ -9,6 +10,7 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinitio
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.SimpleFieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.SingleSelectionDefinition;
+import com.example.taskflow.DomainModel.FieldPackage.Field;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -90,4 +92,14 @@ public interface FieldDefinitionMapper {
     SingleSelectionDefinition toEntity(SingleSelectionDefinitionDTO singleSelectionDefinitionDto);
 
     SimpleFieldDefinition toEntity(SimpleFieldDefinitionDTO simpleFieldDefinitionDto);
+
+    default ArrayList<FieldDefinitionDTO> mapFieldsDefinitionToFieldDefinitionDTO(ArrayList<FieldDefinition> fieldDefinitions){
+        ArrayList<FieldDefinitionDTO> fieldDefinitionDtoList = new ArrayList<FieldDefinitionDTO>();
+
+        for(FieldDefinition fieldDefinition : fieldDefinitions){
+            fieldDefinitionDtoList.add(this.toDto(fieldDefinition));
+        }
+
+        return fieldDefinitionDtoList;
+    }
 }
