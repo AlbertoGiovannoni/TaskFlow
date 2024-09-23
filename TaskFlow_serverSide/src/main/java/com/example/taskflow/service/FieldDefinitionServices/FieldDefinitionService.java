@@ -16,7 +16,7 @@ import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.FieldDefinitionMapper;
 
 @Service
-public abstract class FieldDefinitionService {
+public class FieldDefinitionService {
     @Autowired
     FieldDefinitionDAO fieldDefinitionDao;
     @Autowired
@@ -59,7 +59,7 @@ public abstract class FieldDefinitionService {
 
         this.fieldDao.deleteAll(fieldsToRemove);
 
-        this.activityDao.deleteFieldsFromActivities(fieldToRemoveIds);
+        this.activityDao.removeFieldsFromActivities(fieldToRemoveIds);
 
         this.fieldDefinitionDao.deleteById(fieldDefinitionId);
     }

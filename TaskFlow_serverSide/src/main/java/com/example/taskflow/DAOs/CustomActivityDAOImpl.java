@@ -9,18 +9,17 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.stereotype.Repository;
 
 import com.example.taskflow.DomainModel.Activity;
 
-@Repository
-public class ActivityCustomDAO implements ActivityCustomInterfaceDAO{
+
+public class CustomActivityDAOImpl implements CustomActivityDAO{
 
     @Autowired
     private MongoTemplate mongoTemplate;
 
     @Override
-    public void deleteFieldFromActivity(String fieldId) {
+    public void removeFieldFromActivity(String fieldId) {
         Query query = new Query();
         query.addCriteria(Criteria.where("fields.$id").is(fieldId));
 
@@ -30,7 +29,7 @@ public class ActivityCustomDAO implements ActivityCustomInterfaceDAO{
     }
 
     @Override
-    public void deleteFieldsFromActivities(List<String> fieldIds) {
+    public void removeFieldsFromActivities(List<String> fieldIds) {
         List<ObjectId> objectIds = fieldIds.stream()
                                            .map(ObjectId::new)
                                            .collect(Collectors.toList());

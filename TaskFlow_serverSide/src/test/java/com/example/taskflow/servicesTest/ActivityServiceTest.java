@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -34,7 +35,7 @@ import com.example.taskflow.service.FieldService.FieldServiceManager;
 
 import net.bytebuddy.utility.RandomString;
 
-@DataMongoTest
+@SpringBootTest
 @ActiveProfiles("test")
 @ComponentScan(basePackages = "com.example.taskflow")
 public class ActivityServiceTest {
