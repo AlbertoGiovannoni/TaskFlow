@@ -16,6 +16,7 @@ import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
 import java.util.ArrayList;
+import java.util.UUID;
 
 @DataMongoTest
 @ActiveProfiles("test")
@@ -45,10 +46,10 @@ public class UserTest {
     @Test
     public void testInsertAndFindUser() {
 
-        UserInfo userinfo = new UserInfo(RandomString.make(10), RandomString.make(10));
+        UserInfo userinfo = new UserInfo(UUID.randomUUID().toString(), RandomString.make(10), RandomString.make(10));
         userInfoDAO.save(userinfo);
         
-        User user = new User(userinfo, RandomString.make(10));
+        User user = new User(UUID.randomUUID().toString(), userinfo, RandomString.make(10));
         user = userDAO.save(user);
 
         User found = userDAO.findById(user.getId()).orElse(null);
@@ -59,10 +60,10 @@ public class UserTest {
 
     @Test
     public void testMondifyUser() {
-        UserInfo userinfo = new UserInfo(RandomString.make(10), RandomString.make(10));
+        UserInfo userinfo = new UserInfo(UUID.randomUUID().toString(), RandomString.make(10), RandomString.make(10));
         userInfoDAO.save(userinfo);
 
-        User user = new User(userinfo, RandomString.make(10));
+        User user = new User(UUID.randomUUID().toString(), userinfo, RandomString.make(10));
         user = userDAO.save(user);
 
         user.setUserInfo(userinfo);
@@ -71,7 +72,7 @@ public class UserTest {
         user.setUsername(newUsername);
         assertEquals(user.getUsername(), newUsername);
 
-        UserInfo newUserinfo = new UserInfo(RandomString.make(10), RandomString.make(10));
+        UserInfo newUserinfo = new UserInfo(UUID.randomUUID().toString(), RandomString.make(10), RandomString.make(10));
         newUserinfo = userInfoDAO.save(newUserinfo);
         user.setUserInfo(newUserinfo);
         assertEquals(user.getUserInfo(), newUserinfo);

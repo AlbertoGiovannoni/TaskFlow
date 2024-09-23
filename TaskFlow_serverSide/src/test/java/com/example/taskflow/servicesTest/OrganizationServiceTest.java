@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +60,7 @@ public class OrganizationServiceTest {
         ArrayList<User> owners = new ArrayList<User>();
         owners.add(owner);
 
-        Organization org = new Organization("name", owners, new ArrayList<Project>(), new ArrayList<User>(), LocalDateTime.now());
+        Organization org = new Organization(UUID.randomUUID().toString(), "name", owners, new ArrayList<Project>(), new ArrayList<User>(), LocalDateTime.now());
 
         OrganizationDTO orgDto = organizationMapper.toDto(org);
 

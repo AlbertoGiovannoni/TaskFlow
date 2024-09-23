@@ -1,6 +1,7 @@
 package com.example.taskflow;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.UserInfo;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.AssigneeDefinitionBuilder;
@@ -23,6 +24,7 @@ import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
 
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @DataMongoTest
@@ -107,7 +109,7 @@ public class FieldDefinitionTest {
 
     @Test
     public void testModifyAssigneeDefintion(){
-        FieldDefinition fieldDefinition = this.pushGetRandomFieldDefinitionToDatabase(FieldType.ASSIGNEE);
+        FieldDefinition fieldDefinition = new AssigneeDefinition(UUID.randomUUID().toString(), RandomString.make(10), someUsers);
 
         User newUserForAssignee = this.addGetRandomUserToDatabase();
         
@@ -145,10 +147,10 @@ public class FieldDefinitionTest {
     }
 
     private User addGetRandomUserToDatabase(){
-        UserInfo info = new UserInfo(RandomString.make(10), RandomString.make(10));
+        UserInfo info = new UserInfo(UUID.randomUUID().toString(), RandomString.make(10), RandomString.make(10));
         this.userInfoDAO.save(info);
 
-        User user = new User(info, RandomString.make(10));
+        User user = new User(UUID.randomUUID().toString(), info, RandomString.make(10));
         return this.userDAO.save(user);
     }
 

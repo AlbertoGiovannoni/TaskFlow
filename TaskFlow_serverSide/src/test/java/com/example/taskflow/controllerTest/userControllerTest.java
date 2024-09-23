@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.util.UUID;
 
 import java.util.Random;
 
@@ -84,10 +85,10 @@ public class userControllerTest {
 
         User owner = userDAO.findByUsername("owner").orElse(null);
         if (owner == null) {
-            UserInfo info = new UserInfo(RandomString.make(10), "password");
+            UserInfo info = new UserInfo(UUID.randomUUID().toString(),RandomString.make(10), "password");
             this.userInfoDAO.save(info);
 
-            owner = new User(info, "owner");
+            owner = new User(UUID.randomUUID().toString(),info, "owner");
             this.userDAO.save(owner);
         }
         organization.addOwner(owner);

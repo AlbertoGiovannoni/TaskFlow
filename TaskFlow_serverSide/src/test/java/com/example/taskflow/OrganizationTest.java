@@ -16,7 +16,7 @@ import com.example.taskflow.DAOs.UserInfoDAO;
 import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.OrganizationDAO;
 import java.util.ArrayList;
-
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.time.LocalDateTime;
 
@@ -62,7 +62,7 @@ public class OrganizationTest {
 
         LocalDateTime now = LocalDateTime.now();
 
-        anOrganization = new Organization("i sette nani", someOwners, someProjects, someUsers, now);
+        anOrganization = new Organization(UUID.randomUUID().toString(), "i sette nani", someOwners, someProjects, someUsers, now);
         anOrganization = OrganizationDAO.save(anOrganization);
     }
 

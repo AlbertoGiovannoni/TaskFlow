@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -67,7 +68,7 @@ public class ActivityTest {
         fields.add(field1);
         fields.add(field2);
 
-        this.activity = new Activity(RandomString.make(10), fields);
+        this.activity = new Activity(UUID.randomUUID().toString(), RandomString.make(10), fields);
         activityDAO.save(this.activity);
 
         this.someFields = fields;

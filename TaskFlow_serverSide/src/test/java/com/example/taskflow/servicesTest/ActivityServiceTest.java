@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
+import java.util.UUID;
 
 import com.example.taskflow.TestUtil;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
@@ -171,7 +172,7 @@ public class ActivityServiceTest {
         LocalDateTime dateTime = LocalDateTime.now();
         dateDto.setDateTime(dateTime);
         
-        Notification notification = new Notification(someUsers, dateTime.minusHours(2), "message");
+        Notification notification = new Notification(UUID.randomUUID().toString(), someUsers, dateTime.minusHours(2), "message");
         
         notification = notificationDao.save(notification);
         dateDto.setNotification(this.notificationMapper.toDto(notification));

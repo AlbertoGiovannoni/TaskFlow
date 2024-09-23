@@ -208,7 +208,7 @@ public class FieldServiceTest {
  
         LocalDateTime date = LocalDateTime.now();
         dateDto.setDateTime(date);
-        Notification notification = new Notification(someUsers, date.minusHours(2), "message");
+        Notification notification = new Notification(UUID.randomUUID().toString(), someUsers, date.minusHours(2), "message");
         notificationDao.save(notification);
         dateDto.setNotification(this.notificationMapper.toDto(notification));
 

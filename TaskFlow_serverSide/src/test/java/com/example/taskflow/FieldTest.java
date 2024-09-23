@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -192,7 +193,7 @@ public class FieldTest {
     public void testDateField() {
         FieldDefinition fieldDefinition = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.DATE);
         ArrayList<User> someUsers = this.testUtil.addGetMultipleRandomUserToDatabase(10);
-        Notification notification = new Notification(someUsers, LocalDateTime.now(), RandomString.make(10));
+        Notification notification = new Notification(UUID.randomUUID().toString(), someUsers, LocalDateTime.now(), RandomString.make(10));
 
         this.notificationDao.save(notification);
 
@@ -207,7 +208,7 @@ public class FieldTest {
         assertEquals(field.getFieldDefinition(), fieldDefinition);
         assertEquals(((Date) fieldFromDB).getNotification(), notification);
 
-        Notification anotherNotification = new Notification(someUsers, LocalDateTime.now(), RandomString.make(10));
+        Notification anotherNotification = new Notification(UUID.randomUUID().toString(), someUsers, LocalDateTime.now(), RandomString.make(10));
 
         ((Date) fieldFromDB).setNotification(anotherNotification);
         assertEquals(((Date) fieldFromDB).getNotification(), anotherNotification);

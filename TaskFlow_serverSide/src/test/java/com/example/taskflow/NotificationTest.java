@@ -21,6 +21,7 @@ import com.example.taskflow.DAOs.UserInfoDAO;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.UUID;
 
 @DataMongoTest
 @ActiveProfiles("test")
@@ -55,10 +56,10 @@ public class NotificationTest {
     }
 
     private User addGetRandomUserToDatabase(){
-        UserInfo info = new UserInfo(RandomString.make(10), RandomString.make(10));
+        UserInfo info = new UserInfo(UUID.randomUUID().toString(), RandomString.make(10), RandomString.make(10));
         this.userInfoDAO.save(info);
 
-        User user = new User(info, RandomString.make(10));
+        User user = new User(UUID.randomUUID().toString(), info, RandomString.make(10));
         return this.userDAO.save(user);
     }
 
@@ -80,7 +81,7 @@ public class NotificationTest {
             userDAO.save(user);
         }
 
-        Notification notification = new Notification(users, LocalDateTime.now(), RandomString.make(10));
+        Notification notification = new Notification(UUID.randomUUID().toString(), users, LocalDateTime.now(), RandomString.make(10));
         notificationDAO.save(notification);
 
         Notification notificationFromDB = notificationDAO.findById(notification.getId()).orElse(null);
@@ -96,7 +97,7 @@ public class NotificationTest {
             userDAO.save(user);
         }
 
-        Notification notification = new Notification(users, LocalDateTime.now(), RandomString.make(10));
+        Notification notification = new Notification(UUID.randomUUID().toString(), users, LocalDateTime.now(), RandomString.make(10));
         notificationDAO.save(notification);
 
         String newMessage = RandomString.make(10);

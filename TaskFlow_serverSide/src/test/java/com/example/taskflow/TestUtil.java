@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -61,10 +62,10 @@ public class TestUtil {
         }
 
         
-        UserInfo userInfo = new UserInfo("admin@gmail.com", "password");
+        UserInfo userInfo = new UserInfo(UUID.randomUUID().toString(), "admin@gmail.com", "password");
         userInfoDAO.save(userInfo);
 
-        User admin = new User(userInfo, "admin");
+        User admin = new User(UUID.randomUUID().toString(), userInfo, "admin");
         userDAO.save(admin);
     }
 
@@ -79,10 +80,10 @@ public class TestUtil {
     public User addGetRandomUserToDatabase() {
         String plainPassword = "password";
 
-        UserInfo info = new UserInfo(RandomString.make(10), plainPassword);
+        UserInfo info = new UserInfo(UUID.randomUUID().toString(), RandomString.make(10), plainPassword);
         this.userInfoDAO.save(info);
 
-        User user = new User(info, RandomString.make(10));
+        User user = new User(UUID.randomUUID().toString(), info, RandomString.make(10));
         return this.userDAO.save(user);
     }
 
@@ -112,7 +113,7 @@ public class TestUtil {
     }
 
     public Project addRandomProjectToDatabase() {
-        Project project = new Project(RandomString.make(10));
+        Project project = new Project(UUID.randomUUID().toString(), RandomString.make(10));
         return this.projectDAO.save(project);
     }
 
@@ -130,7 +131,7 @@ public class TestUtil {
         ArrayList<User> members = addGetMultipleRandomUserToDatabase(10);
         ArrayList<User> owners = addGetMultipleRandomUserToDatabase(1);
         ArrayList<Project> projects = addMultipleRandomProjectsToDatabase(1);
-        Organization organization = new Organization(RandomString.make(10), owners, projects, members, LocalDateTime.now());
+        Organization organization = new Organization(UUID.randomUUID().toString(), RandomString.make(10), owners, projects, members, LocalDateTime.now());
         return this.organizationDAO.save(organization);
     }
 

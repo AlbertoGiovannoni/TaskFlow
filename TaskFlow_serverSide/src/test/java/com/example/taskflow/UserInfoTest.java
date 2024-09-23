@@ -19,6 +19,7 @@ import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -51,7 +52,7 @@ public class UserInfoTest {
     @Test
     public void testInsertAndFindUserInfo() {
 
-        UserInfo userinfo = new UserInfo(RandomString.make(10), RandomString.make(10));
+        UserInfo userinfo = new UserInfo(UUID.randomUUID().toString(), RandomString.make(10), RandomString.make(10));
         userInfoDAO.save(userinfo);
 
         UserInfo found = userInfoDAO.findById(userinfo.getId()).orElse(null);
@@ -64,7 +65,7 @@ public class UserInfoTest {
     @Test
     public void testModifyUserInfo() {
 
-        UserInfo userInfo = new UserInfo(RandomString.make(10), RandomString.make(10));
+        UserInfo userInfo = new UserInfo(UUID.randomUUID().toString(), RandomString.make(10), RandomString.make(10));
         userInfoDAO.save(userInfo);
 
         String newEmail = RandomString.make(10);
