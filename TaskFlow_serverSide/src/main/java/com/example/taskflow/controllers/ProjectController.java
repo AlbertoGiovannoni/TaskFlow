@@ -1,5 +1,6 @@
 package com.example.taskflow.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
+import com.example.taskflow.DTOs.ProjectDTO;
+import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
+import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.DomainModel.Project;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
+import com.example.taskflow.service.ProjectService;
 
 /*
     FIXME: fixare tutti i metodi ed utilizzare i DTO! 
@@ -31,7 +37,7 @@ public class ProjectController {
     UserDAO userDAO;
 
     @Autowired
-    ProjectDAO projectDAO;
+    ProjectService projectService;
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Map<String, String>> handleAccessDeniedException(AccessDeniedException ex) {
@@ -55,8 +61,8 @@ public class ProjectController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
-        Project project = new Project(name);
-        projectDAO.save(project);
+        ProjectDTO projectDto = new ProjectDTO( null, name, new ArrayList<FieldDefinitionDTO>(), new ArrayList<ActivityDTO>());
+        this.projectService.createProject(projectDto);
 
         response.put("message", "Progetto creato");
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -83,14 +89,12 @@ public class ProjectController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
-        Project project = projectDAO.findById(projectId).orElse(null);
-        if (project == null) {
+        ProjectDTO projectDto = projectService.renameProject(projectId, name);
+
+        if (projectDto == null) {
             response.put("message", "wrong projectId");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-        project.setName(name);
-        projectDAO.save(project);
-
         response.put("message", "Progetto rinominato");
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }

@@ -93,6 +93,13 @@ public class ProjectService {
         return this.projectMapper.toDto(project);
     }
 
+    public ProjectDTO renameProject(String projectId, String newName){
+        Project project = this.projectDao.findById(projectId).orElseThrow();
+        project.setName(newName);
+        this.projectDao.save(project);
+        return this.projectMapper.toDto(project);
+    }
+
     public void deleteProject(String projectId){
         Project project = this.projectDao.findById(projectId).orElseThrow();
 
