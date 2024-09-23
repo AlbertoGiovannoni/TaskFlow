@@ -25,10 +25,8 @@ public class FieldDefinitionServiceManager {
             case NUMBER:
             case TEXT:
             case DATE:
-                return this.fieldDefinitionService;
             case DOCUMENT:
-                //TODO
-                throw new IllegalArgumentException("Document need implementation");
+                return this.fieldDefinitionService;
             default:
                 throw new IllegalArgumentException(fieldDefinitionDto.getType().toString() + " not recognized");
         }

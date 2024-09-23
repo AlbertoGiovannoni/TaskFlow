@@ -41,12 +41,15 @@ public class AssigneeDefinitionService extends FieldDefinitionService{
 
     private ArrayList<User> getUsersById(ArrayList<String> userIds){
         ArrayList<User> users = new ArrayList<>();
-        User movingUser;
 
-        for (String id : userIds){
-            movingUser = this.userDao.findById(id).orElse(null);
-            if (movingUser != null){
-                users.add(movingUser);
+        if (userIds != null){
+            User movingUser;
+    
+            for (String id : userIds){
+                movingUser = this.userDao.findById(id).orElse(null);
+                if (movingUser != null){
+                    users.add(movingUser);
+                }
             }
         }
 
