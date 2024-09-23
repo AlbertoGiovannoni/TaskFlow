@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.taskflow.DAOs.ActivityDAO;
+import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.ActivityDTO;
@@ -39,15 +40,30 @@ public class ProjectService {
     ActivityMapper activityMapper;
     @Autowired
     FieldMapper fieldMapper;
+    @Autowired
+    FieldDefinitionDAO fieldDefinitionDao;
 
     public ProjectDTO createProject(ProjectDTO projectDto){
         Project project = projectMapper.toEntity(projectDto);
+        project.setFieldsTemplate(this.mapFieldDefDtoToFieldDef(projectDto.getFieldsTemplate()));
         
         ArrayList<Activity> activities = new ArrayList<Activity>();
         project.setActivities(activities);
         this.projectDao.save(project);
 
         return projectMapper.toDto(project);
+    }
+
+    private ArrayList<FieldDefinition> mapFieldDefDtoToFieldDef(ArrayList<FieldDefinitionDTO> fieldDefsDto){
+        ArrayList<FieldDefinition> fieldDefs = new ArrayList<FieldDefinition>();
+        FieldDefinition fieldDef;
+
+        for (FieldDefinitionDTO fieldDefDto : fieldDefsDto){
+            fieldDef = fieldDefinitionDao.findById(fieldDefDto.getId()).orElseThrow();
+            fieldDefs.add(fieldDef);
+        }
+
+        return fieldDefs;
     }
 
     private Project getProject(ProjectDTO projectDto){
