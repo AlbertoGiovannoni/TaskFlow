@@ -163,11 +163,15 @@ public class OrganizationService {
         return organizationMapper.toDto(organization);
     }
 
-    public void deleteOrganization(OrganizationDTO organizationDTO){
-        Organization organization = this.organizationDAO.findById(organizationDTO.getId()).orElseThrow();
-        Project project;
-        for(String projectId:organizationDTO.getProjectsId()){
-            project = this.projectDAO.findById(projectId).orElseThrow();           
+    public OrganizationDTO getOrganizationById(String organizationId){
+        Organization organization = this.organizationDAO.findById(organizationId).orElseThrow();
+        return organizationMapper.toDto(organization);
+    }
+    
+    public void deleteOrganization(String organizationId){
+        Organization organization = this.organizationDAO.findById(organizationId).orElseThrow();
+        for(Project project:organization.getProjects()){
+            project = this.projectDAO.findById(project.getId()).orElseThrow();           
             projectService.deleteProject(project.getId());
         }
         this.organizationDAO.delete(organization);
