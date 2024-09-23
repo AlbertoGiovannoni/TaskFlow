@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
@@ -28,10 +27,11 @@ import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.AssigneeDefinitionBuilder;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.SimpleFieldDefinitionBuilder;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.SingleSelectionDefinitionBuilder;
 import com.example.taskflow.Mappers.NotificationMapper;
 import com.example.taskflow.service.ActivityService;
-import com.example.taskflow.service.FieldService.FieldServiceManager;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -42,8 +42,6 @@ public class ActivityServiceTest {
 
     @Autowired
     private TestUtil testUtil;
-    @Autowired
-    private FieldServiceManager fieldServiceManager;
     @Autowired
     private FieldDefinitionDAO fieldDefinitionDao;
     @Autowired
@@ -79,9 +77,9 @@ public class ActivityServiceTest {
         AssigneeDTO assigneeDto = new AssigneeDTO();
 
         assigneeDto.setType(FieldType.ASSIGNEE);
-        FieldDefinition fd = FieldDefinitionFactory.getBuilder(FieldType.ASSIGNEE)
+        FieldDefinition fd = new AssigneeDefinitionBuilder()
+                .setUsers(this.someUsers)
                 .setName("assignee")
-                .addParameters(this.someUsers)
                 .build();
 
         this.fieldDefinitionDao.save(fd);
@@ -100,7 +98,7 @@ public class ActivityServiceTest {
         StringDTO textDto = new StringDTO();
 
         textDto.setType(FieldType.TEXT);
-        fd = FieldDefinitionFactory.getBuilder(FieldType.TEXT)
+        fd = new SimpleFieldDefinitionBuilder(FieldType.TEXT)
                 .setName("text")
                 .build();
 
@@ -124,9 +122,9 @@ public class ActivityServiceTest {
         selections.add("Ready");
         selections.add("In progress");
         selections.add("Done");
-        fd = FieldDefinitionFactory.getBuilder(FieldType.SINGLE_SELECTION)
+        fd = new SingleSelectionDefinitionBuilder()
+                .setSelections(selections)
                 .setName("single selection")
-                .addParameters(selections)
                 .build();
 
         this.fieldDefinitionDao.save(fd);
@@ -143,7 +141,7 @@ public class ActivityServiceTest {
         NumberDTO numberDto = new NumberDTO();
 
         numberDto.setType(FieldType.NUMBER);
-        fd = FieldDefinitionFactory.getBuilder(FieldType.NUMBER)
+        fd = new SimpleFieldDefinitionBuilder(FieldType.NUMBER)
                 .setName("number")
                 .build();
 
@@ -161,7 +159,7 @@ public class ActivityServiceTest {
         DateDTO dateDto = new DateDTO();
 
         dateDto.setType(FieldType.DATE);
-        fd = FieldDefinitionFactory.getBuilder(FieldType.DATE)
+        fd = new SimpleFieldDefinitionBuilder(FieldType.DATE)
                 .setName("date")
                 .build();
 

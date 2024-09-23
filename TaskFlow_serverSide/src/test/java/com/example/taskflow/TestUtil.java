@@ -27,6 +27,8 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFa
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.NumberBuilder;
 
+import java.time.LocalDateTime;
+
 import java.util.Random;
 
 import net.bytebuddy.utility.RandomString;
@@ -128,7 +130,7 @@ public class TestUtil {
         ArrayList<User> members = addGetMultipleRandomUserToDatabase(10);
         ArrayList<User> owners = addGetMultipleRandomUserToDatabase(1);
         ArrayList<Project> projects = addMultipleRandomProjectsToDatabase(1);
-        Organization organization = new Organization(RandomString.make(10), owners, projects, members, null);
+        Organization organization = new Organization(RandomString.make(10), owners, projects, members, LocalDateTime.now());
         return this.organizationDAO.save(organization);
     }
 

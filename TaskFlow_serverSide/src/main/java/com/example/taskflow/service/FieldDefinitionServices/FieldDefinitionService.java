@@ -11,7 +11,7 @@ import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.SimpleFieldDefinitionDTO;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.SimpleFieldDefinitionBuilder;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.FieldDefinitionMapper;
 
@@ -39,10 +39,10 @@ public class FieldDefinitionService {
             throw new IllegalArgumentException("FieldDefinitionDto of class " + fieldDefinitionDto.getClass().getSimpleName() + " instead of SingleSelectionDefinitionDTO");
         }
         
-        SimpleFieldDefinitionDTO singleSelectionDefinitionDto = (SimpleFieldDefinitionDTO)fieldDefinitionDto;
+        SimpleFieldDefinitionDTO simpleFieldDefinitionDto = (SimpleFieldDefinitionDTO)fieldDefinitionDto;
         
-        FieldDefinition fieldDefinitionCreated = FieldDefinitionFactory.getBuilder(singleSelectionDefinitionDto.getType())
-                                                                    .setName(singleSelectionDefinitionDto.getName())
+        FieldDefinition fieldDefinitionCreated = new SimpleFieldDefinitionBuilder(simpleFieldDefinitionDto.getType())
+                                                                    .setName(simpleFieldDefinitionDto.getName())
                                                                     .build();
 
         FieldDefinition fieldDefinitionFromDatabase = this.fieldDefinitionDao.save(fieldDefinitionCreated);

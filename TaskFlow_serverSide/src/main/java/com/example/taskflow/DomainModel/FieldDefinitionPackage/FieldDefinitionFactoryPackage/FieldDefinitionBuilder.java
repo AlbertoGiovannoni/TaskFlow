@@ -1,7 +1,5 @@
 package com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage;
 
-import java.util.ArrayList;
-
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
@@ -18,11 +16,7 @@ public abstract class FieldDefinitionBuilder {
         return this;
     }
 
-    public abstract FieldDefinitionBuilder addParameters(ArrayList<?> values);
-
-    public abstract FieldDefinitionBuilder addParameter(Object value);
-
-    public abstract void reset();
+    public abstract FieldDefinitionBuilder reset();
     
     public abstract FieldDefinition build();
 }

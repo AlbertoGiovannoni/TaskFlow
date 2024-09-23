@@ -24,12 +24,13 @@ import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.AssigneeDefinitionBuilder;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.SimpleFieldDefinitionBuilder;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.SingleSelectionDefinitionBuilder;
 import com.example.taskflow.DomainModel.FieldPackage.Assignee;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.SingleSelection;
 import com.example.taskflow.DomainModel.FieldPackage.Text;
-import com.example.taskflow.Mappers.FieldMapper;
 import com.example.taskflow.Mappers.NotificationMapper;
 import com.example.taskflow.service.FieldService.FieldServiceManager;
 
@@ -37,7 +38,6 @@ import net.bytebuddy.utility.RandomString;
 
 import com.example.taskflow.DTOs.Field.AssigneeDTO;
 import com.example.taskflow.DTOs.Field.DateDTO;
-import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.Field.NumberDTO;
 import com.example.taskflow.DTOs.Field.StringDTO;
 
@@ -52,8 +52,6 @@ public class FieldServiceTest {
     private FieldServiceManager fieldServiceManager;
     @Autowired
     private FieldDAO fieldDao;
-    @Autowired
-    private FieldMapper fieldMapper;
     @Autowired
     private FieldDefinitionDAO fieldDefinitionDao;
     @Autowired
@@ -80,9 +78,9 @@ public class FieldServiceTest {
         AssigneeDTO fieldDto = new AssigneeDTO();
 
         fieldDto.setType(FieldType.ASSIGNEE);
-        FieldDefinition fd = FieldDefinitionFactory.getBuilder(FieldType.ASSIGNEE)
+        FieldDefinition fd = new AssigneeDefinitionBuilder()
+                .setUsers(this.someUsers)
                 .setName("meet")
-                .addParameters(this.someUsers)
                 .build();
 
         this.fieldDefinitionDao.save(fd);
@@ -114,7 +112,7 @@ public class FieldServiceTest {
         StringDTO fieldDto = new StringDTO();
 
         fieldDto.setType(FieldType.TEXT);
-        FieldDefinition fd = FieldDefinitionFactory.getBuilder(fieldDto.getType())
+        FieldDefinition fd = new SimpleFieldDefinitionBuilder(FieldType.TEXT)
                 .setName("meet")
                 .build();
 
@@ -144,9 +142,9 @@ public class FieldServiceTest {
         selections.add("Ready");
         selections.add("In progress");
         selections.add("Done");
-        FieldDefinition fd = FieldDefinitionFactory.getBuilder(fieldDto.getType())
+        FieldDefinition fd = new SingleSelectionDefinitionBuilder()                
+                .setSelections(selections)
                 .setName("meet")
-                .addParameters(selections)
                 .build();
 
         this.fieldDefinitionDao.save(fd);
@@ -172,7 +170,7 @@ public class FieldServiceTest {
         NumberDTO fieldDto = new NumberDTO();
 
         fieldDto.setType(FieldType.NUMBER);
-        FieldDefinition fd = FieldDefinitionFactory.getBuilder(fieldDto.getType())
+        FieldDefinition fd = new SimpleFieldDefinitionBuilder(FieldType.NUMBER)
                 .setName("meet")
                 .build();
 
@@ -200,7 +198,7 @@ public class FieldServiceTest {
 
         dateDto.setType(FieldType.DATE);
         
-        FieldDefinition fd = FieldDefinitionFactory.getBuilder(dateDto.getType())
+        FieldDefinition fd = new SimpleFieldDefinitionBuilder(FieldType.DATE)
                 .setName("meet")
                 .build();
 

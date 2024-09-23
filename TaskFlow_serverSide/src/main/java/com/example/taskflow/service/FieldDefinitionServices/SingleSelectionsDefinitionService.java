@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.SingleSelectionDefinitionDTO;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.SingleSelectionDefinitionBuilder;
 
 @Service
 public class SingleSelectionsDefinitionService extends FieldDefinitionService{
@@ -23,10 +23,10 @@ public class SingleSelectionsDefinitionService extends FieldDefinitionService{
         
         SingleSelectionDefinitionDTO singleSelectionDefinitionDto = (SingleSelectionDefinitionDTO)fieldDefinitionDto;
         
-        FieldDefinition fieldDefinitionCreated = FieldDefinitionFactory.getBuilder(singleSelectionDefinitionDto.getType())
-                                                                    .setName(singleSelectionDefinitionDto.getName())
-                                                                    .addParameters(singleSelectionDefinitionDto.getSelections())
-                                                                    .build();
+        FieldDefinition fieldDefinitionCreated = new SingleSelectionDefinitionBuilder()
+                                                            .setSelections(singleSelectionDefinitionDto.getSelections())
+                                                            .setName(singleSelectionDefinitionDto.getName())
+                                                            .build();
 
         FieldDefinition fieldDefinitionFromDatabase = this.fieldDefinitionDao.save(fieldDefinitionCreated);
 

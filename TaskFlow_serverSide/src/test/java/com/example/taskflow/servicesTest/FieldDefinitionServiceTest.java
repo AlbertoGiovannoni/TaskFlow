@@ -15,7 +15,6 @@ import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.SimpleFieldDefinitionDTO;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
-import com.example.taskflow.Mappers.FieldDefinitionMapper;
 import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionServiceManager;
 
 import net.bytebuddy.utility.RandomString;
@@ -32,9 +31,6 @@ public class FieldDefinitionServiceTest {
     @Autowired 
     private FieldDefinitionDAO fieldDefinitionDao;
 
-    @Autowired
-    private FieldDefinitionMapper fieldDefinitionMapper;
-
     @BeforeEach
     public void setupDatabase(){
         this.testUtil.cleanDatabase();
@@ -50,8 +46,6 @@ public class FieldDefinitionServiceTest {
         FieldDefinition createdFieldDefinition = this.fieldDefinitionServiceManager
                                                         .getFieldDefinitionService(fieldDefinitionDto)
                                                         .pushNewFieldDefinition(fieldDefinitionDto);
-
-        //FieldDefinition createdFieldDefinition = this.fieldDefinitionMapper.toEntity(createdFieldDefinitionDto);
         
         assertEquals(createdFieldDefinition, this.fieldDefinitionDao.findById(createdFieldDefinition.getId()).orElse(null));
     }

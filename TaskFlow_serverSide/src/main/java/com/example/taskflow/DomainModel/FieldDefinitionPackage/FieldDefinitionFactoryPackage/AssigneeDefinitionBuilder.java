@@ -7,9 +7,8 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 public class AssigneeDefinitionBuilder extends FieldDefinitionBuilder{
     private ArrayList<User>  possibleAssignees;
 
-    AssigneeDefinitionBuilder(FieldType type) {
-        super(type);
-        this.possibleAssignees = new ArrayList<>();
+    public AssigneeDefinitionBuilder() {
+        super(FieldType.ASSIGNEE);
     }
 
     @Override
@@ -21,25 +20,14 @@ public class AssigneeDefinitionBuilder extends FieldDefinitionBuilder{
     }
 
     @Override
-    public FieldDefinitionBuilder addParameters(ArrayList<?> values) {
-        for (Object value : values){
-            this.addParameter(value);
-        }
-        return this;
-    }
-
-    @Override
-    public FieldDefinitionBuilder addParameter(Object value) {
-        if (value != null){
-            if (value instanceof User){
-                this.possibleAssignees.add((User)value);
-            }
-        }
-        return this;
-    }
-
-    @Override
-    public void reset() {
+    public AssigneeDefinitionBuilder reset() {
         this.possibleAssignees.clear();
+        return this;
     }
+
+    public AssigneeDefinitionBuilder setUsers(ArrayList<User> users){
+        this.possibleAssignees = users;
+        return this;
+    }
+
 }

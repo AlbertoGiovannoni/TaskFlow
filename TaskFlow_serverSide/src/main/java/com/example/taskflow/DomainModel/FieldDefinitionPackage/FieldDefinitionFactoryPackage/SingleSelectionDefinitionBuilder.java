@@ -5,15 +5,13 @@ import java.util.ArrayList;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.SingleSelectionDefinition;
 
-// FIXME: costruire senza ripetizion o direttamente qua o costruendo l'oggetto e aggiungendo
-// i parametri utilizzando il metodo di singleSelectionDefinition 
+
 public class SingleSelectionDefinitionBuilder extends FieldDefinitionBuilder{
     
     private ArrayList<String> possibleSelections;
     
-    SingleSelectionDefinitionBuilder(FieldType type) {
-        super(type);
-        this.possibleSelections = new ArrayList<>();
+    public SingleSelectionDefinitionBuilder() {
+        super(FieldType.SINGLE_SELECTION);
     }
 
     @Override
@@ -21,30 +19,15 @@ public class SingleSelectionDefinitionBuilder extends FieldDefinitionBuilder{
         return new SingleSelectionDefinition(this.name, this.type, possibleSelections);
     }
 
-
     @Override
-    public FieldDefinitionBuilder addParameters(ArrayList<?> values) {
-        for (Object value : values){
-            this.addParameter(value);
-        }
-        return this;
-    }
-
-
-    @Override
-    public FieldDefinitionBuilder addParameter(Object value) {
-        if (value != null){
-            if (value instanceof String){
-                this.possibleSelections.add((String)value);
-            }
-        }
-        return this;
-    }
-
-
-    @Override
-    public void reset() {
+    public SingleSelectionDefinitionBuilder reset() {
         this.possibleSelections.clear();
+        return this;
+    }
+
+    public SingleSelectionDefinitionBuilder setSelections(ArrayList<String> selections){
+        this.possibleSelections = selections;
+        return this;
     }
 }
 

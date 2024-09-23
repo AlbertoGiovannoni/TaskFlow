@@ -3,7 +3,9 @@ import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.UserInfo;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.AssigneeDefinitionBuilder;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.SimpleFieldDefinitionBuilder;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.SingleSelectionDefinitionBuilder;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -66,7 +68,7 @@ public class FieldDefinitionTest {
 
     @Test
     public void testInsertAndFindSimpleFieldDefinition() {
-        FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.DATE)
+        FieldDefinition fieldDefinition = new SimpleFieldDefinitionBuilder(FieldType.DATE)
                                     .setName("Data scadenza")
                                     .build();
 
@@ -79,9 +81,9 @@ public class FieldDefinitionTest {
 
     @Test
     public void testInsertAndFindAssigneeFieldDefinition() {
-        FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.ASSIGNEE)
+        FieldDefinition fieldDefinition = new AssigneeDefinitionBuilder()
+                                    .setUsers(this.someUsers)
                                     .setName("Partecipanti")
-                                    .addParameters(this.someUsers)
                                     .build();
 
         this.fieldDefinitionDAO.save(fieldDefinition);
@@ -93,9 +95,9 @@ public class FieldDefinitionTest {
 
     @Test
     public void testInsertAndFindSingleSelectionFieldDefinition() {
-        FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(FieldType.SINGLE_SELECTION)
+        FieldDefinition fieldDefinition = new SingleSelectionDefinitionBuilder()
+                                    .setSelections(this.someSingleSelections)
                                     .setName("Status")
-                                    .addParameters(this.someSingleSelections)
                                     .build();
 
         FieldDefinition fieldDefinitionFromDB = this.fieldDefinitionDAO.save(fieldDefinition);
@@ -161,7 +163,7 @@ public class FieldDefinitionTest {
     }
 
     private FieldDefinition pushGetRandomFieldDefinitionToDatabase(FieldType type){
-        FieldDefinition fieldDefinition = FieldDefinitionFactory.getBuilder(type)
+        FieldDefinition fieldDefinition = new SimpleFieldDefinitionBuilder(type)
                                     .setName(RandomString.make(10))
                                     .build();
 

@@ -11,7 +11,7 @@ import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.FieldDefinitionFactory;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.AssigneeDefinitionBuilder;
 
 @Service
 public class AssigneeDefinitionService extends FieldDefinitionService{
@@ -29,10 +29,10 @@ public class AssigneeDefinitionService extends FieldDefinitionService{
         
         AssigneeDefinitionDTO assigneeDefinitionDTO = (AssigneeDefinitionDTO)fieldDefinitionDto;
         
-        FieldDefinition fieldDefinitionCreated = FieldDefinitionFactory.getBuilder(assigneeDefinitionDTO.getType())
-                                                                    .setName(assigneeDefinitionDTO.getName())
-                                                                    .addParameters(this.getUsersById(assigneeDefinitionDTO.getPossibleAssigneeUserIds()))
-                                                                    .build();
+        FieldDefinition fieldDefinitionCreated = new AssigneeDefinitionBuilder()
+                                                            .setUsers(this.getUsersById(assigneeDefinitionDTO.getPossibleAssigneeUserIds()))
+                                                            .setName(assigneeDefinitionDTO.getName())
+                                                            .build();
 
         FieldDefinition fieldDefinitionFromDatabase = this.fieldDefinitionDao.save(fieldDefinitionCreated);
 
