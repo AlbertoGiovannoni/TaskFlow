@@ -22,13 +22,11 @@ public class Activity implements UuidInterface{
     public Activity(String name) {
         this.name = name;
         this.fields = new ArrayList<Field>();
-        this.uuid = this.createUuid();
     }
 
     public Activity(String name, ArrayList<Field> fields) {
         this.name = name;
         this.fields = fields;
-        this.uuid = this.createUuid();
     }
 
     public void addField(Field field) {

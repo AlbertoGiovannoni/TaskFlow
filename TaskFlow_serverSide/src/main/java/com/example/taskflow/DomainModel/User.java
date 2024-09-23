@@ -23,7 +23,6 @@ public class User implements UuidInterface{
     public User(UserInfo userInfo, String username) {
         this.username = username;
         this.userInfo = userInfo;
-        this.uuid = this.createUuid();
     }
 
     @Override

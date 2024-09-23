@@ -33,7 +33,6 @@ public class Organization implements UuidInterface{
     public Organization(String name, ArrayList<User> owners) {
         this.name = name;
         this.owners = owners;
-        this.uuid = this.createUuid();
     }
 
     
@@ -43,7 +42,6 @@ public class Organization implements UuidInterface{
         this.projects = projects;
         this.members = members;
         this.creationDate = creationDate.truncatedTo(ChronoUnit.MINUTES);
-        this.uuid = this.createUuid();
     }
 
     public void addMember(User user) { 

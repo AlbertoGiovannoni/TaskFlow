@@ -22,7 +22,6 @@ public abstract class FieldDefinition implements UuidInterface{
     public FieldDefinition(String name, FieldType type) {
         this.type = type;
         this.name = name;
-        this.uuid = this.createUuid();
     }
 
     public abstract void addSingleEntry(Object obj);

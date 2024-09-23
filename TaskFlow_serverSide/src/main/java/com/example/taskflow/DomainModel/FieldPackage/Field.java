@@ -24,7 +24,6 @@ public abstract class Field implements UuidInterface{
 
     public Field(FieldDefinition fieldDefinition) {
         this.fieldDefinition = fieldDefinition;
-        this.uuid = this.createUuid();
     }
 
     public FieldType getType(){

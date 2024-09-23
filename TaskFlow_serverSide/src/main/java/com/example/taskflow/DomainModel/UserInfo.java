@@ -26,7 +26,6 @@ public class UserInfo implements UuidInterface{
         
         this.email = email;
         this.password = passwordEncoder.encode(password);
-        this.uuid = this.createUuid();
     }
 
     // getter e setter

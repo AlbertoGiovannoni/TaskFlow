@@ -28,7 +28,6 @@ public class Notification implements UuidInterface{
         this.receivers = receivers;
         this.message = message;
         this.notificationDateTime = notificationDateTime;
-        this.uuid = this.createUuid();
     }
 
     public void addReceiver(User newUser) {

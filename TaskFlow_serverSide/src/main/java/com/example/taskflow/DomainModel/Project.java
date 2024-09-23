@@ -15,7 +15,7 @@ public class Project implements UuidInterface{
     private String uuid;
 
     @DBRef
-    private ArrayList<FieldDefinition> fieldsTemplate = new ArrayList<FieldDefinition>();
+    private ArrayList<FieldDefinition> fieldsTemplate;
 
     @DBRef
     private ArrayList<Activity> activities;
@@ -28,14 +28,12 @@ public class Project implements UuidInterface{
         this.name = name;
         this.activities = new ArrayList<Activity>();
         this.fieldsTemplate = new ArrayList<FieldDefinition>();
-        this.uuid = this.createUuid();
     }
     
     public Project(String name, ArrayList<FieldDefinition> fieldsTemplate, ArrayList<Activity> activities) {
         this.name = name;
         this.fieldsTemplate = fieldsTemplate;
         this.activities = activities;
-        this.uuid = this.createUuid();
     }
 
     public void addFieldDefinition(FieldDefinition fieldDefinition) {
