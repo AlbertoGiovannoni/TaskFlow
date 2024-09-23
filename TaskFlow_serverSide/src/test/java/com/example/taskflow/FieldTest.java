@@ -197,7 +197,8 @@ public class FieldTest {
         this.notificationDao.save(notification);
 
         Field field = (new DateBuilder(fieldDefinition))
-                .addParameters(LocalDateTime.now(), notification)
+                .addDate(LocalDateTime.now())
+                .addNotification(notification)
                 .build();
 
         Field fieldFromDB = this.fieldDao.save(field);

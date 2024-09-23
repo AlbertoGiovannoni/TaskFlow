@@ -9,9 +9,11 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.stereotype.Repository;
 
 import com.example.taskflow.DomainModel.Activity;
 
+@Repository
 public class ActivityCustomDAO implements ActivityCustomInterfaceDAO{
 
     @Autowired

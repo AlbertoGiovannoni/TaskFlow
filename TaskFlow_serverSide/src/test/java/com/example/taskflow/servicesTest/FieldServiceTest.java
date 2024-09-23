@@ -92,11 +92,9 @@ public class FieldServiceTest {
         someUsers.remove(0);
         fieldDto.setUserIds(extractIds(someUsers));
 
-        FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).pushNewField(fieldDto);
+        Field createdField = fieldServiceManager.getFieldService(fieldDto).pushNewField(fieldDto);
 
-        Field createdField = this.fieldMapper.toEntity(createdFieldDto);
-
-        Assignee found = (Assignee) this.fieldDao.findById(createdFieldDto.getId()).orElse(null);
+        Assignee found = (Assignee) this.fieldDao.findById(createdField.getId()).orElse(null);
 
         assertEquals(createdField, found);
     }
@@ -130,14 +128,9 @@ public class FieldServiceTest {
 
         fieldDto.setValue(RandomString.make(10));
 
-        FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).pushNewField(fieldDto);
+        Field createdField = fieldServiceManager.getFieldService(fieldDto).pushNewField(fieldDto);
 
-        Field createdField = this.fieldMapper.toEntity(createdFieldDto);
-        //FieldDefinition foundFD = fieldDefinitionDao.findById(createdFieldDto.getFieldDefinitionId()).orElse(null);
-        
-        
-
-        Text found = (Text) this.fieldDao.findById(createdFieldDto.getId()).orElse(null);
+        Text found = (Text) this.fieldDao.findById(createdField.getId()).orElse(null);
 
         assertEquals(createdField, found);
     }
@@ -162,14 +155,13 @@ public class FieldServiceTest {
 
         fieldDto.setValue("Done");
 
-        FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).pushNewField(fieldDto);
-        Field createdField = this.fieldMapper.toEntity(createdFieldDto);
-        FieldDefinition foundFD = fieldDefinitionDao.findById(createdFieldDto.getFieldDefinitionId()).orElse(null);
+        Field createdField = fieldServiceManager.getFieldService(fieldDto).pushNewField(fieldDto);
+        FieldDefinition foundFD = fieldDefinitionDao.findById(createdField.getFieldDefinition().getId()).orElse(null);
         
         
         createdField.setFieldDefinition(foundFD);
 
-        SingleSelection found = (SingleSelection) this.fieldDao.findById(createdFieldDto.getId()).orElse(null);
+        SingleSelection found = (SingleSelection) this.fieldDao.findById(createdField.getId()).orElse(null);
 
         assertEquals(createdField, found);
     }
@@ -190,15 +182,14 @@ public class FieldServiceTest {
 
         fieldDto.setValue(new Random().nextFloat());
 
-        FieldDTO createdFieldDto = fieldServiceManager.getFieldService(fieldDto).pushNewField(fieldDto);
+        Field createdField = fieldServiceManager.getFieldService(fieldDto).pushNewField(fieldDto);
 
-        Field createdField = this.fieldMapper.toEntity(createdFieldDto);
-        FieldDefinition foundFD = fieldDefinitionDao.findById(createdFieldDto.getFieldDefinitionId()).orElse(null);
+        FieldDefinition foundFD = fieldDefinitionDao.findById(createdField.getFieldDefinition().getId()).orElse(null);
         
         
         createdField.setFieldDefinition(foundFD);
 
-        Field found = this.fieldDao.findById(createdFieldDto.getId()).orElse(null);
+        Field found = this.fieldDao.findById(createdField.getId()).orElse(null);
 
         assertEquals(createdField, found);
     }
@@ -223,14 +214,13 @@ public class FieldServiceTest {
         notificationDao.save(notification);
         dateDto.setNotification(this.notificationMapper.toDto(notification));
 
-        FieldDTO createdFieldDto = fieldServiceManager.getFieldService(dateDto).pushNewField(dateDto);
-        Field createdField = this.fieldMapper.toEntity(createdFieldDto);
-        FieldDefinition foundFD = fieldDefinitionDao.findById(createdFieldDto.getFieldDefinitionId()).orElse(null);
+        Field createdField = fieldServiceManager.getFieldService(dateDto).pushNewField(dateDto);
+        FieldDefinition foundFD = fieldDefinitionDao.findById(createdField.getFieldDefinition().getId()).orElse(null);
         
         
         createdField.setFieldDefinition(foundFD);
 
-        Field found = this.fieldDao.findById(createdFieldDto.getId()).orElse(null);
+        Field found = this.fieldDao.findById(createdField.getId()).orElse(null);
 
         assertEquals(createdField, found);
     }

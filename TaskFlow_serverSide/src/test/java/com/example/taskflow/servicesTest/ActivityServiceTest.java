@@ -90,8 +90,9 @@ public class ActivityServiceTest {
         someUsers.remove(0);
         assigneeDto.setUserIds(this.extractIds(someUsers));
 
-        FieldDTO createdFieldDto = fieldServiceManager.getFieldService(assigneeDto).pushNewField(assigneeDto);
-        fieldsDto.add(createdFieldDto);
+        //FieldDTO createdFieldDto = fieldServiceManager.getFieldService(assigneeDto).pushNewField(assigneeDto);
+        
+        fieldsDto.add(assigneeDto);
 
         // ---------------------- TEXT ---------------------- //
 
@@ -108,8 +109,8 @@ public class ActivityServiceTest {
 
         textDto.setValue(RandomString.make(10));
 
-        createdFieldDto = fieldServiceManager.getFieldService(textDto).pushNewField(textDto);
-        fieldsDto.add(createdFieldDto);
+        //createdFieldDto = fieldServiceManager.getFieldService(textDto).pushNewField(textDto);
+        fieldsDto.add(textDto);
 
         //fields.add(text);
 
@@ -133,8 +134,8 @@ public class ActivityServiceTest {
 
         singleSelectionDto.setValue("Done");
 
-        createdFieldDto = fieldServiceManager.getFieldService(singleSelectionDto).pushNewField(singleSelectionDto);
-        fieldsDto.add(createdFieldDto);
+        //createdFieldDto = fieldServiceManager.getFieldService(singleSelectionDto).pushNewField(singleSelectionDto);
+        fieldsDto.add(singleSelectionDto);
 
         // ---------------------- NUMBER ---------------------- //
 
@@ -151,8 +152,8 @@ public class ActivityServiceTest {
 
         numberDto.setValue(new Random().nextFloat());
 
-        createdFieldDto = fieldServiceManager.getFieldService(numberDto).pushNewField(numberDto);
-        fieldsDto.add(createdFieldDto);
+        //createdFieldDto = fieldServiceManager.getFieldService(numberDto).pushNewField(numberDto);
+        fieldsDto.add(numberDto);
 
         // ---------------------- DATE ---------------------- //
 
@@ -176,8 +177,8 @@ public class ActivityServiceTest {
         notification = notificationDao.save(notification);
         dateDto.setNotification(this.notificationMapper.toDto(notification));
 
-        createdFieldDto = fieldServiceManager.getFieldService(dateDto).pushNewField(dateDto);
-        fieldsDto.add(createdFieldDto);
+        //createdFieldDto = fieldServiceManager.getFieldService(dateDto).pushNewField(dateDto);
+        fieldsDto.add(dateDto);
 
         // ---------------------- DOCUMENT ---------------------- //
         //TODO da implementare

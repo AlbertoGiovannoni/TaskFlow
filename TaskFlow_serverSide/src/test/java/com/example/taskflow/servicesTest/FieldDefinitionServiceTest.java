@@ -47,12 +47,12 @@ public class FieldDefinitionServiceTest {
         fieldDefinitionDto.setName(RandomString.make(10));
         fieldDefinitionDto.setType(FieldType.DATE);
 
-        FieldDefinitionDTO createdFieldDefinitionDto = this.fieldDefinitionServiceManager
+        FieldDefinition createdFieldDefinition = this.fieldDefinitionServiceManager
                                                         .getFieldDefinitionService(fieldDefinitionDto)
                                                         .pushNewFieldDefinition(fieldDefinitionDto);
 
-        FieldDefinition createdFieldDefinition = this.fieldDefinitionMapper.toEntity(createdFieldDefinitionDto);
+        //FieldDefinition createdFieldDefinition = this.fieldDefinitionMapper.toEntity(createdFieldDefinitionDto);
         
-        assertEquals(createdFieldDefinition, this.fieldDefinitionDao.findById(createdFieldDefinitionDto.getId()).orElse(null));
+        assertEquals(createdFieldDefinition, this.fieldDefinitionDao.findById(createdFieldDefinition.getId()).orElse(null));
     }
 }
