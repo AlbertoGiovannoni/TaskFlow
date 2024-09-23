@@ -8,16 +8,21 @@ public class Number extends Field{
 
     // costruttore di default
     public Number(){
+        super();
     }
 
-    public Number(FieldDefinition fieldDefinition, Float value) {
-        super(fieldDefinition);
+    public Number(String uuid){
+        super(uuid);
+    }
+
+    public Number(String uuid, FieldDefinition fieldDefinition, Float value) {
+        super(uuid, fieldDefinition);
 
         this.value = value;
     }
 
-    public Number(FieldDefinition fieldDefinition, Integer value) {
-        super(fieldDefinition);
+    public Number(String uuid, FieldDefinition fieldDefinition, Integer value) {
+        super(uuid, fieldDefinition);
 
         this.value = (float)value;
     }

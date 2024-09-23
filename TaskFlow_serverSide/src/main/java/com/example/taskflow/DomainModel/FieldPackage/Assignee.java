@@ -12,10 +12,15 @@ public class Assignee extends Field {
     private ArrayList<User> users;
 
     public Assignee(){
+        super();
     }
 
-    public Assignee(FieldDefinition fieldDefinition, ArrayList<User> users) {
-        super(fieldDefinition);
+    public Assignee(String uuid){
+        super(uuid);
+    }
+
+    public Assignee(String uuid, FieldDefinition fieldDefinition, ArrayList<User> users) {
+        super(uuid, fieldDefinition);
 
         this.users = users;
     }

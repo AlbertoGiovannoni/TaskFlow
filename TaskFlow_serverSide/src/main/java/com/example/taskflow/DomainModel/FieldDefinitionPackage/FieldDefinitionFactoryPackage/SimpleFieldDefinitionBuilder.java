@@ -1,5 +1,7 @@
 package com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage;
 
+import java.util.UUID;
+
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.SimpleFieldDefinition;
 
@@ -11,7 +13,12 @@ public class SimpleFieldDefinitionBuilder extends FieldDefinitionBuilder{
 
     @Override
     public SimpleFieldDefinition build() {
-        return new SimpleFieldDefinition(this.name, this.type);
+        SimpleFieldDefinition simpleFieldDefinition = new SimpleFieldDefinition(UUID.randomUUID().toString());
+
+        simpleFieldDefinition.setName(this.name);
+        simpleFieldDefinition.setType(this.type);
+
+        return simpleFieldDefinition;
     }
 
     @Override

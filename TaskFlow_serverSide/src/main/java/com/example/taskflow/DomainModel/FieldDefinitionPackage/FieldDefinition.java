@@ -1,25 +1,26 @@
 package com.example.taskflow.DomainModel.FieldDefinitionPackage;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.example.taskflow.DomainModel.UuidInterface;
+import com.example.taskflow.DomainModel.BaseEntity;
 
 import java.util.ArrayList;
 
 @Document("fieldDefinition")
-public abstract class FieldDefinition implements UuidInterface{
-
-    @Id
-    String id;
+public abstract class FieldDefinition extends BaseEntity{
     String name;
     FieldType type;
-    String uuid;
 
     // Costruttore di default
-    public FieldDefinition() {}
+    public FieldDefinition() {
+        super();
+    }
+
+    public FieldDefinition(String uuid) {
+        super(uuid);
+    }
     
-    public FieldDefinition(String name, FieldType type) {
+    public FieldDefinition(String uuid, String name, FieldType type) {
         this.type = type;
         this.name = name;
     }
@@ -40,19 +41,6 @@ public abstract class FieldDefinition implements UuidInterface{
 
     public abstract boolean validateValue(Object obj);
     
-    @Override
-    public boolean equals(Object obj) {
-        boolean value = false;
-        
-        if (obj != null){
-            if (obj instanceof FieldDefinition){
-                value = this.uuid.equals(((FieldDefinition)obj).getUuid());
-            }
-        }
-        
-        return value;
-    }
-    
     // getter e setter
     public String getName() {
         return name;
@@ -61,14 +49,6 @@ public abstract class FieldDefinition implements UuidInterface{
     public void setName(String name){
         this.name = name;
     }
-    
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public void setType(FieldType type) {
         this.type = type;
@@ -76,14 +56,6 @@ public abstract class FieldDefinition implements UuidInterface{
 
     public FieldType getType(){
         return this.type;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
     }
 }
 

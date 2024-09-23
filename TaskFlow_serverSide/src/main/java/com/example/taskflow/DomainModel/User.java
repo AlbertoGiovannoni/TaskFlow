@@ -1,48 +1,25 @@
 package com.example.taskflow.DomainModel;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 @Document
-public class User implements UuidInterface{
-    
-    @Id
-    private String id;
+public class User extends BaseEntity{
 
     @DBRef
     private UserInfo userInfo;
 
-    private String uuid;
     private String username;
 
     // costruttore di default
     public User(){
+        super();
     }
 
-    public User(UserInfo userInfo, String username) {
+    public User(String uuid, UserInfo userInfo, String username) {
+        super(uuid);
         this.username = username;
         this.userInfo = userInfo;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        boolean value = false;
-
-        if (obj != null && obj instanceof User){
-            if (obj instanceof User){
-                value = (this.uuid.equals(((User)obj).getUuid()));  
-            }
-        }
-
-        return value;
-    }
-
-
-    // getter e setter
-
-    public String getId() {
-        return id;
     }
 
     public UserInfo getUserInfo() {
@@ -51,10 +28,6 @@ public class User implements UuidInterface{
     
     public void setUserInfo(UserInfo userInfo) {
         this.userInfo = userInfo;
-    }
-
-    public String getUuid() {
-        return uuid;
     }
 
     public String getUsername() {
@@ -72,10 +45,4 @@ public class User implements UuidInterface{
     public void setEmail(String email){
          this.userInfo.setEmail(email);
     }
-
-    @Override
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-    
 }

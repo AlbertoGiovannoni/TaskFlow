@@ -1,5 +1,7 @@
 package com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage;
 
+import java.util.UUID;
+
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldPackage.SingleSelection;
 
@@ -26,6 +28,12 @@ public class SingleSelectionBuilder extends FieldBuilder {
         if (this.selection == null) {
             throw new IllegalAccessError("selection is null");
         }
-        return new SingleSelection(this.fieldDefinition, selection);
+
+        SingleSelection singleSelection = new SingleSelection(UUID.randomUUID().toString());
+
+        singleSelection.setFieldDefinition(this.fieldDefinition);
+        singleSelection.setValue(this.selection);
+
+        return singleSelection;
     }
 }

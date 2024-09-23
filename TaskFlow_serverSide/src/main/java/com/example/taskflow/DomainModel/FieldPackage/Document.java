@@ -8,10 +8,15 @@ public class Document extends Field{
     private String name;
 
     public Document() {
+        super();
     }
 
-    public Document(FieldDefinition fieldDefinition, String name) {
-        super(fieldDefinition);
+    public Document(String uuid) {
+        super(uuid);
+    }
+
+    public Document(String uuid, FieldDefinition fieldDefinition, String name) {
+        super(uuid, fieldDefinition);
         this.name = name;
     }
 

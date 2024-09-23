@@ -5,11 +5,17 @@ public class SingleSelectionDefinition extends FieldDefinition {
 
     private ArrayList<String> possibleSelections;
 
-    public SingleSelectionDefinition() {}
+    public SingleSelectionDefinition() {
+        super();
+    }
 
-    public SingleSelectionDefinition(String nome, FieldType type, ArrayList<String> possibleSelections) {
-        super(nome, type);
-        // FIXME: assicurarsi che sia un set
+    public SingleSelectionDefinition(String uuid) {
+        super(uuid);
+    }
+
+    public SingleSelectionDefinition(String uuid, String name, ArrayList<String> possibleSelections) {
+        super(uuid, name, FieldType.SINGLE_SELECTION);
+
         this.possibleSelections = possibleSelections;
     }
 
@@ -83,5 +89,13 @@ public class SingleSelectionDefinition extends FieldDefinition {
         }
 
         return validation;
+    }
+
+    public ArrayList<String> getPossibleSelections() {
+        return possibleSelections;
+    }
+
+    public void setPossibleSelections(ArrayList<String> possibleSelections) {
+        this.possibleSelections = possibleSelections;
     }
 }

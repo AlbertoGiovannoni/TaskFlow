@@ -2,15 +2,13 @@ package com.example.taskflow.DomainModel;
 
 import org.springframework.data.annotation.Id;
 
-import jakarta.validation.OverridesAttribute;
-
 public abstract class BaseEntity {
     @Id
     private String id;
 
     private String uuid;
 
-    BaseEntity(){}
+    public BaseEntity(){}
 
     public BaseEntity(String uuid){
         if (uuid == null){
@@ -30,7 +28,7 @@ public abstract class BaseEntity {
         if (!(obj instanceof BaseEntity)){
             return false;
         }
-        return uuid.equals(((BaseEntity)obj).getUuid())
+        return uuid.equals(((BaseEntity)obj).getUuid());
     }
 
     public String getId() {

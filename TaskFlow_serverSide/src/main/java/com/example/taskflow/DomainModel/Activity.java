@@ -1,30 +1,33 @@
 package com.example.taskflow.DomainModel;
 import java.util.ArrayList;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 
 @Document("activity")
-public class Activity implements UuidInterface{
-
-    @Id
-    private String id;
+public class Activity extends BaseEntity{
     private String name;
     @DBRef
     private ArrayList<Field> fields;
-    private String uuid;
 
     // costruttore di default
     public Activity() {
+        super();
     }
 
-    public Activity(String name) {
+    public Activity(String uuid) {
+        super(uuid);
+        this.fields = new ArrayList<Field>();
+    }
+
+    public Activity(String uuid, String name) {
+        super(uuid);
         this.name = name;
         this.fields = new ArrayList<Field>();
     }
 
-    public Activity(String name, ArrayList<Field> fields) {
+    public Activity(String uuid, String name, ArrayList<Field> fields) {
+        super(uuid);
         this.name = name;
         this.fields = fields;
     }
@@ -35,12 +38,6 @@ public class Activity implements UuidInterface{
 
     public void removeField(Field field) {
         fields.remove(field);
-    }
-
-    // getter e setter
-
-    public String getId() {
-        return id;
     }
 
     public String getName() {
@@ -57,31 +54,5 @@ public class Activity implements UuidInterface{
 
     public void setFields(ArrayList<Field> fields) {
         this.fields = fields;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-    @Override
-    public boolean equals(Object obj) {
-        boolean value = false;
-
-        if (obj != null && obj instanceof Activity){
-            if (obj instanceof Activity){
-                value = (this.uuid.equals(((Activity)obj).getUuid()));  
-            }
-        }
-
-        return value;
-    }
-
-    @Override
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    @Override
-    public String getUuid() {
-        return this.uuid;
     }
 }

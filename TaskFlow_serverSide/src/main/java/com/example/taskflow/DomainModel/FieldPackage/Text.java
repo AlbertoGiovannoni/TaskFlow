@@ -8,10 +8,15 @@ public class Text extends Field{
 
     // costruttore di default
     public Text(){
+        super();
     }
 
-    public Text(FieldDefinition fieldDefinition, String value) {
-        super(fieldDefinition);
+    public Text(String uuid){
+        super(uuid);
+    }
+
+    public Text(String uuid, FieldDefinition fieldDefinition, String value) {
+        super(uuid, fieldDefinition);
 
         this.value = value;
     }

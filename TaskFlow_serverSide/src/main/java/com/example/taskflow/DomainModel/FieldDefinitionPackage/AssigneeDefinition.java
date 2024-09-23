@@ -9,15 +9,21 @@ public class AssigneeDefinition extends FieldDefinition {
     @DBRef
     private ArrayList<User> possibleAssigneeUsers;
 
-    public AssigneeDefinition() {}
+    public AssigneeDefinition() {
+        super();
+    }
 
-    public AssigneeDefinition(String name, FieldType type) {
-        super(name, type);
+    public AssigneeDefinition(String uuid) {
+        super(uuid);
+    }
+
+    public AssigneeDefinition(String uuid, String name) {
+        super(uuid, name, FieldType.ASSIGNEE);
         this.possibleAssigneeUsers = new ArrayList<>();
     }
 
-    public AssigneeDefinition(String nome, FieldType type, ArrayList<User> users) {
-        super(nome, type);
+    public AssigneeDefinition(String uuid, String name, ArrayList<User> users) {
+        super(uuid, name, FieldType.ASSIGNEE);
         this.possibleAssigneeUsers = users;
     }
     

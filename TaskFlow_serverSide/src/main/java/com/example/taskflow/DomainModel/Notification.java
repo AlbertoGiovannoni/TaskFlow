@@ -3,18 +3,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class Notification implements UuidInterface{
-    
-    @Id
-    private String id;
+public class Notification extends BaseEntity{
     private String message;
     private LocalDateTime notificationDateTime;
-    private String uuid;
 
     @DBRef
     @Lazy
@@ -22,9 +17,15 @@ public class Notification implements UuidInterface{
 
     // costruttore di default
     public Notification(){
+        super();
     }
 
-    public Notification(ArrayList<User> receivers, LocalDateTime notificationDateTime, String message) {
+    public Notification(String uuid) {
+        super(uuid);
+    }
+
+    public Notification(String uuid, ArrayList<User> receivers, LocalDateTime notificationDateTime, String message) {
+        super(uuid);
         this.receivers = receivers;
         this.message = message;
         this.notificationDateTime = notificationDateTime;
@@ -42,12 +43,6 @@ public class Notification implements UuidInterface{
 
     public boolean deleteReceiver(User userToRemove) {
         return receivers.remove(userToRemove);
-    }
-
-    // getter e setter
-
-    public String getId() {
-        return id;
     }
 
     public String getMessage() {
@@ -70,30 +65,7 @@ public class Notification implements UuidInterface{
         this.notificationDateTime = notificationDateTime;
     }
 
-    @Override
-    public String getUuid() {
-        return this.uuid;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        boolean value = false;
-
-        if (obj != null && obj instanceof Notification) {
-            if (obj instanceof Notification){
-                value = (this.uuid.equals(((Notification)obj).getUuid()));  
-            }
-        }
-
-        return value;
-    }
-
     public LocalDateTime getNotificationDateTime() {
         return notificationDateTime;
-    }
-
-    @Override
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
     }
 }

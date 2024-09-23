@@ -1,6 +1,7 @@
 package com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.SingleSelectionDefinition;
@@ -16,7 +17,13 @@ public class SingleSelectionDefinitionBuilder extends FieldDefinitionBuilder{
 
     @Override
     public SingleSelectionDefinition build() {
-        return new SingleSelectionDefinition(this.name, this.type, possibleSelections);
+        SingleSelectionDefinition singleSelectionDefinition = new SingleSelectionDefinition(UUID.randomUUID().toString());
+
+        singleSelectionDefinition.setName(this.name);
+        singleSelectionDefinition.setType(this.type);
+        singleSelectionDefinition.setPossibleSelections(possibleSelections);
+
+        return singleSelectionDefinition;
     }
 
     @Override

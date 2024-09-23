@@ -1,5 +1,7 @@
 package com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage;
 
+import java.util.UUID;
+
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.Number;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
@@ -25,6 +27,11 @@ public class NumberBuilder extends FieldBuilder {
         if (this.value == null) {
             throw new IllegalAccessError("value is null");
         }
-        return new Number(this.fieldDefinition, this.value);
+        Number number = new Number(UUID.randomUUID().toString());
+
+        number.setFieldDefinition(this.fieldDefinition);
+        number.setValue(this.value);
+
+        return number;
     }
 }

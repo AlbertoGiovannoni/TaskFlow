@@ -1,5 +1,4 @@
 package com.example.taskflow.DomainModel;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
@@ -7,12 +6,8 @@ import java.util.ArrayList;
 
 
 @Document
-public class Project implements UuidInterface{
-    
-    @Id
-    private String id;
+public class Project extends BaseEntity{
     private String name;
-    private String uuid;
 
     @DBRef
     private ArrayList<FieldDefinition> fieldsTemplate;
@@ -22,15 +17,18 @@ public class Project implements UuidInterface{
     
     // costruttore di default
     public Project(){
+        super();
     }
 
-    public Project(String name){
+    public Project(String uuid, String name){
+        super(uuid);
         this.name = name;
         this.activities = new ArrayList<Activity>();
         this.fieldsTemplate = new ArrayList<FieldDefinition>();
     }
     
-    public Project(String name, ArrayList<FieldDefinition> fieldsTemplate, ArrayList<Activity> activities) {
+    public Project(String uuid, String name, ArrayList<FieldDefinition> fieldsTemplate, ArrayList<Activity> activities) {
+        super(uuid);
         this.name = name;
         this.fieldsTemplate = fieldsTemplate;
         this.activities = activities;
@@ -50,16 +48,6 @@ public class Project implements UuidInterface{
 
     public boolean deleteActivity(Activity actToRemove) {
         return activities.remove(actToRemove);
-    }
-    
-    // getter e setter
-    
-    public String getId() {
-        return id;
-    }
-
-    public String getUuid() {
-        return uuid;
     }
     
     public String getName() {
@@ -84,23 +72,5 @@ public class Project implements UuidInterface{
     
     public void setActivities(ArrayList<Activity> activities) {
         this.activities = activities;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        boolean value = false;
-
-        if (obj != null && obj instanceof Project){
-            if (obj instanceof Project){
-                value = (this.uuid.equals(((Project)obj).getUuid()));  
-            }
-        }
-
-        return value;
-    }
-
-    @Override
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
     }
 }

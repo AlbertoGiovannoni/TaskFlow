@@ -1,6 +1,5 @@
 package com.example.taskflow.DomainModel.FieldPackage;
 
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.SingleSelectionDefinition;
 
@@ -11,10 +10,15 @@ public class SingleSelection extends Field {
 
     // costruttore di default
     public SingleSelection() {
+        super();
     }
 
-    public SingleSelection(FieldDefinition fieldDefinition, String value) {
-        super(fieldDefinition);
+    public SingleSelection(String uuid) {
+        super(uuid);
+    }
+
+    public SingleSelection(String uuid, FieldDefinition fieldDefinition, String value) {
+        super(uuid, fieldDefinition);
 
         this.value = value;
     }

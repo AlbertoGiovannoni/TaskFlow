@@ -1,5 +1,4 @@
 package com.example.taskflow.DomainModel;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,11 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @Document
-public class Organization implements UuidInterface{
-
-    @Id
-    private String id;
-    private String uuid;
+public class Organization extends BaseEntity{
     private String name;
     private LocalDateTime creationDate;
 
@@ -28,15 +23,22 @@ public class Organization implements UuidInterface{
 
     // costruttore di default
     public Organization() {
+        super();
     }
 
-    public Organization(String name, ArrayList<User> owners) {
+    public Organization(String uuid) {
+        super(uuid);
+    }
+
+    public Organization(String uuid, String name, ArrayList<User> owners) {
+        super(uuid);
         this.name = name;
         this.owners = owners;
     }
 
     
-    public Organization(String name, ArrayList<User> owners, ArrayList<Project> projects, ArrayList<User> members, LocalDateTime creationDate) {
+    public Organization(String uuid, String name, ArrayList<User> owners, ArrayList<Project> projects, ArrayList<User> members, LocalDateTime creationDate) {
+        super(uuid);
         this.name = name;
         this.owners = owners;
         this.projects = projects;
@@ -66,19 +68,6 @@ public class Organization implements UuidInterface{
 
     public boolean removeOwner(User user) {
         return owners.remove(user);
-    }
-    // getter e setter
-
-    public String getId() {
-        return this.id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getUuid() {
-        return this.uuid;
     }
 
     public String getName() {
@@ -119,23 +108,5 @@ public class Organization implements UuidInterface{
 
     public void setMembers(ArrayList<User> members) {
         this.members = members;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        boolean value = false;
-
-        if (obj != null && obj instanceof Organization){
-            if (obj instanceof Organization){
-                value = (this.uuid.equals(((Organization)obj).getUuid()));  
-            }
-        }
-
-        return value;
-    }
-
-    @Override
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
     }
 }

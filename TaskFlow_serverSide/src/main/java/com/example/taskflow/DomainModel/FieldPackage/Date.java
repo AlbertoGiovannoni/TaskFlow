@@ -15,16 +15,21 @@ public class Date extends Field{
     
     // costruttore di default
     public Date() {
+        super();
     }
 
-    public Date(FieldDefinition fieldDefinition, Notification notification, LocalDateTime dateTime) {
-        super(fieldDefinition);
+    public Date(String uuid){
+        super(uuid);
+    }
+
+    public Date(String uuid, FieldDefinition fieldDefinition, Notification notification, LocalDateTime dateTime) {
+        super(uuid, fieldDefinition);
         this.notification = notification;
         this.dateTime = dateTime;
     }
 
-    public Date(FieldDefinition fieldDefinition, LocalDateTime dateTime) {
-        super(fieldDefinition);
+    public Date(String uuid, FieldDefinition fieldDefinition, LocalDateTime dateTime) {
+        super(uuid, fieldDefinition);
         this.dateTime = dateTime;
     }
 

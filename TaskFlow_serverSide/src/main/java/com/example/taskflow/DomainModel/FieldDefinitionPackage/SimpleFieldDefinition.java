@@ -5,10 +5,16 @@ import java.util.ArrayList;
 import java.lang.UnsupportedOperationException;
 
 public class SimpleFieldDefinition extends FieldDefinition {
-    public SimpleFieldDefinition() {}
+    public SimpleFieldDefinition() {
+        super();
+    }
 
-    public SimpleFieldDefinition(String name, FieldType type) {
-        super(name, type);
+    public SimpleFieldDefinition(String uuid) {
+        super(uuid);
+    }
+
+    public SimpleFieldDefinition(String uuid, String name, FieldType type) {
+        super(uuid, name, type);
     }
 
     @Override
