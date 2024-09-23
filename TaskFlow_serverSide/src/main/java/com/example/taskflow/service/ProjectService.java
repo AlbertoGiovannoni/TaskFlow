@@ -88,6 +88,11 @@ public class ProjectService {
         return projectMapper.toDto(project);
     }
     
+    public ProjectDTO getProjectById(String projectId){
+        Project project = this.projectDao.findById(projectId).orElseThrow();
+        return this.projectMapper.toDto(project);
+    }
+
     public void deleteProject(String projectId){
         Project project = this.projectDao.findById(projectId).orElseThrow();
 

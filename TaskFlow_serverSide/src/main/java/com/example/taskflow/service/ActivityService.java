@@ -70,4 +70,9 @@ public class ActivityService {
 
         return this.activityDao.save(activity);
     }
+
+    public ActivityDTO getActivityById(String activityId){
+        Activity activity = this.activityDao.findById(activityId).orElseThrow();
+        return this.activityMapper.toDto(activity);
+    }
 }
