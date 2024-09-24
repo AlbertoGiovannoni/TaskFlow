@@ -12,5 +12,11 @@ public class DocumentService extends FieldService{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'createField'");
     }
+
+    @Override
+    public Field updateField(FieldDTO fieldDto) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateField'");
+    }
     
 }

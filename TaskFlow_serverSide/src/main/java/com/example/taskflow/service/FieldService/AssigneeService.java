@@ -10,8 +10,10 @@ import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.Field.AssigneeDTO;
+import com.example.taskflow.DTOs.Field.DateDTO;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
+import com.example.taskflow.DomainModel.FieldPackage.Assignee;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.AssigneeBuilder;
 import com.example.taskflow.Mappers.FieldMapper;
@@ -67,6 +69,20 @@ public class AssigneeService extends FieldService {
         }
 
         return users;
+    }
+
+    @Override
+    public Field updateField(FieldDTO fieldDto) {
+        Assignee field = (Assignee) this.fieldDao.findById(fieldDto.getId()).orElseThrow();
+        AssigneeDTO assigneeDTO = (AssigneeDTO)fieldDto;
+
+        ArrayList<String> ids = assigneeDTO.getUserIds();
+        ArrayList<User> newUsers = new ArrayList<User>();
+
+        newUsers = (ArrayList<User>) this.userDAO.findAllById(ids);
+        field.setUsers(newUsers);
+
+        return field;
     }
 
 }

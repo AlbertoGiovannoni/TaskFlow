@@ -10,6 +10,8 @@ import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.Field.StringDTO;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
+import com.example.taskflow.DomainModel.FieldPackage.SingleSelection;
+import com.example.taskflow.DomainModel.FieldPackage.Text;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.SingleSelectionBuilder;
 import com.example.taskflow.Mappers.FieldMapper;
 
@@ -48,6 +50,18 @@ public class SingleSelectionService extends FieldService{
                 .build();
 
         field = fieldDao.save(field);
+
+        return field;
+    }
+
+
+    @Override
+    public Field updateField(FieldDTO fieldDto) {
+        
+        SingleSelection field = (SingleSelection) this.fieldDao.findById(fieldDto.getId()).orElseThrow();
+        StringDTO singleSelectionDTO = (StringDTO) fieldDto;
+
+        field.setValue(singleSelectionDTO.getValue());
 
         return field;
     }
