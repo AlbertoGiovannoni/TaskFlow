@@ -25,7 +25,7 @@ public class UserService {
     public UserDTO createUser(UserWithInfoDTO userWithInfoDTO) {        
 
         // Mappa il DTO in un oggetto User (senza UserInfo)
-        User user = userMapper.toEntity(userWithInfoDTO);
+        User user = this.userMapper.toEntity(userWithInfoDTO);
 
         // Creazione dell'oggetto UserInfo
         UserInfo userInfo = new UserInfo();
@@ -47,9 +47,29 @@ public class UserService {
         // Restituisci l'utente creato come risposta con codice HTTP 201 (CREATED)
         return savedUserDTO;
     }
+
+    public UserDTO updateUser(UserWithInfoDTO userDto) {
+        User user = this.userDAO.findById(userDto.getId()).orElseThrow();
+
+        user.setEmail(userDto.getEmail());
+        user.setUsername(userDto.getUsername());
+        user.getUserInfo().setPassword(userDto.getPassword());
+
+        this.userInfoDAO.save(user.getUserInfo());
+        this.userDAO.save(user);
+
+        return this.userMapper.toDto(user);
+    }
     
     public UserDTO getUserById(String userId) {
-        User usr = userDAO.findById(userId).orElseThrow();
+        User usr = this.userDAO.findById(userId).orElseThrow();
         return this.userMapper.toDto(usr);
+    }
+
+    public void deleteUserById(String userId) {
+        User usr = this.userDAO.findById(userId).orElseThrow();
+
+        this.userInfoDAO.delete(usr.getUserInfo());
+        this.userDAO.delete(usr);
     }
 }
