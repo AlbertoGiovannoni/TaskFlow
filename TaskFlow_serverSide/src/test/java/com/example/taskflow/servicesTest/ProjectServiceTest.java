@@ -65,10 +65,12 @@ public class ProjectServiceTest {
     public void testCreationProject() {
         // creazione projectDto
         ArrayList<FieldDefinition> fieldDefinitions = new ArrayList<FieldDefinition>();
-        FieldDefinition fieldDefinition = new SimpleFieldDefinition(UUID.randomUUID().toString(), "prova", FieldType.TEXT);
+        FieldDefinition fieldDefinition = new SimpleFieldDefinition(UUID.randomUUID().toString(), "prova",
+                FieldType.TEXT);
         fieldDefinitions.add(fieldDefinition);
 
-        Project project = new Project(UUID.randomUUID().toString(), "projectName", fieldDefinitions, new ArrayList<Activity>());
+        Project project = new Project(UUID.randomUUID().toString(), "projectName", fieldDefinitions,
+                new ArrayList<Activity>());
 
         ProjectDTO projectDTO = projectMapper.toDto(project);
 
@@ -81,7 +83,7 @@ public class ProjectServiceTest {
     }
 
     @Test
-    public void testAddActivity(){
+    public void testAddActivity() {
         ArrayList<Field> fields = new ArrayList<Field>();
 
         FieldDefinitionDTO simpleFieldDefinitionDTO = new SimpleFieldDefinitionDTO();
@@ -95,7 +97,8 @@ public class ProjectServiceTest {
         Activity activity = new Activity(UUID.randomUUID().toString(), "activity", fields);
         ActivityDTO activityDTO = this.activityMapper.toDto(activity);
 
-        Project project = new Project(UUID.randomUUID().toString(), "projectName", new ArrayList<FieldDefinition>(), new ArrayList<Activity>());
+        Project project = new Project(UUID.randomUUID().toString(), "projectName", new ArrayList<FieldDefinition>(),
+                new ArrayList<Activity>());
         project = projectDAO.save(project);
 
         this.projectService.addActivityToProject(project.getId(), activityDTO);
@@ -103,15 +106,16 @@ public class ProjectServiceTest {
         project = projectDAO.findById(project.getId()).orElseThrow();
 
         String valuePushed = ((StringDTO) activityDTO.getFields().get(0)).getValue();
-        String valueFromDb = ((Text)project.getActivities().get(0).getFields().get(0)).getValue();
+        String valueFromDb = ((Text) project.getActivities().get(0).getFields().get(0)).getValue();
 
         assertEquals(valuePushed, valueFromDb);
-        
+
     }
 
     @Test
-    public void testAddFieldDefinition(){
-        Project project = new Project(UUID.randomUUID().toString(), "projectName", new ArrayList<FieldDefinition>(), new ArrayList<Activity>());
+    public void testAddFieldDefinition() {
+        Project project = new Project(UUID.randomUUID().toString(), "projectName", new ArrayList<FieldDefinition>(),
+                new ArrayList<Activity>());
         project = projectDAO.save(project);
 
         FieldDefinitionDTO simpleFieldDefinitionDTO = new SimpleFieldDefinitionDTO();
@@ -122,8 +126,24 @@ public class ProjectServiceTest {
 
         Project projectFrotDb = projectDAO.findById(project.getId()).orElse(null);
 
-        FieldDefinition fieldDefinitionFromDb = fieldDefinitionDao.findById(projectFrotDb.getFieldsTemplate().get(0).getId()).orElse(null);
+        FieldDefinition fieldDefinitionFromDb = fieldDefinitionDao
+                .findById(projectFrotDb.getFieldsTemplate().get(0).getId()).orElse(null);
         assertEquals(fieldDefinitionFromDb.getName(), simpleFieldDefinitionDTO.getName());
     }
-    
+
+    @Test
+    public void testRenameProject() {
+        Project project = new Project(UUID.randomUUID().toString(), "projectName", new ArrayList<FieldDefinition>(),
+                new ArrayList<Activity>());
+        project = projectDAO.save(project);
+
+        String newName = "newName";
+
+        this.projectService.renameProject(project.getId(), newName);
+
+        Project projectFromDb = projectDAO.findById(project.getId()).orElseThrow();
+
+        assertEquals(newName, projectFromDb.getName());
+    }
+
 }
