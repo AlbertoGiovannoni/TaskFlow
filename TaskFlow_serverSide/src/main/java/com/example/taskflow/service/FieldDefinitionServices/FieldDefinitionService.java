@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.example.taskflow.DAOs.ActivityDAO;
 import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
+import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.SimpleFieldDefinitionDTO;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
@@ -19,6 +20,8 @@ import com.example.taskflow.Mappers.FieldDefinitionMapper;
 public class FieldDefinitionService {
     @Autowired
     FieldDefinitionDAO fieldDefinitionDao;
+    @Autowired
+    ProjectDAO projectDao;
     @Autowired
     FieldDAO fieldDao;
     @Autowired
@@ -60,6 +63,8 @@ public class FieldDefinitionService {
         this.fieldDao.deleteAll(fieldsToRemove);
 
         this.activityDao.removeFieldsFromActivities(fieldToRemoveIds);
+
+        this.projectDao.removeFieldDefinitionFromProject(fieldDefinitionId);
 
         this.fieldDefinitionDao.deleteById(fieldDefinitionId);
     }
