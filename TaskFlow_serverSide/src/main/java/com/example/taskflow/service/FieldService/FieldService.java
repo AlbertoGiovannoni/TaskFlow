@@ -33,6 +33,8 @@ public abstract class FieldService {
 
     abstract public Field pushNewField(FieldDTO fieldDto);
 
+    abstract public Field updateField(FieldDTO fieldDto);
+
     public void deleteFieldAndActivityReference(String fieldId){
         this.activityDao.removeFieldFromActivity(fieldId);
         this.fieldDao.deleteById(fieldId);
