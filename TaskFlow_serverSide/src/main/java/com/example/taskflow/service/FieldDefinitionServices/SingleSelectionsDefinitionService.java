@@ -4,13 +4,42 @@ import java.util.ArrayList;
 
 import org.springframework.stereotype.Service;
 
+import com.example.taskflow.DTOs.FieldDefinition.AssigneeDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.SingleSelectionDefinitionDTO;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.SingleSelectionDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.SingleSelectionDefinitionBuilder;
 
 @Service
 public class SingleSelectionsDefinitionService extends FieldDefinitionService{
+
+    @Override
+    public FieldDefinitionDTO updateFieldDefinition(FieldDefinitionDTO fieldDefinitionDto) {
+        if (!(fieldDefinitionDto instanceof SingleSelectionDefinitionDTO)){
+            throw new IllegalArgumentException("FieldDefinition is not SingleSelectionDefinitionDTO");
+        }
+        SingleSelectionDefinitionDTO singleSelectionDefinitionDto = (SingleSelectionDefinitionDTO) fieldDefinitionDto;
+
+        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionDto.getId()).orElseThrow();
+        if (!(fieldDefinition instanceof SingleSelectionDefinition)){
+            throw new IllegalArgumentException("FieldDefinition with id: " + fieldDefinition.getId() + " is not of type SingleSelectionDefinition");
+        }
+
+        SingleSelectionDefinition singleSelectionDefinition = (SingleSelectionDefinition)fieldDefinition;
+
+        if (singleSelectionDefinitionDto.getName() != null){
+            singleSelectionDefinition.setName(fieldDefinitionDto.getName());
+        }
+        if (singleSelectionDefinitionDto.getSelections() != null){
+            singleSelectionDefinition.setPossibleSelections(singleSelectionDefinitionDto.getSelections());
+        }
+
+        this.fieldDefinitionDao.save(singleSelectionDefinition);
+
+        return this.fieldDefinitionMapper.toDto(singleSelectionDefinition);
+    }
 
     @Override
     public FieldDefinition pushNewFieldDefinition(FieldDefinitionDTO fieldDefinitionDto) {

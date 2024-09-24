@@ -87,5 +87,38 @@ public class AssigneeDefinitionService extends FieldDefinitionService{
 
         return this.fieldDefinitionMapper.toDto(fieldDefinition);
     }
+
+    @Override
+    public FieldDefinitionDTO updateFieldDefinition(FieldDefinitionDTO fieldDefinitionDto) {
+        if (!(fieldDefinitionDto instanceof AssigneeDefinitionDTO)){
+            throw new IllegalArgumentException("FieldDefinition is not AssigneeDefinitionDTO");
+        }
+        
+        AssigneeDefinitionDTO assigneeDefinitionDto = (AssigneeDefinitionDTO) fieldDefinitionDto;
+
+        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionDto.getId()).orElseThrow();
+        
+        if (!(fieldDefinition instanceof AssigneeDefinition)){
+            throw new IllegalArgumentException("FieldDefinition with id: " + fieldDefinition.getId() + " is not of type AssigneeDefinition");
+        }
+
+        AssigneeDefinition assigneeDefinition = (AssigneeDefinition)fieldDefinition;
+
+        if (assigneeDefinitionDto.getName() != null){
+            assigneeDefinition.setName(fieldDefinitionDto.getName());
+        }
+
+        if (assigneeDefinitionDto.getPossibleAssigneeUserIds() != null){
+            assigneeDefinition.setPossibleAssigneeUsers(
+                new ArrayList<User> (this.userDao.findAllById(
+                    assigneeDefinitionDto.getPossibleAssigneeUserIds())
+                )
+            );
+        }
+
+        this.fieldDefinitionDao.save(assigneeDefinition);
+
+        return this.fieldDefinitionMapper.toDto(assigneeDefinition);
+    }
     
 }
