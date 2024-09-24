@@ -11,11 +11,13 @@ import org.springframework.stereotype.Component;
 @Component
 public interface UserMapper {
 
-    @Mapping(target = "uuid", ignore = true)
     @Mapping(target = "userInfo", ignore = true)
+    @Mapping(source = "email", target = "email", ignore = true)
     User toEntity(UserWithInfoDTO dto);
 
     // Mappa da User a UserDTO
-    @Mapping(source = "email", target = "email")
     UserDTO toDto(User user);
+
+    @Mapping(source = "userInfo.password", target = "password")
+    UserWithInfoDTO toDtoWithInfo(User user);
 }
