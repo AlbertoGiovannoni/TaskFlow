@@ -3,7 +3,6 @@ package com.example.taskflow.servicesTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -14,34 +13,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.example.taskflow.TestUtil;
-import com.example.taskflow.DAOs.ActivityDAO;
-import com.example.taskflow.DAOs.FieldDefinitionDAO;
-import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
-import com.example.taskflow.DTOs.ActivityDTO;
-import com.example.taskflow.DTOs.ProjectDTO;
 import com.example.taskflow.DTOs.UserDTO;
 import com.example.taskflow.DTOs.UserWithInfoDTO;
-import com.example.taskflow.DTOs.Field.StringDTO;
-import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
-import com.example.taskflow.DTOs.FieldDefinition.SimpleFieldDefinitionDTO;
-import com.example.taskflow.DomainModel.Activity;
-import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.UserInfo;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.SimpleFieldDefinition;
-import com.example.taskflow.DomainModel.FieldPackage.Field;
-import com.example.taskflow.DomainModel.FieldPackage.Text;
-import com.example.taskflow.Mappers.ActivityMapper;
-import com.example.taskflow.Mappers.ProjectMapper;
 import com.example.taskflow.Mappers.UserMapper;
-import com.example.taskflow.service.ProjectService;
 import com.example.taskflow.service.UserService;
-import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionService;
-
 import net.bytebuddy.utility.RandomString;
 
 @DataMongoTest

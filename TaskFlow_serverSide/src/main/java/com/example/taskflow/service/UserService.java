@@ -1,8 +1,6 @@
 package com.example.taskflow.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
