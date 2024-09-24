@@ -3,11 +3,10 @@ package com.example.taskflow.service.FieldDefinitionServices;
 import java.util.ArrayList;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.example.taskflow.DTOs.FieldDefinition.AssigneeDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.SingleSelectionDefinitionDTO;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.SingleSelectionDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.SingleSelectionDefinitionBuilder;
@@ -15,6 +14,7 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFa
 @Service
 public class SingleSelectionsDefinitionService extends FieldDefinitionService{
 
+    @Transactional
     @Override
     public FieldDefinitionDTO updateFieldDefinition(FieldDefinitionDTO fieldDefinitionDto) {
         if (!(fieldDefinitionDto instanceof SingleSelectionDefinitionDTO)){
@@ -41,6 +41,7 @@ public class SingleSelectionsDefinitionService extends FieldDefinitionService{
         return this.fieldDefinitionMapper.toDto(singleSelectionDefinition);
     }
 
+    @Transactional
     @Override
     public FieldDefinition pushNewFieldDefinition(FieldDefinitionDTO fieldDefinitionDto) {
         if (fieldDefinitionDto == null){

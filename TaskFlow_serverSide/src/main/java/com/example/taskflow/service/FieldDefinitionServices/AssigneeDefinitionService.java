@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.FieldDefinition.AssigneeDefinitionDTO;
@@ -18,6 +19,7 @@ public class AssigneeDefinitionService extends FieldDefinitionService{
     @Autowired
     private UserDAO userDao;
 
+    @Transactional
     @Override
     public FieldDefinition pushNewFieldDefinition(FieldDefinitionDTO fieldDefinitionDto) {
         if (fieldDefinitionDto == null){
@@ -88,6 +90,7 @@ public class AssigneeDefinitionService extends FieldDefinitionService{
         return this.fieldDefinitionMapper.toDto(fieldDefinition);
     }
 
+    @Transactional
     @Override
     public FieldDefinitionDTO updateFieldDefinition(FieldDefinitionDTO fieldDefinitionDto) {
         if (!(fieldDefinitionDto instanceof AssigneeDefinitionDTO)){

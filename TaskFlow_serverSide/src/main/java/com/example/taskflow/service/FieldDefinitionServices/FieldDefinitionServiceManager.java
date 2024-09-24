@@ -8,7 +8,7 @@ import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 @Service
 public class FieldDefinitionServiceManager {
     @Autowired
-    private FieldDefinitionService fieldDefinitionService;
+    private SimpleFieldDefinitionService simpleFieldDefinitionService;
 
     @Autowired
     private AssigneeDefinitionService assigneeDefinitionService;
@@ -26,7 +26,7 @@ public class FieldDefinitionServiceManager {
             case TEXT:
             case DATE:
             case DOCUMENT:
-                return this.fieldDefinitionService;
+                return this.simpleFieldDefinitionService;
             default:
                 throw new IllegalArgumentException(fieldDefinitionDto.getType().toString() + " not recognized");
         }
