@@ -21,6 +21,7 @@ import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.FieldMapper;
 import com.example.taskflow.Mappers.ProjectMapper;
 import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionService;
+import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionServiceManager;
 
 
 @Service
@@ -37,8 +38,6 @@ public class ProjectService {
     @Autowired
     ActivityService activityService;
     @Autowired
-    FieldDefinitionService fieldDefinitionService;
-    @Autowired
     ActivityMapper activityMapper;
     @Autowired
     FieldMapper fieldMapper;
@@ -46,6 +45,8 @@ public class ProjectService {
     FieldDAO fieldDAO;
     @Autowired
     FieldDefinitionDAO fieldDefinitionDao;
+    @Autowired
+    FieldDefinitionServiceManager fieldDefinitionServiceManager;
 
     public ProjectDTO createProject(ProjectDTO projectDto){
         Project project = projectMapper.toEntity(projectDto);
@@ -73,7 +74,9 @@ public class ProjectService {
     public ProjectDTO addFieldDefinitionToProject(String projectId, FieldDefinitionDTO newFieldDefinitionDto){
 
         Project project = this.projectDao.findById(projectId).orElseThrow();
-        FieldDefinition newFieldDefinition = this.fieldDefinitionService.pushNewFieldDefinition(newFieldDefinitionDto);
+        FieldDefinition newFieldDefinition = this.fieldDefinitionServiceManager
+                                                    .getFieldDefinitionService(newFieldDefinitionDto)
+                                                    .pushNewFieldDefinition(newFieldDefinitionDto);
         project.addFieldDefinition(newFieldDefinition);
         this.projectDao.save(project);
 

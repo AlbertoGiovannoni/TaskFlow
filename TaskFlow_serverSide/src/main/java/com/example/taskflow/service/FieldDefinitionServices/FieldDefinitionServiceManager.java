@@ -9,10 +9,8 @@ import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 public class FieldDefinitionServiceManager {
     @Autowired
     private SimpleFieldDefinitionService simpleFieldDefinitionService;
-
     @Autowired
     private AssigneeDefinitionService assigneeDefinitionService;
-
     @Autowired
     private SingleSelectionsDefinitionService singleSelectionsDefinitionService;
 

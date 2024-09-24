@@ -14,8 +14,9 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.FieldDefinitionMapper;
 
-@Service
+
 public abstract class FieldDefinitionService {
+    
     @Autowired
     FieldDefinitionDAO fieldDefinitionDao;
     @Autowired
