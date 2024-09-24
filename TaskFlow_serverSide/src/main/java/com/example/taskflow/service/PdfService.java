@@ -4,7 +4,6 @@ import com.mongodb.client.gridfs.GridFSBuckets;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.model.GridFSUploadOptions;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.stereotype.Service;
 import org.bson.Document;
@@ -21,7 +20,6 @@ public class PdfService {
 
     private final GridFSBucket gridFSBucket;
 
-    @Autowired
     public PdfService(MongoDatabaseFactory mongoDatabaseFactory) {
         this.gridFSBucket = GridFSBuckets.create(mongoDatabaseFactory.getMongoDatabase());
     }

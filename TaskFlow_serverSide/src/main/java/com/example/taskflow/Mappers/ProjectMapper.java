@@ -2,11 +2,9 @@ package com.example.taskflow.Mappers;
 
 import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.DTOs.ProjectDTO;
-import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
-import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 
 import org.mapstruct.Mapper;

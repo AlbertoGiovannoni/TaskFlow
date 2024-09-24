@@ -2,9 +2,7 @@ package com.example.taskflow.service.FieldService;
 
 import java.util.ArrayList;
 
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
 import com.example.taskflow.DAOs.ActivityDAO;

@@ -1,6 +1,5 @@
 package com.example.taskflow.Mappers;
 
-import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.FieldDefinition.AssigneeDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.SimpleFieldDefinitionDTO;
@@ -10,8 +9,6 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinitio
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.SimpleFieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.SingleSelectionDefinition;
-import com.example.taskflow.DomainModel.FieldPackage.Field;
-
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -43,7 +40,7 @@ public interface FieldDefinitionMapper {
             case TEXT:
                 return this.toDto((SimpleFieldDefinition) fieldDefinition);
             case DOCUMENT:
-                // TODO
+                // TODO document
                 throw new IllegalArgumentException(fieldDefinition.getType() + " not implemented!");
             default:
                 throw new IllegalArgumentException(fieldDefinition.getType() + " not recognized");
@@ -63,7 +60,7 @@ public interface FieldDefinitionMapper {
             case TEXT:
                 return this.toEntity((SimpleFieldDefinitionDTO) fieldDefinitionDto);
             case DOCUMENT:
-                // TODO
+                // TODO document
                 throw new IllegalArgumentException(fieldDefinitionDto.getType() + " not implemented!");
             default:
                 throw new IllegalArgumentException(fieldDefinitionDto.getType() + " not recognized");

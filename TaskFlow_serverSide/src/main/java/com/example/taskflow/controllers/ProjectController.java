@@ -11,20 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
 import com.example.taskflow.DTOs.ProjectDTO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DTOs.ActivityDTO;
-import com.example.taskflow.DomainModel.Project;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.service.ProjectService;
-
-/*
-    FIXME: fixare tutti i metodi ed utilizzare i DTO! 
-    [probabilmente va cancellato tutto e rifatto da capo :(]
-*/
 
 @RestController
 @RequestMapping("/api/user")
@@ -50,8 +42,6 @@ public class ProjectController {
     @PostMapping("/{userId}/myOrganization/{organizationId}/projects")
     public ResponseEntity<Map<String, String>> createProject(@RequestBody Map<String, Object> requestBody) {
 
-        // TODO autenticazione owner
-
         Map<String, String> response = new HashMap<>();
         String name = (String) requestBody.get("projectName");
 
@@ -71,8 +61,6 @@ public class ProjectController {
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @PatchMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}")
     public ResponseEntity<Map<String, String>> renameProject(@PathVariable String projectId, @RequestBody Map<String, Object> requestBody) {
-
-        // TODO autenticazione owner
 
         Map<String, String> response = new HashMap<>();
 

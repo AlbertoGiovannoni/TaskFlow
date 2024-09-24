@@ -10,8 +10,6 @@ import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.Mappers.OrganizationMapper;
-import com.example.taskflow.Mappers.ProjectMapper;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +27,6 @@ public class OrganizationService {
     private UserDAO userDAO;
     @Autowired
     private OrganizationMapper organizationMapper;
-    @Autowired
-    private ProjectMapper projectMapper;
     @Autowired
     private ProjectService projectService;
 

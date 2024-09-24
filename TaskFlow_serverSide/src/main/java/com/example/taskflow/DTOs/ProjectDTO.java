@@ -13,6 +13,7 @@ public class ProjectDTO {
     private String name;
     private ArrayList<FieldDefinitionDTO> fieldsTemplate;
     private ArrayList<ActivityDTO> activities;
+    private String uuid;
 
     public ProjectDTO(String id, @NotNull String name, ArrayList<FieldDefinitionDTO> fieldsTemplate,
             ArrayList<ActivityDTO> activities) {
@@ -46,4 +47,14 @@ public class ProjectDTO {
     public void setActivities(ArrayList<ActivityDTO> activities) {
         this.activities = activities;
     }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    
 }

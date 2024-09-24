@@ -65,18 +65,6 @@ public class ProjectService {
 
         return fieldDefs;
     }
-
-    private Project getProject(ProjectDTO projectDto){
-
-        Project project = projectMapper.toEntity(projectDto);
-        
-        ArrayList<Activity> activities = new ArrayList<Activity>();
-        for(ActivityDTO activityDto:projectDto.getActivities()){
-            activities.add(this.activityDao.findById(activityDto.getId()).orElseThrow());
-        }
-        project.setActivities(activities);
-        return project;
-    }
     
     public ProjectDTO addFieldDefinitionToProject(String projectId, FieldDefinitionDTO newFieldDefinitionDto){
 
