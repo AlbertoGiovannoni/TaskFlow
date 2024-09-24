@@ -1,6 +1,7 @@
 package com.example.taskflow.servicesTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.example.taskflow.TestUtil;
+import com.example.taskflow.DAOs.ActivityDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DTOs.ActivityDTO;
@@ -51,6 +53,8 @@ public class ProjectServiceTest {
     private FieldDefinitionService fieldDefinitionService;
     @Autowired
     private ActivityMapper activityMapper;
+    @Autowired
+    private ActivityDAO activityDAO;
 
     @BeforeEach
     public void setupDatabase() {
@@ -144,6 +148,35 @@ public class ProjectServiceTest {
         Project projectFromDb = projectDAO.findById(project.getId()).orElseThrow();
 
         assertEquals(newName, projectFromDb.getName());
+    }
+
+    @Test
+    public void testDeleteProject() {
+        
+        Project project = new Project(UUID.randomUUID().toString(), "projectName", new ArrayList<FieldDefinition>(),
+        new ArrayList<Activity>());
+        project = projectDAO.save(project);
+
+        FieldDefinitionDTO simpleFieldDefinitionDTO = new SimpleFieldDefinitionDTO();
+        simpleFieldDefinitionDTO.setName("prova");
+        simpleFieldDefinitionDTO.setType(FieldType.TEXT);
+        FieldDefinition textDefinition = this.fieldDefinitionService.pushNewFieldDefinition(simpleFieldDefinitionDTO);
+
+        ArrayList<Field> fields = new ArrayList<Field>();
+        Field field = new Text(UUID.randomUUID().toString(), textDefinition, "test");
+        fields.add(field);
+
+        
+        Activity activity = new Activity(UUID.randomUUID().toString(), "activity", fields);
+        ActivityDTO activityDTO = this.activityMapper.toDto(activity);
+
+        ProjectDTO projectDto = this.projectService.addActivityToProject(project.getId(), activityDTO);
+        ArrayList<ActivityDTO> actDto = projectDto.getActivities();
+
+        this.projectService.deleteProject(project.getId());
+
+        assertNull(activityDAO.findById(actDto.get(0).getId()).orElse(null));
+        assertNull(projectDAO.findById(project.getId()).orElse(null));
     }
 
 }
