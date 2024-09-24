@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.taskflow.DAOs.ActivityDAO;
+import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
@@ -15,6 +16,7 @@ import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
+import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.FieldMapper;
 import com.example.taskflow.Mappers.ProjectMapper;
@@ -40,6 +42,8 @@ public class ProjectService {
     ActivityMapper activityMapper;
     @Autowired
     FieldMapper fieldMapper;
+    @Autowired
+    FieldDAO fieldDAO;
     @Autowired
     FieldDefinitionDAO fieldDefinitionDao;
 
@@ -101,9 +105,16 @@ public class ProjectService {
     public void deleteProject(String projectId){
         Project project = this.projectDao.findById(projectId).orElseThrow();
 
-        for(Activity activity : project.getActivities()){
-            activityService.deleteActivityAndFields(activity.getId());           
+        ArrayList<Activity> activityList = project.getActivities();
+        ArrayList<Field> fields;
+
+        for (Activity activity : activityList){
+            fields = activity.getFields();
+            this.fieldDAO.deleteAll(fields);
         }
+        this.activityDao.deleteAll(activityList);
+        
+        this.fieldDefinitionDao.deleteAll(project.getFieldsTemplate());
 
         this.projectDao.delete(project);
     }
