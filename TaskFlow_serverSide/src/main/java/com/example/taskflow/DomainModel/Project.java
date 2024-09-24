@@ -38,9 +38,6 @@ public class Project extends BaseEntity{
         fieldsTemplate.add(fieldDefinition);
     }
     
-    public ArrayList<Activity> getAllActivities() {
-        return this.activities;
-    }
     
     public void addActivity(Activity newAct) {
         activities.add(newAct);
