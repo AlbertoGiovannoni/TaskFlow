@@ -22,6 +22,7 @@ import com.example.taskflow.DAOs.OrganizationDAO;
 import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
+import com.example.taskflow.DTOs.UserDTO;
 import com.example.taskflow.DTOs.UserWithInfoDTO;
 import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.User;
@@ -110,8 +111,10 @@ public class UserController {
                     .status(HttpStatus.BAD_REQUEST)
                     .body(errorResponse);
         }
+
+        UserDTO userDto = userService.createUser(userWithInfoDTO);
         
-        return userService.createUser(userWithInfoDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
 
     @PatchMapping("/user/{userId}")

@@ -22,7 +22,7 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    public ResponseEntity<?> createUser(UserWithInfoDTO userWithInfoDTO) {        
+    public UserDTO createUser(UserWithInfoDTO userWithInfoDTO) {        
 
         // Mappa il DTO in un oggetto User (senza UserInfo)
         User user = userMapper.toEntity(userWithInfoDTO);
@@ -45,10 +45,11 @@ public class UserService {
         UserDTO savedUserDTO = userMapper.toDto(savedUser);
 
         // Restituisci l'utente creato come risposta con codice HTTP 201 (CREATED)
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(savedUserDTO);
+        return savedUserDTO;
     }
-
-    //TODO metodo load user che non crea l'userinfo ma lo recupera da db?
+    
+    public UserDTO getUserById(String userId) {
+        User usr = userDAO.findById(userId).orElseThrow();
+        return this.userMapper.toDto(usr);
+    }
 }
