@@ -7,9 +7,11 @@ import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
+import com.example.taskflow.DTOs.Field.NumberDTO;
 import com.example.taskflow.DTOs.Field.StringDTO;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
+import com.example.taskflow.DomainModel.FieldPackage.Text;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.TextBuilder;
 import com.example.taskflow.Mappers.FieldMapper;
 
@@ -47,6 +49,17 @@ public class TextService extends FieldService {
                 .build();
 
         field = fieldDao.save(field);
+
+        return field;
+    }
+
+    @Override
+    public Field updateField(FieldDTO fieldDto) {
+        
+        Text field = (Text) this.fieldDao.findById(fieldDto.getId()).orElseThrow();
+        StringDTO textDTO = (StringDTO) fieldDto;
+
+        field.setValue(textDTO.getValue());
 
         return field;
     }

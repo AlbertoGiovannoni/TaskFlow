@@ -6,13 +6,16 @@ import org.springframework.stereotype.Service;
 import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.UserDAO;
+import com.example.taskflow.DTOs.Field.DateDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.Field.NumberDTO;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.SimpleFieldDefinition;
+import com.example.taskflow.DomainModel.FieldPackage.Date;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.NumberBuilder;
 import com.example.taskflow.Mappers.FieldMapper;
+import com.example.taskflow.DomainModel.FieldPackage.Number;
 
 @Service
 public class NumberService extends FieldService{
@@ -51,6 +54,15 @@ public class NumberService extends FieldService{
 
         field = fieldDao.save(field);
 
+        return field;
+    }
+
+    @Override
+    public Field updateField(FieldDTO fieldDto) {
+        Number field = (Number) this.fieldDao.findById(fieldDto.getId()).orElseThrow();
+        NumberDTO dateDTO = (NumberDTO) fieldDto;
+
+        field.setValue(dateDTO.getValue());
         return field;
     }
     

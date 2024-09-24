@@ -20,7 +20,7 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    public UserDTO createUser(UserWithInfoDTO userWithInfoDTO) {        
+    public UserDTO createUser(UserWithInfoDTO userWithInfoDTO) {
 
         // Mappa il DTO in un oggetto User (senza UserInfo)
         User user = this.userMapper.toEntity(userWithInfoDTO);
@@ -49,16 +49,22 @@ public class UserService {
     public UserDTO updateUser(UserWithInfoDTO userDto) {
         User user = this.userDAO.findById(userDto.getId()).orElseThrow();
 
-        user.setEmail(userDto.getEmail());
-        user.setUsername(userDto.getUsername());
-        user.getUserInfo().setPassword(userDto.getPassword());
+        if (userDto.getEmail() != null) {
+            user.setEmail(userDto.getEmail());
+        }
+        if (userDto.getUsername() != null) {
+            user.setUsername(userDto.getUsername());
+        }
+        if (userDto.getPassword() != null) {
+            user.getUserInfo().setPassword(userDto.getPassword());
+            this.userInfoDAO.save(user.getUserInfo());
+        }
 
-        this.userInfoDAO.save(user.getUserInfo());
         this.userDAO.save(user);
 
         return this.userMapper.toDto(user);
     }
-    
+
     public UserDTO getUserById(String userId) {
         User usr = this.userDAO.findById(userId).orElseThrow();
         return this.userMapper.toDto(usr);
