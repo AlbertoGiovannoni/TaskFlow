@@ -132,7 +132,7 @@ public class UserController {
 
         if (optionalUser.isPresent()) {
 
-            ResponseEntity<Map<String, String>> validationResponse = validateFields(requestBody);
+            ResponseEntity<Map<String, String>> validationResponse = validateFields(requestBody); //TODO da togliere, viene fatto in @Valid
 
             if (validationResponse != null) {
                 return validationResponse;

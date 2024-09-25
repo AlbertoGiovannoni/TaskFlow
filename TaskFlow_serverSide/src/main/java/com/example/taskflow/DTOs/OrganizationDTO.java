@@ -2,13 +2,14 @@ package com.example.taskflow.DTOs;
 
 import java.util.ArrayList;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
 public class OrganizationDTO {
 
     private String id;
-    @NotNull
+    @NotBlank(message = "name must not be blank")
     private String name;
+    @NotBlank(message = "creationDate must not be blank")
     private String creationDate;
     private ArrayList<String> ownersId;
     private ArrayList<String> membersId;
