@@ -52,7 +52,6 @@ public class OrganizationServiceTest {
     private OrganizationMapper organizationMapper;
     @Autowired
     private OrganizationDAO organizationDAO;
-    @Autowired
     private FieldDefinitionService fieldDefinitionService;
     @Autowired
     private ProjectDAO projectDAO;
