@@ -48,9 +48,11 @@ public class ProjectService {
     @Autowired
     FieldDefinitionServiceManager fieldDefinitionServiceManager;
 
-    public ProjectDTO createProject(ProjectDTO projectDto){
+    public ProjectDTO pushNewProject(ProjectDTO projectDto){
         Project project = projectMapper.toEntity(projectDto);
-        project.setFieldsTemplate(this.mapFieldDefDtoToFieldDef(projectDto.getFieldsTemplate()));
+        if (projectDto.getFieldsTemplate() != null){
+            project.setFieldsTemplate(this.mapFieldDefDtoToFieldDef(projectDto.getFieldsTemplate()));
+        }
         
         ArrayList<Activity> activities = new ArrayList<Activity>();
         project.setActivities(activities);
