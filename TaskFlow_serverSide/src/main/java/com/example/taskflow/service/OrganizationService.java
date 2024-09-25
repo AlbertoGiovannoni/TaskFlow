@@ -10,6 +10,8 @@ import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.Mappers.OrganizationMapper;
+import com.example.taskflow.Mappers.ProjectMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,8 @@ public class OrganizationService {
     private OrganizationMapper organizationMapper;
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private ProjectMapper projectMapper;
 
     
     // Verifica se l'utente è un OWNER in una specifica organizzazione. 
@@ -69,10 +73,10 @@ public class OrganizationService {
         return organizationMapper.toDto(organization);
     }
 
-    public OrganizationDTO addMemberToOrganization(String organizationId, UserDTO userDTO){
+    public OrganizationDTO addMemberToOrganization(String organizationId, String userId){
         Organization organization = organizationDAO.findById(organizationId).orElseThrow();
     
-        User user = this.userDAO.findById(userDTO.getId()).orElseThrow();
+        User user = this.userDAO.findById(userId).orElseThrow();
         if (user == null){
             throw new IllegalArgumentException("User not defined");
         }
@@ -82,10 +86,10 @@ public class OrganizationService {
         return organizationMapper.toDto(organization);
     }
 
-    public OrganizationDTO addOwnerToOrganization(String organizationId, UserDTO ownerDTO){
+    public OrganizationDTO addOwnerToOrganization(String organizationId, String ownerId){
         Organization organization = organizationDAO.findById(organizationId).orElseThrow();
 
-        User owner = this.userDAO.findById(ownerDTO.getId()).orElseThrow();
+        User owner = this.userDAO.findById(ownerId).orElseThrow();
         if (owner == null){
             throw new IllegalArgumentException("owner not defined");
         }
@@ -101,10 +105,8 @@ public class OrganizationService {
     public OrganizationDTO addNewProjectToOrganization(String organizationId, ProjectDTO projectDTO){
         Organization organization = organizationDAO.findById(organizationId).orElseThrow();
         
-        Project newProject = this.projectDAO.findById(projectDTO.getId()).orElseThrow();
-        if (newProject == null){
-            throw new IllegalArgumentException("owner not defined");
-        }
+        this.projectService.pushNewProject(projectDTO);
+        Project newProject = this.projectMapper.toEntity(projectDTO);
         organization.addProject(newProject);
         this.organizationDAO.save(organization);
 

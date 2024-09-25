@@ -97,7 +97,7 @@ public class OrganizationServiceTest {
         UserDTO userDTO = userMapper.toDto(user);
 
         OrganizationDTO orgDto = organizationMapper.toDto(this.organizationToTest);
-        orgDto = organizationService.addMemberToOrganization(this.organizationToTest.getId(), userDTO);
+        orgDto = organizationService.addMemberToOrganization(this.organizationToTest.getId(), userDTO.getId());
         Organization found = organizationDAO.findById(orgDto.getId()).orElse(null);
 
         OrganizationDTO foundDto = organizationMapper.toDto(found);
@@ -112,7 +112,7 @@ public class OrganizationServiceTest {
         UserDTO userDTO = userMapper.toDto(user);
 
         OrganizationDTO orgDto = organizationMapper.toDto(this.organizationToTest);
-        orgDto = organizationService.addOwnerToOrganization(this.organizationToTest.getId(), userDTO);
+        orgDto = organizationService.addOwnerToOrganization(this.organizationToTest.getId(), userDTO.getId());
         Organization found = organizationDAO.findById(orgDto.getId()).orElse(null);
 
         OrganizationDTO foundDto = organizationMapper.toDto(found);
