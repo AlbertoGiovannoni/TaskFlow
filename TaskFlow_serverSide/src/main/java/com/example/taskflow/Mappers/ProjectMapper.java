@@ -30,7 +30,10 @@ public interface ProjectMapper {
     @Named("mapFieldsDefinitionToFieldDefinitionDTO")
     default ArrayList<FieldDefinitionDTO> mapFieldsDefinitionToFieldDefinitionDTO(ArrayList<FieldDefinition> fieldDefs) {
         ArrayList<FieldDefinitionDTO> fieldsDTO = new ArrayList<FieldDefinitionDTO>();
-        fieldsDTO = fieldDefinitionsToDto(fieldDefs);
+        
+        if (fieldDefs != null){
+            fieldsDTO = fieldDefinitionsToDto(fieldDefs);
+        }
 
         return fieldsDTO;
     }
@@ -38,7 +41,10 @@ public interface ProjectMapper {
     @Named("mapActivitiesToActivitiesDTO")
     default ArrayList<ActivityDTO> mapActivitiesToActivitiesDTO(ArrayList<Activity> activities) {
         ArrayList<ActivityDTO> activitiesDTO = new ArrayList<ActivityDTO>();
-        activitiesDTO = activityToDto(activities);
+
+        if (activities != null){
+            activitiesDTO = activityToDto(activities);
+        }
 
         return activitiesDTO;
     }

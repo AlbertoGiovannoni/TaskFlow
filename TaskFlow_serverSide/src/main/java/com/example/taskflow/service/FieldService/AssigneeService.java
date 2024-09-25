@@ -46,15 +46,21 @@ public class AssigneeService extends FieldService {
             throw new IllegalArgumentException("Wrong fieldDefinition id");
         }
 
-        ArrayList<User> users = this.getUsersByIds(assigneeDTO.getUserIds());
-
-        Field field = (new AssigneeBuilder(fieldDefinition))
-                .addAssignees(users)
+        Field createdField;
+        if (assigneeDTO.getUserIds() != null){
+            ArrayList<User> users = this.getUsersByIds(assigneeDTO.getUserIds());
+            createdField = (new AssigneeBuilder(fieldDefinition))
+                            .addAssignees(users)
+                            .build();
+        }
+        else{
+            createdField = (new AssigneeBuilder(fieldDefinition))
                 .build();
+        }
 
-        field = fieldDao.save(field);
+        createdField = fieldDao.save(createdField);
 
-        return field;
+        return createdField;
     }
 
     private ArrayList<User> getUsersByIds(ArrayList<String> ids) {
