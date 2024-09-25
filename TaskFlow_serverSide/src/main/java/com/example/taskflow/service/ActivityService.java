@@ -60,6 +60,8 @@ public class ActivityService {
 
         this.fieldDao.deleteAll(activity.getFields());
 
+        // TODO: eliminare ref in project
+
         this.activityDao.delete(activity);
     }
 

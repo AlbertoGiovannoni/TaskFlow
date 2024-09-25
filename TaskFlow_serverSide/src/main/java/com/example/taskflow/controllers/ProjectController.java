@@ -51,8 +51,9 @@ public class ProjectController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
-        ProjectDTO projectDto = new ProjectDTO( null, name, new ArrayList<FieldDefinitionDTO>(), new ArrayList<ActivityDTO>());
-        this.projectService.createProject(projectDto);
+        ProjectDTO projectDto = new ProjectDTO();
+        projectDto.setName(name);
+        this.projectService.pushNewProject(projectDto);
 
         response.put("message", "Progetto creato");
         return new ResponseEntity<>(response, HttpStatus.CREATED);

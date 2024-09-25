@@ -15,13 +15,7 @@ public class ProjectDTO {
     private ArrayList<ActivityDTO> activities;
     private String uuid;
 
-    public ProjectDTO(String id, @NotNull String name, ArrayList<FieldDefinitionDTO> fieldsTemplate,
-            ArrayList<ActivityDTO> activities) {
-        this.id = id;
-        this.name = name;
-        this.fieldsTemplate = fieldsTemplate;
-        this.activities = activities;
-    }
+    public ProjectDTO(){}
     
     public String getId() {
         return id;
