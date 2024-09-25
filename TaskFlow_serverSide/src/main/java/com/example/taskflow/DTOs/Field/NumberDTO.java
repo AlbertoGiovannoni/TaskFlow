@@ -1,13 +1,15 @@
 package com.example.taskflow.DTOs.Field;
 
-public class NumberDTO extends FieldDTO {
-    private Float value;
+import java.math.BigDecimal;
 
-    public Float getValue() {
+public class NumberDTO extends FieldDTO {
+    private BigDecimal value;
+
+    public BigDecimal getValue() {
         return this.value;
     }
 
-    public void setValue(Float value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 }

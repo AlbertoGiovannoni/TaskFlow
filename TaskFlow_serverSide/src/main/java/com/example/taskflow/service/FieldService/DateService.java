@@ -89,6 +89,8 @@ public class DateService extends FieldService {
             field.setNotification(notification);
         }
 
+        this.fieldDao.save(field);
+
         return field;
     }
 }

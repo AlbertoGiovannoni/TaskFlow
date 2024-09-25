@@ -63,6 +63,9 @@ public class NumberService extends FieldService{
         NumberDTO dateDTO = (NumberDTO) fieldDto;
 
         field.setValue(dateDTO.getValue());
+
+        this.fieldDao.save(field);
+
         return field;
     }
     
