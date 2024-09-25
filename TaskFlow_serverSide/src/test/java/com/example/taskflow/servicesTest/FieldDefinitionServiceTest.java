@@ -1,7 +1,11 @@
 package com.example.taskflow.servicesTest;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
+
+import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +14,28 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.example.taskflow.TestUtil;
+import com.example.taskflow.DAOs.ActivityDAO;
+import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
+import com.example.taskflow.DAOs.ProjectDAO;
+import com.example.taskflow.DTOs.ActivityDTO;
+import com.example.taskflow.DTOs.ProjectDTO;
+import com.example.taskflow.DTOs.Field.AssigneeDTO;
+import com.example.taskflow.DTOs.Field.DateDTO;
+import com.example.taskflow.DTOs.Field.FieldDTO;
+import com.example.taskflow.DTOs.Field.NumberDTO;
+import com.example.taskflow.DTOs.Field.StringDTO;
 import com.example.taskflow.DTOs.FieldDefinition.AssigneeDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.SimpleFieldDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.SingleSelectionDefinitionDTO;
+import com.example.taskflow.DomainModel.Activity;
+import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
+import com.example.taskflow.DomainModel.FieldPackage.Field;
+import com.example.taskflow.service.ActivityService;
+import com.example.taskflow.service.ProjectService;
 import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionServiceManager;
 
 import net.bytebuddy.utility.RandomString;
@@ -29,6 +48,16 @@ public class FieldDefinitionServiceTest {
     private TestUtil testUtil;
     @Autowired
     private FieldDefinitionServiceManager fieldDefinitionServiceManager;
+    @Autowired
+    private ActivityService activityService;
+    @Autowired
+    private ActivityDAO activityDao;
+    @Autowired
+    private ProjectService projectService;
+    @Autowired
+    private ProjectDAO projectDao;
+    @Autowired
+    private FieldDAO fieldDao;
 
     @Autowired 
     private FieldDefinitionDAO fieldDefinitionDao;
@@ -55,6 +84,65 @@ public class FieldDefinitionServiceTest {
         }
     }
 
+    @Test
+    public void testCascadingDelete(){
+        FieldDefinitionDTO fieldDefinitionDto;
+        FieldDefinition createdFieldDefinition;
+
+        ArrayList<ActivityDTO> activityDtos;
+        ArrayList<FieldDTO> fieldDTOs;
+
+        ArrayList<Activity> activitiesPushed;
+
+        ProjectDTO projectDto;
+        Project movingProject;
+
+        for (FieldType type : FieldType.values()){
+            if (type != FieldType.DOCUMENT){
+                projectDto = new ProjectDTO();
+                projectDto.setName(RandomString.make(10));
+                projectDto = this.projectService.pushNewProject(projectDto);
+
+                fieldDefinitionDto = this.getFieldDefinitionDTO(type);
+                fieldDefinitionDto.setName(RandomString.make(10));
+                createdFieldDefinition = this.fieldDefinitionServiceManager
+                                                            .getFieldDefinitionService(fieldDefinitionDto)
+                                                            .pushNewFieldDefinition(fieldDefinitionDto);
+                
+                fieldDTOs = this.getFieldDTOArray(10, type);
+                this.setFieldDefinitionToFieldDTO(fieldDTOs, createdFieldDefinition.getId());
+
+                activityDtos = this.getActivitieDTOsArray(fieldDTOs);
+                activitiesPushed = this.pushAllActivities(activityDtos);
+
+                movingProject = this.projectDao.findById(projectDto.getId()).orElseThrow();
+                movingProject.addFieldDefinition(createdFieldDefinition);
+                for (Activity activity : activitiesPushed){
+                    movingProject.addActivity(activity);
+                }
+                this.projectDao.save(movingProject);
+    
+                this.fieldDefinitionServiceManager
+                    .getFieldDefinitionService(fieldDefinitionDto)
+                    .deleteFieldDefinitionAndFieldsAndReferenceToFieldsInActivity(createdFieldDefinition.getId());
+
+                for (Activity activity : activitiesPushed){
+                    ArrayList<Field> activityFields = activity.getFields();
+                    for (Field field : activityFields){
+                        assertNull(this.fieldDao.findById(field.getId()).orElse(null));
+                    }
+
+                    Activity activityFromDb = this.activityDao.findById(activity.getId()).orElseThrow();
+                    ArrayList<Field> activityFieldsFromDb = activityFromDb.getFields();
+                    assertNull(activityFieldsFromDb);
+                }
+
+                Project projectFromDb = this.projectDao.findById(projectDto.getId()).orElseThrow();
+                assertNull(projectFromDb.getFieldsTemplate());
+            }
+        }
+    }
+
     private FieldDefinitionDTO getFieldDefinitionDTO(FieldType type){
         FieldDefinitionDTO fieldDefinitionDTO;
         switch (type) {
@@ -70,5 +158,81 @@ public class FieldDefinitionServiceTest {
         }
         fieldDefinitionDTO.setType(type);
         return fieldDefinitionDTO;
+    }
+
+    private ArrayList<FieldDTO> getFieldDTOArray(int n, FieldType type){
+        ArrayList<FieldDTO> fieldDTOs = new ArrayList<>();
+        FieldDTO movingFieldDto;
+
+        for (int i = 0; i < n; i++){
+            movingFieldDto = this.getFieldDTO(type);
+            movingFieldDto.setFieldDefinitionId(null);
+            fieldDTOs.add(this.getFieldDTO(type));
+        }
+
+        return fieldDTOs;
+    }
+
+    private void setFieldDefinitionToFieldDTO(ArrayList<FieldDTO> fieldDtos, String fieldDefinitionId){
+        for (FieldDTO fieldDto : fieldDtos){
+            fieldDto.setFieldDefinitionId(fieldDefinitionId);
+        }
+    }
+
+    private FieldDTO getFieldDTO(FieldType type){
+        FieldDTO fieldDTO;
+        switch (type) {
+            case ASSIGNEE:
+                fieldDTO =  new AssigneeDTO();
+                break;
+            case SINGLE_SELECTION:
+            case TEXT:
+                fieldDTO =  new StringDTO();
+                break;
+            case DATE:
+                fieldDTO = new DateDTO();
+                break;
+            case NUMBER:
+                fieldDTO = new NumberDTO();
+                break;
+            default:
+                throw new IllegalArgumentException("Document need implementation");
+        }
+        fieldDTO.setType(type);
+        return fieldDTO;
+    }
+
+    private ArrayList<ActivityDTO> getActivitieDTOsArray(ArrayList<FieldDTO> fieldDtos){
+        if (fieldDtos.size() == 0){
+            throw new IllegalArgumentException("Size must be > 0");
+        }
+
+        ArrayList<ActivityDTO> activityDtos = new ArrayList<>();
+        ActivityDTO movingActivityDto;
+
+        ArrayList<FieldDTO> fieldDTOsTempArray = new ArrayList<>();
+
+        for (FieldDTO fieldDto : fieldDtos){
+            fieldDTOsTempArray.clear();
+            fieldDTOsTempArray.add(fieldDto);
+
+            movingActivityDto = new ActivityDTO();
+            movingActivityDto.setName(RandomString.make(10));
+            movingActivityDto.setFields(fieldDTOsTempArray);
+
+            activityDtos.add(movingActivityDto);
+        }
+
+        return activityDtos;
+    }
+
+    private ArrayList<Activity> pushAllActivities(ArrayList<ActivityDTO> activities){
+        ArrayList<Activity> pushedActivities = new ArrayList<>();
+
+        for (ActivityDTO activity : activities){
+            pushedActivities.add(this.activityService.pushNewActivity(activity));
+        }
+
+        return pushedActivities;
     }
 }
