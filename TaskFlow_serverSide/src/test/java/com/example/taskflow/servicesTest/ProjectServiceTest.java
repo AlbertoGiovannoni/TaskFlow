@@ -78,7 +78,7 @@ public class ProjectServiceTest {
 
         ProjectDTO projectDTO = projectMapper.toDto(project);
 
-        projectDTO = projectService.createProject(projectDTO);
+        projectDTO = projectService.pushNewProject(projectDTO);
 
         Project projectFromDb = projectDAO.findById(projectDTO.getId()).orElse(null);
 
