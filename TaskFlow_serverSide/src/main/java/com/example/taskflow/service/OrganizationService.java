@@ -69,25 +69,9 @@ public class OrganizationService {
         return organizationMapper.toDto(organization);
     }
 
-    public OrganizationDTO addMemberToOrganization(OrganizationDTO organizationDTO, UserDTO userDTO){
-        Organization organization = organizationMapper.toEntity(organizationDTO);
-        
-        ArrayList<User> users = new ArrayList<User>();
-        for(String userId:organizationDTO.getMembersId()){
-            users.add(this.userDAO.findById(userId).orElseThrow());
-        }
-        ArrayList<User> owners = new ArrayList<User>();
-        for(String userId:organizationDTO.getOwnersId()){
-            owners.add(this.userDAO.findById(userId).orElseThrow());
-        }
-        ArrayList<Project> projects = new ArrayList<Project>();
-        for(String projectId:organizationDTO.getProjectsId()){
-            projects.add(this.projectDAO.findById(projectId).orElseThrow());
-        }
-        organization.setMembers(users);
-        organization.setOwners(owners);
-        organization.setProjects(projects);
-
+    public OrganizationDTO addMemberToOrganization(String organizationId, UserDTO userDTO){
+        Organization organization = organizationDAO.findById(organizationId).orElseThrow();
+    
         User user = this.userDAO.findById(userDTO.getId()).orElseThrow();
         if (user == null){
             throw new IllegalArgumentException("User not defined");
@@ -98,25 +82,9 @@ public class OrganizationService {
         return organizationMapper.toDto(organization);
     }
 
-    public OrganizationDTO addOwnerToOrganization(OrganizationDTO organizationDTO, UserDTO ownerDTO){
-        Organization organization = organizationMapper.toEntity(organizationDTO);
-        
-        ArrayList<User> users = new ArrayList<User>();
-        for(String userId:organizationDTO.getMembersId()){
-            users.add(this.userDAO.findById(userId).orElseThrow());
-        }
-        ArrayList<User> owners = new ArrayList<User>();
-        for(String userId:organizationDTO.getOwnersId()){
-            owners.add(this.userDAO.findById(userId).orElseThrow());
-        }
-        ArrayList<Project> projects = new ArrayList<Project>();
-        for(String projectId:organizationDTO.getProjectsId()){
-            projects.add(this.projectDAO.findById(projectId).orElseThrow());
-        }
-        organization.setMembers(users);
-        organization.setOwners(owners);
-        organization.setProjects(projects);
-        
+    public OrganizationDTO addOwnerToOrganization(String organizationId, UserDTO ownerDTO){
+        Organization organization = organizationDAO.findById(organizationId).orElseThrow();
+
         User owner = this.userDAO.findById(ownerDTO.getId()).orElseThrow();
         if (owner == null){
             throw new IllegalArgumentException("owner not defined");
@@ -130,24 +98,8 @@ public class OrganizationService {
     /*
     aggiunge un nuovo progetto (vuoto)
     */
-    public OrganizationDTO addNewProjectToOrganization(OrganizationDTO organizationDTO, ProjectDTO projectDTO){
-        Organization organization = organizationMapper.toEntity(organizationDTO);
-        
-        ArrayList<User> users = new ArrayList<User>();
-        for(String userId:organizationDTO.getMembersId()){
-            users.add(this.userDAO.findById(userId).orElseThrow());
-        }
-        ArrayList<User> owners = new ArrayList<User>();
-        for(String userId:organizationDTO.getOwnersId()){
-            owners.add(this.userDAO.findById(userId).orElseThrow());
-        }
-        ArrayList<Project> projects = new ArrayList<Project>();
-        for(String projectId:organizationDTO.getProjectsId()){
-            projects.add(this.projectDAO.findById(projectId).orElseThrow());
-        }
-        organization.setMembers(users);
-        organization.setOwners(owners);
-        organization.setProjects(projects);
+    public OrganizationDTO addNewProjectToOrganization(String organizationId, ProjectDTO projectDTO){
+        Organization organization = organizationDAO.findById(organizationId).orElseThrow();
         
         Project newProject = this.projectDAO.findById(projectDTO.getId()).orElseThrow();
         if (newProject == null){
