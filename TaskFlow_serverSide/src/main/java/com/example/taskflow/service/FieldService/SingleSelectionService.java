@@ -63,6 +63,8 @@ public class SingleSelectionService extends FieldService{
 
         field.setValue(singleSelectionDTO.getValue());
 
+        this.fieldDao.save(field);
+
         return field;
     }
 }

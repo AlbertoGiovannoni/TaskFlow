@@ -60,6 +60,7 @@ public class TextService extends FieldService {
         StringDTO textDTO = (StringDTO) fieldDto;
 
         field.setValue(textDTO.getValue());
+        this.fieldDao.save(field);
 
         return field;
     }
