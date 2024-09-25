@@ -80,8 +80,10 @@ public class OrganizationService {
         if (user == null){
             throw new IllegalArgumentException("User not defined");
         }
-        organization.addMember(user);
-        this.organizationDAO.save(organization);
+        if(!organization.getMembers().contains(user)){
+            organization.addMember(user);
+            this.organizationDAO.save(organization);
+        }
 
         return organizationMapper.toDto(organization);
     }
