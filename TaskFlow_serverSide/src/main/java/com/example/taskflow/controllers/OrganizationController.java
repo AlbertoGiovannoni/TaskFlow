@@ -23,11 +23,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/user")
@@ -63,15 +66,41 @@ public class OrganizationController {
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @PostMapping("/{userId}/myOrganization/{organizationId}/projects")
-    public ResponseEntity<ProjectDTO> createProject(@Valid @RequestBody ProjectDTO projectDTO, @PathVariable String organizationId) {
+    public ResponseEntity<OrganizationDTO> addProjectToOrganization(@Valid @RequestBody ProjectDTO projectDTO,
+            @PathVariable String organizationId) {
+
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(this.projectService.pushNewProject(projectDTO));
+                .body(this.organizationService.addNewProjectToOrganization(organizationId, projectDTO));
     }
+
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @PatchMapping("/{userId}/myOrganization/{organizationId}/addMember")
     public ResponseEntity<OrganizationDTO> addMemberToOrganization(@RequestBody Map<String, String> requestBody,
             @PathVariable String organizationId) {
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(this.organizationService.addMemberToOrganization(organizationId, requestBody.get("targetId")));
+    }
+
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
+    @PatchMapping("/{userId}/myOrganization/{organizationId}/addOwner")
+    public ResponseEntity<OrganizationDTO> addOwnerToOrganization(@RequestBody Map<String, String> requestBody,
+            @PathVariable String organizationId) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(this.organizationService.addOwnerToOrganization(organizationId, requestBody.get("targetId")));
+    }
+
+    @GetMapping("/{userId}/myOrganization/{organizationId}")
+    public ResponseEntity<OrganizationDTO> getOrganizationById(@PathVariable String organizationId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(this.organizationService.getOrganizationById(organizationId));
+    }
+
+    @DeleteMapping("/{userId}/myOrganization/{organizationId}")
+    public ResponseEntity<String> deleteOrganizationById(@PathVariable String organizationId) {
+        this.organizationService.deleteOrganization(organizationId);
+        return ResponseEntity.status(HttpStatus.OK).body("deleted");
     }
 
 }

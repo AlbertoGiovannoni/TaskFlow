@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class OrganizationService {
@@ -34,14 +35,16 @@ public class OrganizationService {
     @Autowired
     private ProjectMapper projectMapper;
 
-    
-    // Verifica se l'utente è un OWNER in una specifica organizzazione. 
+    // Verifica se l'utente è un OWNER in una specifica organizzazione.
     public boolean isOwner(String organizationId, String username) {
         Optional<Organization> organization = organizationDAO.findById(organizationId);
 
         if (organization.isPresent()) {
             return organization.get().getOwners().stream()
-                    .anyMatch(owner -> owner.getUsername().equals(username)); // anyMatch è una terminal operation che verifica se almeno un elemento nello stream soddisfa una determinata condizione.
+                    .anyMatch(owner -> owner.getUsername().equals(username)); // anyMatch è una terminal operation che
+                                                                              // verifica se almeno un elemento nello
+                                                                              // stream soddisfa una determinata
+                                                                              // condizione.
         }
         return false;
     }
@@ -57,15 +60,19 @@ public class OrganizationService {
         return false;
     }
 
-    public OrganizationDTO createNewOrganization(OrganizationDTO organizationDTO){
+    public OrganizationDTO createNewOrganization(OrganizationDTO organizationDTO) {
+
+        if (organizationDTO.getUuid() == null) { // TODO perche non ho uuid mentre in user si
+            organizationDTO.setUuid(UUID.randomUUID().toString());
+        }
         Organization organization = organizationMapper.toEntity(organizationDTO);
-        
+
         User owner = this.userDAO.findById(organizationDTO.getOwnersId().get(0)).orElseThrow();
-        if (owner == null){
+        if (owner == null) {
             throw new IllegalArgumentException("An organization must have an owner");
         }
         organization.addOwner(owner);
-        
+
         ArrayList<Project> projects = new ArrayList<Project>();
         organization.setProjects(projects);
         this.organizationDAO.save(organization);
@@ -73,14 +80,14 @@ public class OrganizationService {
         return organizationMapper.toDto(organization);
     }
 
-    public OrganizationDTO addMemberToOrganization(String organizationId, String userId){
+    public OrganizationDTO addMemberToOrganization(String organizationId, String userId) {
         Organization organization = organizationDAO.findById(organizationId).orElseThrow();
-    
+
         User user = this.userDAO.findById(userId).orElseThrow();
-        if (user == null){
+        if (user == null) {
             throw new IllegalArgumentException("User not defined");
         }
-        if(!organization.getMembers().contains(user)){
+        if (!organization.getMembers().contains(user)) {
             organization.addMember(user);
             this.organizationDAO.save(organization);
         }
@@ -88,43 +95,50 @@ public class OrganizationService {
         return organizationMapper.toDto(organization);
     }
 
-    public OrganizationDTO addOwnerToOrganization(String organizationId, String ownerId){
+    public OrganizationDTO addOwnerToOrganization(String organizationId, String ownerId) {
         Organization organization = organizationDAO.findById(organizationId).orElseThrow();
 
         User owner = this.userDAO.findById(ownerId).orElseThrow();
-        if (owner == null){
+        if (owner == null) {
             throw new IllegalArgumentException("owner not defined");
         }
-        organization.addOwner(owner);
-        this.organizationDAO.save(organization);
+        if (!organization.getOwners().contains(owner)) {
+            organization.addOwner(owner);
+            this.organizationDAO.save(organization);
+        }
 
         return organizationMapper.toDto(organization);
     }
 
     /*
-    aggiunge un nuovo progetto (vuoto)
-    */
-    public OrganizationDTO addNewProjectToOrganization(String organizationId, ProjectDTO projectDTO){
+     * aggiunge un nuovo progetto (vuoto)
+     */
+    public OrganizationDTO addNewProjectToOrganization(String organizationId, ProjectDTO projectDTO) {
         Organization organization = organizationDAO.findById(organizationId).orElseThrow();
-        
-        this.projectService.pushNewProject(projectDTO);
+
+        projectDTO = this.projectService.pushNewProject(projectDTO);
         Project newProject = this.projectMapper.toEntity(projectDTO);
+
         organization.addProject(newProject);
         this.organizationDAO.save(organization);
 
         return organizationMapper.toDto(organization);
     }
 
-    public OrganizationDTO getOrganizationById(String organizationId){
+    public OrganizationDTO getOrganizationById(String organizationId) {
         Organization organization = this.organizationDAO.findById(organizationId).orElseThrow();
         return organizationMapper.toDto(organization);
     }
-    
-    public void deleteOrganization(String organizationId){
+
+    public void deleteOrganization(String organizationId) {
         Organization organization = this.organizationDAO.findById(organizationId).orElseThrow();
-        for(Project project:organization.getProjects()){
-            project = this.projectDAO.findById(project.getId()).orElseThrow();           
-            projectService.deleteProject(project.getId());
+        ArrayList<Project> projectList = organization.getProjects();
+
+        if (projectList != null && projectList.size() > 0) {
+            for (Project project : projectList) {
+                project = this.projectDAO.findById(project.getId()).orElseThrow();
+                projectService.deleteProject(project.getId());
+            }
         }
         this.organizationDAO.delete(organization);
     }

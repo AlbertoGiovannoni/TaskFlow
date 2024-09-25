@@ -1,6 +1,7 @@
 package com.example.taskflow.service;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,6 @@ import com.example.taskflow.Mappers.FieldMapper;
 import com.example.taskflow.Mappers.ProjectMapper;
 import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionService;
 import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionServiceManager;
-
 
 @Service
 public class ProjectService {
@@ -48,12 +48,15 @@ public class ProjectService {
     @Autowired
     FieldDefinitionServiceManager fieldDefinitionServiceManager;
 
-    public ProjectDTO pushNewProject(ProjectDTO projectDto){
+    public ProjectDTO pushNewProject(ProjectDTO projectDto) {
+        if (projectDto.getUuid() == null) { // TODO capire perche devo impostare a mano l'uuid
+            projectDto.setUuid(UUID.randomUUID().toString());
+        }
         Project project = projectMapper.toEntity(projectDto);
-        if (projectDto.getFieldsTemplate() != null){
+        if (projectDto.getFieldsTemplate() != null) {
             project.setFieldsTemplate(this.mapFieldDefDtoToFieldDef(projectDto.getFieldsTemplate()));
         }
-        
+
         ArrayList<Activity> activities = new ArrayList<Activity>();
         project.setActivities(activities);
         this.projectDao.save(project);
@@ -61,31 +64,31 @@ public class ProjectService {
         return projectMapper.toDto(project);
     }
 
-    private ArrayList<FieldDefinition> mapFieldDefDtoToFieldDef(ArrayList<FieldDefinitionDTO> fieldDefsDto){
+    private ArrayList<FieldDefinition> mapFieldDefDtoToFieldDef(ArrayList<FieldDefinitionDTO> fieldDefsDto) {
         ArrayList<FieldDefinition> fieldDefs = new ArrayList<FieldDefinition>();
         FieldDefinition fieldDef;
 
-        for (FieldDefinitionDTO fieldDefDto : fieldDefsDto){
+        for (FieldDefinitionDTO fieldDefDto : fieldDefsDto) {
             fieldDef = fieldDefinitionDao.findById(fieldDefDto.getId()).orElseThrow();
             fieldDefs.add(fieldDef);
         }
 
         return fieldDefs;
     }
-    
-    public ProjectDTO addFieldDefinitionToProject(String projectId, FieldDefinitionDTO newFieldDefinitionDto){
+
+    public ProjectDTO addFieldDefinitionToProject(String projectId, FieldDefinitionDTO newFieldDefinitionDto) {
 
         Project project = this.projectDao.findById(projectId).orElseThrow();
         FieldDefinition newFieldDefinition = this.fieldDefinitionServiceManager
-                                                    .getFieldDefinitionService(newFieldDefinitionDto)
-                                                    .pushNewFieldDefinition(newFieldDefinitionDto);
+                .getFieldDefinitionService(newFieldDefinitionDto)
+                .pushNewFieldDefinition(newFieldDefinitionDto);
         project.addFieldDefinition(newFieldDefinition);
         this.projectDao.save(project);
 
         return projectMapper.toDto(project);
     }
 
-    public ProjectDTO addActivityToProject(String projectId, ActivityDTO newActivityDto){
+    public ProjectDTO addActivityToProject(String projectId, ActivityDTO newActivityDto) {
 
         Project project = this.projectDao.findById(projectId).orElseThrow();
         Activity newActivity = this.activityService.pushNewActivity(newActivityDto);
@@ -94,32 +97,43 @@ public class ProjectService {
 
         return projectMapper.toDto(project);
     }
-    
-    public ProjectDTO getProjectById(String projectId){
+
+    public ProjectDTO getProjectById(String projectId) {
         Project project = this.projectDao.findById(projectId).orElseThrow();
         return this.projectMapper.toDto(project);
     }
 
-    public ProjectDTO renameProject(String projectId, String newName){
+    public ProjectDTO renameProject(String projectId, String newName) {
         Project project = this.projectDao.findById(projectId).orElseThrow();
         project.setName(newName);
         this.projectDao.save(project);
         return this.projectMapper.toDto(project);
     }
 
-    public void deleteProject(String projectId){
+    public void deleteProject(String projectId) {
         Project project = this.projectDao.findById(projectId).orElseThrow();
 
         ArrayList<Activity> activityList = project.getActivities();
         ArrayList<Field> fields;
 
-        for (Activity activity : activityList){
-            fields = activity.getFields();
-            this.fieldDAO.deleteAll(fields);
+        if (activityList != null && activityList.size() > 0) {
+            for (Activity activity : activityList) {
+                fields = activity.getFields();
+                if (fields != null && fields.size() > 0) {
+                    this.fieldDAO.deleteAll(fields);
+                }
+            }
         }
-        this.activityDao.deleteAll(activityList);
-        
-        this.fieldDefinitionDao.deleteAll(project.getFieldsTemplate());
+
+        if (activityList != null && activityList.size() > 0) {
+            this.activityDao.deleteAll(activityList);
+        }
+
+        ArrayList<FieldDefinition> fieldsTemplate = new ArrayList<FieldDefinition>();
+
+        if (fieldsTemplate != null && fieldsTemplate.size() > 0) {
+            this.fieldDefinitionDao.deleteAll(project.getFieldsTemplate());
+        }
 
         this.projectDao.delete(project);
     }
