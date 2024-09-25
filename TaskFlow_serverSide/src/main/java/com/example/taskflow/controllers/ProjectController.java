@@ -39,27 +39,6 @@ public class ProjectController {
     }
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
-    @PostMapping("/{userId}/myOrganization/{organizationId}/projects")
-    public ResponseEntity<Map<String, String>> createProject(@RequestBody Map<String, Object> requestBody) {
-
-        Map<String, String> response = new HashMap<>();
-        String name = (String) requestBody.get("projectName");
-
-        // Controllo e conversione dell'input
-        if (name == null || name.trim().isEmpty()) {
-            response.put("message", "projectName cannot be empty");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-
-        ProjectDTO projectDto = new ProjectDTO();
-        projectDto.setName(name);
-        this.projectService.pushNewProject(projectDto);
-
-        response.put("message", "Progetto creato");
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
-    }
-
-    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @PatchMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}")
     public ResponseEntity<Map<String, String>> renameProject(@PathVariable String projectId, @RequestBody Map<String, Object> requestBody) {
 
