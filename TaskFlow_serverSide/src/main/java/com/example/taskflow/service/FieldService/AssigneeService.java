@@ -82,6 +82,8 @@ public class AssigneeService extends FieldService {
         newUsers = (ArrayList<User>) this.userDAO.findAllById(ids);
         field.setUsers(newUsers);
 
+        this.fieldDao.save(field);
+
         return field;
     }
 

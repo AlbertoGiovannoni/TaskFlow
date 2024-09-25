@@ -1,5 +1,6 @@
 package com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import com.example.taskflow.DomainModel.FieldPackage.Field;
@@ -7,13 +8,13 @@ import com.example.taskflow.DomainModel.FieldPackage.Number;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 public class NumberBuilder extends FieldBuilder {
-    private Float value;
+    private BigDecimal value;
 
     public NumberBuilder(FieldDefinition fieldDefinition) {
         super(fieldDefinition);
     }
 
-    public NumberBuilder addParameter(Float value) {
+    public NumberBuilder addParameter(BigDecimal value) {
         if (value != null) {
             this.value = value;
         } else {

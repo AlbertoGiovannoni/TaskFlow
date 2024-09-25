@@ -1,10 +1,12 @@
 package com.example.taskflow.DomainModel.FieldPackage;
 
+import java.math.BigDecimal;
+
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 public class Number extends Field{
 
-    private Float value;
+    private BigDecimal value;
 
     // costruttore di default
     public Number(){
@@ -15,27 +17,27 @@ public class Number extends Field{
         super(uuid);
     }
 
-    public Number(String uuid, FieldDefinition fieldDefinition, Float value) {
+    public Number(String uuid, FieldDefinition fieldDefinition, BigDecimal value) {
         super(uuid, fieldDefinition);
 
         this.value = value;
     }
 
-    public Number(String uuid, FieldDefinition fieldDefinition, Integer value) {
-        super(uuid, fieldDefinition);
+    // public Number(String uuid, FieldDefinition fieldDefinition, Integer value) {
+    //     super(uuid, fieldDefinition);
 
-        this.value = (float)value;
-    }
+    //     this.value = (BigDecimal)value;
+    // }
 
-    public Float getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(Float value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 
-    public void setValue(Integer value) {
-        this.value = (float)value;
-    }
+    // public void setValue(Integer value) {
+    //     this.value = (float)value;
+    // }
 }

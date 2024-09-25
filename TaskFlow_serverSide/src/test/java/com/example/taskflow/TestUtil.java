@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
+import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -148,7 +149,7 @@ public class TestUtil {
 
         for (int i = 0; i < n; i++){
             field = (new NumberBuilder(fieldDefinition))
-                        .addParameter((float)randomGenerator.nextInt(1000))
+                        .addParameter(BigDecimal.valueOf(randomGenerator.nextInt(1000)))
                         .build();
             
             allFieldsGenerated.add(field);
@@ -169,7 +170,7 @@ public class TestUtil {
                                 .setName(RandomString.make(10))
                                 .build();
             field = (new NumberBuilder(fieldDefinition))
-                        .addParameter((float)randomGenerator.nextInt(1000))
+                        .addParameter(BigDecimal.valueOf(randomGenerator.nextInt(1000)))
                         .build();
             
             allFieldsGenerated.add(field);
