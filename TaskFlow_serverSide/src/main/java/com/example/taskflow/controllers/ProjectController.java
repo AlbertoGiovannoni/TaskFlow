@@ -18,6 +18,8 @@ import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.service.ProjectService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/user")
 public class ProjectController {
@@ -36,6 +38,13 @@ public class ProjectController {
         Map<String, String> response = new HashMap<>();
         response.put("message", "Access Denied: You are not authorized to perform this action.");
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    }
+
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
+    @PostMapping("/{userId}/myOrganization/{organizationId}/projects")
+    public ResponseEntity<ProjectDTO> createActivity(@Valid @RequestBody ActivityDTO activityDTO, @PathVariable String projectId) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(this.projectService.addActivityToProject(projectId, activityDTO));
     }
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
