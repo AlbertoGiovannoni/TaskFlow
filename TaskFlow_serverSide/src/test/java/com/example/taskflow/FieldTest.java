@@ -3,6 +3,7 @@ package com.example.taskflow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -88,7 +89,7 @@ public class FieldTest {
         FieldDefinition fieldDefinition = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.NUMBER);
 
         Field field = (new NumberBuilder(fieldDefinition))
-                .addParameter((float) Math.random())
+                .addParameter(BigDecimal.valueOf(Math.random()))
                 .build();
 
         Number fieldFromDB = (Number) this.fieldDao.save(field);
@@ -96,7 +97,7 @@ public class FieldTest {
         assertEquals(field, fieldFromDB);
         assertEquals(field.getFieldDefinition(), fieldDefinition);
 
-        Float randomFloat = (float) Math.random();
+        BigDecimal randomFloat = BigDecimal.valueOf(Math.random());
         fieldFromDB.setValue(randomFloat);
 
         Number fieldModified = (Number) this.fieldDao.save(fieldFromDB);

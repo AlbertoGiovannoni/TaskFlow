@@ -2,6 +2,8 @@ package com.example.taskflow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
@@ -59,7 +61,7 @@ public class ActivityTest {
                 .build();
 
         Field field2 = (new NumberBuilder(fieldDefinition2))
-                .addParameter(new Random().nextFloat())
+                .addParameter(BigDecimal.valueOf(Math.random()))
                 .build();
 
         field1 = this.fieldDao.save(field1);
@@ -92,7 +94,7 @@ public class ActivityTest {
                 .build();
 
         Field field2 = (new NumberBuilder(fieldDefinition2))
-                .addParameter(new Random().nextFloat())
+                .addParameter(BigDecimal.valueOf(Math.random()))
                 .build();
 
         ArrayList<Field> fields = new ArrayList<Field>();

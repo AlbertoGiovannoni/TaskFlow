@@ -1,5 +1,6 @@
 package com.example.taskflow.servicesTest;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Random;
@@ -148,7 +149,7 @@ public class ActivityServiceTest {
         numberDto.setFieldDefinitionId(fd.getId());
         numberDto.setUuid(UUID.randomUUID().toString());
 
-        numberDto.setValue(new Random().nextFloat());
+        numberDto.setValue(BigDecimal.valueOf(Math.random()));
 
         //createdFieldDto = fieldServiceManager.getFieldService(numberDto).pushNewField(numberDto);
         fieldsDto.add(numberDto);
