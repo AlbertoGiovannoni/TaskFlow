@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.example.taskflow.DTOs.Field.FieldDTO;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 public class ActivityDTO {
@@ -11,6 +12,7 @@ public class ActivityDTO {
     private String id;
     @NotNull
     private String name;
+    @Valid
     private ArrayList<FieldDTO> fields;
 
     private String uuid;
