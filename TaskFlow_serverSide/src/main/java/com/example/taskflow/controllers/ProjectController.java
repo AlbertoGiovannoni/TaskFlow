@@ -49,30 +49,11 @@ public class ProjectController {
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @PatchMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}")
-    public ResponseEntity<Map<String, String>> renameProject(@PathVariable String projectId, @RequestBody Map<String, Object> requestBody) {
-
+    public ResponseEntity<Map<String, String>> renameProject(@PathVariable String projectId, @RequestBody Map<String, String> requestBody) {
+        String newName = requestBody.get("newName");
+        this.projectService.renameProject(projectId, newName);
         Map<String, String> response = new HashMap<>();
-
-        String name = (String) requestBody.get("newName");
-
-        // Controllo e conversione dell'input
-        if (name == null || name.trim().isEmpty()) {
-            response.put("message", "projectName cannot be empty");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-
-        if (projectId == null) {
-            response.put("message", "projectId cannot be empty");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-
-        ProjectDTO projectDto = projectService.renameProject(projectId, name);
-
-        if (projectDto == null) {
-            response.put("message", "wrong projectId");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-        response.put("message", "Progetto rinominato");
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        response.put("message", "Project renamed!");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
