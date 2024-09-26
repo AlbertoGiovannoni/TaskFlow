@@ -41,7 +41,7 @@ public class ProjectController {
     }
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
-    @PostMapping("/{userId}/myOrganization/{organizationId}/projects")
+    @PostMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}")
     public ResponseEntity<ProjectDTO> createActivity(@Valid @RequestBody ActivityDTO activityDTO, @PathVariable String projectId) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(this.projectService.addActivityToProject(projectId, activityDTO));
