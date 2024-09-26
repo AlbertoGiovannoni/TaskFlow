@@ -90,6 +90,7 @@ public class ProjectService {
 
         Project project = this.projectDao.findById(projectId).orElseThrow();
         Activity newActivity = this.activityService.pushNewActivity(newActivityDto);
+        this.activityDao.save(newActivity);
         project.addActivity(newActivity);
         this.projectDao.save(project);
 

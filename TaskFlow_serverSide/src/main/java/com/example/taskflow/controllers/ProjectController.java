@@ -57,7 +57,7 @@ public class ProjectController {
     }
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
-    @PatchMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/addFieldDefinition")
+    @PostMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/addFieldDefinitionToProject")
     public ResponseEntity<ProjectDTO> addFieldDefinitionToProject(@PathVariable String projectId, @RequestBody Map<String, Object> requestBody) {
         FieldDefinitionDTO newFieldDef = (FieldDefinitionDTO)requestBody.get("newFieldDefinition");
         return ResponseEntity.status(HttpStatus.OK)
