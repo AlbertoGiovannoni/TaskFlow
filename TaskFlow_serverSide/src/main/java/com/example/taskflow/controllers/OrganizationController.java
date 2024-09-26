@@ -4,9 +4,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.taskflow.DAOs.OrganizationDAO;
 import com.example.taskflow.DTOs.OrganizationDTO;
 import com.example.taskflow.DTOs.ProjectDTO;
 import com.example.taskflow.DTOs.UserDTO;
+import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.service.OrganizationService;
 import com.example.taskflow.service.ProjectService;
 
@@ -38,6 +40,8 @@ public class OrganizationController {
 
     @Autowired
     private OrganizationService organizationService;
+    @Autowired
+    private OrganizationDAO organizationDAO;
     @Autowired
     private ProjectService projectService;
 
@@ -95,6 +99,13 @@ public class OrganizationController {
     public ResponseEntity<OrganizationDTO> getOrganizationById(@PathVariable String organizationId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(this.organizationService.getOrganizationById(organizationId));
+    }
+
+    @GetMapping("/{userId}/myOrganization")
+    public ResponseEntity<ArrayList<Organization>> getMyOrganizations(@PathVariable String userId) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(this.organizationDAO.getOrganizationByUser(userId));
     }
 
     @DeleteMapping("/{userId}/myOrganization/{organizationId}")
