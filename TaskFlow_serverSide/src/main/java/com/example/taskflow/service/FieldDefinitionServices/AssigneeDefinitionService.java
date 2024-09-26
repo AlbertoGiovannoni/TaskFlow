@@ -31,9 +31,13 @@ public class AssigneeDefinitionService extends FieldDefinitionService{
         
         AssigneeDefinitionDTO assigneeDefinitionDTO = (AssigneeDefinitionDTO)fieldDefinitionDto;
         
-        FieldDefinition fieldDefinitionCreated = new AssigneeDefinitionBuilder()
-                                                            .setUsers(this.getUsersById(assigneeDefinitionDTO.getPossibleAssigneeUserIds()))
-                                                            .setName(assigneeDefinitionDTO.getName())
+        AssigneeDefinitionBuilder builder = new AssigneeDefinitionBuilder();
+
+        if (assigneeDefinitionDTO.getPossibleAssigneeUserIds() != null){
+            builder.setUsers(this.getUsersById(assigneeDefinitionDTO.getPossibleAssigneeUserIds()));
+        }
+
+        FieldDefinition fieldDefinitionCreated = builder.setName(assigneeDefinitionDTO.getName())
                                                             .build();
 
         FieldDefinition fieldDefinitionFromDatabase = this.fieldDefinitionDao.save(fieldDefinitionCreated);

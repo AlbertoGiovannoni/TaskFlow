@@ -24,6 +24,7 @@ import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.AssigneeDefinitionBuilder;
 import com.example.taskflow.DomainModel.FieldPackage.Assignee;
 import com.example.taskflow.DomainModel.FieldPackage.Date;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
@@ -159,12 +160,14 @@ public class FieldTest {
 
     @Test
     public void testAssigneeField() {
-        FieldDefinition fieldDefinition = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.ASSIGNEE);
-
         ArrayList<User> someUsers = this.testUtil.addGetMultipleRandomUserToDatabase(5);
         ArrayList<User> subsetOfSomeUsers = new ArrayList<>(Arrays.asList(someUsers.get(0), someUsers.get(3)));
 
-        fieldDefinition.addMultipleEntry(someUsers);
+        FieldDefinition fieldDefinition = new AssigneeDefinitionBuilder()
+                                                .setUsers(someUsers)
+                                                .setName(RandomString.make(10))
+                                                .build();
+
         this.fieldDefinitionDao.save(fieldDefinition);
 
         Field field = (new AssigneeBuilder(fieldDefinition))

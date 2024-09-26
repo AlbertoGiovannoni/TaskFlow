@@ -32,7 +32,7 @@ import com.example.taskflow.DomainModel.FieldPackage.Text;
 import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.ProjectMapper;
 import com.example.taskflow.service.ProjectService;
-import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionService;
+import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionServiceManager;
 
 @DataMongoTest
 @ActiveProfiles("test")
@@ -50,7 +50,7 @@ public class ProjectServiceTest {
     @Autowired
     private FieldDefinitionDAO fieldDefinitionDao;
     @Autowired
-    private FieldDefinitionService fieldDefinitionService;
+    private FieldDefinitionServiceManager fieldDefinitionServiceManager;
     @Autowired
     private ActivityMapper activityMapper;
     @Autowired
@@ -93,7 +93,9 @@ public class ProjectServiceTest {
         FieldDefinitionDTO simpleFieldDefinitionDTO = new SimpleFieldDefinitionDTO();
         simpleFieldDefinitionDTO.setName("prova");
         simpleFieldDefinitionDTO.setType(FieldType.TEXT);
-        FieldDefinition textDefinition = this.fieldDefinitionService.pushNewFieldDefinition(simpleFieldDefinitionDTO);
+        FieldDefinition textDefinition = this.fieldDefinitionServiceManager
+                                    .getFieldDefinitionService(simpleFieldDefinitionDTO)
+                                    .pushNewFieldDefinition(simpleFieldDefinitionDTO);
 
         Field field = new Text(UUID.randomUUID().toString(), textDefinition, "test");
         fields.add(field);
@@ -160,7 +162,9 @@ public class ProjectServiceTest {
         FieldDefinitionDTO simpleFieldDefinitionDTO = new SimpleFieldDefinitionDTO();
         simpleFieldDefinitionDTO.setName("prova");
         simpleFieldDefinitionDTO.setType(FieldType.TEXT);
-        FieldDefinition textDefinition = this.fieldDefinitionService.pushNewFieldDefinition(simpleFieldDefinitionDTO);
+        FieldDefinition textDefinition = this.fieldDefinitionServiceManager
+                                            .getFieldDefinitionService(simpleFieldDefinitionDTO)
+                                            .pushNewFieldDefinition(simpleFieldDefinitionDTO);
 
         ArrayList<Field> fields = new ArrayList<Field>();
         Field field = new Text(UUID.randomUUID().toString(), textDefinition, "test");

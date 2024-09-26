@@ -23,6 +23,9 @@ public class SingleSelectionDefinition extends FieldDefinition {
     public void addSingleEntry(Object obj){
         if (obj != null){
             if (obj instanceof String){
+                if (this.possibleSelections == null){
+                    this.possibleSelections = new ArrayList<>();
+                }
                 if (!this.possibleSelections.contains((String)obj)){
                     this.possibleSelections.add((String)obj);
                 }
@@ -59,7 +62,9 @@ public class SingleSelectionDefinition extends FieldDefinition {
 
     @Override
     public void reset() {
-        this.possibleSelections.clear();
+        if (this.possibleSelections != null){
+            this.possibleSelections.clear();
+        }
     }
 
     @Override
@@ -71,9 +76,12 @@ public class SingleSelectionDefinition extends FieldDefinition {
     public Object getSingleEntry() {
         String string = null;
 
-        if (!this.possibleSelections.isEmpty()){
-            string = this.possibleSelections.get(0);
+        if (this.possibleSelections != null){
+            if (!this.possibleSelections.isEmpty()){
+                string = this.possibleSelections.get(0);
+            }
         }
+
 
         return string;
     }

@@ -31,6 +31,9 @@ public class AssigneeDefinition extends FieldDefinition {
     public void addSingleEntry(Object obj){
         if (obj != null){
             if (obj instanceof User){
+                if (this.possibleAssigneeUsers == null){
+                    this.possibleAssigneeUsers = new ArrayList<>();
+                }
                 if (!this.possibleAssigneeUsers.contains((User)obj)){
                     this.possibleAssigneeUsers.add((User)obj);
                 }
@@ -40,6 +43,9 @@ public class AssigneeDefinition extends FieldDefinition {
 
     @Override
     public void addMultipleEntry(ArrayList<?> objs){
+        if (this.possibleAssigneeUsers == null){
+            this.possibleAssigneeUsers = new ArrayList<>();
+        }
         this.mergeWithoutRepetition(this.possibleAssigneeUsers, this.castToUser(objs));
     }
 
@@ -47,8 +53,10 @@ public class AssigneeDefinition extends FieldDefinition {
     public void removeEntry(Object obj) {
         if (obj != null){
             if (obj instanceof User){
-                if (!this.possibleAssigneeUsers.isEmpty()){
-                    this.possibleAssigneeUsers.add((User)obj);
+                if (this.possibleAssigneeUsers != null){
+                    if (!this.possibleAssigneeUsers.isEmpty()){
+                        this.possibleAssigneeUsers.add((User)obj);
+                    }
                 }
             }
         }
@@ -97,8 +105,10 @@ public class AssigneeDefinition extends FieldDefinition {
     public Object getSingleEntry() {
         User user = null;
 
-        if (!this.possibleAssigneeUsers.isEmpty()){
-            user = this.possibleAssigneeUsers.get(0);
+        if (this.possibleAssigneeUsers != null){
+            if (!this.possibleAssigneeUsers.isEmpty()){
+                user = this.possibleAssigneeUsers.get(0);
+            }
         }
 
         return user;
@@ -109,7 +119,9 @@ public class AssigneeDefinition extends FieldDefinition {
         boolean validation = false;
         if (obj != null){
             if (obj instanceof User){
-                validation = this.possibleAssigneeUsers.contains((User)obj);
+                if (this.possibleAssigneeUsers != null){
+                    validation = this.possibleAssigneeUsers.contains((User)obj);
+                }
             }
         }
         return validation;
