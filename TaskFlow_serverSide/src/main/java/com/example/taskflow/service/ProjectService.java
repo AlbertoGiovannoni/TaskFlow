@@ -15,13 +15,13 @@ import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.DTOs.ProjectDTO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DomainModel.Activity;
+import com.example.taskflow.DomainModel.EntityFactory;
 import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.FieldMapper;
 import com.example.taskflow.Mappers.ProjectMapper;
-import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionService;
 import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionServiceManager;
 
 @Service
@@ -49,17 +49,15 @@ public class ProjectService {
     FieldDefinitionServiceManager fieldDefinitionServiceManager;
 
     public ProjectDTO pushNewProject(ProjectDTO projectDto) {
-        if (projectDto.getUuid() == null) { // TODO capire perche devo impostare a mano l'uuid
-            projectDto.setUuid(UUID.randomUUID().toString());
-        }
-        Project project = projectMapper.toEntity(projectDto);
-        if (projectDto.getFieldsTemplate() != null) {
-            project.setFieldsTemplate(this.mapFieldDefDtoToFieldDef(projectDto.getFieldsTemplate()));
-        }
+        Project project = EntityFactory.getProject();
 
-        ArrayList<Activity> activities = new ArrayList<Activity>();
-        project.setActivities(activities);
-        this.projectDao.save(project);
+        if (projectDto.getName() == null){
+            throw new IllegalAccessError("Name of project cannot be null");
+        }
+        
+        project.setName(projectDto.getName());
+        
+        project = this.projectDao.save(project);
 
         return projectMapper.toDto(project);
     }
