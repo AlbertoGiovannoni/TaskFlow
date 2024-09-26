@@ -39,16 +39,26 @@ public class Project extends BaseEntity{
     }
 
     public void addFieldDefinition(FieldDefinition fieldDefinition) {
-        fieldsTemplate.add(fieldDefinition);
+        if (this.fieldsTemplate == null){
+            this.fieldsTemplate = new ArrayList<>();
+        }
+
+        this.fieldsTemplate.add(fieldDefinition);
     }
     
     
     public void addActivity(Activity newAct) {
+        if (this.activities == null){
+            this.activities = new ArrayList<>();
+        }
         activities.add(newAct);
     }
 
     public boolean deleteActivity(Activity actToRemove) {
-        return activities.remove(actToRemove);
+        if (this.activities != null){
+            return activities.remove(actToRemove);
+        }
+        return false;
     }
     
     public String getName() {

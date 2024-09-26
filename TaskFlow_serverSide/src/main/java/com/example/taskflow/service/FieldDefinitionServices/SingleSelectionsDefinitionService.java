@@ -52,7 +52,15 @@ public class SingleSelectionsDefinitionService extends FieldDefinitionService{
         }
         
         SingleSelectionDefinitionDTO singleSelectionDefinitionDto = (SingleSelectionDefinitionDTO)fieldDefinitionDto;
-        
+
+        if (singleSelectionDefinitionDto.getSelections() == null){
+            throw new IllegalArgumentException("SingleSelection must have at least one selection");
+        }
+
+        if (singleSelectionDefinitionDto.getSelections().isEmpty()){
+            throw new IllegalArgumentException("SingleSelection must have at least one selection");
+        }
+
         FieldDefinition fieldDefinitionCreated = new SingleSelectionDefinitionBuilder()
                                                             .setSelections(singleSelectionDefinitionDto.getSelections())
                                                             .setName(singleSelectionDefinitionDto.getName())
