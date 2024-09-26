@@ -116,6 +116,7 @@ public class OrganizationController {
                 .body(this.organizationDAO.getOrganizationByUser(userId));
     }
 
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @DeleteMapping("/{userId}/myOrganization/{organizationId}")
     public ResponseEntity<String> deleteOrganizationById(@PathVariable String organizationId) {
         this.organizationService.deleteOrganization(organizationId);
