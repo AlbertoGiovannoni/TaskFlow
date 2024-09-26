@@ -139,6 +139,16 @@ public class FieldDefinitionServiceTest {
 
                 fieldDefinitionDto = this.getFieldDefinitionDTO(type);
                 fieldDefinitionDto.setName(RandomString.make(10));
+
+                if (type == FieldType.ASSIGNEE){
+                    ArrayList<User> users = this.testUtil.addGetMultipleRandomUserToDatabase(10);
+                    ((AssigneeDefinitionDTO)fieldDefinitionDto).setPossibleAssigneeUserIds(this.getUserIds(users));
+                }
+    
+                if (type == FieldType.SINGLE_SELECTION){
+                    ((SingleSelectionDefinitionDTO)fieldDefinitionDto).setSelections(this.getRandomSelections(10));
+                }
+
                 createdFieldDefinition = this.fieldDefinitionServiceManager
                                                             .getFieldDefinitionService(fieldDefinitionDto)
                                                             .pushNewFieldDefinition(fieldDefinitionDto);
@@ -151,6 +161,7 @@ public class FieldDefinitionServiceTest {
 
                 movingProject = this.projectDao.findById(projectDto.getId()).orElseThrow();
                 movingProject.addFieldDefinition(createdFieldDefinition);
+                
                 for (Activity activity : activitiesPushed){
                     movingProject.addActivity(activity);
                 }
