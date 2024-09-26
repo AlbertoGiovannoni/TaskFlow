@@ -16,6 +16,10 @@ public class UserInfo extends BaseEntity{
         super();
     }
 
+    public UserInfo(String uuid) {
+        super(uuid);
+    }
+
     public UserInfo(String uuid, String email, String password){
         super(uuid);
 

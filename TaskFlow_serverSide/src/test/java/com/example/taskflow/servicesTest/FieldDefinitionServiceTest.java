@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,9 +34,12 @@ import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.AssigneeDefinitionBuilder;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
+import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.service.ActivityService;
 import com.example.taskflow.service.ProjectService;
+import com.example.taskflow.service.FieldDefinitionServices.AssigneeDefinitionService;
 import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionServiceManager;
 
 import net.bytebuddy.utility.RandomString;
@@ -58,7 +62,8 @@ public class FieldDefinitionServiceTest {
     private ProjectDAO projectDao;
     @Autowired
     private FieldDAO fieldDao;
-
+    @Autowired
+    private AssigneeDefinitionService assigneeDefinitionService;
     @Autowired 
     private FieldDefinitionDAO fieldDefinitionDao;
 
@@ -76,12 +81,41 @@ public class FieldDefinitionServiceTest {
             fieldDefinitionDto = this.getFieldDefinitionDTO(type);
             fieldDefinitionDto.setName(RandomString.make(10));
 
+            if (type == FieldType.ASSIGNEE){
+                ArrayList<User> users = this.testUtil.addGetMultipleRandomUserToDatabase(10);
+                ((AssigneeDefinitionDTO)fieldDefinitionDto).setPossibleAssigneeUserIds(this.getUserIds(users));
+            }
+
+            if (type == FieldType.SINGLE_SELECTION){
+                ((SingleSelectionDefinitionDTO)fieldDefinitionDto).setSelections(this.getRandomSelections(10));
+            }
+
             createdFieldDefinition = this.fieldDefinitionServiceManager
                                                         .getFieldDefinitionService(fieldDefinitionDto)
                                                         .pushNewFieldDefinition(fieldDefinitionDto);
         
             assertEquals(createdFieldDefinition, this.fieldDefinitionDao.findById(createdFieldDefinition.getId()).orElse(null));
         }
+    }
+
+    private ArrayList<String> getUserIds(ArrayList<User> users){
+        ArrayList<String> userIds = new ArrayList<>();
+
+        for (User user : users){
+            userIds.add(user.getId());
+        }
+
+        return userIds;
+    }
+
+    private ArrayList<String> getRandomSelections(int n){
+        ArrayList<String> selections = new ArrayList<>();
+
+        for (int i = 0; i < n; i++){
+            selections.add(RandomString.make(10));
+        }
+
+        return selections;
     }
 
     @Test

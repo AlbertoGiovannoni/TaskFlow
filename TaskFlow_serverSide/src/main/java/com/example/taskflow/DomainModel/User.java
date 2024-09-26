@@ -16,6 +16,10 @@ public class User extends BaseEntity{
         super();
     }
 
+    public User(String uuid){
+        super(uuid);
+    }
+
     public User(String uuid, UserInfo userInfo, String username) {
         super(uuid);
         this.username = username;

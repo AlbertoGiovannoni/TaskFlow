@@ -20,6 +20,10 @@ public class Project extends BaseEntity{
         super();
     }
 
+    public Project(String uuid){
+        super(uuid);
+    }
+
     public Project(String uuid, String name){
         super(uuid);
         this.name = name;
