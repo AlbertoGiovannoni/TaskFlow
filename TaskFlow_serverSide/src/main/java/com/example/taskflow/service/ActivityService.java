@@ -13,6 +13,7 @@ import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.EntityFactory;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.FieldMapper;
@@ -37,15 +38,18 @@ public class ActivityService {
     FieldDefinitionDAO fieldDefinitionDao;
 
     public Activity pushNewActivity(ActivityDTO activityDTO) {
-
-        ArrayList<FieldDTO> fieldsDto = activityDTO.getFields();
+        ArrayList<FieldDTO> fieldsDto = new ArrayList<FieldDTO>();
+        
+        if (activityDTO.getFields().size() != 0) {
+            fieldsDto = activityDTO.getFields();
+        }
         ArrayList<Field> fields = new ArrayList<Field>();
 
         for (FieldDTO movingFieldDto : fieldsDto) {
             fields.add(
                     this.fieldServiceManager
                             .getFieldService(movingFieldDto)
-                                            .pushNewField(movingFieldDto));
+                            .pushNewField(movingFieldDto));
         }
 
         Activity activity = EntityFactory.getActivity();
@@ -67,7 +71,7 @@ public class ActivityService {
         this.activityDao.delete(activity);
     }
 
-    public Activity renameActivity(String activityId, String newName){
+    public Activity renameActivity(String activityId, String newName) {
         Activity activity = this.activityDao.findById(activityId).orElseThrow();
 
         activity.setName(newName);
@@ -75,8 +79,33 @@ public class ActivityService {
         return this.activityDao.save(activity);
     }
 
-    public ActivityDTO getActivityById(String activityId){
+    public ActivityDTO getActivityById(String activityId) {
         Activity activity = this.activityDao.findById(activityId).orElseThrow();
         return this.activityMapper.toDto(activity);
     }
+
+    public ActivityDTO addFieldToActivity(String activityId, FieldDTO fieldDto) {
+        Activity activity = this.activityDao.findById(activityId).orElseThrow();
+
+        Field field = this.fieldServiceManager.getFieldService(fieldDto).pushNewField(fieldDto);
+
+        activity.addField(field);
+        activityDao.save(activity);
+
+        return this.activityMapper.toDto(activity);
+    }
+
+    public FieldDTO updateField(FieldDTO fieldDto) {
+        Field field = this.fieldServiceManager.getFieldService(fieldDto).updateField(fieldDto);
+
+        return this.fieldMapper.toDto(field);
+    }
+
+    public ActivityDTO removeField(String fieldId) {
+        Field field = this.fieldDao.findById(fieldId).orElseThrow();
+        // this.fieldDao.deleteFiledByActivity(fieldId); //TODO da implementare in
+        // fieldDao
+        return null;
+    }
+
 }
