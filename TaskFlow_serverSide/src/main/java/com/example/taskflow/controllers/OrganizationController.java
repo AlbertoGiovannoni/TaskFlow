@@ -97,6 +97,14 @@ public class OrganizationController {
                 .body(this.organizationService.getOrganizationById(organizationId));
     }
 
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
+    @DeleteMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}")
+    public ResponseEntity<String> deleteProjectFromOrganization(@PathVariable String organizationId, @PathVariable String projectId) {
+        this.organizationService.deleteProjectFromOrganization(organizationId, projectId);
+        return ResponseEntity.status(HttpStatus.OK).body("deleted");
+    }
+
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @DeleteMapping("/{userId}/myOrganization/{organizationId}")
     public ResponseEntity<String> deleteOrganizationById(@PathVariable String organizationId) {
         this.organizationService.deleteOrganization(organizationId);

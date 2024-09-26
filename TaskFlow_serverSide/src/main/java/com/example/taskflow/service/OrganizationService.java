@@ -130,6 +130,16 @@ public class OrganizationService {
         return organizationMapper.toDto(organization);
     }
 
+    public OrganizationDTO deleteProjectFromOrganization(String organizationId, String projectId){
+        Organization organization = this.organizationDAO.findById(organizationId).orElseThrow();
+        Project project = this.projectDAO.findById(projectId).orElseThrow();
+        if (project == null) {
+            throw new IllegalArgumentException("project not defined");
+        }
+        organization.removeProject(project);
+        this.organizationDAO.save(organization);
+        return organizationMapper.toDto(organization);
+    }
     public void deleteOrganization(String organizationId) {
         Organization organization = this.organizationDAO.findById(organizationId).orElseThrow();
         ArrayList<Project> projectList = organization.getProjects();
