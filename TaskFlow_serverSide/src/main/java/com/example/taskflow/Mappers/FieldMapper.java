@@ -5,9 +5,11 @@ import com.example.taskflow.DTOs.Field.AssigneeDTO;
 import com.example.taskflow.DTOs.Field.DateDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.Field.NumberDTO;
-import com.example.taskflow.DTOs.Field.StringDTO;
+import com.example.taskflow.DTOs.Field.SingleSelectionDTO;
+import com.example.taskflow.DTOs.Field.TextDTO;
 import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.User;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldPackage.Assignee;
 import com.example.taskflow.DomainModel.FieldPackage.Date;
 import com.example.taskflow.DomainModel.FieldPackage.Number;
@@ -62,9 +64,9 @@ public interface FieldMapper {
             case NUMBER:
                 return this.toEntity((NumberDTO) fieldDto);
             case SINGLE_SELECTION:
-                return this.toEntitySingleSelection((StringDTO) fieldDto);
+                return this.toEntity((SingleSelectionDTO) fieldDto);
             case TEXT:
-                return this.toEntityText((StringDTO) fieldDto);
+                return this.toEntity((TextDTO) fieldDto);
             case DOCUMENT:
                 // TODO
                 throw new IllegalArgumentException(fieldDto.getType() + " not implemented!");
@@ -73,6 +75,38 @@ public interface FieldMapper {
 
         }
     }
+//TODO da implementare document
+    // default FieldDTO toDto(Field field) {
+    //     if (field instanceof Assignee) {
+    //         return this.toDto((Assignee) field);
+    //     } else if (field instanceof Date) {
+    //         return this.toDto((Date) field);
+    //     } else if (field instanceof Number) {
+    //         return this.toDto((Number) field);
+    //     } else if (field instanceof SingleSelection) {
+    //         return this.toDto((SingleSelection) field);
+    //     } else if (field instanceof Text) {
+    //         return this.toDto((Text) field);
+    //     } else {
+    //         throw new IllegalArgumentException("Unsupported field type: " + field.getClass().getSimpleName());
+    //     }
+    // }
+
+    // default Field toEntity(FieldDTO fieldDto) {
+    //     if (fieldDto instanceof AssigneeDTO) {
+    //         return this.toEntity((AssigneeDTO) fieldDto);
+    //     } else if (fieldDto instanceof DateDTO) {
+    //         return this.toEntity((DateDTO) fieldDto);
+    //     } else if (fieldDto instanceof NumberDTO) {
+    //         return this.toEntity((NumberDTO) fieldDto);
+    //     } else if (fieldDto instanceof TextDTO) {
+    //         return this.toEntity((TextDTO) fieldDto);
+    //     } else if (fieldDto instanceof SingleSelectionDTO) {
+    //         return this.toEntity((SingleSelectionDTO) fieldDto);
+    //     } else {
+    //         throw new IllegalArgumentException("Unsupported field DTO type: " + fieldDto.getClass().getSimpleName());
+    //     }
+    // }
 
     // ------------------------------------------------------------------------------------- //
 
@@ -98,10 +132,10 @@ public interface FieldMapper {
     NumberDTO toDto(Number number);
 
     @Mapping(source = "fieldDefinition.id", target = "fieldDefinitionId")
-    StringDTO toDto(SingleSelection singleSelection);
+    SingleSelectionDTO toDto(SingleSelection singleSelection);
 
     @Mapping(source = "fieldDefinition.id", target = "fieldDefinitionId")
-    StringDTO toDto(Text text);
+    TextDTO toDto(Text text);
 
     // ------------------------------------------------------------------------------------- //
 
@@ -119,10 +153,10 @@ public interface FieldMapper {
 
     @Mapping(source = "value", target = "value", ignore = true)
     @Mapping(source = "fieldDefinitionId", target = "fieldDefinition", ignore = true)
-    SingleSelection toEntitySingleSelection(StringDTO singleSelectionDto);
+    SingleSelection toEntity(SingleSelectionDTO singleSelectionDto);
 
     @Mapping(source = "fieldDefinitionId", target = "fieldDefinition", ignore = true)
-    Text toEntityText(StringDTO textDto);
+    Text toEntity(TextDTO textDto);
 
     default ArrayList<FieldDTO> fieldToFieldDto(ArrayList<Field> fields){
         ArrayList<FieldDTO> fieldDtoList = new ArrayList<FieldDTO>();

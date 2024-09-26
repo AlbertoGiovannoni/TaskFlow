@@ -8,7 +8,7 @@ import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.Field.NumberDTO;
-import com.example.taskflow.DTOs.Field.StringDTO;
+import com.example.taskflow.DTOs.Field.TextDTO;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.Text;
@@ -30,12 +30,12 @@ public class TextService extends FieldService {
     @Override
     public Field pushNewField(FieldDTO fieldDto) {
 
-        if (!(fieldDto instanceof StringDTO)) {
+        if (!(fieldDto instanceof TextDTO)) {
             throw new IllegalArgumentException(
                     "FieldDto of class " + fieldDto.getClass().getSimpleName() + " instead of StringDTO");
         }
 
-        StringDTO stringDto = (StringDTO) fieldDto;
+        TextDTO stringDto = (TextDTO) fieldDto;
 
         FieldDefinition fieldDefinition = fieldDefinitionDAO.findById(stringDto.getFieldDefinitionId())
                 .orElse(null);
@@ -57,7 +57,7 @@ public class TextService extends FieldService {
     public Field updateField(FieldDTO fieldDto) {
         
         Text field = (Text) this.fieldDao.findById(fieldDto.getId()).orElseThrow();
-        StringDTO textDTO = (StringDTO) fieldDto;
+        TextDTO textDTO = (TextDTO) fieldDto;
 
         field.setValue(textDTO.getValue());
         this.fieldDao.save(field);

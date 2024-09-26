@@ -42,7 +42,8 @@ import net.bytebuddy.utility.RandomString;
 import com.example.taskflow.DTOs.Field.AssigneeDTO;
 import com.example.taskflow.DTOs.Field.DateDTO;
 import com.example.taskflow.DTOs.Field.NumberDTO;
-import com.example.taskflow.DTOs.Field.StringDTO;
+import com.example.taskflow.DTOs.Field.SingleSelectionDTO;
+import com.example.taskflow.DTOs.Field.TextDTO;
 
 @DataMongoTest
 @ActiveProfiles("test")
@@ -112,7 +113,7 @@ public class FieldServiceTest {
 
     @Test
     public void testCreationText() {
-        StringDTO fieldDto = new StringDTO();
+        TextDTO fieldDto = new TextDTO();
 
         fieldDto.setType(FieldType.TEXT);
         FieldDefinition fd = new SimpleFieldDefinitionBuilder(FieldType.TEXT)
@@ -136,7 +137,7 @@ public class FieldServiceTest {
 
     @Test
     public void testCreationSingleSelection() {
-        StringDTO fieldDto = new StringDTO();
+        SingleSelectionDTO fieldDto = new SingleSelectionDTO();
 
         fieldDto.setType(FieldType.SINGLE_SELECTION);
         ArrayList<String> selections = new ArrayList<String>();
@@ -268,7 +269,7 @@ public class FieldServiceTest {
     @Test
     public void testUpdateText(){
 
-        StringDTO fieldDto = new StringDTO();
+        TextDTO fieldDto = new TextDTO();
 
         fieldDto.setType(FieldType.TEXT);
         FieldDefinition fd = new SimpleFieldDefinitionBuilder(FieldType.TEXT)
@@ -289,7 +290,7 @@ public class FieldServiceTest {
 
         // update
 
-        StringDTO newFieldDto = new StringDTO();
+        TextDTO newFieldDto = new TextDTO();
 
         newFieldDto.setType(FieldType.TEXT);
 
@@ -307,7 +308,7 @@ public class FieldServiceTest {
 
     @Test
     public void testUpdateSingleSelection() {
-        StringDTO fieldDto = new StringDTO();
+        SingleSelectionDTO fieldDto = new SingleSelectionDTO();
 
         fieldDto.setType(FieldType.SINGLE_SELECTION);
         ArrayList<String> selections = new ArrayList<String>();
@@ -329,7 +330,7 @@ public class FieldServiceTest {
 
         // update
 
-        StringDTO newFieldDto = new StringDTO();
+        SingleSelectionDTO newFieldDto = new SingleSelectionDTO();
 
         newFieldDto.setId(createdField.getId());
         newFieldDto.setType(FieldType.SINGLE_SELECTION);

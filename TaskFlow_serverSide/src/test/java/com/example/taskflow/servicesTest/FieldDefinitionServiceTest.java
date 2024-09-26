@@ -25,7 +25,7 @@ import com.example.taskflow.DTOs.Field.AssigneeDTO;
 import com.example.taskflow.DTOs.Field.DateDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.Field.NumberDTO;
-import com.example.taskflow.DTOs.Field.StringDTO;
+import com.example.taskflow.DTOs.Field.TextDTO;
 import com.example.taskflow.DTOs.FieldDefinition.AssigneeDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.SimpleFieldDefinitionDTO;
@@ -232,7 +232,7 @@ public class FieldDefinitionServiceTest {
                 break;
             case SINGLE_SELECTION:
             case TEXT:
-                fieldDTO =  new StringDTO();
+                fieldDTO =  new TextDTO();
                 break;
             case DATE:
                 fieldDTO = new DateDTO();

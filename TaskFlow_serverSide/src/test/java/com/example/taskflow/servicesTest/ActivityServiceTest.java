@@ -22,7 +22,8 @@ import com.example.taskflow.DTOs.Field.AssigneeDTO;
 import com.example.taskflow.DTOs.Field.DateDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.Field.NumberDTO;
-import com.example.taskflow.DTOs.Field.StringDTO;
+import com.example.taskflow.DTOs.Field.SingleSelectionDTO;
+import com.example.taskflow.DTOs.Field.TextDTO;
 import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
@@ -57,7 +58,7 @@ public class ActivityServiceTest {
 
     @BeforeEach
     public void setupDatabase() {
-        this.testUtil.cleanDatabase();
+        //this.testUtil.cleanDatabase();
         for (int i = 0; i < 5; i++) {
             this.testUtil.addGetRandomUserToDatabase();
         }
@@ -95,7 +96,7 @@ public class ActivityServiceTest {
 
         // ---------------------- TEXT ---------------------- //
 
-        StringDTO textDto = new StringDTO();
+        TextDTO textDto = new TextDTO();
 
         textDto.setType(FieldType.TEXT);
         fd = new SimpleFieldDefinitionBuilder(FieldType.TEXT)
@@ -115,7 +116,7 @@ public class ActivityServiceTest {
 
         // ---------------------- SINGLE SELECTION ---------------------- //
 
-        StringDTO singleSelectionDto = new StringDTO();
+        SingleSelectionDTO singleSelectionDto = new SingleSelectionDTO();
 
         singleSelectionDto.setType(FieldType.SINGLE_SELECTION);
         ArrayList<String> selections = new ArrayList<String>();

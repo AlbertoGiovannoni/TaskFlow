@@ -19,7 +19,7 @@ import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.DTOs.ProjectDTO;
-import com.example.taskflow.DTOs.Field.StringDTO;
+import com.example.taskflow.DTOs.Field.TextDTO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.SimpleFieldDefinitionDTO;
 import com.example.taskflow.DomainModel.Activity;
@@ -111,7 +111,7 @@ public class ProjectServiceTest {
 
         project = projectDAO.findById(project.getId()).orElseThrow();
 
-        String valuePushed = ((StringDTO) activityDTO.getFields().get(0)).getValue();
+        String valuePushed = ((TextDTO) activityDTO.getFields().get(0)).getValue();
         String valueFromDb = ((Text) project.getActivities().get(0).getFields().get(0)).getValue();
 
         assertEquals(valuePushed, valueFromDb);

@@ -7,7 +7,7 @@ import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
-import com.example.taskflow.DTOs.Field.StringDTO;
+import com.example.taskflow.DTOs.Field.SingleSelectionDTO;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.SingleSelection;
@@ -30,13 +30,13 @@ public class SingleSelectionService extends FieldService{
     @Override
     public Field pushNewField(FieldDTO fieldDto) {
 
-        if (!(fieldDto instanceof StringDTO)) {
+        if (!(fieldDto instanceof SingleSelectionDTO)) {
             throw new IllegalArgumentException(
                 "FieldDto of class " + fieldDto.getClass().getSimpleName() + " instead of StringDTO"
             );
         }
 
-        StringDTO stringDTO = (StringDTO) fieldDto;
+        SingleSelectionDTO stringDTO = (SingleSelectionDTO) fieldDto;
 
         FieldDefinition fieldDefinition = fieldDefinitionDAO.findById(stringDTO.getFieldDefinitionId())
                 .orElse(null);
@@ -59,7 +59,7 @@ public class SingleSelectionService extends FieldService{
     public Field updateField(FieldDTO fieldDto) {
         
         SingleSelection field = (SingleSelection) this.fieldDao.findById(fieldDto.getId()).orElseThrow();
-        StringDTO singleSelectionDTO = (StringDTO) fieldDto;
+        SingleSelectionDTO singleSelectionDTO = (SingleSelectionDTO) fieldDto;
 
         field.setValue(singleSelectionDTO.getValue());
 
