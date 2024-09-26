@@ -12,6 +12,7 @@ import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DomainModel.Activity;
+import com.example.taskflow.DomainModel.EntityFactory;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.FieldMapper;
@@ -47,7 +48,8 @@ public class ActivityService {
                                             .pushNewField(movingFieldDto));
         }
 
-        Activity activity = this.activityMapper.toEntity(activityDTO);
+        Activity activity = EntityFactory.getActivity();
+        activity.setName(activityDTO.getName());
         activity.setFields(fields);
 
         activity = this.activityDao.save(activity);
