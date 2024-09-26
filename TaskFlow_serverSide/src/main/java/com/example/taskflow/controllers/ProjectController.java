@@ -15,6 +15,7 @@ import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
 import com.example.taskflow.DTOs.ProjectDTO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.service.ProjectService;
 
@@ -41,19 +42,25 @@ public class ProjectController {
     }
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
-    @PostMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}")
+    @PostMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/createActivity")
     public ResponseEntity<ProjectDTO> createActivity(@Valid @RequestBody ActivityDTO activityDTO, @PathVariable String projectId) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(this.projectService.addActivityToProject(projectId, activityDTO));
     }
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
-    @PatchMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}")
-    public ResponseEntity<Map<String, String>> renameProject(@PathVariable String projectId, @RequestBody Map<String, String> requestBody) {
+    @PatchMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/renameProject")
+    public ResponseEntity<ProjectDTO> renameProject(@PathVariable String projectId, @RequestBody Map<String, String> requestBody) {
         String newName = requestBody.get("newName");
-        this.projectService.renameProject(projectId, newName);
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Project renamed!");
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(this.projectService.renameProject(projectId, newName));
+    }
+
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
+    @PatchMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/addFieldDefinition")
+    public ResponseEntity<ProjectDTO> addFieldDefinitionToProject(@PathVariable String projectId, @RequestBody Map<String, Object> requestBody) {
+        FieldDefinitionDTO newFieldDef = (FieldDefinitionDTO)requestBody.get("newFieldDefinition");
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(this.projectService.addFieldDefinitionToProject(projectId, newFieldDef));
     }
 }
