@@ -88,5 +88,12 @@ public class ProjectController {
                  .body(this.projectService.getProjectById(projectId));
     }
 
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
+    @DeleteMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}")
+    public ResponseEntity<ProjectDTO> removeActivity(@PathVariable String projectId, @PathVariable String activityId, @PathVariable String organizationId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                 .body(this.projectService.removeActivity(projectId, activityId));
+    }
+
     // TODO deleteActivity
 }

@@ -1,6 +1,7 @@
 package com.example.taskflow.service;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,9 @@ public class ActivityService {
     FieldDefinitionDAO fieldDefinitionDao;
 
     public Activity pushNewActivity(ActivityDTO activityDTO) {
+        if (activityDTO.getUuid() == null) { // TODO perche non ho uuid mentre in user si
+            activityDTO.setUuid(UUID.randomUUID().toString());
+        }
         ArrayList<FieldDTO> fieldsDto = new ArrayList<FieldDTO>();
         
         if (activityDTO.getFields().size() != 0) {

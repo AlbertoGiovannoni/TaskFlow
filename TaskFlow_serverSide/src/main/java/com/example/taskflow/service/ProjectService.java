@@ -136,4 +136,16 @@ public class ProjectService {
 
         this.projectDao.delete(project);
     }
+
+    public ProjectDTO removeActivity(String projectId, String activityId){
+        Project project = projectDao.findById(projectId).orElseThrow();
+        Activity activity = activityDao.findById(activityId).orElseThrow();
+
+        project.deleteActivity(activity);
+        activityDao.delete(activity);
+
+        this.projectDao.save(project);
+        return projectMapper.toDto(project);
+
+    }
 }
