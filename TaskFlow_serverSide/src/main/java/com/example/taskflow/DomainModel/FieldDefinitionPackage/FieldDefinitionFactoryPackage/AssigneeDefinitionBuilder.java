@@ -1,8 +1,8 @@
 package com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
+import com.example.taskflow.DomainModel.EntityFactory;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
@@ -20,7 +20,7 @@ public class AssigneeDefinitionBuilder extends FieldDefinitionBuilder{
             throw new IllegalAccessError("possibleAssignees are null");
         }
 
-        AssigneeDefinition assigneeDefinition = new AssigneeDefinition(UUID.randomUUID().toString());
+        AssigneeDefinition assigneeDefinition = EntityFactory.getAssigneeDefinition();
 
         assigneeDefinition.setName(this.name);
         assigneeDefinition.setType(this.type);

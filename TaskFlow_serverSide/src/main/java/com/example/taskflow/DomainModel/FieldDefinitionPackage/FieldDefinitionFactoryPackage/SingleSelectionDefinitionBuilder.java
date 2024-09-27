@@ -1,8 +1,8 @@
 package com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
+import com.example.taskflow.DomainModel.EntityFactory;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.SingleSelectionDefinition;
 
@@ -17,7 +17,7 @@ public class SingleSelectionDefinitionBuilder extends FieldDefinitionBuilder{
 
     @Override
     public SingleSelectionDefinition build() {
-        SingleSelectionDefinition singleSelectionDefinition = new SingleSelectionDefinition(UUID.randomUUID().toString());
+        SingleSelectionDefinition singleSelectionDefinition = EntityFactory.getSingleSelectionDefinition();
 
         singleSelectionDefinition.setName(this.name);
         singleSelectionDefinition.setType(this.type);
