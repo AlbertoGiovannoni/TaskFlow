@@ -32,9 +32,8 @@ public class SingleSelectionsDefinitionService extends FieldDefinitionService{
         if (singleSelectionDefinitionDto.getName() != null){
             singleSelectionDefinition.setName(fieldDefinitionDto.getName());
         }
-        if (singleSelectionDefinitionDto.getPossibleSelections() != null){
-            ArrayList<String> selections = singleSelectionDefinition.getPossibleSelections();
-            singleSelectionDefinition.setPossibleSelections(singleSelectionDefinitionDto.getPossibleSelections());
+        if (singleSelectionDefinitionDto.getSelections() != null){
+            singleSelectionDefinition.setPossibleSelections(singleSelectionDefinitionDto.getSelections());
         }
 
         this.fieldDefinitionDao.save(singleSelectionDefinition);
@@ -54,16 +53,16 @@ public class SingleSelectionsDefinitionService extends FieldDefinitionService{
         
         SingleSelectionDefinitionDTO singleSelectionDefinitionDto = (SingleSelectionDefinitionDTO)fieldDefinitionDto;
 
-        if (singleSelectionDefinitionDto.getPossibleSelections() == null){
+        if (singleSelectionDefinitionDto.getSelections() == null){
             throw new IllegalArgumentException("SingleSelection must have at least one selection");
         }
 
-        if (singleSelectionDefinitionDto.getPossibleSelections().isEmpty()){
+        if (singleSelectionDefinitionDto.getSelections().isEmpty()){
             throw new IllegalArgumentException("SingleSelection must have at least one selection");
         }
 
         FieldDefinition fieldDefinitionCreated = new SingleSelectionDefinitionBuilder()
-                                                            .setSelections(singleSelectionDefinitionDto.getPossibleSelections())
+                                                            .setSelections(singleSelectionDefinitionDto.getSelections())
                                                             .setName(singleSelectionDefinitionDto.getName())
                                                             .build();
 

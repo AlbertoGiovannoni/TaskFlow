@@ -86,7 +86,7 @@ public class FieldDefinitionServiceTest {
             }
 
             if (type == FieldType.SINGLE_SELECTION){
-                ((SingleSelectionDefinitionDTO)fieldDefinitionDto).setPossibleSelections(this.getRandomSelections(10));
+                ((SingleSelectionDefinitionDTO)fieldDefinitionDto).setSelections(this.getRandomSelections(10));
             }
 
             createdFieldDefinition = this.fieldDefinitionServiceManager
@@ -145,7 +145,7 @@ public class FieldDefinitionServiceTest {
                 }
     
                 if (type == FieldType.SINGLE_SELECTION){
-                    ((SingleSelectionDefinitionDTO)fieldDefinitionDto).setPossibleSelections(this.getRandomSelections(10));
+                    ((SingleSelectionDefinitionDTO)fieldDefinitionDto).setSelections(this.getRandomSelections(10));
                 }
 
                 createdFieldDefinition = this.fieldDefinitionServiceManager
