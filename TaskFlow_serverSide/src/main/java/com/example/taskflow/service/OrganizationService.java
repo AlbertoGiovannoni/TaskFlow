@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class OrganizationService {
