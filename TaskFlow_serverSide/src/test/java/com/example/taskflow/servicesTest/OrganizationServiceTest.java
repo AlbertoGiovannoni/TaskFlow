@@ -35,6 +35,7 @@ import com.example.taskflow.Mappers.ProjectMapper;
 import com.example.taskflow.Mappers.UserMapper;
 import com.example.taskflow.service.OrganizationService;
 import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionService;
+import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionServiceManager;
 
 @DataMongoTest
 @ActiveProfiles("test")
@@ -52,7 +53,8 @@ public class OrganizationServiceTest {
     private OrganizationMapper organizationMapper;
     @Autowired
     private OrganizationDAO organizationDAO;
-    private FieldDefinitionService fieldDefinitionService;
+    @Autowired
+    private FieldDefinitionServiceManager fieldDefinitionServiceManager;
     @Autowired
     private ProjectDAO projectDAO;
     @Autowired
@@ -151,7 +153,7 @@ public class OrganizationServiceTest {
         FieldDefinitionDTO simpleFieldDefinitionDTO = new SimpleFieldDefinitionDTO();
         simpleFieldDefinitionDTO.setName("prova");
         simpleFieldDefinitionDTO.setType(FieldType.TEXT);
-        FieldDefinition textDefinition = this.fieldDefinitionService.pushNewFieldDefinition(simpleFieldDefinitionDTO);
+        FieldDefinition textDefinition = this.fieldDefinitionServiceManager.getFieldDefinitionService(simpleFieldDefinitionDTO).pushNewFieldDefinition(simpleFieldDefinitionDTO);
         ArrayList<FieldDefinition> fieldDefs = new ArrayList<FieldDefinition>();
         fieldDefs.add(textDefinition);
 

@@ -2,6 +2,8 @@ package com.example.taskflow.DomainModel;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
+import com.example.taskflow.DomainModel.FieldPackage.Field;
+
 import java.util.ArrayList;
 
 
@@ -54,11 +56,10 @@ public class Project extends BaseEntity{
         activities.add(newAct);
     }
 
-    public boolean deleteActivity(Activity actToRemove) {
+    public void deleteActivity(Activity actToRemove) {
         if (this.activities != null){
-            return activities.remove(actToRemove);
+            activities.remove(actToRemove);
         }
-        return false;
     }
     
     public String getName() {
@@ -83,5 +84,11 @@ public class Project extends BaseEntity{
     
     public void setActivities(ArrayList<Activity> activities) {
         this.activities = activities;
+    }
+
+    public void removeFieldDefinition(FieldDefinition fieldDefinition){
+        if (this.fieldsTemplate != null){
+            this.fieldsTemplate.remove(fieldDefinition);
+        }
     }
 }

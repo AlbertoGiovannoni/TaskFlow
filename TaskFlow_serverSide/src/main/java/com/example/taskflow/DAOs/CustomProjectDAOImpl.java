@@ -1,12 +1,14 @@
 package com.example.taskflow.DAOs;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
-import com.example.taskflow.DomainModel.Activity;
+import com.example.taskflow.DomainModel.Project;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 public class CustomProjectDAOImpl implements CustomProjectDAO{
     @Autowired
@@ -17,8 +19,16 @@ public class CustomProjectDAOImpl implements CustomProjectDAO{
         Query query = new Query();
         query.addCriteria(Criteria.where("fieldsTemplate.$id").is(fieldDefinitionId));
 
-        Update update = new Update().pull("fieldsTemplate", new org.bson.types.ObjectId(fieldDefinitionId));
+        Update update = new Update().pull("fieldsTemplate", new ObjectId(fieldDefinitionId));
+        
+        this.mongoTemplate.updateFirst(query, update, FieldDefinition.class);
+    }
 
-        mongoTemplate.updateFirst(query, update, Activity.class);
+    @Override
+    public Project findProjectByFieldDefinition(String fieldDefinitionId) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("fieldsTemplate.$id").is(new ObjectId(fieldDefinitionId)));
+
+        return this.mongoTemplate.findOne(query, Project.class);
     }
 }

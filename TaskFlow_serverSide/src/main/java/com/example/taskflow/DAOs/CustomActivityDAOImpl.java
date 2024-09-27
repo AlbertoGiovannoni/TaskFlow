@@ -1,6 +1,7 @@
 package com.example.taskflow.DAOs;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
@@ -11,9 +12,11 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import com.example.taskflow.DomainModel.Activity;
+import com.example.taskflow.DomainModel.FieldPackage.Field;
+import com.mongodb.client.result.UpdateResult;
+import com.example.taskflow.DomainModel.FieldPackage.Date;
 
-
-public class CustomActivityDAOImpl implements CustomActivityDAO{
+public class CustomActivityDAOImpl implements CustomActivityDAO {
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -31,15 +34,29 @@ public class CustomActivityDAOImpl implements CustomActivityDAO{
     @Override
     public void removeFieldsFromActivities(List<String> fieldIds) {
         List<ObjectId> objectIds = fieldIds.stream()
-                                           .map(ObjectId::new)
-                                           .collect(Collectors.toList());
+                .map(ObjectId::new)
+                .collect(Collectors.toList());
 
         Query query = new Query();
         query.addCriteria(Criteria.where("fields.$id").in(objectIds));
 
-        Update update = new Update().pull("fields", new Query(Criteria.where("$id").in(objectIds)));
+        Update update = new Update().pull("fields", Query.query(Criteria.where("$id").in(objectIds)));
 
-        mongoTemplate.updateMulti(query, update, Activity.class);
+        this.mongoTemplate.updateMulti(query, update, Activity.class);
     }
-    
+
+    @Override
+    public ArrayList<Activity> getActivitiesByFieldIds(List<String> fieldIds) {
+        List<ObjectId> objectIds = fieldIds.stream()
+                                        .map(ObjectId::new)
+                                        .collect(Collectors.toList());
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("fields.$id").in(objectIds));
+
+        List<Activity> activities = mongoTemplate.find(query, Activity.class);
+
+        return new ArrayList<>(activities);
+    }
+
 }

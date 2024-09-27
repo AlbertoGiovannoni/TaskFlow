@@ -5,11 +5,11 @@ import java.util.ArrayList;
 public class SingleSelectionDefinitionDTO extends FieldDefinitionDTO{
     ArrayList<String> possibleSelections;
 
-    public ArrayList<String> getSelections() {
+    public ArrayList<String> getPossibleSelections() {
         return possibleSelections;
     }
 
-    public void setSelections(ArrayList<String> selections) {
+    public void setPossibleSelections(ArrayList<String> selections) {
         this.possibleSelections = selections;
     }
 }

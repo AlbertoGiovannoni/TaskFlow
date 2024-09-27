@@ -4,9 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
-import java.util.Random;
-
-import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +22,7 @@ import com.example.taskflow.DTOs.Field.AssigneeDTO;
 import com.example.taskflow.DTOs.Field.DateDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.Field.NumberDTO;
+import com.example.taskflow.DTOs.Field.SingleSelectionDTO;
 import com.example.taskflow.DTOs.Field.TextDTO;
 import com.example.taskflow.DTOs.FieldDefinition.AssigneeDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
@@ -32,14 +30,17 @@ import com.example.taskflow.DTOs.FieldDefinition.SimpleFieldDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.SingleSelectionDefinitionDTO;
 import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.Project;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.AssigneeDefinitionBuilder;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.SingleSelectionDefinition;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.service.ActivityService;
 import com.example.taskflow.service.ProjectService;
-import com.example.taskflow.service.FieldDefinitionServices.AssigneeDefinitionService;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionServiceManager;
 
 import net.bytebuddy.utility.RandomString;
@@ -62,8 +63,6 @@ public class FieldDefinitionServiceTest {
     private ProjectDAO projectDao;
     @Autowired
     private FieldDAO fieldDao;
-    @Autowired
-    private AssigneeDefinitionService assigneeDefinitionService;
     @Autowired 
     private FieldDefinitionDAO fieldDefinitionDao;
 
@@ -87,7 +86,7 @@ public class FieldDefinitionServiceTest {
             }
 
             if (type == FieldType.SINGLE_SELECTION){
-                ((SingleSelectionDefinitionDTO)fieldDefinitionDto).setSelections(this.getRandomSelections(10));
+                ((SingleSelectionDefinitionDTO)fieldDefinitionDto).setPossibleSelections(this.getRandomSelections(10));
             }
 
             createdFieldDefinition = this.fieldDefinitionServiceManager
@@ -146,7 +145,7 @@ public class FieldDefinitionServiceTest {
                 }
     
                 if (type == FieldType.SINGLE_SELECTION){
-                    ((SingleSelectionDefinitionDTO)fieldDefinitionDto).setSelections(this.getRandomSelections(10));
+                    ((SingleSelectionDefinitionDTO)fieldDefinitionDto).setPossibleSelections(this.getRandomSelections(10));
                 }
 
                 createdFieldDefinition = this.fieldDefinitionServiceManager
@@ -154,7 +153,7 @@ public class FieldDefinitionServiceTest {
                                                             .pushNewFieldDefinition(fieldDefinitionDto);
                 
                 fieldDTOs = this.getFieldDTOArray(10, type);
-                this.setFieldDefinitionToFieldDTO(fieldDTOs, createdFieldDefinition.getId());
+                this.setupFieldDTOs(fieldDTOs, createdFieldDefinition);
 
                 activityDtos = this.getActivitieDTOsArray(fieldDTOs);
                 activitiesPushed = this.pushAllActivities(activityDtos);
@@ -179,11 +178,11 @@ public class FieldDefinitionServiceTest {
 
                     Activity activityFromDb = this.activityDao.findById(activity.getId()).orElseThrow();
                     ArrayList<Field> activityFieldsFromDb = activityFromDb.getFields();
-                    assertNull(activityFieldsFromDb);
+                    assertEquals(0, activityFieldsFromDb.size());
                 }
 
                 Project projectFromDb = this.projectDao.findById(projectDto.getId()).orElseThrow();
-                assertNull(projectFromDb.getFieldsTemplate());
+                assertEquals(0, projectFromDb.getFieldsTemplate().size());
             }
         }
     }
@@ -207,20 +206,42 @@ public class FieldDefinitionServiceTest {
 
     private ArrayList<FieldDTO> getFieldDTOArray(int n, FieldType type){
         ArrayList<FieldDTO> fieldDTOs = new ArrayList<>();
-        FieldDTO movingFieldDto;
 
         for (int i = 0; i < n; i++){
-            movingFieldDto = this.getFieldDTO(type);
-            movingFieldDto.setFieldDefinitionId(null);
             fieldDTOs.add(this.getFieldDTO(type));
         }
 
         return fieldDTOs;
     }
 
-    private void setFieldDefinitionToFieldDTO(ArrayList<FieldDTO> fieldDtos, String fieldDefinitionId){
+    private void setupFieldDTOs(ArrayList<FieldDTO> fieldDtos, FieldDefinition fieldDefinition){
         for (FieldDTO fieldDto : fieldDtos){
-            fieldDto.setFieldDefinitionId(fieldDefinitionId);
+            fieldDto.setFieldDefinitionId(fieldDefinition.getId());
+            this.setValueToDTO(fieldDto, fieldDefinition);
+        }
+    }
+
+    private void setValueToDTO(FieldDTO fieldDto, FieldDefinition fieldDefinition){
+        switch (fieldDto.getType()) {
+            case ASSIGNEE:
+                ((AssigneeDTO)fieldDto)
+                    .setUserIds(
+                        this.getUserIds(((AssigneeDefinition)fieldDefinition).getPossibleAssigneeUsers()));
+                break;
+            case SINGLE_SELECTION:
+                ((SingleSelectionDTO)fieldDto).setValue((((SingleSelectionDefinition)fieldDefinition).getPossibleSelections().get(0)));
+                break;
+            case TEXT:
+                ((TextDTO)fieldDto).setValue(RandomString.make(100));
+                break;
+            case DATE:
+                ((DateDTO)fieldDto).setDateTime(LocalDateTime.now());
+                break;
+            case NUMBER:
+                ((NumberDTO)fieldDto).setValue(new BigDecimal(100));
+                break;
+            default:
+                throw new IllegalArgumentException("Document need implementation");
         }
     }
 
@@ -231,6 +252,8 @@ public class FieldDefinitionServiceTest {
                 fieldDTO =  new AssigneeDTO();
                 break;
             case SINGLE_SELECTION:
+                fieldDTO = new SingleSelectionDTO();
+                break;
             case TEXT:
                 fieldDTO =  new TextDTO();
                 break;

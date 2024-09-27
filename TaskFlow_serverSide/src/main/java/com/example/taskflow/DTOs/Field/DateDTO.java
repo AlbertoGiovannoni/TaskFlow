@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import com.example.taskflow.DTOs.NotificationDTO;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class DateDTO extends FieldDTO {
