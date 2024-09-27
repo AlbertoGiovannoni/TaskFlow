@@ -33,8 +33,8 @@ public class AssigneeDefinitionService extends FieldDefinitionService{
         
         AssigneeDefinitionBuilder builder = new AssigneeDefinitionBuilder();
 
-        if (assigneeDefinitionDTO.getPossibleAssigneeUserIds() != null){
-            builder.setUsers(this.getUsersById(assigneeDefinitionDTO.getPossibleAssigneeUserIds()));
+        if (assigneeDefinitionDTO.getAssigneeIds() != null){
+            builder.setUsers(this.getUsersById(assigneeDefinitionDTO.getAssigneeIds()));
         }
 
         FieldDefinition fieldDefinitionCreated = builder.setName(assigneeDefinitionDTO.getName())
@@ -115,10 +115,10 @@ public class AssigneeDefinitionService extends FieldDefinitionService{
             assigneeDefinition.setName(fieldDefinitionDto.getName());
         }
 
-        if (assigneeDefinitionDto.getPossibleAssigneeUserIds() != null){
+        if (assigneeDefinitionDto.getAssigneeIds() != null){
             assigneeDefinition.setPossibleAssigneeUsers(
                 new ArrayList<User> (this.userDao.findAllById(
-                    assigneeDefinitionDto.getPossibleAssigneeUserIds())
+                    assigneeDefinitionDto.getAssigneeIds())
                 )
             );
         }

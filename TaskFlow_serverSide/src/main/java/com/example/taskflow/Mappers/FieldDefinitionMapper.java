@@ -67,9 +67,10 @@ public interface FieldDefinitionMapper {
         }
     }
 
-    @Mapping(source="possibleAssigneeUsers", target="possibleAssigneeUserIds", qualifiedByName = "mapUsersToIds")
+    @Mapping(source="possibleAssigneeUsers", target="assigneeIds", qualifiedByName = "mapUsersToIds")
     AssigneeDefinitionDTO toDto(AssigneeDefinition assigneeDefinition);
 
+    @Mapping(source="possibleSelections", target="selections")
     SingleSelectionDefinitionDTO toDto(SingleSelectionDefinition singleSelectionDefinition);
 
     SimpleFieldDefinitionDTO toDto(SimpleFieldDefinition simpleFieldDefinition);

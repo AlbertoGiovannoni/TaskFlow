@@ -1,17 +1,13 @@
 package com.example.taskflow.DTOs.Field;
 
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import jakarta.validation.constraints.NotBlank;
 
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "type"
-)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true)
+
 @JsonSubTypes({
     @JsonSubTypes.Type(value = NumberDTO.class, name = "NUMBER"),
     @JsonSubTypes.Type(value = TextDTO.class, name = "TEXT"),
@@ -19,6 +15,7 @@ import jakarta.validation.constraints.NotBlank;
     @JsonSubTypes.Type(value = DateDTO.class, name = "DATE"),
     @JsonSubTypes.Type(value = SingleSelectionDTO.class, name = "SINGLE_SELECTION"),
 })
+
 public abstract class FieldDTO {
 
     String id;
@@ -26,9 +23,6 @@ public abstract class FieldDTO {
     FieldType type;
     @NotBlank(message = "FieldDefinition non può essere vuoto")
     String fieldDefinitionId;
-
-    public FieldDTO(){}
-
 
     public String getId() {
         return id;
