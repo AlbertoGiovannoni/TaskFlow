@@ -6,6 +6,8 @@ import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.OrganizationDTO;
 import com.example.taskflow.DTOs.ProjectDTO;
 import com.example.taskflow.DTOs.UserDTO;
+import com.example.taskflow.DomainModel.BaseEntity;
+import com.example.taskflow.DomainModel.EntityFactory;
 import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.User;
@@ -13,8 +15,11 @@ import com.example.taskflow.Mappers.OrganizationMapper;
 import com.example.taskflow.Mappers.ProjectMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.aggregation.DateOperators.Minute;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
@@ -62,10 +67,13 @@ public class OrganizationService {
 
     public OrganizationDTO createNewOrganization(OrganizationDTO organizationDTO) {
 
-        if (organizationDTO.getUuid() == null) { // TODO perche non ho uuid mentre in user si
-            organizationDTO.setUuid(UUID.randomUUID().toString());
-        }
-        Organization organization = organizationMapper.toEntity(organizationDTO);
+        Organization organization = EntityFactory.getOrganization();
+        
+        organization.setName(organizationDTO.getName());
+        organization.setMembers(new ArrayList<User>());
+        organization.setOwners(new ArrayList<User>());
+        organization.setProjects(new ArrayList<Project>());
+        organization.setCreationDate(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
 
         User owner = this.userDAO.findById(organizationDTO.getOwnersId().get(0)).orElseThrow();
         if (owner == null) {
