@@ -108,7 +108,6 @@ public class OrganizationController {
         return ResponseEntity.status(HttpStatus.OK).body("deleted");
     }
 
-    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @GetMapping("/{userId}/myOrganization")
     public ResponseEntity<ArrayList<Organization>> getMyOrganizations(@PathVariable String userId) {
 

@@ -88,5 +88,5 @@ public class ProjectController {
                  .body(this.projectService.getProjectById(projectId));
     }
 
-    // TODO delete project in controller
+    // TODO deleteActivity
 }

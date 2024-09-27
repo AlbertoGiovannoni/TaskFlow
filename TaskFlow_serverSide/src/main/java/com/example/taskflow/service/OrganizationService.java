@@ -137,6 +137,8 @@ public class OrganizationService {
             throw new IllegalArgumentException("project not defined");
         }
         organization.removeProject(project);
+        projectDAO.delete(project);
+
         this.organizationDAO.save(organization);
         return organizationMapper.toDto(organization);
     }
