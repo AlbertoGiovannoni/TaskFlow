@@ -1,9 +1,8 @@
 package com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage;
 
-import java.util.UUID;
-
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.Text;
+import com.example.taskflow.DomainModel.EntityFactory;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 public class TextBuilder extends FieldBuilder {
@@ -28,7 +27,7 @@ public class TextBuilder extends FieldBuilder {
             throw new IllegalAccessError("text is null");
         }
 
-        Text text = new Text(UUID.randomUUID().toString());
+        Text text = EntityFactory.getText();
 
         text.setFieldDefinition(this.fieldDefinition);
         text.setValue(this.text);

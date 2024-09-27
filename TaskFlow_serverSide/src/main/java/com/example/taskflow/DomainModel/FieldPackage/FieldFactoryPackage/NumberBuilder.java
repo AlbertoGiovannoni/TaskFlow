@@ -1,10 +1,10 @@
 package com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.Number;
+import com.example.taskflow.DomainModel.EntityFactory;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 public class NumberBuilder extends FieldBuilder {
@@ -28,7 +28,7 @@ public class NumberBuilder extends FieldBuilder {
         if (this.value == null) {
             throw new IllegalAccessError("value is null");
         }
-        Number number = new Number(UUID.randomUUID().toString());
+        Number number = EntityFactory.getNumber();
 
         number.setFieldDefinition(this.fieldDefinition);
         number.setValue(this.value);

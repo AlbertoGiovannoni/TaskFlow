@@ -2,10 +2,10 @@
 package com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import com.example.taskflow.DomainModel.FieldPackage.Date;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
+import com.example.taskflow.DomainModel.EntityFactory;
 import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
@@ -44,7 +44,7 @@ public class DateBuilder extends FieldBuilder {
             throw new IllegalAccessError("dateTime is null");
         }
 
-        Date date = new Date(UUID.randomUUID().toString());
+        Date date = EntityFactory.getDate();
 
         date.setFieldDefinition(this.fieldDefinition);
         date.setDateTime(this.dateTime);
