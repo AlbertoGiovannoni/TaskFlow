@@ -6,6 +6,7 @@ import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.OrganizationDTO;
 import com.example.taskflow.DTOs.ProjectDTO;
 import com.example.taskflow.DTOs.UserDTO;
+import com.example.taskflow.DomainModel.EntityFactory;
 import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.User;
@@ -61,20 +62,27 @@ public class OrganizationService {
     }
 
     public OrganizationDTO createNewOrganization(OrganizationDTO organizationDTO) {
+        Organization organization = EntityFactory.getOrganization();
 
-        if (organizationDTO.getUuid() == null) { // TODO perche non ho uuid mentre in user si
-            organizationDTO.setUuid(UUID.randomUUID().toString());
-        }
-        Organization organization = organizationMapper.toEntity(organizationDTO);
-
-        User owner = this.userDAO.findById(organizationDTO.getOwnersId().get(0)).orElseThrow();
-        if (owner == null) {
+        if (organizationDTO.getOwnersId() == null){
             throw new IllegalArgumentException("An organization must have an owner");
         }
-        organization.addOwner(owner);
+        if (organizationDTO.getOwnersId().isEmpty()){
+            throw new IllegalArgumentException("An organization must have an owner");
+        }
 
+        organization.setOwners(new ArrayList<>(this.userDAO.findAllById(organizationDTO.getOwnersId())));
+
+        if (organizationDTO.getMembersId() != null){
+            if (!(organizationDTO.getMembersId().isEmpty())){
+                organization.setMembers(new ArrayList<>(this.userDAO.findAllById(organizationDTO.getMembersId())));
+            }
+        }
+
+        // FIXME: perché dobbiamo dargli una lista vuota? -> dovrei averlo fixato ma è tardi ho sonno (@TommasoBotarelli)
         ArrayList<Project> projects = new ArrayList<Project>();
         organization.setProjects(projects);
+
         this.organizationDAO.save(organization);
 
         return organizationMapper.toDto(organization);

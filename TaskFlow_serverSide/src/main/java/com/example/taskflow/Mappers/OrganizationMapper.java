@@ -25,13 +25,19 @@ public interface OrganizationMapper {
     
     @Named("mapUsersToIds")
     default ArrayList<String> mapUsersToIds(ArrayList<User> users) {
-        return (ArrayList<String>) users.stream().map(User::getId).collect(Collectors.toList());
+        if (users != null){
+            return (ArrayList<String>) users.stream().map(User::getId).collect(Collectors.toList());
+        }
+        return null;
     }  
 
     
     @Named("mapProjectsToIds")
     default ArrayList<String> mapProjectsToIds(ArrayList<Project> projects) {
-        return (ArrayList<String>) projects.stream().map(Project::getId).collect(Collectors.toList());
+        if (projects != null){
+            return (ArrayList<String>) projects.stream().map(Project::getId).collect(Collectors.toList());
+        }
+        return null;
     } 
 
     @Mapping(source = "owners", target = "ownersId", qualifiedByName = "mapUsersToIds")

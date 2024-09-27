@@ -13,12 +13,12 @@ public class Organization extends BaseEntity{
     private LocalDateTime creationDate;
 
     @DBRef
-    private ArrayList<User> owners = new ArrayList<User>();
+    private ArrayList<User> owners;
     @DBRef
-    private ArrayList<User> members = new ArrayList<User>();
+    private ArrayList<User> members;
 
     @DBRef
-    private ArrayList<Project> projects = new ArrayList<Project>();
+    private ArrayList<Project> projects;
 
 
     // costruttore di default
@@ -47,27 +47,45 @@ public class Organization extends BaseEntity{
     }
 
     public void addMember(User user) { 
+        if (this.members == null){
+            this.members = new ArrayList<>();
+        }
         members.add(user);
     }
 
     public boolean removeMember(User user) {
-        return members.remove(user);
+        if (this.members != null){
+            return members.remove(user);
+        }
+        return false;
     }
 
     public void addProject(Project project) { 
+        if (this.projects == null){
+            this.projects = new ArrayList<>();
+        }
         projects.add(project);
     }
 
     public boolean removeProject(Project project) {
-        return projects.remove(project);
+        if (this.projects != null){
+            return projects.remove(project);
+        }
+        return false;
     }
     
     public void addOwner(User user) { 
+        if (this.owners == null){
+            this.owners = new ArrayList<>();
+        }
         owners.add(user);
     }
 
     public boolean removeOwner(User user) {
-        return owners.remove(user);
+        if (this.owners != null){
+            return owners.remove(user);
+        }
+        return false;
     }
 
     public String getName() {
@@ -83,7 +101,7 @@ public class Organization extends BaseEntity{
     }
 
     public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
+        this.creationDate = creationDate.truncatedTo(ChronoUnit.MINUTES);
     }
 
     public ArrayList<User> getOwners() {
