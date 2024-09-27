@@ -14,8 +14,11 @@ import com.example.taskflow.Mappers.OrganizationMapper;
 import com.example.taskflow.Mappers.ProjectMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.aggregation.DateOperators.Minute;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
@@ -62,7 +65,11 @@ public class OrganizationService {
     }
 
     public OrganizationDTO createNewOrganization(OrganizationDTO organizationDTO) {
+
         Organization organization = EntityFactory.getOrganization();
+        
+        organization.setName(organizationDTO.getName());
+        organization.setCreationDate(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
 
         if (organizationDTO.getOwnersId() == null){
             throw new IllegalArgumentException("An organization must have an owner");
@@ -145,6 +152,8 @@ public class OrganizationService {
             throw new IllegalArgumentException("project not defined");
         }
         organization.removeProject(project);
+        projectDAO.delete(project);
+
         this.organizationDAO.save(organization);
         return organizationMapper.toDto(organization);
     }

@@ -3,15 +3,22 @@ package com.example.taskflow.DTOs.FieldDefinition;
 import jakarta.validation.constraints.NotBlank;
 
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true)
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = AssigneeDefinitionDTO.class, name = "ASSIGNEE"),
+    @JsonSubTypes.Type(value = SingleSelectionDefinitionDTO.class, name = "SINGLE_SELECTION"),
+    @JsonSubTypes.Type(value = SimpleFieldDefinitionDTO.class, name = "SIMPLE")
+})
 
 public abstract class FieldDefinitionDTO {
     @NotBlank(message = "Nome non può essere vuoto")
     String name;
-    @NotBlank(message = "Type non può essere vuoto")
     FieldType type;
     String id;
     String uuid;
-
 
     public String getName() {
         return name;
@@ -28,7 +35,6 @@ public abstract class FieldDefinitionDTO {
     public void setId(String id) {
         this.id = id;
     }
-
     public FieldType getType() {
         return type;
     }

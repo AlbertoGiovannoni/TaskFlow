@@ -1,6 +1,7 @@
 package com.example.taskflow.service;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,7 @@ public class ActivityService {
     FieldDefinitionDAO fieldDefinitionDao;
 
     public Activity pushNewActivity(ActivityDTO activityDTO) {
+
         ArrayList<FieldDTO> fieldsDto = new ArrayList<FieldDTO>();
         
         if (activityDTO.getFields().size() != 0) {

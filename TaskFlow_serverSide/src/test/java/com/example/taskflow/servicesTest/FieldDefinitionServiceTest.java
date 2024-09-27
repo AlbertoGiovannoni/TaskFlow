@@ -82,7 +82,7 @@ public class FieldDefinitionServiceTest {
 
             if (type == FieldType.ASSIGNEE){
                 ArrayList<User> users = this.testUtil.addGetMultipleRandomUserToDatabase(10);
-                ((AssigneeDefinitionDTO)fieldDefinitionDto).setPossibleAssigneeUserIds(this.getUserIds(users));
+                ((AssigneeDefinitionDTO)fieldDefinitionDto).setAssigneeIds(this.getUserIds(users));
             }
 
             if (type == FieldType.SINGLE_SELECTION){
@@ -141,7 +141,7 @@ public class FieldDefinitionServiceTest {
 
                 if (type == FieldType.ASSIGNEE){
                     ArrayList<User> users = this.testUtil.addGetMultipleRandomUserToDatabase(10);
-                    ((AssigneeDefinitionDTO)fieldDefinitionDto).setPossibleAssigneeUserIds(this.getUserIds(users));
+                    ((AssigneeDefinitionDTO)fieldDefinitionDto).setAssigneeIds(this.getUserIds(users));
                 }
     
                 if (type == FieldType.SINGLE_SELECTION){

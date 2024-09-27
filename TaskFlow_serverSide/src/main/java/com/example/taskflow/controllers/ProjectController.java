@@ -1,6 +1,5 @@
 package com.example.taskflow.controllers;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,12 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
 import com.example.taskflow.DTOs.ProjectDTO;
-import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.service.ProjectService;
-
 import jakarta.validation.Valid;
 
 @RestController
@@ -36,6 +32,7 @@ public class ProjectController {
 
     @Autowired
     ProjectService projectService;
+
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Map<String, String>> handleAccessDeniedException(AccessDeniedException ex) {
@@ -66,20 +63,37 @@ public class ProjectController {
     }
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
-    @PatchMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/renameProject")
-    public ResponseEntity<ProjectDTO> renameProject(@PathVariable String projectId, @RequestBody Map<String, String> requestBody) {
+    @PatchMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/renameProject")
+    public ResponseEntity<ProjectDTO> renameProject(@PathVariable String projectId,
+            @RequestBody Map<String, String> requestBody, @PathVariable String organizationId) {
         String newName = requestBody.get("newName");
+        if (newName == null || newName.trim().isEmpty()) {
+            throw new IllegalArgumentException("newName cannot be empty");
+        }
         return ResponseEntity.status(HttpStatus.OK)
                 .body(this.projectService.renameProject(projectId, newName));
     }
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
-    @PostMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/addFieldDefinitionToProject")
-    public ResponseEntity<ProjectDTO> addFieldDefinitionToProject(@PathVariable String projectId, @RequestBody Map<String, Object> requestBody) {
-        FieldDefinitionDTO newFieldDef = (FieldDefinitionDTO)requestBody.get("newFieldDefinition");
+    @PostMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/addFieldDefinitionToProject")
+    public ResponseEntity<?> addFieldDefinitionToProject(@PathVariable String projectId, @RequestBody FieldDefinitionDTO fieldDefinitionDTO, @PathVariable String organizationId) {
+        
         return ResponseEntity.status(HttpStatus.OK)
-                .body(this.projectService.addFieldDefinitionToProject(projectId, newFieldDef));
+                 .body(this.projectService.addFieldDefinitionToProject(projectId, fieldDefinitionDTO));
     }
 
-    // TODO delete project in controller
+    @GetMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}")
+    public ResponseEntity<ProjectDTO> getProject(@PathVariable String projectId, @PathVariable String organizationId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                 .body(this.projectService.getProjectById(projectId));
+    }
+
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
+    @DeleteMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}")
+    public ResponseEntity<ProjectDTO> removeActivity(@PathVariable String projectId, @PathVariable String activityId, @PathVariable String organizationId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                 .body(this.projectService.removeActivity(projectId, activityId));
+    }
+
+    // TODO deleteActivity
 }

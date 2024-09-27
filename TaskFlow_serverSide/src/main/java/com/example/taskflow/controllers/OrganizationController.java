@@ -108,7 +108,6 @@ public class OrganizationController {
         return ResponseEntity.status(HttpStatus.OK).body("deleted");
     }
 
-    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @GetMapping("/{userId}/myOrganization")
     public ResponseEntity<ArrayList<Organization>> getMyOrganizations(@PathVariable String userId) {
 
@@ -120,7 +119,7 @@ public class OrganizationController {
     @DeleteMapping("/{userId}/myOrganization/{organizationId}")
     public ResponseEntity<String> deleteOrganizationById(@PathVariable String organizationId) {
         this.organizationService.deleteOrganization(organizationId);
-        return ResponseEntity.status(HttpStatus.OK).body("deleted");
+        return ResponseEntity.status(HttpStatus.OK).body("Organization deleted");
     }
 
 }
