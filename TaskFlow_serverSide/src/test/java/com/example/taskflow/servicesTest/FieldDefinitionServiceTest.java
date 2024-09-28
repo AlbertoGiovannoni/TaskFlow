@@ -12,35 +12,16 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.example.taskflow.TestUtil;
-import com.example.taskflow.DAOs.ActivityDAO;
-import com.example.taskflow.DAOs.FieldDAO;
-import com.example.taskflow.DAOs.FieldDefinitionDAO;
-import com.example.taskflow.DAOs.ProjectDAO;
-import com.example.taskflow.DTOs.ActivityDTO;
-import com.example.taskflow.DTOs.ProjectDTO;
-import com.example.taskflow.DTOs.Field.AssigneeDTO;
-import com.example.taskflow.DTOs.Field.DateDTO;
-import com.example.taskflow.DTOs.Field.FieldDTO;
-import com.example.taskflow.DTOs.Field.NumberDTO;
-import com.example.taskflow.DTOs.Field.SingleSelectionDTO;
-import com.example.taskflow.DTOs.Field.TextDTO;
-import com.example.taskflow.DTOs.FieldDefinition.AssigneeDefinitionDTO;
-import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
-import com.example.taskflow.DTOs.FieldDefinition.SimpleFieldDefinitionDTO;
-import com.example.taskflow.DTOs.FieldDefinition.SingleSelectionDefinitionDTO;
-import com.example.taskflow.DomainModel.Activity;
-import com.example.taskflow.DomainModel.Project;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.SingleSelectionDefinition;
-import com.example.taskflow.DomainModel.FieldPackage.Field;
-import com.example.taskflow.DomainModel.User;
-import com.example.taskflow.service.ActivityService;
-import com.example.taskflow.service.ProjectService;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import com.example.taskflow.DAOs.*;
+import com.example.taskflow.DTOs.Field.*;
+import com.example.taskflow.DTOs.FieldDefinition.*;
+import com.example.taskflow.DTOs.*;
+import com.example.taskflow.DomainModel.*;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.*;
+import com.example.taskflow.DomainModel.FieldPackage.*;
+import com.example.taskflow.service.*;
+
 import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionServiceManager;
 
 import net.bytebuddy.utility.RandomString;
@@ -53,8 +34,6 @@ public class FieldDefinitionServiceTest {
     private TestUtil testUtil;
     @Autowired
     private FieldDefinitionServiceManager fieldDefinitionServiceManager;
-    @Autowired
-    private ActivityService activityService;
     @Autowired
     private ActivityDAO activityDao;
     @Autowired
@@ -77,7 +56,7 @@ public class FieldDefinitionServiceTest {
         FieldDefinition createdFieldDefinition;
 
         for (FieldType type : FieldType.values()){
-            fieldDefinitionDto = this.getFieldDefinitionDTO(type);
+            fieldDefinitionDto = this.testUtil.getFieldDefinitionDTO(type);
             fieldDefinitionDto.setName(RandomString.make(10));
 
             if (type == FieldType.ASSIGNEE){
@@ -136,7 +115,7 @@ public class FieldDefinitionServiceTest {
                 projectDto.setName(RandomString.make(10));
                 projectDto = this.projectService.pushNewProject(projectDto);
 
-                fieldDefinitionDto = this.getFieldDefinitionDTO(type);
+                fieldDefinitionDto = this.testUtil.getFieldDefinitionDTO(type);
                 fieldDefinitionDto.setName(RandomString.make(10));
 
                 if (type == FieldType.ASSIGNEE){
@@ -152,11 +131,11 @@ public class FieldDefinitionServiceTest {
                                                             .getFieldDefinitionService(fieldDefinitionDto)
                                                             .pushNewFieldDefinition(fieldDefinitionDto);
                 
-                fieldDTOs = this.getFieldDTOArray(10, type);
-                this.setupFieldDTOs(fieldDTOs, createdFieldDefinition);
+                fieldDTOs = this.testUtil.getFieldDTOArray(10, type);
+                this.testUtil.setupFieldDTOs(fieldDTOs, createdFieldDefinition);
 
-                activityDtos = this.getActivitieDTOsArray(fieldDTOs);
-                activitiesPushed = this.pushAllActivities(activityDtos);
+                activityDtos = this.testUtil.getActivitieDTOsArray(fieldDTOs);
+                activitiesPushed = this.testUtil.pushAllActivities(activityDtos);
 
                 movingProject = this.projectDao.findById(projectDto.getId()).orElseThrow();
                 movingProject.addFieldDefinition(createdFieldDefinition);
@@ -185,122 +164,5 @@ public class FieldDefinitionServiceTest {
                 assertEquals(0, projectFromDb.getFieldsTemplate().size());
             }
         }
-    }
-
-    private FieldDefinitionDTO getFieldDefinitionDTO(FieldType type){
-        FieldDefinitionDTO fieldDefinitionDTO;
-        switch (type) {
-            case ASSIGNEE:
-                fieldDefinitionDTO =  new AssigneeDefinitionDTO();
-                break;
-            case SINGLE_SELECTION:
-                fieldDefinitionDTO =  new SingleSelectionDefinitionDTO();
-                break;
-            default:
-                fieldDefinitionDTO =  new SimpleFieldDefinitionDTO();
-                break;
-        }
-        fieldDefinitionDTO.setType(type);
-        return fieldDefinitionDTO;
-    }
-
-    private ArrayList<FieldDTO> getFieldDTOArray(int n, FieldType type){
-        ArrayList<FieldDTO> fieldDTOs = new ArrayList<>();
-
-        for (int i = 0; i < n; i++){
-            fieldDTOs.add(this.getFieldDTO(type));
-        }
-
-        return fieldDTOs;
-    }
-
-    private void setupFieldDTOs(ArrayList<FieldDTO> fieldDtos, FieldDefinition fieldDefinition){
-        for (FieldDTO fieldDto : fieldDtos){
-            fieldDto.setFieldDefinitionId(fieldDefinition.getId());
-            this.setValueToDTO(fieldDto, fieldDefinition);
-        }
-    }
-
-    private void setValueToDTO(FieldDTO fieldDto, FieldDefinition fieldDefinition){
-        switch (fieldDto.getType()) {
-            case ASSIGNEE:
-                ((AssigneeDTO)fieldDto)
-                    .setUserIds(
-                        this.getUserIds(((AssigneeDefinition)fieldDefinition).getPossibleAssigneeUsers()));
-                break;
-            case SINGLE_SELECTION:
-                ((SingleSelectionDTO)fieldDto).setValue((((SingleSelectionDefinition)fieldDefinition).getPossibleSelections().get(0)));
-                break;
-            case TEXT:
-                ((TextDTO)fieldDto).setValue(RandomString.make(100));
-                break;
-            case DATE:
-                ((DateDTO)fieldDto).setDateTime(LocalDateTime.now());
-                break;
-            case NUMBER:
-                ((NumberDTO)fieldDto).setValue(new BigDecimal(100));
-                break;
-            default:
-                throw new IllegalArgumentException("Document need implementation");
-        }
-    }
-
-    private FieldDTO getFieldDTO(FieldType type){
-        FieldDTO fieldDTO;
-        switch (type) {
-            case ASSIGNEE:
-                fieldDTO =  new AssigneeDTO();
-                break;
-            case SINGLE_SELECTION:
-                fieldDTO = new SingleSelectionDTO();
-                break;
-            case TEXT:
-                fieldDTO =  new TextDTO();
-                break;
-            case DATE:
-                fieldDTO = new DateDTO();
-                break;
-            case NUMBER:
-                fieldDTO = new NumberDTO();
-                break;
-            default:
-                throw new IllegalArgumentException("Document need implementation");
-        }
-        fieldDTO.setType(type);
-        return fieldDTO;
-    }
-
-    private ArrayList<ActivityDTO> getActivitieDTOsArray(ArrayList<FieldDTO> fieldDtos){
-        if (fieldDtos.size() == 0){
-            throw new IllegalArgumentException("Size must be > 0");
-        }
-
-        ArrayList<ActivityDTO> activityDtos = new ArrayList<>();
-        ActivityDTO movingActivityDto;
-
-        ArrayList<FieldDTO> fieldDTOsTempArray = new ArrayList<>();
-
-        for (FieldDTO fieldDto : fieldDtos){
-            fieldDTOsTempArray.clear();
-            fieldDTOsTempArray.add(fieldDto);
-
-            movingActivityDto = new ActivityDTO();
-            movingActivityDto.setName(RandomString.make(10));
-            movingActivityDto.setFields(fieldDTOsTempArray);
-
-            activityDtos.add(movingActivityDto);
-        }
-
-        return activityDtos;
-    }
-
-    private ArrayList<Activity> pushAllActivities(ArrayList<ActivityDTO> activities){
-        ArrayList<Activity> pushedActivities = new ArrayList<>();
-
-        for (ActivityDTO activity : activities){
-            pushedActivities.add(this.activityService.pushNewActivity(activity));
-        }
-
-        return pushedActivities;
     }
 }
