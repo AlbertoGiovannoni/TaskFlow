@@ -31,4 +31,12 @@ public class CustomProjectDAOImpl implements CustomProjectDAO{
 
         return this.mongoTemplate.findOne(query, Project.class);
     }
+
+    @Override
+    public Project findProjectByActivity(String activityId) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("activities.$id").is(new ObjectId(activityId)));
+
+        return this.mongoTemplate.findOne(query, Project.class);
+    }
 }
