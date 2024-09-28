@@ -14,7 +14,6 @@ import com.example.taskflow.Mappers.OrganizationMapper;
 import com.example.taskflow.Mappers.ProjectMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.DateOperators.Minute;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -164,7 +163,14 @@ public class OrganizationService {
         this.organizationDAO.delete(organization);
     }
 
-    public ArrayList<User> getOrganizationUser(String organizationId){
-        
+    public ArrayList<User> getAllOrganizationUser(String organizationId){
+        ArrayList<User> allUsers = new ArrayList<>();
+
+        Organization organization = this.organizationDAO.findById(organizationId).orElseThrow();
+
+        allUsers.addAll(organization.getOwners());
+        allUsers.addAll(organization.getMembers());
+
+        return allUsers;
     }
 }

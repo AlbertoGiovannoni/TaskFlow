@@ -1,16 +1,18 @@
 package com.example.taskflow.DTOs;
 
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class OrganizationDTO {
 
     private String id;
     @NotBlank(message = "name must not be blank")
     private String name;
-    @NotBlank(message = "creationDate must not be blank")
-    private String creationDate;
+    @NotNull(message = "creationDate must not be blank")
+    private LocalDateTime creationDate;
     private ArrayList<String> ownersId;
     private ArrayList<String> membersId;
     private ArrayList<String> projectsId;
@@ -29,10 +31,10 @@ public class OrganizationDTO {
     public void setName(String name) {
         this.name = name;
     }
-    public String getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
-    public void setCreationDate(String creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
     public ArrayList<String> getOwnersId() {
