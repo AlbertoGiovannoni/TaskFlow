@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.taskflow.DAOs.ActivityDAO;
 import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
+import com.example.taskflow.DAOs.OrganizationDAO;
 import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.ActivityDTO;
@@ -16,6 +17,7 @@ import com.example.taskflow.DTOs.ProjectDTO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.EntityFactory;
+import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
@@ -47,6 +49,8 @@ public class ProjectService {
     FieldDefinitionDAO fieldDefinitionDao;
     @Autowired
     FieldDefinitionServiceManager fieldDefinitionServiceManager;
+    @Autowired
+    OrganizationDAO organizationDao;
 
     public ProjectDTO pushNewProject(ProjectDTO projectDto) {
         Project project = EntityFactory.getProject();
@@ -113,26 +117,31 @@ public class ProjectService {
         Project project = this.projectDao.findById(projectId).orElseThrow();
 
         ArrayList<Activity> activityList = project.getActivities();
-        ArrayList<Field> fields;
+        ArrayList<Field> fields = new ArrayList<>();
 
         if (activityList != null && activityList.size() > 0) {
             for (Activity activity : activityList) {
-                fields = activity.getFields();
-                if (fields != null && fields.size() > 0) {
-                    this.fieldDAO.deleteAll(fields);
-                }
+                fields.addAll(activity.getFields());
             }
+        }
+
+        if (fields != null){
+            this.fieldDAO.deleteAll(fields);
         }
 
         if (activityList != null && activityList.size() > 0) {
             this.activityDao.deleteAll(activityList);
         }
 
-        ArrayList<FieldDefinition> fieldsTemplate = new ArrayList<FieldDefinition>();
+        ArrayList<FieldDefinition> fieldsTemplate = project.getFieldsTemplate();
 
-        if (fieldsTemplate != null && fieldsTemplate.size() > 0) {
-            this.fieldDefinitionDao.deleteAll(project.getFieldsTemplate());
+        if (fieldsTemplate != null) {
+            this.fieldDefinitionDao.deleteAll(fieldsTemplate);
         }
+
+        Organization organization = this.organizationDao.getOrganizationByProject(projectId);
+        organization.removeProject(project);
+        this.organizationDao.save(organization);
 
         this.projectDao.delete(project);
     }

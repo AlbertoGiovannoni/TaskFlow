@@ -5,7 +5,6 @@ import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.OrganizationDTO;
 import com.example.taskflow.DTOs.ProjectDTO;
-import com.example.taskflow.DTOs.UserDTO;
 import com.example.taskflow.DomainModel.EntityFactory;
 import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.Project;
@@ -119,7 +118,7 @@ public class OrganizationService {
         return organizationMapper.toDto(organization);
     }
 
-    // FIXME: forse non è più comodo tornare indietro il ProjectDTO appena creato?
+    // TODO: forse non è più comodo tornare indietro il ProjectDTO appena creato?
     public OrganizationDTO addNewProjectToOrganization(String organizationId, ProjectDTO projectDTO) {
         Organization organization = organizationDAO.findById(organizationId).orElseThrow();
         
@@ -144,6 +143,7 @@ public class OrganizationService {
             throw new IllegalArgumentException("project not defined");
         }
         organization.removeProject(project);
+        //this.projectService.deleteProject(projectId);
         projectDAO.delete(project);
 
         this.organizationDAO.save(organization);

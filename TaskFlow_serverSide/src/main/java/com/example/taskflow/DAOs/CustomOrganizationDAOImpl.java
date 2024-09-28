@@ -3,12 +3,14 @@ package com.example.taskflow.DAOs;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import com.example.taskflow.DomainModel.Organization;
+import com.example.taskflow.DomainModel.Project;
 
 
 public class CustomOrganizationDAOImpl implements CustomOrganizationDAO{
@@ -27,6 +29,14 @@ public class CustomOrganizationDAOImpl implements CustomOrganizationDAO{
         List<Organization> organizations = mongoTemplate.find(query, Organization.class);
         
         return new ArrayList<Organization>(organizations);
+    }
+
+    @Override
+    public Organization getOrganizationByProject(String projectId) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("projects.$id").is(new ObjectId(projectId)));
+
+        return this.mongoTemplate.findOne(query, Organization.class);
     }
     
 }

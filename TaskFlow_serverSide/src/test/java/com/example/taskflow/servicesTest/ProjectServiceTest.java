@@ -1,7 +1,9 @@
 package com.example.taskflow.servicesTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -15,7 +17,9 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.example.taskflow.TestUtil;
 import com.example.taskflow.DAOs.ActivityDAO;
+import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
+import com.example.taskflow.DAOs.OrganizationDAO;
 import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.DTOs.ProjectDTO;
@@ -23,6 +27,8 @@ import com.example.taskflow.DTOs.Field.TextDTO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.SimpleFieldDefinitionDTO;
 import com.example.taskflow.DomainModel.Activity;
+import com.example.taskflow.DomainModel.BaseEntity;
+import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
@@ -55,6 +61,10 @@ public class ProjectServiceTest {
     private ActivityMapper activityMapper;
     @Autowired
     private ActivityDAO activityDAO;
+    @Autowired
+    private FieldDAO fieldDao;
+    @Autowired
+    private OrganizationDAO organizationDAO;
 
     @BeforeEach
     public void setupDatabase() {
@@ -154,33 +164,40 @@ public class ProjectServiceTest {
 
     @Test
     public void testDeleteProject() {
-        
-        Project project = new Project(UUID.randomUUID().toString(), "projectName", new ArrayList<FieldDefinition>(),
-        new ArrayList<Activity>());
-        project = projectDAO.save(project);
+        Organization organization = this.testUtil.getEntireDatabaseMockup(1, 10, 3, 20).get(0);
 
-        FieldDefinitionDTO simpleFieldDefinitionDTO = new SimpleFieldDefinitionDTO();
-        simpleFieldDefinitionDTO.setName("prova");
-        simpleFieldDefinitionDTO.setType(FieldType.TEXT);
-        FieldDefinition textDefinition = this.fieldDefinitionServiceManager
-                                            .getFieldDefinitionService(simpleFieldDefinitionDTO)
-                                            .pushNewFieldDefinition(simpleFieldDefinitionDTO);
+        ArrayList<Project> projects = organization.getProjects();
 
-        ArrayList<Field> fields = new ArrayList<Field>();
-        Field field = new Text(UUID.randomUUID().toString(), textDefinition, "test");
-        fields.add(field);
+        for (Project project : projects){
+            ArrayList<FieldDefinition> fieldDefinitions = project.getFieldsTemplate();
+            
+            ArrayList<Activity> activities = project.getActivities();
+            ArrayList<Field> fields = new ArrayList<>();
+            
+            for (Activity activity : activities){
+                fields.addAll(activity.getFields());
+            }
 
-        
-        Activity activity = new Activity(UUID.randomUUID().toString(), "activity", fields);
-        ActivityDTO activityDTO = this.activityMapper.toDto(activity);
+            this.projectService.deleteProject(project.getId());
 
-        ProjectDTO projectDto = this.projectService.addActivityToProject(project.getId(), activityDTO);
-        ArrayList<ActivityDTO> actDto = projectDto.getActivities();
+            assertTrue(this.activityDAO.findAllById(this.getIds(activities)).isEmpty());
+            assertTrue(this.fieldDao.findAllById(this.getIds(fields)).isEmpty());
+            assertTrue(this.fieldDefinitionDao.findAllById(this.getIds(fieldDefinitions)).isEmpty());
+            assertTrue(this.projectDAO.findById(project.getId()).isEmpty());
+            
+            Organization organizationFromDB = this.organizationDAO.findById(organization.getId()).orElseThrow();
+            assertFalse(organizationFromDB.getProjects().contains(project));
+        }
+    }
 
-        this.projectService.deleteProject(project.getId());
+    private <T extends BaseEntity> ArrayList<String> getIds(ArrayList<T> entities){
+        ArrayList<String> allIds = new ArrayList<>();
 
-        assertNull(activityDAO.findById(actDto.get(0).getId()).orElse(null));
-        assertNull(projectDAO.findById(project.getId()).orElse(null));
+        for (T entity : entities){
+            allIds.add(entity.getId());
+        }
+
+        return allIds;
     }
 
 }
