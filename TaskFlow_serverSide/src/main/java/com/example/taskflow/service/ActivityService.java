@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 import com.example.taskflow.DAOs.ActivityDAO;
 import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
+import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.EntityFactory;
+import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.FieldMapper;
@@ -36,6 +38,8 @@ public class ActivityService {
     UserDAO userDao;
     @Autowired
     FieldDefinitionDAO fieldDefinitionDao;
+    @Autowired
+    ProjectDAO projectDao;
 
     public Activity pushNewActivity(ActivityDTO activityDTO) {
 
@@ -67,7 +71,8 @@ public class ActivityService {
 
         this.fieldDao.deleteAll(activity.getFields());
 
-        // TODO: eliminare ref in project
+        Project project = this.projectDao.findProjectByActivity(activityId);
+        project.deleteActivity(activity);
 
         this.activityDao.delete(activity);
     }
