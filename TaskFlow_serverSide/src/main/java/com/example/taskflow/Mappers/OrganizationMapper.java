@@ -44,4 +44,10 @@ public interface OrganizationMapper {
     @Mapping(source = "members", target = "membersId", qualifiedByName = "mapUsersToIds")
     @Mapping(source = "projects", target = "projectsId", qualifiedByName = "mapProjectsToIds")
     OrganizationDTO toDto(Organization user);
+
+    @Mapping(source = "owners", target = "ownersId", ignore = true)
+    @Mapping(source = "members", target = "membersId", ignore = true)
+    @Mapping(source = "projects", target = "projectsId", ignore = true)
+    @Mapping(source = "creationDate", target = "creationDate", ignore = true)
+    OrganizationDTO toSimpleDto(Organization organization);
 }
