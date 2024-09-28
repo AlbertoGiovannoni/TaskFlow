@@ -22,7 +22,7 @@ public class TextService extends FieldService {
     @Autowired
     FieldMapper fieldMapper;
     @Autowired
-    FieldDAO fieldDao; 
+    FieldDAO fieldDao;
     @Autowired
     UserDAO userDAO;
 
@@ -54,11 +54,16 @@ public class TextService extends FieldService {
 
     @Override
     public Field updateField(FieldDTO fieldDto) {
-        
+
         Text field = (Text) this.fieldDao.findById(fieldDto.getId()).orElseThrow();
         TextDTO textDTO = (TextDTO) fieldDto;
 
-        field.setValue(textDTO.getValue());
+        if (textDTO.getValue() != null && textDTO.getValue().length() > 0) {
+            field.setValue(textDTO.getValue());
+        }
+        else{
+            throw new IllegalArgumentException("Value per la modifica non può essere vuoto");
+        }
         this.fieldDao.save(field);
 
         return field;
