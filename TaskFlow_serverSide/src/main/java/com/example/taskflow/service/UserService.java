@@ -6,6 +6,7 @@ import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
 import com.example.taskflow.DTOs.UserDTO;
 import com.example.taskflow.DTOs.UserWithInfoDTO;
+import com.example.taskflow.DomainModel.EntityFactory;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.UserInfo;
 import com.example.taskflow.Mappers.UserMapper;
@@ -23,7 +24,9 @@ public class UserService {
     public UserDTO createUser(UserWithInfoDTO userWithInfoDTO) {
 
         // Mappa il DTO in un oggetto User (senza UserInfo)
-        User user = this.userMapper.toEntity(userWithInfoDTO);
+        //User user = this.userMapper.toEntity(userWithInfoDTO);
+        User user = EntityFactory.getUser();
+        user.setUsername(userWithInfoDTO.getUsername());
 
         // Creazione dell'oggetto UserInfo
         UserInfo userInfo = new UserInfo();
