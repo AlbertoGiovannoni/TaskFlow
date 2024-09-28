@@ -11,10 +11,12 @@ public class AssigneeDefinition extends FieldDefinition {
 
     public AssigneeDefinition() {
         super();
+        this.type = FieldType.ASSIGNEE;
     }
 
     public AssigneeDefinition(String uuid) {
         super(uuid);
+        this.type = FieldType.ASSIGNEE;
     }
 
     public AssigneeDefinition(String uuid, String name) {

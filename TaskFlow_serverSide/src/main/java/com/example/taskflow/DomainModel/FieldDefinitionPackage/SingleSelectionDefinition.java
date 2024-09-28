@@ -7,10 +7,12 @@ public class SingleSelectionDefinition extends FieldDefinition {
 
     public SingleSelectionDefinition() {
         super();
+        this.type = FieldType.SINGLE_SELECTION;
     }
 
     public SingleSelectionDefinition(String uuid) {
         super(uuid);
+        this.type = FieldType.SINGLE_SELECTION;
     }
 
     public SingleSelectionDefinition(String uuid, String name, ArrayList<String> possibleSelections) {
