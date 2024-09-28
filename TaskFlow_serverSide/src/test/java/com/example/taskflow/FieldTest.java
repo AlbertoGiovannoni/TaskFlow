@@ -24,6 +24,7 @@ import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.SingleSelectionDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.AssigneeDefinitionBuilder;
 import com.example.taskflow.DomainModel.FieldPackage.Assignee;
 import com.example.taskflow.DomainModel.FieldPackage.Date;
@@ -126,7 +127,7 @@ public class FieldTest {
             }
         }
 
-        fieldDefinition.addMultipleEntry(someSelections);
+        ((SingleSelectionDefinition)fieldDefinition).addMultipleSelection(someSelections);
         this.fieldDefinitionDao.save(fieldDefinition);
 
         Field field = (new SingleSelectionBuilder(fieldDefinition))

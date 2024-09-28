@@ -1,6 +1,8 @@
 package com.example.taskflow.DomainModel.FieldDefinitionPackage;
 import java.util.ArrayList;
 
+import com.example.taskflow.DomainModel.User;
+
 public class SingleSelectionDefinition extends FieldDefinition {
 
     private ArrayList<String> possibleSelections;
@@ -20,65 +22,10 @@ public class SingleSelectionDefinition extends FieldDefinition {
     }
 
     @Override
-    public void addSingleEntry(Object obj){
-        if (obj != null){
-            if (obj instanceof String){
-                if (this.possibleSelections == null){
-                    this.possibleSelections = new ArrayList<>();
-                }
-                if (!this.possibleSelections.contains((String)obj)){
-                    this.possibleSelections.add((String)obj);
-                }
-            }
-        }
-    }
-
-    @Override
-    public void addMultipleEntry(ArrayList<?> objs){
-        for (Object obj : objs){
-            this.addSingleEntry(obj);
-        }
-    }
-
-    @Override
-    public void removeEntry(Object obj) {
-        if (obj != null){
-            if (obj instanceof String){
-                if (this.possibleSelections != null){
-                    if (!this.possibleSelections.isEmpty()){
-                        this.possibleSelections.remove(obj);
-                    }
-                }
-            }
-        }
-    }
-
-    @Override
-    public void removeMultipleEntry(ArrayList<?> objs) {
-        for (Object obj : objs){
-            this.removeEntry(obj);
-        }
-    }
-
-    @Override
     public void reset() {
         if (this.possibleSelections != null){
             this.possibleSelections.clear();
         }
-    }
-
-    @Override
-    public Object getSingleEntry() {
-        String string = null;
-
-        if (this.possibleSelections != null){
-            if (!this.possibleSelections.isEmpty()){
-                string = this.possibleSelections.get(0);
-            }
-        }
-
-
-        return string;
     }
 
     @Override
@@ -100,5 +47,32 @@ public class SingleSelectionDefinition extends FieldDefinition {
 
     public void setPossibleSelections(ArrayList<String> possibleSelections) {
         this.possibleSelections = possibleSelections;
+    }
+
+    public void addSelection(String s) {
+        this.possibleSelections.add(s);
+    }
+
+    public void addMultipleSelection(ArrayList<String> selections) {
+        for(String s : selections){
+            this.addSelection(s);
+        }
+    }
+
+    public void removeSelection(String selection) {
+        if (selection != null) {
+            if (this.possibleSelections != null) {
+                if (!this.possibleSelections.isEmpty()) {
+                    this.possibleSelections.add(selection);
+                }
+            }
+
+        }
+    }
+
+    public void removeMultipleSelection(ArrayList<String> selections) {
+        for (String selection : selections) {
+            this.removeSelection(selection);
+        }
     }
 }

@@ -74,7 +74,7 @@ public class SingleSelectionsDefinitionService extends FieldDefinitionService{
     public FieldDefinitionDTO addSelections(String fieldDefinitionId, ArrayList<String> selections){
         FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionId).orElseThrow();
 
-        fieldDefinition.addMultipleEntry(selections);
+        ((SingleSelectionDefinition)fieldDefinition).addMultipleSelection(selections);
 
         this.fieldDefinitionDao.save(fieldDefinition);
 
@@ -84,7 +84,7 @@ public class SingleSelectionsDefinitionService extends FieldDefinitionService{
     public FieldDefinitionDTO removeSelections(String fieldDefinitionId, ArrayList<String> selections){
         FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionId).orElseThrow();
 
-        fieldDefinition.removeMultipleEntry(selections);
+        ((SingleSelectionDefinition)fieldDefinition).removeMultipleSelection(selections);
 
         this.fieldDefinitionDao.save(fieldDefinition);
 

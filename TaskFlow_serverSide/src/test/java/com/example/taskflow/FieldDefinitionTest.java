@@ -46,15 +46,15 @@ public class FieldDefinitionTest {
 
     @BeforeEach
     public void setupDatabase(){
-        if (template.collectionExists("fieldDefinition")){
-            template.dropCollection("fieldDefinition");
-        }
-        if (template.collectionExists("user")){
-            template.dropCollection("user");
-        }
-        if (template.collectionExists("userInfo")){
-            template.dropCollection("userInfo");
-        }
+        // if (template.collectionExists("fieldDefinition")){
+        //     template.dropCollection("fieldDefinition");
+        // }
+        // if (template.collectionExists("user")){
+        //     template.dropCollection("user");
+        // }
+        // if (template.collectionExists("userInfo")){
+        //     template.dropCollection("userInfo");
+        // }
 
         for (int i = 0; i < 5; i++){
             this.addGetRandomUserToDatabase();
@@ -119,12 +119,12 @@ public class FieldDefinitionTest {
         assertEquals(anotherName, fieldDefinition.getName());
 
         fieldDefinition.reset();
-        fieldDefinition.addSingleEntry(newUserForAssignee);
-        assertEquals(fieldDefinition.getSingleEntry(), newUserForAssignee);
+        ((AssigneeDefinition)fieldDefinition).addAssignee(newUserForAssignee);
+        assertEquals(((AssigneeDefinition)fieldDefinition).getPossibleAssigneeUsers().get(0), newUserForAssignee);
 
         fieldDefinition.reset();
         ArrayList<User> someUsers = this.addGetMultipleRandomUserToDatabase(5);
-        fieldDefinition.addMultipleEntry(someUsers);
+        ((AssigneeDefinition)fieldDefinition).addMultipleAssignee(someUsers);
         
         FieldDefinition fieldDefinitionPushed = this.fieldDefinitionDAO.save(fieldDefinition);
 
