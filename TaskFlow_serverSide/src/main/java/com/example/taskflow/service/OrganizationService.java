@@ -85,10 +85,6 @@ public class OrganizationService {
             }
         }
 
-        // FIXME: perché dobbiamo dargli una lista vuota? -> dovrei averlo fixato ma è tardi ho sonno (@TommasoBotarelli)
-        ArrayList<Project> projects = new ArrayList<Project>();
-        organization.setProjects(projects);
-
         this.organizationDAO.save(organization);
 
         return organizationMapper.toDto(organization);
@@ -124,12 +120,10 @@ public class OrganizationService {
         return organizationMapper.toDto(organization);
     }
 
-    /*
-     * aggiunge un nuovo progetto (vuoto)
-     */
+    // FIXME: forse non è più comodo tornare indietro il ProjectDTO appena creato?
     public OrganizationDTO addNewProjectToOrganization(String organizationId, ProjectDTO projectDTO) {
         Organization organization = organizationDAO.findById(organizationId).orElseThrow();
-
+        
         projectDTO = this.projectService.pushNewProject(projectDTO);
         Project newProject = this.projectMapper.toEntity(projectDTO);
 
@@ -156,6 +150,7 @@ public class OrganizationService {
         this.organizationDAO.save(organization);
         return organizationMapper.toDto(organization);
     }
+    
     public void deleteOrganization(String organizationId) {
         Organization organization = this.organizationDAO.findById(organizationId).orElseThrow();
         ArrayList<Project> projectList = organization.getProjects();
@@ -167,5 +162,9 @@ public class OrganizationService {
             }
         }
         this.organizationDAO.delete(organization);
+    }
+
+    public ArrayList<User> getOrganizationUser(String organizationId){
+        
     }
 }
