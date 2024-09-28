@@ -7,6 +7,8 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import javax.swing.text.html.parser.Entity;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +20,16 @@ import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.NotificationDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.ActivityDTO;
+import com.example.taskflow.DTOs.ProjectDTO;
 import com.example.taskflow.DTOs.Field.AssigneeDTO;
 import com.example.taskflow.DTOs.Field.DateDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.Field.NumberDTO;
 import com.example.taskflow.DTOs.Field.SingleSelectionDTO;
 import com.example.taskflow.DTOs.Field.TextDTO;
+import com.example.taskflow.DomainModel.EntityFactory;
 import com.example.taskflow.DomainModel.Notification;
+import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
@@ -186,6 +191,12 @@ public class ActivityServiceTest {
 
         activityDTO.setFields(fieldsDto);
         activityService.pushNewActivity(activityDTO);
+    }
+
+    @Test
+    public void testDelete(){
+        Project project = EntityFactory.getProject();
+        project.setName(RandomString.make(10));
     }
 
     private ArrayList<String> extractIds(ArrayList<User> users) {

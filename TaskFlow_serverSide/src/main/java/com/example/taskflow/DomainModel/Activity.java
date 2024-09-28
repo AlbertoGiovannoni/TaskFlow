@@ -33,11 +33,16 @@ public class Activity extends BaseEntity{
     }
 
     public void addField(Field field) {
+        if (this.fields == null){
+            this.fields = new ArrayList<>();
+        }
         fields.add(field);
     }
 
     public void removeField(Field field) {
-        fields.remove(field);
+        if (this.fields != null){
+            fields.remove(field);
+        }
     }
 
     public String getName() {

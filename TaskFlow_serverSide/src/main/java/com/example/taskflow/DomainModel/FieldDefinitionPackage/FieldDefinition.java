@@ -4,8 +4,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.example.taskflow.DomainModel.BaseEntity;
 
-import java.util.ArrayList;
-
 @Document("fieldDefinition")
 public abstract class FieldDefinition extends BaseEntity{
     String name;

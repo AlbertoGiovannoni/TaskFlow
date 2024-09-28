@@ -22,39 +22,17 @@ public class AssigneeDefinition extends FieldDefinition {
 
     public AssigneeDefinition(String uuid, String name) {
         super(uuid, name, FieldType.ASSIGNEE);
-        this.possibleAssigneeUsers = new ArrayList<>();
     }
 
     public AssigneeDefinition(String uuid, String name, ArrayList<User> users) {
         super(uuid, name, FieldType.ASSIGNEE);
-        this.possibleAssigneeUsers = users;
-    }
-
-    private void mergeWithoutRepetition(ArrayList<User> startingArrayList, ArrayList<User> arrayListToMerge) {
-        for (User user : arrayListToMerge) {
-            if (!startingArrayList.contains(user)) {
-                this.possibleAssigneeUsers.add(user);
-            }
-        }
-    }
-
-    private ArrayList<User> castToUser(ArrayList<?> objs) {
-        ArrayList<User> users = new ArrayList<>();
-
-        for (Object obj : objs) {
-            if (obj != null) {
-                if (obj instanceof User) {
-                    users.add((User) obj);
-                }
-            }
-        }
-
-        return users;
     }
 
     @Override
     public void reset() {
-        this.possibleAssigneeUsers.clear();
+        if (this.possibleAssigneeUsers != null){
+            this.possibleAssigneeUsers.clear();
+        }
     }
 
     @Override
@@ -79,7 +57,12 @@ public class AssigneeDefinition extends FieldDefinition {
     }
 
     public void addAssignee(User usr) {
-        this.possibleAssigneeUsers.add(usr);
+        if (this.possibleAssigneeUsers == null){
+            this.possibleAssigneeUsers = new ArrayList<>();
+        }
+        if (!(this.possibleAssigneeUsers.contains(usr))){
+            this.possibleAssigneeUsers.add(usr);
+        }
     }
 
     public void addMultipleAssignee(ArrayList<User> usrs) {

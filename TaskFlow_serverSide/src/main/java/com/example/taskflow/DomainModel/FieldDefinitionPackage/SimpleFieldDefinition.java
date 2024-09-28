@@ -1,7 +1,5 @@
 package com.example.taskflow.DomainModel.FieldDefinitionPackage;
 
-import java.util.ArrayList;
-
 import java.lang.UnsupportedOperationException;
 
 public class SimpleFieldDefinition extends FieldDefinition {

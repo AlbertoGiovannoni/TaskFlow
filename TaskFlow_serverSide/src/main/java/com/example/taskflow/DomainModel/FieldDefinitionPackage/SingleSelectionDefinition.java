@@ -1,8 +1,6 @@
 package com.example.taskflow.DomainModel.FieldDefinitionPackage;
 import java.util.ArrayList;
 
-import com.example.taskflow.DomainModel.User;
-
 public class SingleSelectionDefinition extends FieldDefinition {
 
     private ArrayList<String> possibleSelections;
@@ -36,7 +34,9 @@ public class SingleSelectionDefinition extends FieldDefinition {
         
         if (obj != null){
             if (obj instanceof String){
-                validation = this.possibleSelections.contains((String)obj);
+                if (this.possibleSelections != null){
+                    validation = this.possibleSelections.contains((String)obj);
+                }
             }
         }
 
@@ -52,10 +52,16 @@ public class SingleSelectionDefinition extends FieldDefinition {
     }
 
     public void addSelection(String s) {
+        if (this.possibleSelections == null){
+            this.possibleSelections = new ArrayList<>();
+        }
         this.possibleSelections.add(s);
     }
 
     public void addMultipleSelection(ArrayList<String> selections) {
+        if (this.possibleSelections == null){
+            this.possibleSelections = new ArrayList<>();
+        }
         for(String s : selections){
             this.addSelection(s);
         }

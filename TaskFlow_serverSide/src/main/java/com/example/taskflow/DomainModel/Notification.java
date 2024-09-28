@@ -32,6 +32,9 @@ public class Notification extends BaseEntity{
     }
 
     public void addReceiver(User newUser) {
+        if (this.receivers == null){
+            this.receivers = new ArrayList<>();
+        }
         receivers.add(newUser);
     }
 
@@ -42,7 +45,10 @@ public class Notification extends BaseEntity{
     }
 
     public boolean deleteReceiver(User userToRemove) {
-        return receivers.remove(userToRemove);
+        if (this.receivers != null){
+            return receivers.remove(userToRemove);
+        }
+        return false;
     }
 
     public String getMessage() {
