@@ -80,15 +80,15 @@ public class ActivityController {
     public ResponseEntity<FieldDTO> updateField(@PathVariable String fieldId,
             @RequestBody FieldDTO fieldDto) {
 
+        fieldDto.setId(fieldId);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(this.activityService.updateField(fieldDto));
     }
 
     @DeleteMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields/{fieldId}")
-    public ResponseEntity<ActivityDTO> removeField(@PathVariable String fieldId){
-        return null;
-        //this.activityService.
+    public ResponseEntity<ActivityDTO> removeField(@PathVariable String fieldId, @PathVariable String activityId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(this.activityService.removeField(activityId, fieldId));
     }
-
-    // TODO rimuovi field e rimuovi attività
 }

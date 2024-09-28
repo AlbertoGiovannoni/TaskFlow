@@ -107,4 +107,15 @@ public class ActivityService {
         return this.fieldMapper.toDto(field);
     }
 
+    public ActivityDTO removeField(String activityId, String fieldId) {
+        Activity activity = this.activityDao.findById(activityId).orElseThrow();
+        Field field = this.fieldDao.findById(fieldId).orElseThrow();
+        
+        activity.removeField(field);
+
+        this.fieldDao.delete(field);
+        activityDao.save(activity);
+        return this.activityMapper.toDto(activity);
+    }
+
 }
