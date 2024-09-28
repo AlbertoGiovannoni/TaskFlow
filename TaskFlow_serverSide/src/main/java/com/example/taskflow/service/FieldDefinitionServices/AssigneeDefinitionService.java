@@ -71,7 +71,7 @@ public class AssigneeDefinitionService extends FieldDefinitionService{
 
         ArrayList<User> users = new ArrayList<>(this.userDao.findAllById(userIds));
 
-        fieldDefinition.addMultipleEntry(users);
+        ((AssigneeDefinition)fieldDefinition).addMultipleAssignee(users);
 
         this.fieldDefinitionDao.save(fieldDefinition);
 
@@ -87,7 +87,7 @@ public class AssigneeDefinitionService extends FieldDefinitionService{
 
         ArrayList<User> users = new ArrayList<>(this.userDao.findAllById(userIds));
 
-        fieldDefinition.removeMultipleEntry(users);
+        ((AssigneeDefinition)fieldDefinition).removeMultipleAssignee(users);
 
         this.fieldDefinitionDao.save(fieldDefinition);
 

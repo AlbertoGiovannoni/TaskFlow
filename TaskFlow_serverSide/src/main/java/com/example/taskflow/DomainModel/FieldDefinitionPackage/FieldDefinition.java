@@ -25,19 +25,7 @@ public abstract class FieldDefinition extends BaseEntity{
         this.name = name;
     }
 
-    public abstract void addSingleEntry(Object obj);
-
-    public abstract void addMultipleEntry(ArrayList<?> obj);
-
-    public abstract void removeEntry(Object obj);
-
-    public abstract void removeMultipleEntry(ArrayList<?> objs);
-
     public abstract void reset();
-
-    public abstract ArrayList<?> getAllEntries();
-
-    public abstract Object getSingleEntry();
 
     public abstract boolean validateValue(Object obj);
     

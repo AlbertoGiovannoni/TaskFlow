@@ -13,6 +13,7 @@ import com.example.taskflow.DTOs.NotificationDTO;
 import com.example.taskflow.DTOs.Field.AssigneeDTO;
 import com.example.taskflow.DTOs.Field.DateDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
+import com.example.taskflow.DomainModel.EntityFactory;
 import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
@@ -55,13 +56,16 @@ public class DateService extends FieldService {
         }
 
         NotificationDTO notificationDto = dateDTO.getNotification();
-        Notification notification = null;
+        Notification notification = EntityFactory.getNotification();
 
         DateBuilder builder = (new DateBuilder(fieldDefinition))
                 .addDate(dateDTO.getDateTime());
 
         if (notificationDto != null) {
-            notification = this.notificationMapper.toEntity(notificationDto);
+            //notification = this.notificationMapper.toEntity(notificationDto);
+            notification.setMessage(notificationDto.getMessage());
+            notification.setNotificationDateTime(notificationDto.getNotificationDateTime());
+            notification.setReceivers(this.convertRecievers(notificationDto.getReceiverIds()));
             notification = this.notificationDao.save(notification);
             builder.addNotification(notification);
         }
@@ -92,5 +96,20 @@ public class DateService extends FieldService {
         this.fieldDao.save(field);
 
         return field;
+    }
+
+    private ArrayList<User> convertRecievers(ArrayList<String> ids){
+        ArrayList<User> receivers = new ArrayList<User>();
+        User usr;
+
+        if(ids != null && ids.size() > 0){
+            for (String id : ids){
+                usr = this.userDAO.findById(id).orElseThrow();
+                receivers.add(usr);
+            }
+
+        }
+
+        return receivers;
     }
 }
