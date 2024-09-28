@@ -37,6 +37,8 @@ import com.example.taskflow.service.OrganizationService;
 import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionService;
 import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionServiceManager;
 
+import net.bytebuddy.utility.RandomString;
+
 @DataMongoTest
 @ActiveProfiles("test")
 @ComponentScan(basePackages = "com.example.taskflow")
@@ -79,10 +81,12 @@ public class OrganizationServiceTest {
         ArrayList<User> owners = new ArrayList<User>();
         owners.add(owner);
 
-        Organization org = new Organization(UUID.randomUUID().toString(), "name", owners, new ArrayList<Project>(),
-                new ArrayList<User>(), LocalDateTime.now());
+        ArrayList<String> ownerIds = new ArrayList<>();
+        ownerIds.add(owner.getId());
 
-        OrganizationDTO orgDto = organizationMapper.toDto(org);
+        OrganizationDTO orgDto = new OrganizationDTO();
+        orgDto.setName(RandomString.make(10));
+        orgDto.setOwnersId(ownerIds);
 
         orgDto = organizationService.createNewOrganization(orgDto);
 
