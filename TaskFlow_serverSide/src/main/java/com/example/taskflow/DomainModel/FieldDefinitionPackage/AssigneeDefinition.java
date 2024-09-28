@@ -97,11 +97,6 @@ public class AssigneeDefinition extends FieldDefinition {
     }
 
     @Override
-    public ArrayList<?> getAllEntries() {
-        return this.possibleAssigneeUsers;
-    }
-
-    @Override
     public Object getSingleEntry() {
         User user = null;
 

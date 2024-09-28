@@ -125,8 +125,7 @@ public class FieldDefinitionTest {
         fieldDefinition.reset();
         ArrayList<User> someUsers = this.addGetMultipleRandomUserToDatabase(5);
         fieldDefinition.addMultipleEntry(someUsers);
-        assertEquals(fieldDefinition.getAllEntries(), someUsers);
-
+        
         FieldDefinition fieldDefinitionPushed = this.fieldDefinitionDAO.save(fieldDefinition);
 
         assertEquals(fieldDefinition.getId(), fieldDefinitionPushed.getId());

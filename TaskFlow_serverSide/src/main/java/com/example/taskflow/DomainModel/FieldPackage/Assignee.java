@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import com.example.taskflow.DomainModel.User;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 public class Assignee extends Field {
@@ -37,7 +38,7 @@ public class Assignee extends Field {
                 validatedUsers.add(user);
             }
             else{
-                throw new IllegalArgumentException(user + " not allowed by AssigneeDefinition. Allowed users: " + this.fieldDefinition.getAllEntries());
+                throw new IllegalArgumentException(user + " not allowed by AssigneeDefinition. Allowed users: " + ((AssigneeDefinition) this.fieldDefinition).getPossibleAssigneeUsers());
             }
         }
 

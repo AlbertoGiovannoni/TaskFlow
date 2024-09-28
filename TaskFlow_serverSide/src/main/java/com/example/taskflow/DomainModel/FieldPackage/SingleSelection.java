@@ -32,7 +32,7 @@ public class SingleSelection extends Field {
             this.value = value;
         }
         else{
-            throw new IllegalArgumentException(value + " not allowed: fieldDefinition = [" + this.fieldDefinition.getAllEntries() + "]");
+            throw new IllegalArgumentException(value + " not allowed: fieldDefinition = [" + ((SingleSelectionDefinition) this.fieldDefinition).getPossibleSelections() + "]");
         }
     }
 }

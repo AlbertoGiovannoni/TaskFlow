@@ -68,11 +68,6 @@ public class SingleSelectionDefinition extends FieldDefinition {
     }
 
     @Override
-    public ArrayList<?> getAllEntries() {
-        return this.possibleSelections;
-    }
-
-    @Override
     public Object getSingleEntry() {
         String string = null;
 

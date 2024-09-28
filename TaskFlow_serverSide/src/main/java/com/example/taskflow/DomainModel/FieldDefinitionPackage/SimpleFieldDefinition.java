@@ -59,15 +59,6 @@ public class SimpleFieldDefinition extends FieldDefinition {
     }
 
     @Override
-    public ArrayList<?> getAllEntries() {
-        String methodName = new Throwable().getStackTrace()[0].getMethodName();
-
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() 
-                                                + " doesn't implement method " 
-                                                + methodName);
-    }
-
-    @Override
     public Object getSingleEntry() {
         String methodName = new Throwable().getStackTrace()[0].getMethodName();
 

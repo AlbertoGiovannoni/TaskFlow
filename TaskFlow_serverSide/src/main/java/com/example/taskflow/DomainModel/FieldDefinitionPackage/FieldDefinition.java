@@ -35,8 +35,6 @@ public abstract class FieldDefinition extends BaseEntity{
 
     public abstract void reset();
 
-    public abstract ArrayList<?> getAllEntries();
-
     public abstract Object getSingleEntry();
 
     public abstract boolean validateValue(Object obj);
