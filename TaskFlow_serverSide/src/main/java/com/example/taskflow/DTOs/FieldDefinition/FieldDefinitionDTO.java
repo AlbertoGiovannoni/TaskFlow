@@ -10,7 +10,9 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 @JsonSubTypes({
     @JsonSubTypes.Type(value = AssigneeDefinitionDTO.class, name = "ASSIGNEE"),
     @JsonSubTypes.Type(value = SingleSelectionDefinitionDTO.class, name = "SINGLE_SELECTION"),
-    @JsonSubTypes.Type(value = SimpleFieldDefinitionDTO.class, name = "SIMPLE")
+    @JsonSubTypes.Type(value = SimpleFieldDefinitionDTO.class, name = "DATE"),
+    @JsonSubTypes.Type(value = SimpleFieldDefinitionDTO.class, name = "NUMBER"),
+    @JsonSubTypes.Type(value = SimpleFieldDefinitionDTO.class, name = "TEXT")
 })
 
 public abstract class FieldDefinitionDTO {

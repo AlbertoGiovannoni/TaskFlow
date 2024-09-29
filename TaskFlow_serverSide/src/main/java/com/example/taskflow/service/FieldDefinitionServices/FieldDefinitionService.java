@@ -33,8 +33,13 @@ public abstract class FieldDefinitionService {
 
     public abstract FieldDefinition pushNewFieldDefinition(FieldDefinitionDTO fieldDefinitionDto);
 
-    public FieldDefinitionDTO pushNewFieldDefinitionDTO(FieldDefinitionDTO fieldDefinitionDto){
+    public FieldDefinitionDTO pushNewFieldDefinitionDTO(FieldDefinitionDTO fieldDefinitionDto, String projectId){
         FieldDefinition fieldDefinition = this.pushNewFieldDefinition(fieldDefinitionDto);
+
+        Project project = this.projectDao.findById(projectId).orElseThrow();
+        project.addFieldDefinition(fieldDefinition);
+        projectDao.save(project);
+
         return this.fieldDefinitionMapper.toDto(fieldDefinition);
     }
 
