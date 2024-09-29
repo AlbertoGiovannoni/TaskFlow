@@ -21,6 +21,8 @@ import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.FieldMapper;
 import com.example.taskflow.service.FieldService.FieldServiceManager;
 
+import jakarta.validation.constraints.Null;
+
 @Service
 public class ActivityService {
 
@@ -44,7 +46,7 @@ public class ActivityService {
     public Activity pushNewActivity(ActivityDTO activityDTO) {
 
         ArrayList<FieldDTO> fieldsDto = new ArrayList<FieldDTO>();
-        
+
         if (activityDTO.getFields().size() != 0) {
             fieldsDto = activityDTO.getFields();
         }
@@ -91,7 +93,11 @@ public class ActivityService {
     }
 
     public ActivityDTO addFieldToActivity(String activityId, FieldDTO fieldDto) {
-        Activity activity = this.activityDao.findById(activityId).orElseThrow();
+        Activity activity = this.activityDao.findById(activityId).orElse(null);
+
+        if (activity == null) {
+            throw new IllegalArgumentException("Wrong activity id");
+        }
 
         Field field = this.fieldServiceManager.getFieldService(fieldDto).pushNewField(fieldDto);
 
@@ -110,7 +116,7 @@ public class ActivityService {
     public ActivityDTO removeField(String activityId, String fieldId) {
         Activity activity = this.activityDao.findById(activityId).orElseThrow();
         Field field = this.fieldDao.findById(fieldId).orElseThrow();
-        
+
         activity.removeField(field);
 
         this.fieldDao.delete(field);
