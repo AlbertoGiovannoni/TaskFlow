@@ -62,8 +62,25 @@ public class DateService extends FieldService {
                 .addDate(dateDTO.getDateTime());
 
         if (notificationDto != null) {
-            //notification = this.notificationMapper.toEntity(notificationDto);
-            notification.setMessage(notificationDto.getMessage());
+            // String message = "Hai ricevuto questa notifica perchè hai un'attività fissata
+            // per: " + dateDTO.getDateTime() + "\nAttività fissata: " +
+            // notificationDto.getMessage();
+            String message = "<html>" +
+                    "<body>" +
+                    "<h2 style='color: #007BFF;'>Hai ricevuto una nuova notifica!</h2>" +
+                    "<p>Hai ricevuto questa notifica perché hai un'attività fissata per:</p>" +
+                    "<p style='font-weight: bold;'>Data: " + dateDTO.getDateTime().toLocalDate() + "</p>" +
+                    "<p style='font-weight: bold;'>Ora: " + dateDTO.getDateTime().toLocalTime() + "</p>" +
+                    "<p>Attività fissata:</p>" +
+                    "<blockquote style='background: #f9f9f9; border-left: 5px solid #007BFF; padding: 10px;'>" +
+                    notificationDto.getMessage() +
+                    "</blockquote>" +
+                    "<p>Grazie per la tua attenzione!</p>" +
+                    "<p>Il team di TaskFlow</p>" +
+                    "</body>" +
+                    "</html>";
+
+            notification.setMessage(message);
             notification.setNotificationDateTime(notificationDto.getNotificationDateTime());
             notification.setReceivers(this.convertRecievers(notificationDto.getReceiverIds()));
             notification = this.notificationDao.save(notification);
@@ -80,16 +97,16 @@ public class DateService extends FieldService {
     @Override
     public Field updateField(FieldDTO fieldDto) {
         Date field = (Date) this.fieldDao.findById(fieldDto.getId()).orElseThrow();
-        DateDTO dateDTO = (DateDTO)fieldDto;
+        DateDTO dateDTO = (DateDTO) fieldDto;
 
-        if(dateDTO.getDateTime() != null) {
+        if (dateDTO.getDateTime() != null) {
             field.setDateTime(dateDTO.getDateTime());
         }
 
-        if(dateDTO.getNotification() != null){
+        if (dateDTO.getNotification() != null) {
             NotificationDTO notificationDto = dateDTO.getNotification();
             Notification notification = this.notificationMapper.toEntity(notificationDto);
-            notification.setReceivers((ArrayList <User>) this.userDAO.findAllById(notificationDto.getReceiverIds()));
+            notification.setReceivers((ArrayList<User>) this.userDAO.findAllById(notificationDto.getReceiverIds()));
             field.setNotification(notification);
         }
 
@@ -98,12 +115,12 @@ public class DateService extends FieldService {
         return field;
     }
 
-    private ArrayList<User> convertRecievers(ArrayList<String> ids){
+    private ArrayList<User> convertRecievers(ArrayList<String> ids) {
         ArrayList<User> receivers = new ArrayList<User>();
         User usr;
 
-        if(ids != null && ids.size() > 0){
-            for (String id : ids){
+        if (ids != null && ids.size() > 0) {
+            for (String id : ids) {
                 usr = this.userDAO.findById(id).orElseThrow();
                 receivers.add(usr);
             }
