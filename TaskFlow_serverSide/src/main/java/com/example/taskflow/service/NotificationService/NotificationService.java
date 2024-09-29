@@ -48,6 +48,7 @@ public class NotificationService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true); // true per l'invio di multipart
 
+            
             helper.setTo(receiver.getEmail()); // Assicurati che User abbia un campo email
             helper.setSubject("Notifica da TaskFlow");
             helper.setText(notification.getMessage(), true); // true per interpretare come HTML
