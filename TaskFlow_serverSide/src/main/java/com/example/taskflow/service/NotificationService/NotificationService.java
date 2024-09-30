@@ -1,6 +1,8 @@
 package com.example.taskflow.service.NotificationService;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,16 +32,17 @@ public class NotificationService {
 
     @Scheduled(fixedRate = 60000) // ogni minuto
     public void checkForExpiredNotifications() throws MessagingException {
-        // Trova tutte le notifiche
-        List<Notification> notifications = notificationDAO.findAll(); // TODO per ora le carico tutte
+        ZonedDateTime nowInRome = ZonedDateTime.now(ZoneId.of("Europe/Rome"));
+        LocalDateTime now = nowInRome.toLocalDateTime();
+        LocalDateTime nextMinute = now.plusMinutes(1);
 
-        LocalDateTime now = LocalDateTime.now();
+        // Trova solo le notifiche che scadono nel prossimo minuto
+        List<Notification> notifications = notificationDAO.findExpiringNotifications(now, nextMinute);
+        System.out.println(now);
+        System.out.println(nextMinute);
 
         for (Notification notification : notifications) {
-            if (notification.getNotificationDateTime().isBefore(now)) {
-                sendNotificationEmail(notification);
-                notificationDAO.delete(notification); // TODO per ora le elimino
-            }
+            sendNotificationEmail(notification);
         }
     }
 
@@ -48,7 +51,6 @@ public class NotificationService {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true); // true per l'invio di multipart
 
-            
             helper.setTo(receiver.getEmail()); // Assicurati che User abbia un campo email
             helper.setSubject("Notifica da TaskFlow");
             helper.setText(notification.getMessage(), true); // true per interpretare come HTML
