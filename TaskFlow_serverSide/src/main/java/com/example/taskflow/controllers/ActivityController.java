@@ -1,6 +1,7 @@
 
 package com.example.taskflow.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,13 @@ public class ActivityController {
                 .body(this.activityService.addFieldToActivity(activityId, fieldDto));
     }
 
+    @PostMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/addFields")
+    public ResponseEntity<ActivityDTO> addFields(@PathVariable String activityId,
+            @Valid @RequestBody ArrayList<FieldDTO> fieldDtos) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(this.activityService.addFieldsToActivity(activityId, fieldDtos));
+    }
+
     @PatchMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields/{fieldId}")
     public ResponseEntity<FieldDTO> updateField(@PathVariable String fieldId,
             @RequestBody FieldDTO fieldDto) {
@@ -84,6 +92,12 @@ public class ActivityController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(this.activityService.updateField(fieldDto));
+    }
+
+    @PatchMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields/updateFields")
+    public ResponseEntity<ArrayList<FieldDTO>> updateFields(@RequestBody ArrayList<FieldDTO> fieldDtos) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(this.activityService.updateFields(fieldDtos));
     }
 
     @DeleteMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields/{fieldId}")

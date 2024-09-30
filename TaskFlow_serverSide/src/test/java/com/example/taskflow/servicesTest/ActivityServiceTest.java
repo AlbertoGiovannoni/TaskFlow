@@ -1,5 +1,9 @@
 package com.example.taskflow.servicesTest;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,8 +20,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 import com.example.taskflow.TestUtil;
+import com.example.taskflow.DAOs.ActivityDAO;
+import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.NotificationDAO;
+import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.DTOs.ProjectDTO;
@@ -27,8 +34,10 @@ import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.Field.NumberDTO;
 import com.example.taskflow.DTOs.Field.SingleSelectionDTO;
 import com.example.taskflow.DTOs.Field.TextDTO;
+import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.EntityFactory;
 import com.example.taskflow.DomainModel.Notification;
+import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
@@ -36,6 +45,7 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.AssigneeDefinitionBuilder;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.SimpleFieldDefinitionBuilder;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.SingleSelectionDefinitionBuilder;
+import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.NotificationMapper;
 import com.example.taskflow.service.ActivityService;
 
@@ -58,8 +68,14 @@ public class ActivityServiceTest {
     private NotificationMapper notificationMapper;
     @Autowired
     private ActivityService activityService;
+    @Autowired
+    private ActivityDAO activityDao;
+    @Autowired
+    private FieldDAO fieldDao;
+    @Autowired
+    private ProjectDAO projectDao;
 
-    private ArrayList<User> someUsers = new ArrayList<User>();
+    private ArrayList<User> someUsers;
 
     @BeforeEach
     public void setupDatabase() {
@@ -195,8 +211,26 @@ public class ActivityServiceTest {
 
     @Test
     public void testDelete(){
-        Project project = EntityFactory.getProject();
-        project.setName(RandomString.make(10));
+        Organization organization = this.testUtil.getEntireDatabaseMockup(1, 10, 5, 30).get(0);
+        
+        ArrayList<Project> projects = organization.getProjects();
+
+        for (Project project : projects){
+            ArrayList<Activity> activities = project.getActivities();
+
+            for (Activity activity : activities){
+                ArrayList<Field> fields = activity.getFields();
+                
+                this.activityService.deleteActivityAndFields(activity.getId());
+                assertFalse(this.activityDao.findById(activity.getId()).isPresent());
+                for (Field field : fields){
+                    assertFalse(this.fieldDao.findById(field.getId()).isPresent());
+                }
+                
+                Project projectFromDb = this.projectDao.findById(project.getId()).orElseThrow();
+                assertFalse(projectFromDb.getActivities().contains(activity));
+            }
+        }
     }
 
     private ArrayList<String> extractIds(ArrayList<User> users) {

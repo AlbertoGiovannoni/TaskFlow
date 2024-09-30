@@ -1,7 +1,6 @@
 package com.example.taskflow.service;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,8 +19,6 @@ import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.ActivityMapper;
 import com.example.taskflow.Mappers.FieldMapper;
 import com.example.taskflow.service.FieldService.FieldServiceManager;
-
-import jakarta.validation.constraints.Null;
 
 @Service
 public class ActivityService {
@@ -107,10 +104,35 @@ public class ActivityService {
         return this.activityMapper.toDto(activity);
     }
 
+    public ActivityDTO addFieldsToActivity(String activityId, ArrayList<FieldDTO> fieldDtos){
+        Activity activity = this.activityDao.findById(activityId).orElseThrow();
+
+        ArrayList<Field> fieldsPushed = new ArrayList<>();
+
+        for (FieldDTO fieldDto : fieldDtos){
+            fieldsPushed.add(this.fieldServiceManager.getFieldService(fieldDto).pushNewField(fieldDto));
+        }
+
+        activity.addFields(fieldsPushed);
+        activity = this.activityDao.save(activity);
+
+        return this.activityMapper.toDto(activity);
+    }
+
     public FieldDTO updateField(FieldDTO fieldDto) {
         Field field = this.fieldServiceManager.getFieldService(fieldDto).updateField(fieldDto);
 
         return this.fieldMapper.toDto(field);
+    }
+
+    public ArrayList<FieldDTO> updateFields(ArrayList<FieldDTO> fieldDtos) {
+        ArrayList<FieldDTO> fieldDtosPushed = new ArrayList<>();
+
+        for (FieldDTO fieldDto : fieldDtos){
+            fieldDtosPushed.add(this.fieldMapper.toDto(this.fieldServiceManager.getFieldService(fieldDto).updateField(fieldDto)));
+        }
+
+        return fieldDtosPushed;
     }
 
     public ActivityDTO removeField(String activityId, String fieldId) {
