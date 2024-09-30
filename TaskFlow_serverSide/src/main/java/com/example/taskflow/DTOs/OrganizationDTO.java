@@ -11,7 +11,6 @@ public class OrganizationDTO {
     private String id;
     @NotBlank(message = "name must not be blank")
     private String name;
-    @NotNull(message = "creationDate must not be blank")
     private LocalDateTime creationDate;
     private ArrayList<String> ownersId;
     private ArrayList<String> membersId;
