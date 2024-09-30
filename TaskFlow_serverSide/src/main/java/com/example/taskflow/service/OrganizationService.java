@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -66,7 +68,11 @@ public class OrganizationService {
         Organization organization = EntityFactory.getOrganization();
         
         organization.setName(organizationDTO.getName());
-        organization.setCreationDate(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES));
+
+        ZonedDateTime nowInRome = ZonedDateTime.now(ZoneId.of("Europe/Rome"));
+        LocalDateTime now = nowInRome.toLocalDateTime();
+
+        organization.setCreationDate(now.truncatedTo(ChronoUnit.MINUTES));
 
         if (organizationDTO.getOwnersId() == null){
             throw new IllegalArgumentException("An organization must have an owner");
