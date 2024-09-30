@@ -1,14 +1,11 @@
 package com.example.taskflow.DomainModel.FieldPackage;
 
-import org.springframework.data.annotation.Id;
 
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 
 public class Document extends Field{
 
-    @Id
-    private String id;
     private String fileName;
     private String contentType;
     private byte[] content;
@@ -24,14 +21,6 @@ public class Document extends Field{
     public Document(String uuid, FieldDefinition fieldDefinition, String name) {
         super(uuid, fieldDefinition);
         this.fileName = name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getFileName() {
