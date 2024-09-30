@@ -60,4 +60,11 @@ public class Activity extends BaseEntity{
     public void setFields(ArrayList<Field> fields) {
         this.fields = fields;
     }
+
+    public void addFields(ArrayList<Field> fields){
+        if(this.fields == null){
+            this.fields = new ArrayList<>();
+        }
+        this.fields.addAll(fields);
+    }
 }
