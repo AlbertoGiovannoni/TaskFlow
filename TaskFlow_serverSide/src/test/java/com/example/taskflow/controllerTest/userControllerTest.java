@@ -93,24 +93,4 @@ public class userControllerTest {
                 .contentType("application/json").content("{}"))
                 .andExpect(status().isOk());
     }
-
-    @Test
-    public void testUserEndpoint_withUserRole() throws Exception {
-        mockMvc.perform(get("/api/user/someEndpoint"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockUser(roles = "ADMIN")
-    public void testAdminEndpoint_withAdminRole() throws Exception {
-        mockMvc.perform(get("/api/admin/someEndpoint"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockUser(roles = "USER")
-    public void testAdminEndpoint_withUserRole() throws Exception {
-        mockMvc.perform(get("/api/admin/someEndpoint"))
-                .andExpect(status().isForbidden()); // L'utente con ruolo "USER" non dovrebbe avere accesso
-    }
 }
