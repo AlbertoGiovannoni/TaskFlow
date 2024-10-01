@@ -27,6 +27,7 @@ import com.example.taskflow.DTOs.UserWithInfoDTO;
 import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.UserInfo;
+import com.example.taskflow.Mappers.UserMapper;
 import com.example.taskflow.service.UserService;
 
 import jakarta.validation.Valid;
@@ -51,6 +52,8 @@ public class UserController {
     FieldDefinitionDAO fieldDefinitionDAO;
     @Autowired
     OrganizationDAO organizationDAO;
+    @Autowired
+    UserMapper userMapper;
 
     @Autowired
     UserService userService;
@@ -115,6 +118,21 @@ public class UserController {
         UserDTO userDto = userService.createUser(userWithInfoDTO);
         
         return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
+    }
+
+    @PostMapping("/public/login")
+    public ResponseEntity<?> login(@Valid @RequestBody UserWithInfoDTO userDto) {
+        String username = userDto.getUsername();
+        String password = userDto.getPassword();
+
+        Optional<User> userOptional = userService.login(username, password);
+        
+        if (userOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(this.userMapper.toDto((userOptional.get())));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid username or password");
+        }
     }
 
     @PatchMapping("/user/{userId}")

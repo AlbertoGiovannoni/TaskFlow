@@ -13,7 +13,6 @@ public class UserWithInfoDTO {
     @NotBlank(message = "Username non può essere vuoto")
     private String username;
 
-    @NotBlank(message = "Email non può essere vuota")
     private String email;
     private String uuid;
     
