@@ -77,7 +77,11 @@ public class ActivityService {
     }
 
     public Activity renameActivity(String activityId, String newName) {
-        Activity activity = this.activityDao.findById(activityId).orElseThrow();
+        Activity activity = this.activityDao.findById(activityId).orElse(null);
+
+        if (activity == null) {
+            throw new IllegalArgumentException("Activity not found");
+        }
 
         activity.setName(newName);
 

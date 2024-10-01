@@ -64,10 +64,10 @@ public class ActivityController {
 
     @PatchMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}")
     public ResponseEntity<Activity> renameActivity(@PathVariable String activityId,
-            @RequestBody Map<String, String> requestBody) {
+            @RequestParam String newName) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(this.activityService.renameActivity(activityId, requestBody.get("newName")));
+                .body(this.activityService.renameActivity(activityId, newName));
     }
 
     @PostMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields")

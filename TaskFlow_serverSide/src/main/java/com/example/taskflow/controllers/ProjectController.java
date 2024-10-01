@@ -65,8 +65,8 @@ public class ProjectController {
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @PatchMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/renameProject")
     public ResponseEntity<ProjectDTO> renameProject(@PathVariable String projectId,
-            @RequestBody Map<String, String> requestBody, @PathVariable String organizationId) {
-        String newName = requestBody.get("newName");
+            @RequestParam String newName, @PathVariable String organizationId) {
+        
         if (newName == null || newName.trim().isEmpty()) {
             throw new IllegalArgumentException("newName cannot be empty");
         }
@@ -95,5 +95,4 @@ public class ProjectController {
                  .body(this.projectService.removeActivity(projectId, activityId));
     }
 
-    // TODO deleteActivity
 }

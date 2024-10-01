@@ -81,7 +81,9 @@ public class OrganizationService {
             throw new IllegalArgumentException("An organization must have an owner");
         }
 
-        organization.setOwners(new ArrayList<>(this.userDAO.findAllById(organizationDTO.getOwnersId())));
+        organization.setOwners(new ArrayList<User>(this.userDAO.findAllById(organizationDTO.getOwnersId())));
+        organization.setMembers(new ArrayList<User>());
+        organization.setProjects(new ArrayList<Project>());
 
         if (organizationDTO.getMembersId() != null){
             if (!(organizationDTO.getMembersId().isEmpty())){

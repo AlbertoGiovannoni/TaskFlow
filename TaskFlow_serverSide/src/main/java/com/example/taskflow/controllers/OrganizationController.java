@@ -1,13 +1,13 @@
 package com.example.taskflow.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.taskflow.DAOs.OrganizationDAO;
 import com.example.taskflow.DTOs.OrganizationDTO;
 import com.example.taskflow.DTOs.ProjectDTO;
-import com.example.taskflow.DTOs.UserDTO;
 import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.service.OrganizationService;
 import com.example.taskflow.service.ProjectService;
@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,7 +31,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/user")
@@ -42,8 +40,6 @@ public class OrganizationController {
     private OrganizationService organizationService;
     @Autowired
     private OrganizationDAO organizationDAO;
-    @Autowired
-    private ProjectService projectService;
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -79,20 +75,20 @@ public class OrganizationController {
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @PatchMapping("/{userId}/myOrganization/{organizationId}/addMember")
-    public ResponseEntity<OrganizationDTO> addMemberToOrganization(@RequestBody Map<String, String> requestBody,
+    public ResponseEntity<OrganizationDTO> addMemberToOrganization(@RequestParam String targetId,
             @PathVariable String organizationId) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(this.organizationService.addMemberToOrganization(organizationId, requestBody.get("targetId")));
+                .body(this.organizationService.addMemberToOrganization(organizationId, targetId));
     }
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @PatchMapping("/{userId}/myOrganization/{organizationId}/addOwner")
-    public ResponseEntity<OrganizationDTO> addOwnerToOrganization(@RequestBody Map<String, String> requestBody,
+    public ResponseEntity<OrganizationDTO> addOwnerToOrganization(@RequestParam String targetId,
             @PathVariable String organizationId) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(this.organizationService.addOwnerToOrganization(organizationId, requestBody.get("targetId")));
+                .body(this.organizationService.addOwnerToOrganization(organizationId, targetId));
     }
 
     @GetMapping("/{userId}/myOrganization/{organizationId}")
@@ -103,9 +99,9 @@ public class OrganizationController {
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @DeleteMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}")
-    public ResponseEntity<String> deleteProjectFromOrganization(@PathVariable String organizationId, @PathVariable String projectId) {
-        this.organizationService.deleteProjectFromOrganization(organizationId, projectId);
-        return ResponseEntity.status(HttpStatus.OK).body("deleted");
+    public ResponseEntity<OrganizationDTO> deleteProjectFromOrganization(@PathVariable String organizationId, @PathVariable String projectId) {
+        OrganizationDTO organizationDTO = this.organizationService.deleteProjectFromOrganization(organizationId, projectId);
+        return ResponseEntity.status(HttpStatus.OK).body(organizationDTO);
     }
 
     @GetMapping("/{userId}/myOrganization")
