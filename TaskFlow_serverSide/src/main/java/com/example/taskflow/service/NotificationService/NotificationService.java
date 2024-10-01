@@ -51,7 +51,6 @@ public class NotificationService {
 
     private void sendNotificationEmail(Notification notification) throws MessagingException {
         for (User receiver : notification.getReceivers()) {
-            MimeMessage message = mailSender.createMimeMessage();
 
             this.mailService.sendEmail(receiver.getEmail(), "Notifica da TaskFlow", notification.getMessage());
             
