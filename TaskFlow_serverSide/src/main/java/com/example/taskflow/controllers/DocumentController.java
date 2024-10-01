@@ -33,8 +33,8 @@ public class DocumentController {
     @Autowired
     private DocumentService documentService;
 
-    // Endpoint per caricare un PDF
-    @PostMapping("/upload")
+    // Endpoint per caricare un PDF   
+     @PostMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields/{fieldId}/upload")
     public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file) {
         try {
             Document pdfDocument = this.documentService.savePdf(file);
