@@ -81,10 +81,14 @@ public class TestUtil {
     public User addGetRandomUserToDatabase() {
         String plainPassword = "password";
 
-        UserInfo info = new UserInfo(UUID.randomUUID().toString(), RandomString.make(10), plainPassword);
+        UserInfo info = EntityFactory.getUserInfo();
+        info.setPassword(plainPassword);
+        info.setEmail(RandomString.make(5) + "." + RandomString.make(5) + "@gmail.com");
         this.userInfoDAO.save(info);
 
-        User user = new User(UUID.randomUUID().toString(), info, RandomString.make(10));
+        User user = EntityFactory.getUser();
+        user.setUserInfo(info);
+        user.setUsername(RandomString.make(10));
         return this.userDAO.save(user);
     }
 
@@ -220,6 +224,7 @@ public class TestUtil {
                                                 int nProjectForOrganization, 
                                                 int nActivitiesForProject, 
                                                 int nUsers) {
+        this.cleanDatabase();
         ArrayList<User> applicationUsers = this.addGetMultipleRandomUserToDatabase(nUsers);
 
         ArrayList<Organization> organizations = new ArrayList<>();

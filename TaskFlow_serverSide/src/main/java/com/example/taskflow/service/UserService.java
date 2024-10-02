@@ -1,12 +1,17 @@
 package com.example.taskflow.service;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.example.taskflow.DAOs.OrganizationDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
 import com.example.taskflow.DTOs.UserDTO;
 import com.example.taskflow.DTOs.UserWithInfoDTO;
 import com.example.taskflow.DomainModel.EntityFactory;
+import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.UserInfo;
 import com.example.taskflow.Mappers.UserMapper;
@@ -20,46 +25,47 @@ public class UserService {
     private UserInfoDAO userInfoDAO;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private OrganizationDAO organizationDao;
 
     public UserDTO createUser(UserWithInfoDTO userWithInfoDTO) {
-
-        // Mappa il DTO in un oggetto User (senza UserInfo)
-        //User user = this.userMapper.toEntity(userWithInfoDTO);
         User user = EntityFactory.getUser();
+
+        if (this.userDAO.findByUsername(userWithInfoDTO.getUsername()).isPresent()){
+            throw new IllegalArgumentException("Username already exists");
+        }
+
+        if (this.userInfoDAO.findByEmail(userWithInfoDTO.getEmail()).isPresent()){
+            throw new IllegalArgumentException("Email already exists");
+        }
+
         user.setUsername(userWithInfoDTO.getUsername());
 
-        // Creazione dell'oggetto UserInfo
-        UserInfo userInfo = new UserInfo();
-        userInfo.setEmail(userWithInfoDTO.getEmail());
-        userInfo.setPassword(userWithInfoDTO.getPassword()); // Aggiungi qui la logica di cifratura se necessario
+        UserInfo userInfo = EntityFactory.getUserInfo();
 
-        // Associazione di UserInfo a User
+        userInfo.setEmail(userWithInfoDTO.getEmail());
+
+        userInfo.setPassword(userWithInfoDTO.getPassword());
+
         user.setUserInfo(userInfo);
 
-        // Salva UserInfo
         userInfoDAO.save(userInfo);
+        user = userDAO.save(user);
 
-        // Salva l'utente nel database
-        User savedUser = userDAO.save(user);
-
-        // Mappa l'entità salvata a UserDTO
-        UserDTO savedUserDTO = userMapper.toDto(savedUser);
-
-        // Restituisci l'utente creato come risposta con codice HTTP 201 (CREATED)
-        return savedUserDTO;
+        return userMapper.toDto(user);
     }
 
-    public UserDTO updateUser(UserWithInfoDTO userDto) {
-        User user = this.userDAO.findById(userDto.getId()).orElseThrow();
+    public UserDTO updateUser(UserWithInfoDTO userWithInfoDto) {
+        User user = this.userDAO.findById(userWithInfoDto.getId()).orElseThrow();
 
-        if (userDto.getEmail() != null) {
-            user.setEmail(userDto.getEmail());
+        if (userWithInfoDto.getEmail() != null) {
+            user.setEmail(userWithInfoDto.getEmail());
         }
-        if (userDto.getUsername() != null) {
-            user.setUsername(userDto.getUsername());
+        if (userWithInfoDto.getUsername() != null) {
+            user.setUsername(userWithInfoDto.getUsername());
         }
-        if (userDto.getPassword() != null) {
-            user.getUserInfo().setPassword(userDto.getPassword());
+        if (userWithInfoDto.getPassword() != null) {
+            user.getUserInfo().setPassword(userWithInfoDto.getPassword());
             this.userInfoDAO.save(user.getUserInfo());
         }
 
@@ -73,10 +79,69 @@ public class UserService {
         return this.userMapper.toDto(usr);
     }
 
-    public void deleteUserById(String userId) {
-        User usr = this.userDAO.findById(userId).orElseThrow();
+    public void deleteUserById(String userId) throws IllegalArgumentException{
+        if (userId == null){
+            throw new IllegalArgumentException("targetId provided is null");
+        }
+
+        User usr = this.userDAO.findById(userId).orElse(null);
+        if (usr == null){
+            throw new IllegalArgumentException("User: " + userId + " not found");
+        }
+
+        ArrayList<Organization> organizationsOfUser = this.organizationDao.getOrganizationByUser(userId);
+
+        String exceptionMessage = "";
+
+        for (Organization organization : organizationsOfUser){
+            try{
+                this.checkOrganizationOwners(organization, usr);
+                organization.removeGenericUser(usr);
+                this.organizationDao.save(organization);
+            }
+            catch(IllegalArgumentException exception){
+                exceptionMessage +=  exception.getMessage() + "\n";
+            }
+        }
+
+        if (exceptionMessage != ""){
+            throw new IllegalArgumentException(exceptionMessage);
+        }
 
         this.userInfoDAO.delete(usr.getUserInfo());
         this.userDAO.delete(usr);
+    }
+
+    public UserDTO makeOwner(String organizationId, String targetId){
+        User user = this.userDAO.findById(targetId).orElse(null);
+        if (user == null){
+            throw new IllegalArgumentException("User with targetId not found");
+        }
+
+        Organization organization = this.organizationDao.findById(organizationId).orElse(null);
+        if (organization == null){
+            throw new IllegalArgumentException("Organization not found");
+        }
+
+        if (!(organization.getOwners().contains(user))){
+            organization.addOwner(user);
+            organization.removeMember(user);
+            this.organizationDao.save(organization);
+        }
+
+        return this.userMapper.toDto(user);
+    }
+
+    public UserDTO getUser(String userId){
+        User user = this.userDAO.findById(userId).orElseThrow();
+
+        return this.userMapper.toDto(user);
+    }
+
+    private void checkOrganizationOwners(Organization organization, User user) throws IllegalArgumentException{
+        ArrayList<User> owners = organization.getOwners();
+        if (owners.size() == 1 && owners.contains(user)){
+            throw new IllegalArgumentException("Organization: " + organization.getName() + " cannot live without owners and user " + user.getUsername() + " is the last. " +user.getUsername() + " cannot be deleted");
+        }
     }
 }

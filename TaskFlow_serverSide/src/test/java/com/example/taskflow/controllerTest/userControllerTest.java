@@ -20,6 +20,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
 import java.util.UUID;
 
 @SpringBootTest
@@ -39,7 +41,7 @@ public class userControllerTest {
 
     @Test
     public void testRegister() throws Exception {
-        String email = RandomString.make(10);
+        String email = this.getRandomMail();
         String username = RandomString.make(10);
         String jsonBody = "{ \"username\": \"" + username + "\", \"password\": \"password\" , \"email\": \""
                 + email + "\", \"isAdmin\": false}";
@@ -50,14 +52,17 @@ public class userControllerTest {
                 .andExpect(status().isCreated());
     }
 
+    private String getRandomMail(){
+        return RandomString.make(5) + "." + RandomString.make(5) + "@gmail.com";
+    }
+
     @Test
-    @WithMockUser(roles = "USER")
     public void updateUser() throws Exception {
 
         User user = testUtil.addGetRandomUserToDatabase();
 
         // Aggiorna l'utente
-        String newEmail = RandomString.make(10);
+        String newEmail = this.getRandomMail();
         String newUsername = RandomString.make(10);
         String updateJsonBody = "{ \"username\": \"" + newUsername
                 + "\", \"password\": \"newPassword\" , \"email\": \""
@@ -92,5 +97,22 @@ public class userControllerTest {
                 "/api/user/" + owner.getId() + "/myOrganization/" + organization.getId() + "/users/" + target.getId())
                 .contentType("application/json").content("{}"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testUpdatedDelete() throws Exception{
+        ArrayList<Organization> organizations = this.testUtil.getEntireDatabaseMockup(2, 10, 5, 30);
+        
+        Organization organization = organizations.get(0);
+
+        User owner = organization.getOwners().get(0);
+        User member = organization.getMembers().get(0);
+
+        String message = this.mockMvc.perform(
+            delete("/api/user" + owner.getId() + "/myOrganization/" + organization.getId() + "/users")
+                .param("targetId", member.getId()))
+            .andReturn().getResponse().getErrorMessage();
+
+        System.out.println(message);
     }
 }

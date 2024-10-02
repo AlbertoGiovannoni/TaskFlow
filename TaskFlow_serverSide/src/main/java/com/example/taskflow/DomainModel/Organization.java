@@ -46,6 +46,11 @@ public class Organization extends BaseEntity{
         this.creationDate = creationDate.truncatedTo(ChronoUnit.MINUTES);
     }
 
+    public void removeGenericUser(User user){
+        this.removeMember(user);
+        this.removeOwner(user);
+    }
+
     public void addMember(User user) { 
         if (this.members == null){
             this.members = new ArrayList<>();
