@@ -1,10 +1,9 @@
 package com.example.taskflow.DTOs.Field;
 
-public class DocumentDTO {
+public class DocumentDTO extends FieldDTO {
 
     private String fileName;
-    private String contentType;
-    private byte[] content;
+    private String fileType;
 
     public String getFileName() {
         return fileName;
@@ -12,16 +11,10 @@ public class DocumentDTO {
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
-    public String getContentType() {
-        return contentType;
+    public String getFileType() {
+        return fileType;
     }
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
-    public byte[] getContent() {
-        return content;
-    }
-    public void setContent(byte[] content) {
-        this.content = content;
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
     }
 }

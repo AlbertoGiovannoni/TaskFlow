@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.taskflow.DAOs.FieldDAO;
+import com.example.taskflow.DTOs.Field.DocumentDTO;
 import com.example.taskflow.DomainModel.FieldPackage.Document;
 import com.example.taskflow.service.FieldService.DocumentService;
 import com.example.taskflow.service.FieldService.FieldService;
@@ -34,11 +35,11 @@ public class DocumentController {
     private DocumentService documentService;
 
     // Endpoint per caricare un PDF   
-     @PostMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields/{fieldId}/upload")
-    public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file) {
+     @PostMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields/upload")
+    public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file, @RequestParam("info") DocumentDTO documentDto) {
         try {
-            Document pdfDocument = this.documentService.savePdf(file);
-            return new ResponseEntity<>("File uploaded successfully: " + pdfDocument.getId(), HttpStatus.OK);
+            Document document = this.documentService.pushDocument(documentDto, file);
+            return new ResponseEntity<>("File uploaded successfully: " + document.getId(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("File upload failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

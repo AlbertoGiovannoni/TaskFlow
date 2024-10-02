@@ -3,6 +3,7 @@ package com.example.taskflow.Mappers;
 import com.example.taskflow.DTOs.NotificationDTO;
 import com.example.taskflow.DTOs.Field.AssigneeDTO;
 import com.example.taskflow.DTOs.Field.DateDTO;
+import com.example.taskflow.DTOs.Field.DocumentDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.Field.NumberDTO;
 import com.example.taskflow.DTOs.Field.SingleSelectionDTO;
@@ -12,6 +13,7 @@ import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldPackage.Assignee;
 import com.example.taskflow.DomainModel.FieldPackage.Date;
+import com.example.taskflow.DomainModel.FieldPackage.Document;
 import com.example.taskflow.DomainModel.FieldPackage.Number;
 import com.example.taskflow.DomainModel.FieldPackage.SingleSelection;
 import com.example.taskflow.DomainModel.FieldPackage.Text;
@@ -45,8 +47,7 @@ public interface FieldMapper {
             case TEXT:
                 return this.toDto((Text) field);
             case DOCUMENT:
-                // TODO
-                throw new IllegalArgumentException(field.getType() + " not implemented!");
+                return this.toDto((Document) field);
             default:
                 throw new IllegalArgumentException(field.getType() + " not recognized");
 
@@ -68,8 +69,7 @@ public interface FieldMapper {
             case TEXT:
                 return this.toEntity((TextDTO) fieldDto);
             case DOCUMENT:
-                // TODO
-                throw new IllegalArgumentException(fieldDto.getType() + " not implemented!");
+                return this.toEntity((DocumentDTO) fieldDto);
             default:
                 throw new IllegalArgumentException(fieldDto.getType() + " not recognized");
 
@@ -137,6 +137,9 @@ public interface FieldMapper {
     @Mapping(source = "fieldDefinition.id", target = "fieldDefinitionId")
     TextDTO toDto(Text text);
 
+    @Mapping(source = "fieldDefinition.id", target = "fieldDefinitionId")
+    DocumentDTO toDto(Document text);
+
     // ------------------------------------------------------------------------------------- //
 
     @Mapping(source = "userIds", target="users", ignore = true)
@@ -157,6 +160,9 @@ public interface FieldMapper {
 
     @Mapping(source = "fieldDefinitionId", target = "fieldDefinition", ignore = true)
     Text toEntity(TextDTO textDto);
+
+    @Mapping(source = "fieldDefinitionId", target = "fieldDefinition", ignore = true)
+    Document toEntity(DocumentDTO textDto);
 
     default ArrayList<FieldDTO> fieldToFieldDto(ArrayList<Field> fields){
         ArrayList<FieldDTO> fieldDtoList = new ArrayList<FieldDTO>();

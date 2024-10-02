@@ -40,8 +40,7 @@ public interface FieldDefinitionMapper {
             case TEXT:
                 return this.toDto((SimpleFieldDefinition) fieldDefinition);
             case DOCUMENT:
-                // TODO document
-                throw new IllegalArgumentException(fieldDefinition.getType() + " not implemented!");
+                return this.toDto((SimpleFieldDefinition) fieldDefinition);
             default:
                 throw new IllegalArgumentException(fieldDefinition.getType() + " not recognized");
         }
@@ -60,8 +59,7 @@ public interface FieldDefinitionMapper {
             case TEXT:
                 return this.toEntity((SimpleFieldDefinitionDTO) fieldDefinitionDto);
             case DOCUMENT:
-                // TODO document
-                throw new IllegalArgumentException(fieldDefinitionDto.getType() + " not implemented!");
+                return this.toEntity((SimpleFieldDefinitionDTO) fieldDefinitionDto);
             default:
                 throw new IllegalArgumentException(fieldDefinitionDto.getType() + " not recognized");
         }

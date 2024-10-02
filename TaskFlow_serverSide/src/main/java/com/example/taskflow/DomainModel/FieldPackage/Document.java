@@ -7,7 +7,7 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 public class Document extends Field{
 
     private String fileName;
-    private String contentType;
+    private String fileType;
     private byte[] content;
 
     public Document() {
@@ -31,12 +31,12 @@ public class Document extends Field{
         this.fileName = fileName;
     }
 
-    public String getContentType() {
-        return contentType;
+    public String getFileType() {
+        return fileType;
     }
 
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
     }
 
     public byte[] getContent() {
