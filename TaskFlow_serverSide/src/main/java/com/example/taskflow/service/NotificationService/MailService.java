@@ -2,8 +2,6 @@ package com.example.taskflow.service.NotificationService;
 
 import java.time.LocalDateTime;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -22,10 +20,7 @@ public class MailService {
     }
 
     public void sendEmail(String receiverMail, String subject, String activityMessage, Date date) throws MessagingException {
-        //String[] split = activityMessage.split(",");
-        //LocalDateTime dateTime = LocalDateTime.parse(split[1]);
-        // String date = dateTime.toLocalDate().toString();
-        // String time = dateTime.toLocalTime().toString();
+    
         LocalDateTime dateTime = date.getDateTime();
         String htmlContent = getTemplate(dateTime.toLocalDate().toString(), dateTime.toLocalTime().toString(), activityMessage);
 
