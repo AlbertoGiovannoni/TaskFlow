@@ -18,6 +18,8 @@ import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DAOs.NotificationDAO;
 import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.User;
+import com.example.taskflow.DomainModel.FieldPackage.Date;
+import com.example.taskflow.DomainModel.FieldPackage.Field;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -29,6 +31,8 @@ public class NotificationService {
 
     @Autowired
     private JavaMailSender mailSender;
+    @Autowired
+    private FieldDAO fieldDAO;
 
     @Autowired
     private MailService mailService;
@@ -52,7 +56,9 @@ public class NotificationService {
     private void sendNotificationEmail(Notification notification) throws MessagingException {
         for (User receiver : notification.getReceivers()) {
 
-            this.mailService.sendEmail(receiver.getEmail(), "Notifica da TaskFlow", notification.getMessage());
+            List<Date> date = this.fieldDAO.findByNotification(notification);
+
+            this.mailService.sendEmail(receiver.getEmail(), "Notifica da TaskFlow", notification.getMessage(), date.get(0));
             
         }
     }

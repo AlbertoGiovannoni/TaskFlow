@@ -8,6 +8,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import com.example.taskflow.DomainModel.FieldPackage.Date;
+
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
@@ -19,12 +21,13 @@ public class MailService {
         this.mailSender = mailSender;
     }
 
-    public void sendEmail(String receiverMail, String subject, String activityMessage) throws MessagingException {
-        String[] split = activityMessage.split(",");
-        LocalDateTime dateTime = LocalDateTime.parse(split[1]);
-        String date = dateTime.toLocalDate().toString();
-        String time = dateTime.toLocalTime().toString();
-        String htmlContent = getTemplate(date, time, split[0]);
+    public void sendEmail(String receiverMail, String subject, String activityMessage, Date date) throws MessagingException {
+        //String[] split = activityMessage.split(",");
+        //LocalDateTime dateTime = LocalDateTime.parse(split[1]);
+        // String date = dateTime.toLocalDate().toString();
+        // String time = dateTime.toLocalTime().toString();
+        LocalDateTime dateTime = date.getDateTime();
+        String htmlContent = getTemplate(dateTime.toLocalDate().toString(), dateTime.toLocalTime().toString(), activityMessage);
 
         // Crea un messaggio email
         MimeMessage message = mailSender.createMimeMessage();

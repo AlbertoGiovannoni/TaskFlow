@@ -63,7 +63,7 @@ public class DateService extends FieldService {
 
         if (notificationDto != null) {
             
-            String message = notificationDto.getMessage() + "," + dateDTO.getDateTime();
+            String message = notificationDto.getMessage();
 
             notification.setMessage(message);
             notification.setNotificationDateTime(notificationDto.getNotificationDateTime());
