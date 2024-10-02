@@ -62,23 +62,8 @@ public class DateService extends FieldService {
                 .addDate(dateDTO.getDateTime());
 
         if (notificationDto != null) {
-            // String message = "Hai ricevuto questa notifica perchè hai un'attività fissata
-            // per: " + dateDTO.getDateTime() + "\nAttività fissata: " +
-            // notificationDto.getMessage();
-            String message = "<html>" +
-                    "<body>" +
-                    "<h2 style='color: #007BFF;'>Hai ricevuto una nuova notifica!</h2>" +
-                    "<p>Hai ricevuto questa notifica perché hai un'attività fissata per:</p>" +
-                    "<p style='font-weight: bold;'>Data: " + dateDTO.getDateTime().toLocalDate() + "</p>" +
-                    "<p style='font-weight: bold;'>Ora: " + dateDTO.getDateTime().toLocalTime() + "</p>" +
-                    "<p>Attività fissata:</p>" +
-                    "<blockquote style='background: #f9f9f9; border-left: 5px solid #007BFF; padding: 10px;'>" +
-                    notificationDto.getMessage() +
-                    "</blockquote>" +
-                    "<p>Grazie per la tua attenzione!</p>" +
-                    "<p>Il team di TaskFlow</p>" +
-                    "</body>" +
-                    "</html>";
+            
+            String message = notificationDto.getMessage() + "," + dateDTO.getDateTime();
 
             notification.setMessage(message);
             notification.setNotificationDateTime(notificationDto.getNotificationDateTime());

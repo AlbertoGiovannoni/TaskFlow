@@ -1,8 +1,11 @@
 package com.example.taskflow.service;
 
+import java.util.Optional;
+
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.taskflow.DAOs.OrganizationDAO;
@@ -25,6 +28,8 @@ public class UserService {
     private UserInfoDAO userInfoDAO;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private OrganizationDAO organizationDao;
 
@@ -50,9 +55,24 @@ public class UserService {
         user.setUserInfo(userInfo);
 
         userInfoDAO.save(userInfo);
+
         user = userDAO.save(user);
 
         return userMapper.toDto(user);
+    }
+
+    public Optional<User> login(String username, String password) {
+        Optional<User> userOptional = userDAO.findByUsername(username);
+        
+        // Verifica se l'utente esiste e se la password è corretta
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            if (passwordEncoder.matches(password, user.getUserInfo().getPassword())) {
+                return Optional.of(user); // Login riuscito
+            }
+        }
+        
+        return Optional.empty(); // Login fallito
     }
 
     public UserDTO updateUser(UserWithInfoDTO userWithInfoDto) {

@@ -30,6 +30,9 @@ public class NotificationService {
     @Autowired
     private JavaMailSender mailSender;
 
+    @Autowired
+    private MailService mailService;
+
     @Scheduled(fixedRate = 60000) // ogni minuto
     public void checkForExpiredNotifications() throws MessagingException {
         ZonedDateTime nowInRome = ZonedDateTime.now(ZoneId.of("Europe/Rome"));
@@ -38,8 +41,8 @@ public class NotificationService {
 
         // Trova solo le notifiche che scadono nel prossimo minuto
         List<Notification> notifications = notificationDAO.findExpiringNotifications(now, nextMinute);
-        System.out.println(now);
-        System.out.println(nextMinute);
+        System.out.println("Notification check from date: \n" + now);
+        System.out.println("To date: \n" + nextMinute);
 
         for (Notification notification : notifications) {
             sendNotificationEmail(notification);
@@ -48,19 +51,9 @@ public class NotificationService {
 
     private void sendNotificationEmail(Notification notification) throws MessagingException {
         for (User receiver : notification.getReceivers()) {
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true); // true per l'invio di multipart
 
-            helper.setTo(receiver.getEmail()); // Assicurati che User abbia un campo email
-            helper.setSubject("Notifica da TaskFlow");
-            helper.setText(notification.getMessage(), true); // true per interpretare come HTML
-            try {
-                mailSender.send(message);
-                System.out.println("Email inviata con successo a: " + receiver.getEmail());
-            } catch (Exception e) {
-                System.out.println(
-                        "Errore imprevisto nell'invio dell'email a " + receiver.getEmail() + ": " + e.getMessage());
-            }
+            this.mailService.sendEmail(receiver.getEmail(), "Notifica da TaskFlow", notification.getMessage());
+            
         }
     }
 }
