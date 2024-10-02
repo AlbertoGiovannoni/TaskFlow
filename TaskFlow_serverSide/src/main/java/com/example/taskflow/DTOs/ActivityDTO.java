@@ -13,7 +13,6 @@ public class ActivityDTO {
     @NotNull
     private String name;
     @Valid
-    @NotNull
     private ArrayList<FieldDTO> fields;
 
     private String uuid;
