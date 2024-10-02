@@ -162,6 +162,7 @@ public interface FieldMapper {
     Text toEntity(TextDTO textDto);
 
     @Mapping(source = "fieldDefinitionId", target = "fieldDefinition", ignore = true)
+    @Mapping(target = "content", ignore = true)
     Document toEntity(DocumentDTO textDto);
 
     default ArrayList<FieldDTO> fieldToFieldDto(ArrayList<Field> fields){

@@ -20,6 +20,7 @@ import com.example.taskflow.DTOs.Field.DocumentDTO;
 import com.example.taskflow.DomainModel.FieldPackage.Document;
 import com.example.taskflow.service.FieldService.DocumentService;
 import com.example.taskflow.service.FieldService.FieldService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -35,8 +36,23 @@ public class DocumentController {
     private DocumentService documentService;
 
     // Endpoint per caricare un PDF   
-     @PostMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields/upload")
-    public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file, @RequestParam("info") DocumentDTO documentDto) {
+     @PostMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields/documents")
+    public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file, @RequestParam("info") String documentString) {
+        
+        // Crea l'ObjectMapper
+        ObjectMapper objectMapper = new ObjectMapper();
+        DocumentDTO documentDto = null;
+
+        try {
+            // Converti la stringa JSON in un oggetto PersonDTO
+            documentDto = objectMapper.readValue(documentString, DocumentDTO.class);
+
+            // Stampa l'oggetto DTO
+            System.out.println(documentDto);
+        } catch (Exception e) {
+            e.printStackTrace()
+            ;
+        }
         try {
             Document document = this.documentService.pushDocument(documentDto, file);
             return new ResponseEntity<>("File uploaded successfully: " + document.getId(), HttpStatus.OK);
@@ -46,7 +62,7 @@ public class DocumentController {
     }
 
     // Endpoint per restituire un PDF al frontend
-    @GetMapping("/download/{id}")
+    @GetMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields/documents/{id}")
     public ResponseEntity<byte[]> downloadPdf(@PathVariable String id) {
         Document document = this.documentService.getDocumentById(id);
 
@@ -54,7 +70,7 @@ public class DocumentController {
 
             // Imposta gli header della risposta
             HttpHeaders headers = new HttpHeaders();
-            headers.setContentDispositionFormData("inline", document.getFileName()); // Inline visualizza nel browser
+            headers.setContentDispositionFormData("inline", document.getFileName() + "." + document.getFileType()); // Inline visualizza nel browser
 
             // Restituisci il file PDF come byte[]
             return new ResponseEntity<>(document.getContent(), headers, HttpStatus.OK);
