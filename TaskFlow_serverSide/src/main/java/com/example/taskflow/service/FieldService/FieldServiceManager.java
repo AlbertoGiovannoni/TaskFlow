@@ -40,8 +40,7 @@ public class FieldServiceManager {
             case DATE:
                 return this.dateService;
             case DOCUMENT:
-                // TODO
-                throw new IllegalArgumentException("Document need implementation");
+                return this.documentService;
             default:
                 throw new IllegalArgumentException(type.toString() + " not recognized");
         }

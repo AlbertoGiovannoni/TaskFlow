@@ -14,6 +14,7 @@ import jakarta.validation.constraints.NotBlank;
     @JsonSubTypes.Type(value = AssigneeDTO.class, name = "ASSIGNEE"),
     @JsonSubTypes.Type(value = DateDTO.class, name = "DATE"),
     @JsonSubTypes.Type(value = SingleSelectionDTO.class, name = "SINGLE_SELECTION"),
+    @JsonSubTypes.Type(value = DocumentDTO.class, name = "DOCUMENT"),
 })
 
 public abstract class FieldDTO {

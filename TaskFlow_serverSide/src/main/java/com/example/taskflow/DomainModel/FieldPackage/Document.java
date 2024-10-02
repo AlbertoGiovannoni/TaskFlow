@@ -1,11 +1,14 @@
 package com.example.taskflow.DomainModel.FieldPackage;
 
+
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 
 
 public class Document extends Field{
 
-    private String name;
+    private String fileName;
+    private String fileType;
+    private byte[] content;
 
     public Document() {
         super();
@@ -17,14 +20,30 @@ public class Document extends Field{
 
     public Document(String uuid, FieldDefinition fieldDefinition, String name) {
         super(uuid, fieldDefinition);
-        this.name = name;
+        this.fileName = name;
     }
 
-    public String getName() {
-        return name;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
+
+    public byte[] getContent() {
+        return content;
+    }
+
+    public void setContent(byte[] content) {
+        this.content = content;
     }
 }
