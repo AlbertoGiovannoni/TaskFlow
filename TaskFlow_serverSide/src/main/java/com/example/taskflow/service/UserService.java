@@ -76,7 +76,11 @@ public class UserService {
     }
 
     public UserDTO updateUser(UserWithInfoDTO userWithInfoDto) {
-        User user = this.userDAO.findById(userWithInfoDto.getId()).orElseThrow();
+        User user = this.userDAO.findById(userWithInfoDto.getId()).orElse(null);
+
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
 
         if (userWithInfoDto.getEmail() != null) {
             user.setEmail(userWithInfoDto.getEmail());
@@ -95,7 +99,11 @@ public class UserService {
     }
 
     public UserDTO getUserById(String userId) {
-        User usr = this.userDAO.findById(userId).orElseThrow();
+        User usr = this.userDAO.findById(userId).orElse(null);
+
+        if (usr == null) {
+            throw new IllegalArgumentException("User not found");
+        }
         return this.userMapper.toDto(usr);
     }
 
@@ -153,7 +161,11 @@ public class UserService {
     }
 
     public UserDTO getUser(String userId){
-        User user = this.userDAO.findById(userId).orElseThrow();
+        User user = this.userDAO.findById(userId).orElse(null);
+
+        if (user == null){
+            throw new IllegalArgumentException("User not found");
+        }
 
         return this.userMapper.toDto(user);
     }
