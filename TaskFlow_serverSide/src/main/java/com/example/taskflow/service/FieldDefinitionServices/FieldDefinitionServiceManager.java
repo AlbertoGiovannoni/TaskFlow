@@ -24,7 +24,11 @@ public class FieldDefinitionServiceManager {
     }
 
     public FieldDefinitionService getFieldDefinitionService(String fieldDefinitionId){
-        FieldDefinition fieldDefinition = this.fieldDefinitionDAO.findById(fieldDefinitionId).orElseThrow();
+        FieldDefinition fieldDefinition = this.fieldDefinitionDAO.findById(fieldDefinitionId).orElse(null);
+
+        if (fieldDefinition == null){
+            throw new IllegalArgumentException("FieldDefinition not found");
+        }
         
         return this.switchFieldDefinition(fieldDefinition.getType());
     }

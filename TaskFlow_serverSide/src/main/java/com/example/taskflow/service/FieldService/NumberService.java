@@ -59,7 +59,12 @@ public class NumberService extends FieldService{
 
     @Override
     public Field updateField(FieldDTO fieldDto) {
-        Number field = (Number) this.fieldDao.findById(fieldDto.getId()).orElseThrow();
+        Number field = (Number) this.fieldDao.findById(fieldDto.getId()).orElse(null);
+
+        if (field == null){
+            throw new IllegalArgumentException("Field number not found");
+        }
+
         NumberDTO dateDTO = (NumberDTO) fieldDto;
 
         field.setValue(dateDTO.getValue());

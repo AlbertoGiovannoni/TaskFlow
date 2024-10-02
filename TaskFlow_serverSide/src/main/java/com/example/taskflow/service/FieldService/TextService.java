@@ -55,7 +55,12 @@ public class TextService extends FieldService {
     @Override
     public Field updateField(FieldDTO fieldDto) {
 
-        Text field = (Text) this.fieldDao.findById(fieldDto.getId()).orElseThrow();
+        Text field = (Text) this.fieldDao.findById(fieldDto.getId()).orElse(null);
+
+        if (field == null){
+            throw new IllegalArgumentException("Field text not found");
+        }
+
         TextDTO textDTO = (TextDTO) fieldDto;
 
         if (textDTO.getValue() != null && textDTO.getValue().length() > 0) {

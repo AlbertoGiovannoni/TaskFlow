@@ -63,7 +63,11 @@ public class AssigneeDefinitionService extends FieldDefinitionService{
     }
 
     public FieldDefinitionDTO addUsers(String fieldDefinitionId, ArrayList<String> userIds){
-        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionId).orElseThrow();
+        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionId).orElse(null);
+
+        if (fieldDefinition == null){
+            throw new IllegalArgumentException("FieldDefinition not found");
+        }
 
         if (!(fieldDefinition instanceof AssigneeDefinition)){
             throw new IllegalArgumentException(fieldDefinitionId + " is an Id of " + fieldDefinition.getClass().getSimpleName() + " instead of " + AssigneeDefinition.class.getSimpleName());
@@ -79,7 +83,11 @@ public class AssigneeDefinitionService extends FieldDefinitionService{
     }
 
     public FieldDefinitionDTO removeUsers(String fieldDefinitionId, ArrayList<String> userIds){
-        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionId).orElseThrow();
+        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionId).orElse(null);
+
+        if (fieldDefinition == null){
+            throw new IllegalArgumentException("FieldDefinition not found");
+        }
 
         if (!(fieldDefinition instanceof AssigneeDefinition)){
             throw new IllegalArgumentException(fieldDefinitionId + " is an Id of " + fieldDefinition.getClass().getSimpleName() + " instead of " + AssigneeDefinition.class.getSimpleName());
@@ -103,7 +111,11 @@ public class AssigneeDefinitionService extends FieldDefinitionService{
         
         AssigneeDefinitionDTO assigneeDefinitionDto = (AssigneeDefinitionDTO) fieldDefinitionDto;
 
-        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionDto.getId()).orElseThrow();
+        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionDto.getId()).orElse(null);
+
+        if (fieldDefinition == null){
+            throw new IllegalArgumentException("FieldDefinition not found");
+        }
         
         if (!(fieldDefinition instanceof AssigneeDefinition)){
             throw new IllegalArgumentException("FieldDefinition with id: " + fieldDefinition.getId() + " is not of type AssigneeDefinition");

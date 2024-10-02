@@ -71,7 +71,11 @@ public class ProjectService {
         FieldDefinition fieldDef;
 
         for (FieldDefinitionDTO fieldDefDto : fieldDefsDto) {
-            fieldDef = fieldDefinitionDao.findById(fieldDefDto.getId()).orElseThrow();
+            fieldDef = fieldDefinitionDao.findById(fieldDefDto.getId()).orElse(null);
+
+            if (fieldDef == null){
+                throw new IllegalArgumentException("FieldDef not found");
+            }
             fieldDefs.add(fieldDef);
         }
 
@@ -80,7 +84,12 @@ public class ProjectService {
 
     public ProjectDTO addFieldDefinitionToProject(String projectId, FieldDefinitionDTO newFieldDefinitionDto) {
 
-        Project project = this.projectDao.findById(projectId).orElseThrow();
+        Project project = this.projectDao.findById(projectId).orElse(null);
+
+        if (project == null){
+            throw new IllegalArgumentException("Project not found");
+        }
+
         FieldDefinition newFieldDefinition = this.fieldDefinitionServiceManager
                 .getFieldDefinitionService(newFieldDefinitionDto)
                 .pushNewFieldDefinition(newFieldDefinitionDto);
@@ -92,7 +101,12 @@ public class ProjectService {
 
     public ProjectDTO addActivityToProject(String projectId, ActivityDTO newActivityDto) {
 
-        Project project = this.projectDao.findById(projectId).orElseThrow();
+        Project project = this.projectDao.findById(projectId).orElse(null);
+
+        if (project == null){
+            throw new IllegalArgumentException("Project not found");
+        }
+
         Activity newActivity = this.activityService.pushNewActivity(newActivityDto);
         this.activityDao.save(newActivity);
         project.addActivity(newActivity);
@@ -102,19 +116,33 @@ public class ProjectService {
     }
 
     public ProjectDTO getProjectById(String projectId) {
-        Project project = this.projectDao.findById(projectId).orElseThrow();
+        Project project = this.projectDao.findById(projectId).orElse(null);
+
+        if (project == null){
+            throw new IllegalArgumentException("Project not found");
+        }
+
         return this.projectMapper.toDto(project);
     }
 
     public ProjectDTO renameProject(String projectId, String newName) {
-        Project project = this.projectDao.findById(projectId).orElseThrow();
+        Project project = this.projectDao.findById(projectId).orElse(null);
+
+        if (project == null){
+            throw new IllegalArgumentException("Project not found");
+        }
+
         project.setName(newName);
         this.projectDao.save(project);
         return this.projectMapper.toDto(project);
     }
 
     public void deleteProject(String projectId) {
-        Project project = this.projectDao.findById(projectId).orElseThrow();
+        Project project = this.projectDao.findById(projectId).orElse(null);
+
+        if (project == null){
+            throw new IllegalArgumentException("Project not found");
+        }
 
         ArrayList<Activity> activityList = project.getActivities();
         ArrayList<Field> fields = new ArrayList<>();
@@ -147,8 +175,17 @@ public class ProjectService {
     }
 
     public ProjectDTO removeActivity(String projectId, String activityId){
-        Project project = projectDao.findById(projectId).orElseThrow();
-        Activity activity = activityDao.findById(activityId).orElseThrow();
+        Project project = projectDao.findById(projectId).orElse(null);
+
+        if (project == null){
+            throw new IllegalArgumentException("Project not found");
+        }
+
+        Activity activity = activityDao.findById(activityId).orElse(null);
+
+        if (activity == null){
+            throw new IllegalArgumentException("Activity not found");
+        }
 
         project.deleteActivity(activity);
         activityDao.delete(activity);

@@ -58,7 +58,12 @@ public class SingleSelectionService extends FieldService{
     @Override
     public Field updateField(FieldDTO fieldDto) {
         
-        SingleSelection field = (SingleSelection) this.fieldDao.findById(fieldDto.getId()).orElseThrow();
+        SingleSelection field = (SingleSelection) this.fieldDao.findById(fieldDto.getId()).orElse(null);
+
+        if (field == null){
+            throw new IllegalArgumentException("Field single selection not found");
+        }
+
         SingleSelectionDTO singleSelectionDTO = (SingleSelectionDTO) fieldDto;
 
         field.setValue(singleSelectionDTO.getValue());

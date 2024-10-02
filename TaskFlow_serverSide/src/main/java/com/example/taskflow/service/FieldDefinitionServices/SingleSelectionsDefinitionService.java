@@ -22,7 +22,12 @@ public class SingleSelectionsDefinitionService extends FieldDefinitionService{
         }
         SingleSelectionDefinitionDTO singleSelectionDefinitionDto = (SingleSelectionDefinitionDTO) fieldDefinitionDto;
 
-        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionDto.getId()).orElseThrow();
+        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionDto.getId()).orElse(null);
+
+        if (fieldDefinition == null){
+            throw new IllegalArgumentException("FieldDefinition not found");
+        }
+
         if (!(fieldDefinition instanceof SingleSelectionDefinition)){
             throw new IllegalArgumentException("FieldDefinition with id: " + fieldDefinition.getId() + " is not of type SingleSelectionDefinition");
         }
@@ -72,7 +77,11 @@ public class SingleSelectionsDefinitionService extends FieldDefinitionService{
     }
 
     public FieldDefinitionDTO addSelections(String fieldDefinitionId, ArrayList<String> selections){
-        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionId).orElseThrow();
+        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionId).orElse(null);
+
+        if (fieldDefinition == null){
+            throw new IllegalArgumentException("FieldDefinition not found");
+        }
 
         ((SingleSelectionDefinition)fieldDefinition).addMultipleSelection(selections);
 
@@ -82,8 +91,12 @@ public class SingleSelectionsDefinitionService extends FieldDefinitionService{
     } 
 
     public FieldDefinitionDTO removeSelections(String fieldDefinitionId, ArrayList<String> selections){
-        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionId).orElseThrow();
+        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionId).orElse(null);
 
+        if (fieldDefinition == null){
+            throw new IllegalArgumentException("FieldDefinition not found");
+        }
+        
         ((SingleSelectionDefinition)fieldDefinition).removeMultipleSelection(selections);
 
         this.fieldDefinitionDao.save(fieldDefinition);

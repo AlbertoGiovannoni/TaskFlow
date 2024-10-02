@@ -97,9 +97,14 @@ public class OrganizationService {
     }
 
     public OrganizationDTO addMemberToOrganization(String organizationId, String userId) {
-        Organization organization = organizationDAO.findById(organizationId).orElseThrow();
+        Organization organization = organizationDAO.findById(organizationId).orElse(null);
 
-        User user = this.userDAO.findById(userId).orElseThrow();
+        if (organization == null){
+            throw new IllegalArgumentException("Organization not found");
+        }
+
+        User user = this.userDAO.findById(userId).orElse(null);
+
         if (user == null) {
             throw new IllegalArgumentException("User not defined");
         }
@@ -112,9 +117,14 @@ public class OrganizationService {
     }
 
     public OrganizationDTO addOwnerToOrganization(String organizationId, String ownerId) {
-        Organization organization = organizationDAO.findById(organizationId).orElseThrow();
+        Organization organization = organizationDAO.findById(organizationId).orElse(null);
 
-        User owner = this.userDAO.findById(ownerId).orElseThrow();
+        if (organization == null){
+            throw new IllegalArgumentException("Organization not found");
+        }
+
+        User owner = this.userDAO.findById(ownerId).orElse(null);
+
         if (owner == null) {
             throw new IllegalArgumentException("owner not defined");
         }
@@ -128,8 +138,12 @@ public class OrganizationService {
 
     // TODO: forse non è più comodo tornare indietro il ProjectDTO appena creato?
     public OrganizationDTO addNewProjectToOrganization(String organizationId, ProjectDTO projectDTO) {
-        Organization organization = organizationDAO.findById(organizationId).orElseThrow();
-        
+        Organization organization = organizationDAO.findById(organizationId).orElse(null);
+
+        if (organization == null){
+            throw new IllegalArgumentException("Organization not found");
+        }
+
         projectDTO = this.projectService.pushNewProject(projectDTO);
         Project newProject = this.projectMapper.toEntity(projectDTO);
 
@@ -140,18 +154,30 @@ public class OrganizationService {
     }
 
     public OrganizationDTO getOrganizationById(String organizationId) {
-        Organization organization = this.organizationDAO.findById(organizationId).orElseThrow();
+        Organization organization = this.organizationDAO.findById(organizationId).orElse(null);
+
+        if (organization == null){
+            throw new IllegalArgumentException("Organization not found");
+        }
+
         return organizationMapper.toDto(organization);
     }
 
     public OrganizationDTO deleteProjectFromOrganization(String organizationId, String projectId){
-        Organization organization = this.organizationDAO.findById(organizationId).orElseThrow();
-        Project project = this.projectDAO.findById(projectId).orElseThrow();
+        Organization organization = this.organizationDAO.findById(organizationId).orElse(null);
+
+        if (organization == null){
+            throw new IllegalArgumentException("Organization not found");
+        }
+
+        Project project = this.projectDAO.findById(projectId).orElse(null);
+
         if (project == null) {
             throw new IllegalArgumentException("project not defined");
         }
+
         organization.removeProject(project);
-        //this.projectService.deleteProject(projectId);
+
         projectDAO.delete(project);
 
         this.organizationDAO.save(organization);
@@ -159,12 +185,22 @@ public class OrganizationService {
     }
     
     public void deleteOrganization(String organizationId) {
-        Organization organization = this.organizationDAO.findById(organizationId).orElseThrow();
+        Organization organization = this.organizationDAO.findById(organizationId).orElse(null);
+
+        if (organization == null){
+            throw new IllegalArgumentException("Organization not found");
+        }
+
         ArrayList<Project> projectList = organization.getProjects();
 
         if (projectList != null && projectList.size() > 0) {
             for (Project project : projectList) {
-                project = this.projectDAO.findById(project.getId()).orElseThrow();
+                project = this.projectDAO.findById(project.getId()).orElse(null);
+
+                if (project == null){
+                    throw new IllegalArgumentException("Project not found");
+                }
+
                 projectService.deleteProject(project.getId());
             }
         }
@@ -174,8 +210,12 @@ public class OrganizationService {
     public ArrayList<User> getAllOrganizationUser(String organizationId){
         ArrayList<User> allUsers = new ArrayList<>();
 
-        Organization organization = this.organizationDAO.findById(organizationId).orElseThrow();
+        Organization organization = this.organizationDAO.findById(organizationId).orElse(null);
 
+        if (organization == null){
+            throw new IllegalArgumentException("Organization not found");
+        }
+        
         allUsers.addAll(organization.getOwners());
         allUsers.addAll(organization.getMembers());
 

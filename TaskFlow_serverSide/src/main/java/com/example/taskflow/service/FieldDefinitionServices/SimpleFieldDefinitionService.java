@@ -18,8 +18,12 @@ public class SimpleFieldDefinitionService extends FieldDefinitionService{
             throw new IllegalArgumentException("FieldDefinitionDto is not of type SimpleFieldDefinitionDTO");
         }
 
-        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionDto.getId()).orElseThrow();
+        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionDto.getId()).orElse(null);
 
+        if (fieldDefinition == null){
+            throw new IllegalArgumentException("FieldDefinition not found");
+        }
+        
         if (!(fieldDefinition instanceof SimpleFieldDefinition)){
             throw new IllegalArgumentException("FieldDefinition is not of type SimpleFieldDefinition");
         }

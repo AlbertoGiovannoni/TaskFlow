@@ -81,7 +81,12 @@ public class DateService extends FieldService {
 
     @Override
     public Field updateField(FieldDTO fieldDto) {
-        Date field = (Date) this.fieldDao.findById(fieldDto.getId()).orElseThrow();
+        Date field = (Date) this.fieldDao.findById(fieldDto.getId()).orElse(null);
+
+        if (field == null){
+            throw new IllegalArgumentException("Field date not found");
+        }
+
         DateDTO dateDTO = (DateDTO) fieldDto;
 
         if (dateDTO.getDateTime() != null) {
@@ -106,7 +111,12 @@ public class DateService extends FieldService {
 
         if (ids != null && ids.size() > 0) {
             for (String id : ids) {
-                usr = this.userDAO.findById(id).orElseThrow();
+                usr = this.userDAO.findById(id).orElse(null);
+
+                if (usr == null){
+                    throw new IllegalArgumentException("User not found");
+                }
+
                 receivers.add(usr);
             }
 

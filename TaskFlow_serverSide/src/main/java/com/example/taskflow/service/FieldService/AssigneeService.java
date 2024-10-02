@@ -79,7 +79,12 @@ public class AssigneeService extends FieldService {
 
     @Override
     public Field updateField(FieldDTO fieldDto) {
-        Assignee field = (Assignee) this.fieldDao.findById(fieldDto.getId()).orElseThrow();
+        Assignee field = (Assignee) this.fieldDao.findById(fieldDto.getId()).orElse(null);
+
+        if (field == null){
+            throw new IllegalArgumentException("Field assignee not found");
+        }
+
         AssigneeDTO assigneeDTO = (AssigneeDTO)fieldDto;
 
         ArrayList<String> ids = assigneeDTO.getUserIds();

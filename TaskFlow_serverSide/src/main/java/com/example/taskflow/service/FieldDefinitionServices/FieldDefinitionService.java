@@ -36,7 +36,12 @@ public abstract class FieldDefinitionService {
     public FieldDefinitionDTO pushNewFieldDefinitionDTO(FieldDefinitionDTO fieldDefinitionDto, String projectId){
         FieldDefinition fieldDefinition = this.pushNewFieldDefinition(fieldDefinitionDto);
 
-        Project project = this.projectDao.findById(projectId).orElseThrow();
+        Project project = this.projectDao.findById(projectId).orElse(null);
+
+        if (project == null){
+            throw new IllegalArgumentException("Project not found");
+        }
+
         project.addFieldDefinition(fieldDefinition);
         projectDao.save(project);
 
@@ -44,7 +49,11 @@ public abstract class FieldDefinitionService {
     }
 
     public void deleteFieldDefinitionAndFieldsAndReferenceToFieldsInActivity(String fieldDefinitionId){
-        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionId).orElseThrow();
+        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionId).orElse(null);
+
+        if (fieldDefinition == null){
+            throw new IllegalArgumentException("FieldDefinition not found");
+        }
 
         ArrayList<Field> fieldsToRemove = new ArrayList<>(this.fieldDao.findFieldByFieldDefinition(fieldDefinition));
 
@@ -62,8 +71,12 @@ public abstract class FieldDefinitionService {
     }
 
     public FieldDefinitionDTO renameFieldDefinition(String fieldDefinitionId, String name){
-        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionId).orElseThrow();
+        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionId).orElse(null);
 
+        if (fieldDefinition == null){
+            throw new IllegalArgumentException("FieldDefinition not found");
+        }
+        
         fieldDefinition.setName(name);
 
         return this.fieldDefinitionMapper.toDto(fieldDefinition);

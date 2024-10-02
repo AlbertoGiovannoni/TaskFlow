@@ -66,7 +66,11 @@ public class ActivityService {
     }
 
     public void deleteActivityAndFields(String activityId) {
-        Activity activity = this.activityDao.findById(activityId).orElseThrow();
+        Activity activity = this.activityDao.findById(activityId).orElse(null);
+
+        if (activity == null){
+            throw new IllegalArgumentException("Activity not found");
+        }
 
         this.fieldDao.deleteAll(activity.getFields());
 
@@ -89,7 +93,11 @@ public class ActivityService {
     }
 
     public ActivityDTO getActivityById(String activityId) {
-        Activity activity = this.activityDao.findById(activityId).orElseThrow();
+        Activity activity = this.activityDao.findById(activityId).orElse(null);
+
+        if (activity == null){
+            throw new IllegalArgumentException("Activity not found");
+        }
         return this.activityMapper.toDto(activity);
     }
 
@@ -109,7 +117,11 @@ public class ActivityService {
     }
 
     public ActivityDTO addFieldsToActivity(String activityId, ArrayList<FieldDTO> fieldDtos){
-        Activity activity = this.activityDao.findById(activityId).orElseThrow();
+        Activity activity = this.activityDao.findById(activityId).orElse(null);
+
+        if (activity == null){
+            throw new IllegalArgumentException("Activity not found");
+        }
 
         ArrayList<Field> fieldsPushed = new ArrayList<>();
 
@@ -140,8 +152,17 @@ public class ActivityService {
     }
 
     public ActivityDTO removeField(String activityId, String fieldId) {
-        Activity activity = this.activityDao.findById(activityId).orElseThrow();
-        Field field = this.fieldDao.findById(fieldId).orElseThrow();
+        Activity activity = this.activityDao.findById(activityId).orElse(null);
+
+        if (activity == null){
+            throw new IllegalArgumentException("Activity not found");
+        }
+
+        Field field = this.fieldDao.findById(fieldId).orElse(null);
+
+        if (field == null){
+            throw new IllegalArgumentException("Field not found");
+        }
 
         activity.removeField(field);
 
