@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.taskflow.DAOs.FieldDAO;
 import com.example.taskflow.DTOs.Field.DocumentDTO;
+import com.example.taskflow.DTOs.Field.DocumentUploadDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.DTOs.Field.TextDTO;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
@@ -30,19 +31,21 @@ public class DocumentService extends FieldService{
 
         return fieldDao.save(document);
     }
+
     public Document getDocumentById(String id) {
         Document document = (Document)this.fieldDao.findById(id).orElseThrow();
         return document;
     }
+
     @Override
     public Field pushNewField(FieldDTO fieldDto) {
 
-        if (!(fieldDto instanceof DocumentDTO)) {
+        if (!(fieldDto instanceof DocumentUploadDTO)) {
             throw new IllegalArgumentException(
                     "FieldDto of class " + fieldDto.getClass().getSimpleName() + " instead of StringDTO");
         }
 
-        DocumentDTO documentDto = (DocumentDTO) fieldDto;
+        DocumentUploadDTO documentDto = (DocumentUploadDTO) fieldDto;
 
         FieldDefinition fieldDefinition = fieldDefinitionDAO.findById(documentDto.getFieldDefinitionId())
                 .orElse(null);
@@ -54,12 +57,14 @@ public class DocumentService extends FieldService{
         Field field = (new DocumentBuilder(fieldDefinition))
                 .addFileName(documentDto.getFileName())
                 .addFileType(documentDto.getFileType())
+                .addContent(documentDto.getContent())
                 .build();
 
         field = fieldDao.save(field);
 
         return field;
     }
+
     @Override
     public Field updateField(FieldDTO fieldDto) {
         // TODO Auto-generated method stub

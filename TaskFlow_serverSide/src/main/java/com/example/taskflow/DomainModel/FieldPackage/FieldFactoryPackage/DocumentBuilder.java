@@ -9,6 +9,7 @@ import com.example.taskflow.DomainModel.FieldPackage.Text;
 public class DocumentBuilder extends FieldBuilder {
     private String fileName;
     private String fileType;
+    private byte[] content;
 
     public DocumentBuilder(FieldDefinition fieldDefinition) {
         super(fieldDefinition);
@@ -31,6 +32,14 @@ public class DocumentBuilder extends FieldBuilder {
         }
         return this;
     }
+
+    public DocumentBuilder addContent(byte[] content){
+        if (content != null){
+            this.content = content;
+        }
+        return this;
+    }
+
     @Override
     public Field build() {
         if (this.fileName == null) {

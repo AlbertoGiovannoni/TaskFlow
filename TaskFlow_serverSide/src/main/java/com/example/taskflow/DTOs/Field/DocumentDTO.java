@@ -1,6 +1,6 @@
 package com.example.taskflow.DTOs.Field;
 
-public class DocumentDTO {
+public class DocumentDTO extends FieldDTO{
     private String fileName;
     private String fileType;
 
