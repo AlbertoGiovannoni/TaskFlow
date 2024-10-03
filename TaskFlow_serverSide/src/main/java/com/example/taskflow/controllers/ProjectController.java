@@ -33,7 +33,6 @@ public class ProjectController {
     @Autowired
     ProjectService projectService;
 
-
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Map<String, String>> handleAccessDeniedException(AccessDeniedException ex) {
         Map<String, String> response = new HashMap<>();
@@ -56,43 +55,63 @@ public class ProjectController {
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @PostMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}")
-    public ResponseEntity<ProjectDTO> createActivity(@Valid @RequestBody ActivityDTO activityDTO,
+    public ResponseEntity<?> createActivity(@Valid @RequestBody ActivityDTO activityDTO,
             @PathVariable String projectId, @PathVariable String organizationId) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(this.projectService.addActivityToProject(projectId, activityDTO));
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(this.projectService.addActivityToProject(projectId, activityDTO));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        }
     }
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @PatchMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/renameProject")
-    public ResponseEntity<ProjectDTO> renameProject(@PathVariable String projectId,
+    public ResponseEntity<?> renameProject(@PathVariable String projectId,
             @RequestParam String newName, @PathVariable String organizationId) {
-        
-        if (newName == null || newName.trim().isEmpty()) {
-            throw new IllegalArgumentException("newName cannot be empty");
+        try {
+            if (newName == null || newName.trim().isEmpty()) {
+                throw new IllegalArgumentException("newName cannot be empty");
+            }
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(this.projectService.renameProject(projectId, newName));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(this.projectService.renameProject(projectId, newName));
     }
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @PostMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/addFieldDefinitionToProject")
-    public ResponseEntity<?> addFieldDefinitionToProject(@PathVariable String projectId, @RequestBody FieldDefinitionDTO fieldDefinitionDTO, @PathVariable String organizationId) {
-        
-        return ResponseEntity.status(HttpStatus.OK)
-                 .body(this.projectService.addFieldDefinitionToProject(projectId, fieldDefinitionDTO));
+    public ResponseEntity<?> addFieldDefinitionToProject(@PathVariable String projectId,
+            @RequestBody FieldDefinitionDTO fieldDefinitionDTO, @PathVariable String organizationId) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(this.projectService.addFieldDefinitionToProject(projectId, fieldDefinitionDTO));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        }
     }
 
     @GetMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}")
-    public ResponseEntity<ProjectDTO> getProject(@PathVariable String projectId, @PathVariable String organizationId) {
-        return ResponseEntity.status(HttpStatus.OK)
-                 .body(this.projectService.getProjectById(projectId));
+    public ResponseEntity<?> getProject(@PathVariable String projectId, @PathVariable String organizationId) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(this.projectService.getProjectById(projectId));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        }
     }
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @DeleteMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}")
-    public ResponseEntity<ProjectDTO> removeActivity(@PathVariable String projectId, @PathVariable String activityId, @PathVariable String organizationId) {
-        return ResponseEntity.status(HttpStatus.OK)
-                 .body(this.projectService.removeActivity(projectId, activityId));
+    public ResponseEntity<?> removeActivity(@PathVariable String projectId, @PathVariable String activityId,
+            @PathVariable String organizationId) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(this.projectService.removeActivity(projectId, activityId));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        }
     }
 
 }

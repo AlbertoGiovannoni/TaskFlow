@@ -82,7 +82,7 @@ public class UserController {
             userDto = this.userService.createUser(userWithInfoDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
         }
-        catch(IllegalArgumentException exception){
+        catch(Exception exception){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
         }
     }
@@ -108,7 +108,7 @@ public class UserController {
             UserDTO userUpdated = this.userService.updateUser(userWithInfoDTO);
             return ResponseEntity.status(HttpStatus.OK).body(userUpdated);
         }
-        catch(NoSuchElementException exception){
+        catch(Exception exception){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
         }
     }
@@ -120,7 +120,7 @@ public class UserController {
             UserDTO userUpdated = this.userService.makeOwner(organizationId, targetId);
             return ResponseEntity.status(HttpStatus.OK).body(userUpdated);
         }
-        catch (IllegalArgumentException exception){
+        catch (Exception exception){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
         }
     }
@@ -132,11 +132,8 @@ public class UserController {
             this.userService.deleteUserById(targetId);
             return ResponseEntity.status(HttpStatus.OK).body("User " + targetId + " removed");
         }
-        catch(NoSuchElementException noSuchElementException){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User " + targetId + " not exists.\nException" + noSuchElementException.getMessage());
-        }
-        catch(IllegalArgumentException illegalArgumentException){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(illegalArgumentException.getMessage());
+        catch(Exception exception){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
         }
     }
 
@@ -146,7 +143,7 @@ public class UserController {
             UserDTO userDto = this.userService.getUser(userId);
             return ResponseEntity.status(HttpStatus.OK).body(userDto);
         }
-        catch(NoSuchElementException exception){
+        catch(Exception exception){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
         }
     }
