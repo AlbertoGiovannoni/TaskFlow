@@ -18,14 +18,14 @@ public class DocumentService extends FieldService{
     @Autowired
     private FieldDAO fieldDao;
 
-    public byte[] download(String documentFieldId){
+    public Document download(String documentFieldId){
         Document document = (Document)this.fieldDao.findById(documentFieldId).orElseThrow();
 
         if (document.getContent() == null){
             throw new IllegalArgumentException("Document is empty");
         }
 
-        return document.getContent();
+        return document;
     }
 
     @Override
