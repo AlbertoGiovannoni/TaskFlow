@@ -61,7 +61,7 @@ public class ProjectController {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(this.projectService.addActivityToProject(projectId, activityDTO));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
         }
     }
 
@@ -76,7 +76,7 @@ public class ProjectController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(this.projectService.renameProject(projectId, newName));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
         }
     }
 
@@ -88,7 +88,7 @@ public class ProjectController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(this.projectService.addFieldDefinitionToProject(projectId, fieldDefinitionDTO));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
         }
     }
 
@@ -98,7 +98,7 @@ public class ProjectController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(this.projectService.getProjectById(projectId));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
         }
     }
 
@@ -110,7 +110,7 @@ public class ProjectController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(this.projectService.removeActivity(projectId, activityId));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
         }
     }
 

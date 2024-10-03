@@ -64,7 +64,7 @@ public class OrganizationController {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(this.organizationService.createNewOrganization(organizationDTO));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
         }
     }
 
@@ -76,7 +76,7 @@ public class OrganizationController {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(this.organizationService.addNewProjectToOrganization(organizationId, projectDTO));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
         }
     }
 
@@ -88,7 +88,7 @@ public class OrganizationController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(this.organizationService.addMemberToOrganization(organizationId, targetId));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
         }
     }
 
@@ -100,7 +100,7 @@ public class OrganizationController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(this.organizationService.addOwnerToOrganization(organizationId, targetId));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
         }
     }
 
@@ -110,7 +110,7 @@ public class OrganizationController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(this.organizationService.getOrganizationById(organizationId));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
         }
     }
 
@@ -123,7 +123,7 @@ public class OrganizationController {
                     projectId);
             return ResponseEntity.status(HttpStatus.OK).body(organizationDTO);
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
         }
     }
 
@@ -133,7 +133,7 @@ public class OrganizationController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(this.organizationDAO.getOrganizationByUser(userId));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
         }
     }
 
@@ -144,7 +144,7 @@ public class OrganizationController {
             this.organizationService.deleteOrganization(organizationId);
             return ResponseEntity.status(HttpStatus.OK).body("Organization deleted");
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
         }
     }
 
