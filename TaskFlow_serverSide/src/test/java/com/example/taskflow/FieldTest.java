@@ -1,14 +1,23 @@
 package com.example.taskflow;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.math.BigDecimal;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.io.IOException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,12 +37,14 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.SingleSelectionDe
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFactoryPackage.AssigneeDefinitionBuilder;
 import com.example.taskflow.DomainModel.FieldPackage.Assignee;
 import com.example.taskflow.DomainModel.FieldPackage.Date;
+import com.example.taskflow.DomainModel.FieldPackage.Document;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.DomainModel.FieldPackage.Number;
 import com.example.taskflow.DomainModel.FieldPackage.SingleSelection;
 import com.example.taskflow.DomainModel.FieldPackage.Text;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.AssigneeBuilder;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.DateBuilder;
+import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.DocumentBuilder;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.NumberBuilder;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.SingleSelectionBuilder;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.TextBuilder;
@@ -127,7 +138,7 @@ public class FieldTest {
             }
         }
 
-        ((SingleSelectionDefinition)fieldDefinition).addMultipleSelection(someSelections);
+        ((SingleSelectionDefinition) fieldDefinition).addMultipleSelection(someSelections);
         this.fieldDefinitionDao.save(fieldDefinition);
 
         Field field = (new SingleSelectionBuilder(fieldDefinition))
@@ -165,9 +176,9 @@ public class FieldTest {
         ArrayList<User> subsetOfSomeUsers = new ArrayList<>(Arrays.asList(someUsers.get(0), someUsers.get(3)));
 
         FieldDefinition fieldDefinition = new AssigneeDefinitionBuilder()
-                                                .setUsers(someUsers)
-                                                .setName(RandomString.make(10))
-                                                .build();
+                .setUsers(someUsers)
+                .setName(RandomString.make(10))
+                .build();
 
         this.fieldDefinitionDao.save(fieldDefinition);
 
@@ -198,7 +209,8 @@ public class FieldTest {
     public void testDateField() {
         FieldDefinition fieldDefinition = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.DATE);
         ArrayList<User> someUsers = this.testUtil.addGetMultipleRandomUserToDatabase(10);
-        Notification notification = new Notification(UUID.randomUUID().toString(), someUsers, LocalDateTime.now(), RandomString.make(10));
+        Notification notification = new Notification(UUID.randomUUID().toString(), someUsers, LocalDateTime.now(),
+                RandomString.make(10));
 
         this.notificationDao.save(notification);
 
@@ -213,12 +225,44 @@ public class FieldTest {
         assertEquals(field.getFieldDefinition(), fieldDefinition);
         assertEquals(((Date) fieldFromDB).getNotification(), notification);
 
-        Notification anotherNotification = new Notification(UUID.randomUUID().toString(), someUsers, LocalDateTime.now(), RandomString.make(10));
+        Notification anotherNotification = new Notification(UUID.randomUUID().toString(), someUsers,
+                LocalDateTime.now(), RandomString.make(10));
 
         ((Date) fieldFromDB).setNotification(anotherNotification);
         assertEquals(((Date) fieldFromDB).getNotification(), anotherNotification);
 
         fieldDao.delete(fieldFromDB);
         assertEquals(fieldDao.findById(fieldFromDB.getId()), Optional.empty());
+    }
+
+    @Test
+    public void testDocumentField() throws URISyntaxException {
+        FieldDefinition fieldDefinition = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.DOCUMENT);
+
+        // Path del file PDF
+        Path pdfPath = Paths.get(getClass().getClassLoader().getResource("Integral_image.pdf").getPath());
+
+        // Leggi il PDF e caricalo come byte[]
+        byte[] content = null;
+        try {
+            content = Files.readAllBytes(pdfPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail("Error reading the PDF file: " + e.getMessage());
+        }
+
+        Field field = (new DocumentBuilder(fieldDefinition))
+                .addFileName("test")
+                .addFileType("pdf")
+                .addContent(content) // Inserisci il contenuto del PDF
+                .build();
+
+        Field fieldFromDB = this.fieldDao.save(field);
+        assertEquals(field, fieldFromDB);
+
+
+        // Aggiungi asserzioni per verificare il contenuto
+        Document document = (Document) field;
+        assertArrayEquals(((Document)fieldFromDB).getContent(), document.getContent()); // Verifica che il contenuto corrisponda
     }
 }

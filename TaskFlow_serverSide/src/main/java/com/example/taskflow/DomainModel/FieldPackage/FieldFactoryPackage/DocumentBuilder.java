@@ -54,6 +54,7 @@ public class DocumentBuilder extends FieldBuilder {
         document.setFieldDefinition(this.fieldDefinition);
         document.setFileName(this.fileName);
         document.setFileType(this.fileType);
+        document.setContent(this.content);
 
         return document;
     }
