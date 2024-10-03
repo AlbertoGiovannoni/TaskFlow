@@ -69,7 +69,7 @@ public class UserServiceTest {
         userWithInfoDto.setUsername("new username");
         userWithInfoDto.setPassword("newPsw");
 
-        this.userService.updateUser(userWithInfoDto);
+        this.userService.updateUser(user.getId(), userWithInfoDto);
 
         user = this.userDAO.findById(user.getId()).orElseThrow();
 
