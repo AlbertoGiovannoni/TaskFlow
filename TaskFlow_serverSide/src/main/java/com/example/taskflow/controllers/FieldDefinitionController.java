@@ -54,7 +54,7 @@ public class FieldDefinitionController {
 
             return ResponseEntity.status(HttpStatus.OK).body(createdFieldDefinitionDto);
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
         }
     }
 
@@ -68,7 +68,7 @@ public class FieldDefinitionController {
 
             return ResponseEntity.status(HttpStatus.OK).body(fieldDefinitionId);
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
         }
     }
 }
