@@ -67,13 +67,13 @@ public class DocumentService extends FieldService{
         Document document = (Document)this.fieldDao.findById(documentDto.getId()).orElseThrow();
 
         if (documentDto.getFileName() != null){
-            if (documentDto.getFileName() != ""){
+            if (!(documentDto.getFileName().isBlank())){
                 document.setFileName(documentDto.getFileName());
             }
         }
 
         if (documentDto.getFileType() != null){
-            if (documentDto.getFileType() != ""){
+            if (!(documentDto.getFileType().isBlank())){
                 document.setFileType(documentDto.getFileType());
             }
         }

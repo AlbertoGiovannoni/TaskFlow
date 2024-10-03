@@ -132,4 +132,11 @@ public class Organization extends BaseEntity{
     public void setMembers(ArrayList<User> members) {
         this.members = members;
     }
+
+    public ArrayList<User> getUsers(){
+        ArrayList<User> users = this.owners;
+        users.addAll(this.members);
+
+        return users;
+    }
 }
