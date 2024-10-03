@@ -35,19 +35,21 @@ public class CheckUriService {
     Activity activity;
     Field field;
 
-    public void check(Authentication authentication, String userId){
+    public boolean check(Authentication authentication, String userId){
         User userFromAuthentication = this.userDao.findByUsername(authentication.getName()).orElse(null);
 
         this.checkNullOrThrow(userFromAuthentication, authentication.getName());
 
-        if (userFromAuthentication.getId() != userId){
+        if (!(userFromAuthentication.getId().equals(userId))){
             throw new IllegalArgumentException(userId + " doesn't match authentication username");
         }
 
         this.user = userFromAuthentication;
+
+        return true;
     }
 
-    public void check(Authentication authentication, String userId, String organizationId){
+    public boolean check(Authentication authentication, String userId, String organizationId){
         this.check(authentication, userId);
 
         Organization organization = this.organizationDao.findById(organizationId).orElseThrow();
@@ -59,9 +61,11 @@ public class CheckUriService {
         }
 
         this.organization = organization;
+
+        return true;
     }
 
-    public void check(Authentication authentication, String userId, String organizationId, String projectId){
+    public boolean check(Authentication authentication, String userId, String organizationId, String projectId){
         this.check(authentication, userId, organizationId);
 
         Project project = this.projectDao.findById(projectId).orElse(null);
@@ -72,9 +76,11 @@ public class CheckUriService {
         }
 
         this.project = project;
+
+        return true;
     }
 
-    public void check(Authentication authentication, String userId, String organizationId, String projectId, String activityId){
+    public boolean check(Authentication authentication, String userId, String organizationId, String projectId, String activityId){
         this.check(authentication, userId, organizationId, projectId);
 
         Activity activity = this.activityDao.findById(activityId).orElse(null);
@@ -85,9 +91,11 @@ public class CheckUriService {
         }
 
         this.activity = activity;
+
+        return true;
     }
 
-    public void check(Authentication authentication, String userId, String organizationId, String projectId, String activityId, String fieldId){
+    public boolean check(Authentication authentication, String userId, String organizationId, String projectId, String activityId, String fieldId){
         this.check(authentication, userId, organizationId, projectId, activityId);
 
         Field field = this.fieldDao.findById(fieldId).orElse(null);
@@ -98,6 +106,8 @@ public class CheckUriService {
         }
 
         this.field = field;
+
+        return true;
     }
 
     private <T extends BaseEntity> void checkNullOrThrow(T object, String objectName){

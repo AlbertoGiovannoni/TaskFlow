@@ -75,8 +75,8 @@ public class UserService {
         return Optional.empty(); // Login fallito
     }
 
-    public UserDTO updateUser(UserWithInfoDTO userWithInfoDto) {
-        User user = this.userDAO.findById(userWithInfoDto.getId()).orElse(null);
+    public UserDTO updateUser(String userId, UserWithInfoDTO userWithInfoDto) {
+        User user = this.userDAO.findById(userId).orElse(null);
 
         if (user == null) {
             throw new IllegalArgumentException("User not found");

@@ -3,13 +3,11 @@ package com.example.taskflow.controllers;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.validation.FieldError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,15 +24,11 @@ import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
 import com.example.taskflow.DTOs.UserDTO;
 import com.example.taskflow.DTOs.UserWithInfoDTO;
-import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.User;
-import com.example.taskflow.DomainModel.UserInfo;
 import com.example.taskflow.Mappers.UserMapper;
 import com.example.taskflow.service.UserService;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/api")
@@ -72,7 +66,6 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
 
-    
     @PostMapping("/public/register")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserWithInfoDTO userWithInfoDTO) {
 
@@ -102,20 +95,22 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("@checkUriService.check(authentication, #userId)")
     @PatchMapping("/user/{userId}")
-    public ResponseEntity<?> updateUser(@RequestBody UserWithInfoDTO userWithInfoDTO) {
+    public ResponseEntity<?> updateUser(@PathVariable String userId, @RequestBody UserWithInfoDTO userWithInfoDTO) {
         try{
-            UserDTO userUpdated = this.userService.updateUser(userWithInfoDTO);
+            UserDTO userUpdated = this.userService.updateUser(userId, userWithInfoDTO);
             return ResponseEntity.status(HttpStatus.OK).body(userUpdated);
         }
         catch(Exception exception){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage() + "USER_ID: " + userWithInfoDTO.getId() + "     " + userId);
         }
     }
 
-    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
+    
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER') && @checkUriService.check(authentication, #userId, #organizationId)")
     @PatchMapping("/user/{userId}/myOrganization/{organizationId}/users")
-    public ResponseEntity<?> makeOwner(@PathVariable String organizationId, @RequestParam String targetId){
+    public ResponseEntity<?> makeOwner(@PathVariable String userId, @PathVariable String organizationId, @RequestParam String targetId){
         try {
             UserDTO userUpdated = this.userService.makeOwner(organizationId, targetId);
             return ResponseEntity.status(HttpStatus.OK).body(userUpdated);
