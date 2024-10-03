@@ -36,7 +36,7 @@ public class DocumentController {
     private DocumentService documentService;
 
     // Endpoint per caricare un PDF   
-     @PostMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields/documents")
+     @PostMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields")
     public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file, @RequestParam("info") String documentString) {
         
         // Crea l'ObjectMapper
@@ -62,9 +62,9 @@ public class DocumentController {
     }
 
     // Endpoint per restituire un PDF al frontend
-    @GetMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields/documents/{id}")
-    public ResponseEntity<byte[]> downloadPdf(@PathVariable String id) {
-        Document document = this.documentService.getDocumentById(id);
+    @GetMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields/{fieldId}/download")
+    public ResponseEntity<byte[]> downloadPdf(@PathVariable String fieldId) {
+        Document document = this.documentService.getDocumentById(fieldId);
 
         if (document != null) {
 
