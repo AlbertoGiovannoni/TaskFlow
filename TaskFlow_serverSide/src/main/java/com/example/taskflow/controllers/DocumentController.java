@@ -36,7 +36,7 @@ public class DocumentController {
     private DocumentService documentService;
 
     // Endpoint per caricare un PDF   
-     @PostMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields")
+     @PostMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields/upload")
     public ResponseEntity<String> uploadPdf(@RequestParam("file") MultipartFile file, @RequestParam("info") String documentString) {
         
         // Crea l'ObjectMapper
