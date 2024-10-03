@@ -55,67 +55,97 @@ public class OrganizationController {
     }
 
     @PostMapping("/{userId}/myOrganization")
-    public ResponseEntity<OrganizationDTO> createOrganization(@Valid @RequestBody OrganizationDTO organizationDTO,
+    public ResponseEntity<?> createOrganization(@Valid @RequestBody OrganizationDTO organizationDTO,
             @PathVariable String userId) {
-        ArrayList<String> owners = new ArrayList<String>();
-        owners.add(userId);
-        organizationDTO.setOwnersId(owners);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(this.organizationService.createNewOrganization(organizationDTO));
+        try {
+            ArrayList<String> owners = new ArrayList<String>();
+            owners.add(userId);
+            organizationDTO.setOwnersId(owners);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(this.organizationService.createNewOrganization(organizationDTO));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        }
     }
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @PostMapping("/{userId}/myOrganization/{organizationId}/projects")
-    public ResponseEntity<OrganizationDTO> addProjectToOrganization(@Valid @RequestBody ProjectDTO projectDTO,
+    public ResponseEntity<?> addProjectToOrganization(@Valid @RequestBody ProjectDTO projectDTO,
             @PathVariable String organizationId) {
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(this.organizationService.addNewProjectToOrganization(organizationId, projectDTO));
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(this.organizationService.addNewProjectToOrganization(organizationId, projectDTO));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        }
     }
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @PatchMapping("/{userId}/myOrganization/{organizationId}/addMember")
-    public ResponseEntity<OrganizationDTO> addMemberToOrganization(@RequestParam String targetId,
+    public ResponseEntity<?> addMemberToOrganization(@RequestParam String targetId,
             @PathVariable String organizationId) {
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(this.organizationService.addMemberToOrganization(organizationId, targetId));
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(this.organizationService.addMemberToOrganization(organizationId, targetId));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        }
     }
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @PatchMapping("/{userId}/myOrganization/{organizationId}/addOwner")
-    public ResponseEntity<OrganizationDTO> addOwnerToOrganization(@RequestParam String targetId,
+    public ResponseEntity<?> addOwnerToOrganization(@RequestParam String targetId,
             @PathVariable String organizationId) {
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(this.organizationService.addOwnerToOrganization(organizationId, targetId));
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(this.organizationService.addOwnerToOrganization(organizationId, targetId));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        }
     }
 
     @GetMapping("/{userId}/myOrganization/{organizationId}")
-    public ResponseEntity<OrganizationDTO> getOrganizationById(@PathVariable String organizationId) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(this.organizationService.getOrganizationById(organizationId));
+    public ResponseEntity<?> getOrganizationById(@PathVariable String organizationId) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(this.organizationService.getOrganizationById(organizationId));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        }
     }
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @DeleteMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}")
-    public ResponseEntity<OrganizationDTO> deleteProjectFromOrganization(@PathVariable String organizationId, @PathVariable String projectId) {
-        OrganizationDTO organizationDTO = this.organizationService.deleteProjectFromOrganization(organizationId, projectId);
-        return ResponseEntity.status(HttpStatus.OK).body(organizationDTO);
+    public ResponseEntity<?> deleteProjectFromOrganization(@PathVariable String organizationId,
+            @PathVariable String projectId) {
+        try {
+            OrganizationDTO organizationDTO = this.organizationService.deleteProjectFromOrganization(organizationId,
+                    projectId);
+            return ResponseEntity.status(HttpStatus.OK).body(organizationDTO);
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        }
     }
 
     @GetMapping("/{userId}/myOrganization")
-    public ResponseEntity<ArrayList<Organization>> getMyOrganizations(@PathVariable String userId) {
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(this.organizationDAO.getOrganizationByUser(userId));
+    public ResponseEntity<?> getMyOrganizations(@PathVariable String userId) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(this.organizationDAO.getOrganizationByUser(userId));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        }
     }
 
     @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
     @DeleteMapping("/{userId}/myOrganization/{organizationId}")
-    public ResponseEntity<String> deleteOrganizationById(@PathVariable String organizationId) {
-        this.organizationService.deleteOrganization(organizationId);
-        return ResponseEntity.status(HttpStatus.OK).body("Organization deleted");
+    public ResponseEntity<?> deleteOrganizationById(@PathVariable String organizationId) {
+        try {
+            this.organizationService.deleteOrganization(organizationId);
+            return ResponseEntity.status(HttpStatus.OK).body("Organization deleted");
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        }
     }
 
 }

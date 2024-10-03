@@ -63,46 +63,71 @@ public class ActivityController {
     }
 
     @PatchMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}")
-    public ResponseEntity<Activity> renameActivity(@PathVariable String activityId,
+    public ResponseEntity<?> renameActivity(@PathVariable String activityId,
             @RequestParam String newName) {
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(this.activityService.renameActivity(activityId, newName));
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(this.activityService.renameActivity(activityId, newName));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        }
     }
 
     @PostMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields")
-    public ResponseEntity<ActivityDTO> addField(@PathVariable String activityId,
+    public ResponseEntity<?> addField(@PathVariable String activityId,
             @Valid @RequestBody FieldDTO fieldDto) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(this.activityService.addFieldToActivity(activityId, fieldDto));
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(this.activityService.addFieldToActivity(activityId, fieldDto));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        }
     }
 
     @PostMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/addFields")
-    public ResponseEntity<ActivityDTO> addFields(@PathVariable String activityId,
+    public ResponseEntity<?> addFields(@PathVariable String activityId,
             @Valid @RequestBody ArrayList<FieldDTO> fieldDtos) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(this.activityService.addFieldsToActivity(activityId, fieldDtos));
+
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(this.activityService.addFieldsToActivity(activityId, fieldDtos));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        }
     }
 
     @PatchMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields/{fieldId}")
-    public ResponseEntity<FieldDTO> updateField(@PathVariable String fieldId,
+    public ResponseEntity<?> updateField(@PathVariable String fieldId,
             @RequestBody FieldDTO fieldDto) {
 
         fieldDto.setId(fieldId);
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(this.activityService.updateField(fieldDto));
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(this.activityService.updateField(fieldDto));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        }
     }
 
     @PatchMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields/updateFields")
-    public ResponseEntity<ArrayList<FieldDTO>> updateFields(@RequestBody ArrayList<FieldDTO> fieldDtos) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(this.activityService.updateFields(fieldDtos));
+    public ResponseEntity<?> updateFields(@RequestBody ArrayList<FieldDTO> fieldDtos) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(this.activityService.updateFields(fieldDtos));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        }
     }
 
     @DeleteMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields/{fieldId}")
-    public ResponseEntity<ActivityDTO> removeField(@PathVariable String fieldId, @PathVariable String activityId) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(this.activityService.removeField(activityId, fieldId));
+    public ResponseEntity<?> removeField(@PathVariable String fieldId, @PathVariable String activityId) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(this.activityService.removeField(activityId, fieldId));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        }
     }
 }

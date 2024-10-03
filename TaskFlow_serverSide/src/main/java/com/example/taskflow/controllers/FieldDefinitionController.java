@@ -42,24 +42,33 @@ public class FieldDefinitionController {
     }
 
     @PostMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/newFieldDefinition")
-    public ResponseEntity<FieldDefinitionDTO> addNewFieldDefinition(
+    public ResponseEntity<?> addNewFieldDefinition(
             @PathVariable String organizationId,
             @PathVariable String projectId,
             @Valid @RequestBody FieldDefinitionDTO fieldDefinitionDto) {
-        FieldDefinitionDTO createdFieldDefinitionDto = this.fieldDefinitionServiceManager
-                .getFieldDefinitionService(fieldDefinitionDto)
-                .pushNewFieldDefinitionDTO(fieldDefinitionDto, projectId);
 
-        return ResponseEntity.status(HttpStatus.OK).body(createdFieldDefinitionDto);
+        try {
+            FieldDefinitionDTO createdFieldDefinitionDto = this.fieldDefinitionServiceManager
+                    .getFieldDefinitionService(fieldDefinitionDto)
+                    .pushNewFieldDefinitionDTO(fieldDefinitionDto, projectId);
+
+            return ResponseEntity.status(HttpStatus.OK).body(createdFieldDefinitionDto);
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        }
     }
 
     @DeleteMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/{fieldDefinitionId}")
-    public ResponseEntity<String> removeFieldDefinition(@PathVariable String organizationId,
+    public ResponseEntity<?> removeFieldDefinition(@PathVariable String organizationId,
             @PathVariable String projectId, @PathVariable String fieldDefinitionId) {
-        this.fieldDefinitionServiceManager
-                .getFieldDefinitionService(fieldDefinitionId)
-                .deleteFieldDefinitionAndFieldsAndReferenceToFieldsInActivity(fieldDefinitionId);
+        try {
+            this.fieldDefinitionServiceManager
+                    .getFieldDefinitionService(fieldDefinitionId)
+                    .deleteFieldDefinitionAndFieldsAndReferenceToFieldsInActivity(fieldDefinitionId);
 
-        return ResponseEntity.status(HttpStatus.OK).body(fieldDefinitionId);
+            return ResponseEntity.status(HttpStatus.OK).body(fieldDefinitionId);
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        }
     }
 }
