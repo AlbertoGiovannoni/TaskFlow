@@ -12,13 +12,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.taskflow.DAOs.ActivityDAO;
-import com.example.taskflow.DAOs.FieldDAO;
-import com.example.taskflow.DAOs.FieldDefinitionDAO;
-import com.example.taskflow.DAOs.NotificationDAO;
-import com.example.taskflow.DAOs.ProjectDAO;
-import com.example.taskflow.DAOs.UserDAO;
-import com.example.taskflow.DAOs.UserInfoDAO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
 import com.example.taskflow.service.ActivityService;
 import com.example.taskflow.service.FieldService.FieldServiceManager;
@@ -28,25 +21,10 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api")
 public class ActivityController {
-
-    @Autowired
-    UserInfoDAO userInfoDAO;
     @Autowired
     ActivityService activityService;
     @Autowired
-    NotificationDAO notificationDAO;
-    @Autowired
-    ProjectDAO projectDAO;
-    @Autowired
-    ActivityDAO activityDAO;
-    @Autowired
-    FieldDAO fieldDAO;
-    @Autowired
-    FieldDefinitionDAO fieldDefinitionDAO;
-    @Autowired
     FieldServiceManager fieldServiceManager;
-    @Autowired
-    UserDAO userDAO;
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -69,6 +47,21 @@ public class ActivityController {
     }
 
     @PreAuthorize("@checkUriService.check(authentication, #userId, #organizationId, #projectId, #activityId)")
+    @DeleteMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}")
+    public ResponseEntity<?> removeActivity(@PathVariable String userId,
+                                            @PathVariable String organizationId,
+                                            @PathVariable String projectId, 
+                                            @PathVariable String activityId) 
+    {
+        try {
+            this.activityService.deleteActivityAndFields(activityId);
+            return ResponseEntity.status(HttpStatus.OK).body(activityId + " removed");
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
+        }
+    }
+
+    @PreAuthorize("@checkUriService.check(authentication, #userId, #organizationId, #projectId, #activityId)")
     @PatchMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}")
     public ResponseEntity<?> renameActivity(
             @PathVariable String userId,
@@ -86,7 +79,7 @@ public class ActivityController {
     }
 
     @PreAuthorize("@checkUriService.check(authentication, #userId, #organizationId, #projectId, #activityId)")
-    @PostMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields")
+    @PostMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/field")
     public ResponseEntity<?> addField(
             @PathVariable String userId,
             @PathVariable String organizationId,
@@ -102,7 +95,7 @@ public class ActivityController {
     }
 
     @PreAuthorize("@checkUriService.check(authentication, #userId, #organizationId, #projectId, #activityId)")
-    @PostMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/addFields")
+    @PostMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields")
     public ResponseEntity<?> addFields(
             @PathVariable String userId,
             @PathVariable String organizationId,
@@ -113,58 +106,6 @@ public class ActivityController {
         try {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(this.activityService.addFieldsToActivity(activityId, fieldDtos));
-        } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
-        }
-    }
-
-    @PreAuthorize("@checkUriService.check(authentication, #userId, #organizationId, #projectId, #activityId, #fieldId)")
-    @PatchMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields/{fieldId}")
-    public ResponseEntity<?> updateField(
-            @PathVariable String fieldId,
-            @PathVariable String userId,
-            @PathVariable String organizationId,
-            @PathVariable String projectId,
-            @PathVariable String activityId,
-            @RequestBody FieldDTO fieldDto) {
-
-        fieldDto.setId(fieldId);
-
-        try {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(this.activityService.updateField(fieldDto));
-        } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
-        }
-    }
-
-    @PreAuthorize("@checkUriService.check(authentication, #userId, #organizationId, #projectId, #activityId)")
-    @PatchMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields/updateFields")
-    public ResponseEntity<?> updateFields(
-            @RequestBody ArrayList<FieldDTO> fieldDtos,
-            @PathVariable String userId,
-            @PathVariable String organizationId,
-            @PathVariable String projectId,
-            @PathVariable String activityId) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(this.activityService.updateFields(fieldDtos));
-        } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
-        }
-    }
-
-    @PreAuthorize("@checkUriService.check(authentication, #userId, #organizationId, #projectId, #activityId, #fieldId)")
-    @DeleteMapping("/user/{userId}/myOrganization/{organizationId}/projects/{projectId}/activities/{activityId}/fields/{fieldId}")
-    public ResponseEntity<?> removeField(
-            @PathVariable String userId,
-            @PathVariable String organizationId,
-            @PathVariable String projectId,
-            @PathVariable String activityId,
-            @PathVariable String fieldId) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(this.activityService.removeField(activityId, fieldId));
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
         }
