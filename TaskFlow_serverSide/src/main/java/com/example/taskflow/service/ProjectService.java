@@ -172,25 +172,4 @@ public class ProjectService {
 
         this.projectDao.delete(project);
     }
-
-    public ProjectDTO removeActivity(String projectId, String activityId){
-        Project project = projectDao.findById(projectId).orElse(null);
-
-        if (project == null){
-            throw new IllegalArgumentException("Project not found");
-        }
-
-        Activity activity = activityDao.findById(activityId).orElse(null);
-
-        if (activity == null){
-            throw new IllegalArgumentException("Activity not found");
-        }
-
-        project.deleteActivity(activity);
-        activityDao.delete(activity);
-
-        this.projectDao.save(project);
-        return projectMapper.toDto(project);
-
-    }
 }

@@ -77,6 +77,8 @@ public class ActivityService {
         Project project = this.projectDao.findProjectByActivity(activityId);
         project.deleteActivity(activity);
 
+        this.projectDao.save(project);
+
         this.activityDao.delete(activity);
     }
 
