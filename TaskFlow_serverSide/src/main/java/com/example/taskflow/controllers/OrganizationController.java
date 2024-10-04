@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.taskflow.DAOs.OrganizationDAO;
 import com.example.taskflow.DTOs.OrganizationDTO;
 import com.example.taskflow.DTOs.ProjectDTO;
-import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.service.OrganizationService;
-import com.example.taskflow.service.ProjectService;
-
 import jakarta.validation.Valid;
 
 import java.util.ArrayList;
@@ -21,6 +18,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -54,6 +52,21 @@ public class OrganizationController {
         return errors;
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Map<String, String>> handleAccessDeniedException(AccessDeniedException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Access Denied: You are not authorized to perform this action.");
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalArgumentException(IllegalArgumentException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    }
+
+    @PreAuthorize("@checkUriService.check(authentication, #userId)")
     @PostMapping("/{userId}/myOrganization")
     public ResponseEntity<?> createOrganization(@Valid @RequestBody OrganizationDTO organizationDTO,
             @PathVariable String userId) {
@@ -68,10 +81,11 @@ public class OrganizationController {
         }
     }
 
-    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER') && @checkUriService.check(authentication, #userId, #organizationId)")
     @PostMapping("/{userId}/myOrganization/{organizationId}/projects")
     public ResponseEntity<?> addProjectToOrganization(@Valid @RequestBody ProjectDTO projectDTO,
-            @PathVariable String organizationId) {
+            @PathVariable String organizationId,
+            @PathVariable String userId) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(this.organizationService.addNewProjectToOrganization(organizationId, projectDTO));
@@ -80,10 +94,11 @@ public class OrganizationController {
         }
     }
 
-    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER') && @checkUriService.check(authentication, #userId, #organizationId)")
     @PatchMapping("/{userId}/myOrganization/{organizationId}/addMember")
     public ResponseEntity<?> addMemberToOrganization(@RequestParam String targetId,
-            @PathVariable String organizationId) {
+            @PathVariable String organizationId,
+            @PathVariable String userId) {
         try {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(this.organizationService.addMemberToOrganization(organizationId, targetId));
@@ -92,10 +107,11 @@ public class OrganizationController {
         }
     }
 
-    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER') && @checkUriService.check(authentication, #userId, #organizationId)")
     @PatchMapping("/{userId}/myOrganization/{organizationId}/addOwner")
     public ResponseEntity<?> addOwnerToOrganization(@RequestParam String targetId,
-            @PathVariable String organizationId) {
+            @PathVariable String organizationId,
+            @PathVariable String userId) {
         try {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(this.organizationService.addOwnerToOrganization(organizationId, targetId));
@@ -104,8 +120,9 @@ public class OrganizationController {
         }
     }
 
+    @PreAuthorize("@checkUriService.check(authentication, #userId)")
     @GetMapping("/{userId}/myOrganization/{organizationId}")
-    public ResponseEntity<?> getOrganizationById(@PathVariable String organizationId) {
+    public ResponseEntity<?> getOrganizationById(@PathVariable String organizationId, @PathVariable String userId) {
         try {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(this.organizationService.getOrganizationById(organizationId));
@@ -114,10 +131,11 @@ public class OrganizationController {
         }
     }
 
-    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER') && @checkUriService.check(authentication, #userId, #organizationId)")
     @DeleteMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}")
     public ResponseEntity<?> deleteProjectFromOrganization(@PathVariable String organizationId,
-            @PathVariable String projectId) {
+            @PathVariable String projectId,
+            @PathVariable String userId) {
         try {
             OrganizationDTO organizationDTO = this.organizationService.deleteProjectFromOrganization(organizationId,
                     projectId);
@@ -127,6 +145,7 @@ public class OrganizationController {
         }
     }
 
+    @PreAuthorize("@checkUriService.check(authentication, #userId)")
     @GetMapping("/{userId}/myOrganization")
     public ResponseEntity<?> getMyOrganizations(@PathVariable String userId) {
         try {
@@ -137,9 +156,9 @@ public class OrganizationController {
         }
     }
 
-    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER') && @checkUriService.check(authentication, #userId, #organizationId)")
     @DeleteMapping("/{userId}/myOrganization/{organizationId}")
-    public ResponseEntity<?> deleteOrganizationById(@PathVariable String organizationId) {
+    public ResponseEntity<?> deleteOrganizationById(@PathVariable String organizationId, @PathVariable String userId) {
         try {
             this.organizationService.deleteOrganization(organizationId);
             return ResponseEntity.status(HttpStatus.OK).body("Organization deleted");
