@@ -120,9 +120,9 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER') && @checkUriService.check(authentication, #userId, #organizationId)")
     @DeleteMapping("/user/{userId}/myOrganization/{organizationId}/users")
-    public ResponseEntity<String> removeUser(@PathVariable String organizationId, @RequestParam String targetId) {
+    public ResponseEntity<String> removeUser(@PathVariable String organizationId, @PathVariable String userId, @RequestParam String targetId) {
         try{
             this.userService.deleteUserById(targetId);
             return ResponseEntity.status(HttpStatus.OK).body("User " + targetId + " removed");
@@ -132,7 +132,8 @@ public class UserController {
         }
     }
 
-    @GetMapping("user/{userId}/")
+    @PreAuthorize("@checkUriService.check(authentication, #userId)")
+    @GetMapping("user/{userId}")
     public ResponseEntity<?> getUser(@PathVariable String userId){
         try{
             UserDTO userDto = this.userService.getUser(userId);
