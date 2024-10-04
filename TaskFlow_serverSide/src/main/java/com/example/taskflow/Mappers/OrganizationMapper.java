@@ -20,6 +20,7 @@ public interface OrganizationMapper {
     @Mapping(source = "ownersId", target = "owners", ignore = true)
     @Mapping(source = "membersId", target = "members", ignore = true)
     @Mapping(source = "projectsId", target = "projects", ignore = true)
+    @Mapping(target = "users", ignore = true)
     Organization toEntity(OrganizationDTO dto);
 
     
