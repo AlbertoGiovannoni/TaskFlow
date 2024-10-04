@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.taskflow.DAOs.ActivityDAO;
 import com.example.taskflow.DAOs.FieldDAO;
+import com.example.taskflow.DAOs.FieldDefinitionDAO;
 import com.example.taskflow.DAOs.OrganizationDAO;
 import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
@@ -14,6 +15,7 @@ import com.example.taskflow.DomainModel.BaseEntity;
 import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.User;
+import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 
 @Service
@@ -28,12 +30,15 @@ public class CheckUriService {
     ActivityDAO activityDao;
     @Autowired
     FieldDAO fieldDao;
+    @Autowired
+    FieldDefinitionDAO fieldDefinitionDao;
 
     User user;
     Organization organization;
     Project project;
     Activity activity;
     Field field;
+    FieldDefinition fieldDefinition;
 
     public boolean check(Authentication authentication, String userId){
         User userFromAuthentication = this.userDao.findByUsername(authentication.getName()).orElse(null);
@@ -52,7 +57,7 @@ public class CheckUriService {
     public boolean check(Authentication authentication, String userId, String organizationId){
         this.check(authentication, userId);
 
-        Organization organization = this.organizationDao.findById(organizationId).orElseThrow();
+        Organization organization = this.organizationDao.findById(organizationId).orElse(null);
 
         this.checkNullOrThrow(organization, organizationId);
 
@@ -110,9 +115,24 @@ public class CheckUriService {
         return true;
     }
 
+    public boolean checkFieldDefinition(Authentication authentication, String userId, String organizationId, String projectId, String fieldDefinitionId){
+        this.check(authentication, userId, organizationId, projectId);
+
+        FieldDefinition fieldDefinition = this.fieldDefinitionDao.findById(fieldDefinitionId).orElse(null);
+        this.checkNullOrThrow(fieldDefinition, fieldDefinitionId);
+
+        if (!(this.project.getFieldsTemplate().contains(fieldDefinition))){
+            throw new IllegalArgumentException("Project " + projectId + " isn't in organization " + organizationId);
+        }
+
+        this.fieldDefinition = fieldDefinition;
+
+        return true;
+    }
+
     private <T extends BaseEntity> void checkNullOrThrow(T object, String objectName){
         if (object == null){
-            throw new IllegalArgumentException(objectName + " is null");
+            throw new IllegalArgumentException(objectName + " not found");
         }
     }
 }

@@ -10,7 +10,6 @@ import com.example.taskflow.DTOs.Field.SingleSelectionDTO;
 import com.example.taskflow.DTOs.Field.TextDTO;
 import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.User;
-import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldType;
 import com.example.taskflow.DomainModel.FieldPackage.Assignee;
 import com.example.taskflow.DomainModel.FieldPackage.Date;
 import com.example.taskflow.DomainModel.FieldPackage.Document;
@@ -75,38 +74,6 @@ public interface FieldMapper {
 
         }
     }
-//TODO da implementare document
-    // default FieldDTO toDto(Field field) {
-    //     if (field instanceof Assignee) {
-    //         return this.toDto((Assignee) field);
-    //     } else if (field instanceof Date) {
-    //         return this.toDto((Date) field);
-    //     } else if (field instanceof Number) {
-    //         return this.toDto((Number) field);
-    //     } else if (field instanceof SingleSelection) {
-    //         return this.toDto((SingleSelection) field);
-    //     } else if (field instanceof Text) {
-    //         return this.toDto((Text) field);
-    //     } else {
-    //         throw new IllegalArgumentException("Unsupported field type: " + field.getClass().getSimpleName());
-    //     }
-    // }
-
-    // default Field toEntity(FieldDTO fieldDto) {
-    //     if (fieldDto instanceof AssigneeDTO) {
-    //         return this.toEntity((AssigneeDTO) fieldDto);
-    //     } else if (fieldDto instanceof DateDTO) {
-    //         return this.toEntity((DateDTO) fieldDto);
-    //     } else if (fieldDto instanceof NumberDTO) {
-    //         return this.toEntity((NumberDTO) fieldDto);
-    //     } else if (fieldDto instanceof TextDTO) {
-    //         return this.toEntity((TextDTO) fieldDto);
-    //     } else if (fieldDto instanceof SingleSelectionDTO) {
-    //         return this.toEntity((SingleSelectionDTO) fieldDto);
-    //     } else {
-    //         throw new IllegalArgumentException("Unsupported field DTO type: " + fieldDto.getClass().getSimpleName());
-    //     }
-    // }
 
     // ------------------------------------------------------------------------------------- //
 

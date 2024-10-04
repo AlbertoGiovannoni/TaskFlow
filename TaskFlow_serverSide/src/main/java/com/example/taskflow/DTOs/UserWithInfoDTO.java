@@ -52,6 +52,4 @@ public class UserWithInfoDTO {
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }      
-    
-
 }

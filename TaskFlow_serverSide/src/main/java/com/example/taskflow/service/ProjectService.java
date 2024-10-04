@@ -1,7 +1,6 @@
 package com.example.taskflow.service;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,22 +67,6 @@ public class ProjectService {
         project = this.projectDao.save(project);
 
         return projectMapper.toDto(project);
-    }
-
-    private ArrayList<FieldDefinition> mapFieldDefDtoToFieldDef(ArrayList<FieldDefinitionDTO> fieldDefsDto) {
-        ArrayList<FieldDefinition> fieldDefs = new ArrayList<FieldDefinition>();
-        FieldDefinition fieldDef;
-
-        for (FieldDefinitionDTO fieldDefDto : fieldDefsDto) {
-            fieldDef = fieldDefinitionDao.findById(fieldDefDto.getId()).orElse(null);
-
-            if (fieldDef == null){
-                throw new IllegalArgumentException("FieldDef not found");
-            }
-            fieldDefs.add(fieldDef);
-        }
-
-        return fieldDefs;
     }
 
     public FieldDefinitionDTO addFieldDefinitionToProject(String projectId, FieldDefinitionDTO newFieldDefinitionDto) {

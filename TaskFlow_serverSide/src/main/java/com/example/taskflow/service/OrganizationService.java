@@ -38,21 +38,16 @@ public class OrganizationService {
     @Autowired
     private ProjectMapper projectMapper;
 
-    // Verifica se l'utente è un OWNER in una specifica organizzazione.
     public boolean isOwner(String organizationId, String username) {
         Optional<Organization> organization = organizationDAO.findById(organizationId);
 
         if (organization.isPresent()) {
             return organization.get().getOwners().stream()
-                    .anyMatch(owner -> owner.getUsername().equals(username)); // anyMatch è una terminal operation che
-                                                                              // verifica se almeno un elemento nello
-                                                                              // stream soddisfa una determinata
-                                                                              // condizione.
+                    .anyMatch(owner -> owner.getUsername().equals(username));
         }
         return false;
     }
 
-    // Verifica se l'utente è un USER in una specifica organizzazione.
     public boolean isUser(String organizationId, String username) {
         Optional<Organization> organization = organizationDAO.findById(organizationId);
 
@@ -136,7 +131,6 @@ public class OrganizationService {
         return organizationMapper.toDto(organization);
     }
 
-    // TODO: forse non è più comodo tornare indietro il ProjectDTO appena creato?
     public OrganizationDTO addNewProjectToOrganization(String organizationId, ProjectDTO projectDTO) {
         Organization organization = organizationDAO.findById(organizationId).orElse(null);
 

@@ -59,10 +59,8 @@ public abstract class FieldDefinitionService {
 
         ArrayList<String> fieldToRemoveIds = this.getFieldIds(fieldsToRemove);
 
-        //this.activityDao.removeFieldsFromActivities(fieldToRemoveIds);
         this.removeFieldReferenceFromActivities(fieldToRemoveIds);
 
-        //this.projectDao.removeFieldDefinitionFromProject(fieldDefinitionId);
         this.removeFieldDefinitionReferenceFromProject(fieldDefinition);
 
         this.fieldDao.deleteAll(fieldsToRemove);

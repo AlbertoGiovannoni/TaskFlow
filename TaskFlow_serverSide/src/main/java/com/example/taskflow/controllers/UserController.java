@@ -66,6 +66,13 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalArgumentException(IllegalArgumentException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    }
+
     @PostMapping("/public/register")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserWithInfoDTO userWithInfoDTO) {
 
@@ -120,9 +127,9 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER')")
+    @PreAuthorize("@dynamicRoleService.getRolesBasedOnContext(#organizationId, authentication).contains('ROLE_OWNER') && @checkUriService.check(authentication, #userId, #organizationId)")
     @DeleteMapping("/user/{userId}/myOrganization/{organizationId}/users")
-    public ResponseEntity<String> removeUser(@PathVariable String organizationId, @RequestParam String targetId) {
+    public ResponseEntity<String> removeUser(@PathVariable String organizationId, @PathVariable String userId, @RequestParam String targetId) {
         try{
             this.userService.deleteUserById(targetId);
             return ResponseEntity.status(HttpStatus.OK).body("User " + targetId + " removed");
@@ -132,7 +139,8 @@ public class UserController {
         }
     }
 
-    @GetMapping("user/{userId}/")
+    @PreAuthorize("@checkUriService.check(authentication, #userId)")
+    @GetMapping("user/{userId}")
     public ResponseEntity<?> getUser(@PathVariable String userId){
         try{
             UserDTO userDto = this.userService.getUser(userId);

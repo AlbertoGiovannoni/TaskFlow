@@ -1,17 +1,11 @@
 package com.example.taskflow.servicesTest;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import javax.swing.text.html.parser.Entity;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +21,6 @@ import com.example.taskflow.DAOs.NotificationDAO;
 import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.ActivityDTO;
-import com.example.taskflow.DTOs.ProjectDTO;
 import com.example.taskflow.DTOs.Field.AssigneeDTO;
 import com.example.taskflow.DTOs.Field.DateDTO;
 import com.example.taskflow.DTOs.Field.FieldDTO;
@@ -35,7 +28,6 @@ import com.example.taskflow.DTOs.Field.NumberDTO;
 import com.example.taskflow.DTOs.Field.SingleSelectionDTO;
 import com.example.taskflow.DTOs.Field.TextDTO;
 import com.example.taskflow.DomainModel.Activity;
-import com.example.taskflow.DomainModel.EntityFactory;
 import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.Project;
@@ -202,7 +194,6 @@ public class ActivityServiceTest {
         fieldsDto.add(dateDto);
 
         // ---------------------- DOCUMENT ---------------------- //
-        //TODO da implementare
 
 
         activityDTO.setFields(fieldsDto);

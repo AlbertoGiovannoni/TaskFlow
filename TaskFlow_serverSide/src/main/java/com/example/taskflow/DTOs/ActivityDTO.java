@@ -17,11 +17,6 @@ public class ActivityDTO {
 
     private String uuid;
 
-    // public ActivityDTO(String name, String id, ArrayList<FieldDTO> fields){
-    //     this.name = name;
-    //     this.fields = fields;
-    //     this.id = id;
-    // }
     public String getId() {
         return id;
     }

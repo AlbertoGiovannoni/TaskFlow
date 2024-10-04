@@ -24,27 +24,24 @@ public class DynamicRoleService {
         // Recupera il nome utente corrente
         String username = authentication.getName();
 
-        // Trova l'utente autenticato (esempio di logica personalizzata)
-        // Qui recupererai l'utente dal DB o da un altro sistema in base al nome utente.
+        // Trova l'utente autenticato
         Optional<User> currentUser = userDAO.findByUsername(username);
         if (!currentUser.isPresent()) {
-            return Set.of(); // Se l'utente non esiste
+            return Set.of();
         }
 
         // Trova l'organizzazione specifica
         Optional<Organization> optionalOrganization = organizationDAO.findById(organizationId);
         if (!optionalOrganization.isPresent()) {
-            return Set.of(); // Se l'organizzazione non esiste
+            return Set.of();
         }
 
         Organization organization = optionalOrganization.get();
 
-        // Verifica i ruoli dinamici in base all'organizzazione e all'utente
+        // Verifica i ruoli in base all'organizzazione e all'utente
         if (organization.getOwners().contains(currentUser.get())) {
-            return Set.of("ROLE_OWNER"); // Se l'utente è un owner
+            return Set.of("ROLE_OWNER");
         }
-
-        // Altrimenti restituisci i ruoli standard o vuoto
         return Set.of("ROLE_USER");
     }
 }

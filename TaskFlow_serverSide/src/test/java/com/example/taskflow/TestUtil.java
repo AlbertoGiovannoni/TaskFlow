@@ -22,7 +22,6 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFa
 import com.example.taskflow.DomainModel.FieldPackage.*;
 import com.example.taskflow.DomainModel.FieldPackage.FieldFactoryPackage.*;
 import com.example.taskflow.service.*;
-import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionServiceManager;
 
 import java.time.LocalDateTime;
 
@@ -49,10 +48,6 @@ public class TestUtil {
     private FieldDAO fieldDao;
     @Autowired
     private OrganizationDAO organizationDAO;
-    @Autowired
-    private ProjectService projectService;
-    @Autowired
-    private FieldDefinitionServiceManager fieldDefinitionServiceManager;
     @Autowired
     private ActivityService activityService;
 

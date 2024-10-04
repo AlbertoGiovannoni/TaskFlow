@@ -6,11 +6,6 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailAuthenticationException;
-import org.springframework.mail.MailSendException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -19,21 +14,14 @@ import com.example.taskflow.DAOs.NotificationDAO;
 import com.example.taskflow.DomainModel.Notification;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldPackage.Date;
-import com.example.taskflow.DomainModel.FieldPackage.Field;
-
 import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 
 @Service
 public class NotificationService {
     @Autowired
     private NotificationDAO notificationDAO;
-
-    @Autowired
-    private JavaMailSender mailSender;
     @Autowired
     private FieldDAO fieldDAO;
-
     @Autowired
     private MailService mailService;
 

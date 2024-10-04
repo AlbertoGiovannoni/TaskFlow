@@ -2,9 +2,7 @@ package com.example.taskflow;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.math.BigDecimal;
@@ -69,8 +67,6 @@ public class FieldTest {
     public void setupDatabase() {
         this.testUtil.cleanDatabase();
     }
-
-    // TODO: testare document e ragionare su come implementarlo per bene
 
     @Test
     public void testTextField() {

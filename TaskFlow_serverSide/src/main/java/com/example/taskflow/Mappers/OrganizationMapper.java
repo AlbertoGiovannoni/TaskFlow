@@ -31,7 +31,6 @@ public interface OrganizationMapper {
         return null;
     }  
 
-    
     @Named("mapProjectsToIds")
     default ArrayList<String> mapProjectsToIds(ArrayList<Project> projects) {
         if (projects != null){
