@@ -6,6 +6,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,8 +43,17 @@ public class FieldDefinitionController {
         return errors;
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalArgumentException(IllegalArgumentException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    }
+
+    @PreAuthorize("@checkUriService.check(authentication, #userId, #organizationId, #projectId)")
     @PostMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/newFieldDefinition")
     public ResponseEntity<?> addNewFieldDefinition(
+            @PathVariable String userId,
             @PathVariable String organizationId,
             @PathVariable String projectId,
             @Valid @RequestBody FieldDefinitionDTO fieldDefinitionDto) {
@@ -58,9 +69,10 @@ public class FieldDefinitionController {
         }
     }
 
+    @PreAuthorize("@checkUriService.checkFieldDefinition(authentication, #userId, #organizationId, #projectId, #fieldDefinitionId)")
     @DeleteMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/{fieldDefinitionId}")
     public ResponseEntity<?> removeFieldDefinition(@PathVariable String organizationId,
-            @PathVariable String projectId, @PathVariable String fieldDefinitionId) {
+            @PathVariable String projectId, @PathVariable String fieldDefinitionId, @PathVariable String userId) {
         try {
             this.fieldDefinitionServiceManager
                     .getFieldDefinitionService(fieldDefinitionId)
