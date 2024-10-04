@@ -14,6 +14,7 @@ import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.DTOs.ProjectDTO;
+import com.example.taskflow.DTOs.ProjectSimpleDTO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DomainModel.Activity;
 import com.example.taskflow.DomainModel.EntityFactory;
@@ -22,6 +23,7 @@ import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
 import com.example.taskflow.DomainModel.FieldPackage.Field;
 import com.example.taskflow.Mappers.ActivityMapper;
+import com.example.taskflow.Mappers.FieldDefinitionMapper;
 import com.example.taskflow.Mappers.FieldMapper;
 import com.example.taskflow.Mappers.ProjectMapper;
 import com.example.taskflow.service.FieldDefinitionServices.FieldDefinitionServiceManager;
@@ -51,6 +53,8 @@ public class ProjectService {
     FieldDefinitionServiceManager fieldDefinitionServiceManager;
     @Autowired
     OrganizationDAO organizationDao;
+    @Autowired
+    FieldDefinitionMapper fieldDefinitionMapper;
 
     public ProjectDTO pushNewProject(ProjectDTO projectDto) {
         Project project = EntityFactory.getProject();
@@ -82,7 +86,7 @@ public class ProjectService {
         return fieldDefs;
     }
 
-    public ProjectDTO addFieldDefinitionToProject(String projectId, FieldDefinitionDTO newFieldDefinitionDto) {
+    public FieldDefinitionDTO addFieldDefinitionToProject(String projectId, FieldDefinitionDTO newFieldDefinitionDto) {
 
         Project project = this.projectDao.findById(projectId).orElse(null);
 
@@ -96,10 +100,10 @@ public class ProjectService {
         project.addFieldDefinition(newFieldDefinition);
         this.projectDao.save(project);
 
-        return projectMapper.toDto(project);
+        return this.fieldDefinitionMapper.toDto(newFieldDefinition);
     }
 
-    public ProjectDTO addActivityToProject(String projectId, ActivityDTO newActivityDto) {
+    public ActivityDTO addActivityToProject(String projectId, ActivityDTO newActivityDto) {
 
         Project project = this.projectDao.findById(projectId).orElse(null);
 
@@ -108,11 +112,11 @@ public class ProjectService {
         }
 
         Activity newActivity = this.activityService.pushNewActivity(newActivityDto);
-        this.activityDao.save(newActivity);
+        newActivity = this.activityDao.save(newActivity);
         project.addActivity(newActivity);
         this.projectDao.save(project);
 
-        return projectMapper.toDto(project);
+        return activityMapper.toDto(newActivity);
     }
 
     public ProjectDTO getProjectById(String projectId) {
@@ -125,16 +129,28 @@ public class ProjectService {
         return this.projectMapper.toDto(project);
     }
 
-    public ProjectDTO renameProject(String projectId, String newName) {
+    public ProjectSimpleDTO renameProject(String projectId, String newName) {
+        if (newName == null){
+            throw new IllegalArgumentException("New name must be non null");
+        }
+
+        if (newName.isBlank()){
+            throw new IllegalArgumentException("New name must be not blank");
+        }
+
         Project project = this.projectDao.findById(projectId).orElse(null);
 
         if (project == null){
             throw new IllegalArgumentException("Project not found");
         }
+        
+        if (!(newName.isBlank())){
+            project.setName(newName);
+            this.projectDao.save(project);
+        }
+        
 
-        project.setName(newName);
-        this.projectDao.save(project);
-        return this.projectMapper.toDto(project);
+        return this.projectMapper.toSimpleDTO(project);
     }
 
     public void deleteProject(String projectId) {
