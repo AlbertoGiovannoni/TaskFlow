@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DAOs.UserInfoDAO;
-import com.example.taskflow.DTOs.ProjectDTO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.service.ProjectService;

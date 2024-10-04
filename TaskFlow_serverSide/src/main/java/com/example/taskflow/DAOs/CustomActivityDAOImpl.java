@@ -12,9 +12,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import com.example.taskflow.DomainModel.Activity;
-import com.example.taskflow.DomainModel.FieldPackage.Field;
-import com.mongodb.client.result.UpdateResult;
-import com.example.taskflow.DomainModel.FieldPackage.Date;
 
 public class CustomActivityDAOImpl implements CustomActivityDAO {
 

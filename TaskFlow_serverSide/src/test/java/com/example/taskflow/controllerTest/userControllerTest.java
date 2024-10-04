@@ -16,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -75,7 +74,7 @@ public class userControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "owner") // TODO per ora si usa admin fisso , si puo fare con owner?
+    @WithMockUser(username = "owner")
     public void testRemoveUser() throws Exception {
 
         User target = testUtil.addGetRandomUserToDatabase();

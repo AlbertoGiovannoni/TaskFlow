@@ -10,8 +10,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import com.example.taskflow.DomainModel.Organization;
-import com.example.taskflow.DomainModel.Project;
-
 
 public class CustomOrganizationDAOImpl implements CustomOrganizationDAO{
 

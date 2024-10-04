@@ -65,22 +65,6 @@ public class ProjectService {
         return projectMapper.toDto(project);
     }
 
-    private ArrayList<FieldDefinition> mapFieldDefDtoToFieldDef(ArrayList<FieldDefinitionDTO> fieldDefsDto) {
-        ArrayList<FieldDefinition> fieldDefs = new ArrayList<FieldDefinition>();
-        FieldDefinition fieldDef;
-
-        for (FieldDefinitionDTO fieldDefDto : fieldDefsDto) {
-            fieldDef = fieldDefinitionDao.findById(fieldDefDto.getId()).orElse(null);
-
-            if (fieldDef == null){
-                throw new IllegalArgumentException("FieldDef not found");
-            }
-            fieldDefs.add(fieldDef);
-        }
-
-        return fieldDefs;
-    }
-
     public ProjectDTO addFieldDefinitionToProject(String projectId, FieldDefinitionDTO newFieldDefinitionDto) {
 
         Project project = this.projectDao.findById(projectId).orElse(null);
