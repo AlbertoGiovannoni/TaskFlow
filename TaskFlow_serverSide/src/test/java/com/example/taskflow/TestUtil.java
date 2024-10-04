@@ -227,6 +227,10 @@ public class TestUtil {
         this.cleanDatabase();
         ArrayList<User> applicationUsers = this.addGetMultipleRandomUserToDatabase(nUsers);
 
+        ArrayList<User> owners = TestUtil.getRandomSublist(applicationUsers, nOrganization);
+        ArrayList<User> members = new ArrayList<>(applicationUsers);
+        members.removeAll(owners);
+
         ArrayList<Organization> organizations = new ArrayList<>();
         for (int i = 0; i < nOrganization; i++){
             Organization organization = EntityFactory.getOrganization();
@@ -273,13 +277,15 @@ public class TestUtil {
                     activities.add(this.activityDAO.save(activity));
                 }
 
+                project.setName(RandomString.make(10));
                 project.setActivities(activities);
                 project = this.projectDao.save(project);
                 projects.add(project);
             }
             organization.setProjects(projects);
-            organization.setMembers(TestUtil.getRandomSublist(applicationUsers, new Random().nextInt(applicationUsers.size())));
-            organization.setOwners(TestUtil.getRandomSublist(applicationUsers, new Random().nextInt(applicationUsers.size())));
+            
+            organization.setOwners(TestUtil.getRandomSublist(owners, new Random().nextInt(owners.size())));
+            organization.setMembers(TestUtil.getRandomSublist(members, new Random().nextInt(members.size())));
 
             organization = this.organizationDAO.save(organization);
             organizations.add(organization);
@@ -325,13 +331,13 @@ public class TestUtil {
         FieldDefinition fieldDefinition;
         switch (type) {
             case ASSIGNEE:
-                fieldDefinition = new AssigneeDefinition();
+                fieldDefinition = EntityFactory.getAssigneeDefinition();
                 break;
             case SINGLE_SELECTION:
-                fieldDefinition = new SingleSelectionDefinition();
+                fieldDefinition = EntityFactory.getSingleSelectionDefinition();
                 break;
             default:
-                fieldDefinition = new SimpleFieldDefinition();
+                fieldDefinition = EntityFactory.getSimpleFieldDefinition();
                 fieldDefinition.setType(type);
                 break;
         }
@@ -340,6 +346,9 @@ public class TestUtil {
     }
 
     public static <T> ArrayList<T> getRandomSublist(ArrayList<T> list, int n) {
+        if (n == 0){
+            n = 1;
+        }
         Collections.shuffle(list);
         return new ArrayList<T>(list.subList(0, n));
     }
