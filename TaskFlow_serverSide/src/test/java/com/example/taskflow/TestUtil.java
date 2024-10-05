@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
+import java.io.File;
 import java.math.BigDecimal;
+import java.nio.file.Files;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -231,29 +233,33 @@ public class TestUtil {
             Organization organization = EntityFactory.getOrganization();
             organization.setName(RandomString.make(10));
 
+            organization.setOwners(TestUtil.getRandomSublist(owners, new Random().nextInt(owners.size())));
+            organization.setMembers(TestUtil.getRandomSublist(members, new Random().nextInt(members.size())));
+            organization = this.organizationDAO.save(organization);
+            
             ArrayList<Project> projects = new ArrayList<>();
 
             for (int j = 0; j < nProjectForOrganization; j++){
                 Project project = EntityFactory.getProject();
+                project.setName(RandomString.make(10));
+                project = this.projectDao.save(project);
 
                 ArrayList<FieldDefinition> fieldDefinitions = new ArrayList<>();
                 for (FieldType type : FieldType.values()) {
-                    if (type != FieldType.DOCUMENT) {
-                        FieldDefinition fieldDefinition = this.getFieldDefinition(type);
+                    FieldDefinition fieldDefinition = this.getFieldDefinition(type);
 
-                        if (type == FieldType.ASSIGNEE) {
-                            ArrayList<User> randomUsersList = TestUtil.getRandomSublist(applicationUsers, new Random().nextInt(9) + 1);
-                            ((AssigneeDefinition) fieldDefinition).setPossibleAssigneeUsers(randomUsersList);
-                        }
-    
-                        if (type == FieldType.SINGLE_SELECTION) {
-                            ((SingleSelectionDefinition) fieldDefinition).setPossibleSelections(this.getRandomSelections(new Random().nextInt(4) + 1));
-                        }
-                        
-                        fieldDefinition = this.fieldDefinitionDAO.save(fieldDefinition);
-                        fieldDefinitions.add(fieldDefinition);
-                        project.addFieldDefinition(fieldDefinition);
+                    if (type == FieldType.ASSIGNEE) {
+                        ArrayList<User> randomSublistOfOrganizationUsers = TestUtil.getRandomSublist(organization.getUsers(), new Random().nextInt(9) + 1);
+                        ((AssigneeDefinition) fieldDefinition).setPossibleAssigneeUsers(randomSublistOfOrganizationUsers);
                     }
+
+                    if (type == FieldType.SINGLE_SELECTION) {
+                        ((SingleSelectionDefinition) fieldDefinition).setPossibleSelections(this.getRandomSelections(new Random().nextInt(4) + 1));
+                    }
+                    
+                    fieldDefinition = this.fieldDefinitionDAO.save(fieldDefinition);
+                    fieldDefinitions.add(fieldDefinition);
+                    project.addFieldDefinition(fieldDefinition);
                 }
 
                 ArrayList<Activity> activities = new ArrayList<>();
@@ -278,9 +284,6 @@ public class TestUtil {
                 projects.add(project);
             }
             organization.setProjects(projects);
-            
-            organization.setOwners(TestUtil.getRandomSublist(owners, new Random().nextInt(owners.size())));
-            organization.setMembers(TestUtil.getRandomSublist(members, new Random().nextInt(members.size())));
 
             organization = this.organizationDAO.save(organization);
             organizations.add(organization);
@@ -315,6 +318,19 @@ public class TestUtil {
                 field = new NumberBuilder(fieldDefinition)
                         .addParameter(new BigDecimal(new Random().nextInt(100)))
                         .build();
+                break;
+            case DOCUMENT:
+                File file = new File(System.getProperty("user.dir") + "/src/test/resources/Integral_image.pdf");
+                try{
+                    field = new DocumentBuilder(fieldDefinition)
+                            .addContent(Files.readAllBytes(file.toPath()))
+                            .addFileName("Integral_image")
+                            .addFileType(".pdf")
+                            .build();
+                }
+                catch(Exception exception){
+                    throw new IllegalArgumentException(file.getAbsolutePath() + ": File non trovato");
+                }
                 break;
             default:
                 throw new IllegalArgumentException("Document need implementation");

@@ -134,7 +134,7 @@ public class Organization extends BaseEntity{
     }
 
     public ArrayList<User> getUsers(){
-        ArrayList<User> users = this.owners;
+        ArrayList<User> users = new ArrayList<>(this.owners);
         users.addAll(this.members);
 
         return users;
