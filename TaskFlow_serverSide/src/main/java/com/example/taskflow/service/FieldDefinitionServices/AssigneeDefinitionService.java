@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.taskflow.DAOs.OrganizationDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.FieldDefinition.AssigneeDefinitionDTO;
 import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
+import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.AssigneeDefinition;
 import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinition;
@@ -18,6 +20,8 @@ import com.example.taskflow.DomainModel.FieldDefinitionPackage.FieldDefinitionFa
 public class AssigneeDefinitionService extends FieldDefinitionService{
     @Autowired
     private UserDAO userDao;
+    @Autowired
+    private OrganizationDAO organizationDao;
 
     @Transactional
     @Override
@@ -32,6 +36,14 @@ public class AssigneeDefinitionService extends FieldDefinitionService{
         AssigneeDefinitionDTO assigneeDefinitionDTO = (AssigneeDefinitionDTO)fieldDefinitionDto;
         
         AssigneeDefinitionBuilder builder = new AssigneeDefinitionBuilder();
+
+        Organization organization = this.organizationDao.findById(assigneeDefinitionDTO.getOrganizationId()).orElse(null);
+
+        if (organization == null){
+            throw new IllegalArgumentException("Organization in DTO not found");
+        }
+
+        builder.setOrganization(organization);
 
         if (assigneeDefinitionDTO.getAssigneeIds() != null){
             builder.setUsers(this.getUsersById(assigneeDefinitionDTO.getAssigneeIds()));

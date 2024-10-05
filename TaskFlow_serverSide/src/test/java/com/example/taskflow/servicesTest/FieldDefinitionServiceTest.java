@@ -44,6 +44,8 @@ public class FieldDefinitionServiceTest {
     private FieldDAO fieldDao;
     @Autowired 
     private FieldDefinitionDAO fieldDefinitionDao;
+    @Autowired
+    private OrganizationDAO organizationDao;
 
     @BeforeEach
     public void setupDatabase(){
@@ -119,8 +121,13 @@ public class FieldDefinitionServiceTest {
                 fieldDefinitionDto.setName(RandomString.make(10));
 
                 if (type == FieldType.ASSIGNEE){
-                    ArrayList<User> users = this.testUtil.addGetMultipleRandomUserToDatabase(10);
-                    ((AssigneeDefinitionDTO)fieldDefinitionDto).setAssigneeIds(this.getUserIds(users));
+                    Organization organization = EntityFactory.getOrganization();
+                    organization.setOwners(this.testUtil.addGetMultipleRandomUserToDatabase(2));
+                    organization.setMembers(this.testUtil.addGetMultipleRandomUserToDatabase(10));
+                    organization = this.organizationDao.save(organization);
+
+                    ((AssigneeDefinitionDTO)fieldDefinitionDto).setOrganizationId(organization.getId());
+                    ((AssigneeDefinitionDTO)fieldDefinitionDto).setAssigneeIds(this.getUserIds(organization.getUsers()));
                 }
     
                 if (type == FieldType.SINGLE_SELECTION){
