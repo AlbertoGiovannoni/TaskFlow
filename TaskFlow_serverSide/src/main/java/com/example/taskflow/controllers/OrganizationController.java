@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.taskflow.DAOs.OrganizationDAO;
 import com.example.taskflow.DTOs.OrganizationDTO;
 import com.example.taskflow.DTOs.ProjectDTO;
+import com.example.taskflow.DTOs.UserDTO;
 import com.example.taskflow.service.OrganizationService;
 import jakarta.validation.Valid;
 
@@ -167,4 +168,14 @@ public class OrganizationController {
         }
     }
 
+    @PreAuthorize("@checkUriService.check(authentication, #userId, #organizationId)")
+    @GetMapping("/{userId}/myOrganization/{organizationId}/users")
+    public ResponseEntity<?> getOrganizationUsers(@PathVariable String organizationId, @PathVariable String userId) {
+        try {
+            ArrayList<UserDTO> users = this.organizationService.getAllOrganizationUserDTO(organizationId);
+            return ResponseEntity.status(HttpStatus.OK).body(users);
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
+        }
+    }
 }
