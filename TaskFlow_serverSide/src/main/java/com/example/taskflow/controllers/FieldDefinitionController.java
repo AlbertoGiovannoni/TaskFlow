@@ -50,7 +50,7 @@ public class FieldDefinitionController {
     }
 
     @PreAuthorize("@checkUriService.check(authentication, #userId, #organizationId, #projectId)")
-    @PostMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/newFieldDefinition")
+    @PostMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/fieldDefinitions")
     public ResponseEntity<?> addNewFieldDefinition(
             @PathVariable String userId,
             @PathVariable String organizationId,
@@ -69,7 +69,7 @@ public class FieldDefinitionController {
     }
 
     @PreAuthorize("@checkUriService.checkFieldDefinition(authentication, #userId, #organizationId, #projectId, #fieldDefinitionId)")
-    @DeleteMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/{fieldDefinitionId}")
+    @DeleteMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/fieldDefinitions/{fieldDefinitionId}")
     public ResponseEntity<?> removeFieldDefinition(@PathVariable String organizationId,
             @PathVariable String projectId, @PathVariable String fieldDefinitionId, @PathVariable String userId) {
         try {

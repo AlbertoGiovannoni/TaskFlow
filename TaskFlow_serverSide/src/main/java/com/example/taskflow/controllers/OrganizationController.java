@@ -72,11 +72,8 @@ public class OrganizationController {
     public ResponseEntity<?> createOrganization(@Valid @RequestBody OrganizationDTO organizationDTO,
             @PathVariable String userId) {
         try {
-            ArrayList<String> owners = new ArrayList<String>();
-            owners.add(userId);
-            organizationDTO.setOwnersId(owners);
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(this.organizationService.createNewOrganization(organizationDTO));
+                    .body(this.organizationService.createNewOrganization(userId, organizationDTO));
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
         }

@@ -87,7 +87,7 @@ public class OrganizationServiceTest {
         orgDto.setName(RandomString.make(10));
         orgDto.setOwnersId(ownerIds);
 
-        orgDto = organizationService.createNewOrganization(orgDto);
+        orgDto = organizationService.createNewOrganization(orgDto.getOwnersId().get(0), orgDto);
 
         Organization orgFromDb = organizationDAO.findById(orgDto.getId()).orElse(null);
 

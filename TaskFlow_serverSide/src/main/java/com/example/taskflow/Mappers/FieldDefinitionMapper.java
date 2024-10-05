@@ -66,6 +66,7 @@ public interface FieldDefinitionMapper {
     }
 
     @Mapping(source="possibleAssigneeUsers", target="assigneeIds", qualifiedByName = "mapUsersToIds")
+    @Mapping(target = "organizationId", ignore = true)
     AssigneeDefinitionDTO toDto(AssigneeDefinition assigneeDefinition);
 
     @Mapping(source="possibleSelections", target="selections")

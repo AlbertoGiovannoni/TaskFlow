@@ -62,7 +62,7 @@ public class OrganizationService {
         return false;
     }
 
-    public OrganizationDTO createNewOrganization(OrganizationDTO organizationDTO) {
+    public OrganizationDTO createNewOrganization(String ownerId, OrganizationDTO organizationDTO) {
 
         Organization organization = EntityFactory.getOrganization();
         
@@ -74,11 +74,16 @@ public class OrganizationService {
         organization.setCreationDate(now.truncatedTo(ChronoUnit.MINUTES));
 
         if (organizationDTO.getOwnersId() == null){
-            throw new IllegalArgumentException("An organization must have an owner");
+            ArrayList<String> owners = new ArrayList<>();
+            owners.add(ownerId);
+            organizationDTO.setOwnersId(owners);
         }
-        if (organizationDTO.getOwnersId().isEmpty()){
-            throw new IllegalArgumentException("An organization must have an owner");
+
+        ArrayList<String> owners = new ArrayList<>(organizationDTO.getOwnersId());
+        if (!(owners.contains(ownerId))){
+            owners.add(ownerId);
         }
+        organizationDTO.setOwnersId(owners);
 
         organization.setOwners(new ArrayList<User>(this.userDAO.findAllById(organizationDTO.getOwnersId())));
         organization.setMembers(new ArrayList<User>());

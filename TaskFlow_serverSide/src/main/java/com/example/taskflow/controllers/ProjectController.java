@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.taskflow.DTOs.FieldDefinition.FieldDefinitionDTO;
 import com.example.taskflow.DTOs.ActivityDTO;
 import com.example.taskflow.service.ProjectService;
 import jakarta.validation.Valid;
@@ -75,21 +74,6 @@ public class ProjectController {
         try {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(this.projectService.renameProject(projectId, newName));
-        } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
-        }
-    }
-
-    @PreAuthorize("@checkUriService.check(authentication, #userId, #organizationId, #projectId)")
-    @PostMapping("/{userId}/myOrganization/{organizationId}/projects/{projectId}/fieldDefinitions")
-    public ResponseEntity<?> addFieldDefinitionToProject(@RequestBody FieldDefinitionDTO fieldDefinitionDTO, 
-                                                         @PathVariable String userId, 
-                                                         @PathVariable String organizationId, 
-                                                         @PathVariable String projectId) 
-    {
-        try {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(this.projectService.addFieldDefinitionToProject(projectId, fieldDefinitionDTO));
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
         }
