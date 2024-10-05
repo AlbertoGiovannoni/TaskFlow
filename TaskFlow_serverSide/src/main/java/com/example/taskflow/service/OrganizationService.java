@@ -5,12 +5,14 @@ import com.example.taskflow.DAOs.ProjectDAO;
 import com.example.taskflow.DAOs.UserDAO;
 import com.example.taskflow.DTOs.OrganizationDTO;
 import com.example.taskflow.DTOs.ProjectDTO;
+import com.example.taskflow.DTOs.UserDTO;
 import com.example.taskflow.DomainModel.EntityFactory;
 import com.example.taskflow.DomainModel.Organization;
 import com.example.taskflow.DomainModel.Project;
 import com.example.taskflow.DomainModel.User;
 import com.example.taskflow.Mappers.OrganizationMapper;
 import com.example.taskflow.Mappers.ProjectMapper;
+import com.example.taskflow.Mappers.UserMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,8 @@ public class OrganizationService {
     private ProjectService projectService;
     @Autowired
     private ProjectMapper projectMapper;
+    @Autowired
+    private UserMapper userMapper;
 
     public boolean isOwner(String organizationId, String username) {
         Optional<Organization> organization = organizationDAO.findById(organizationId);
@@ -214,5 +218,16 @@ public class OrganizationService {
         allUsers.addAll(organization.getMembers());
 
         return allUsers;
+    }
+
+    public ArrayList<UserDTO> getAllOrganizationUserDTO(String organizationId){
+        ArrayList<User> allUsers = this.getAllOrganizationUser(organizationId);
+        ArrayList<UserDTO> allUserDTOs = new ArrayList<>();
+
+        for (User user : allUsers){
+            allUserDTOs.add(this.userMapper.toDto(user));
+        }
+
+        return allUserDTOs;
     }
 }
