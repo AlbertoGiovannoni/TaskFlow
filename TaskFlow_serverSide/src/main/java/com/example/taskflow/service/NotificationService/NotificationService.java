@@ -46,6 +46,12 @@ public class NotificationService {
 
             List<Date> date = this.fieldDAO.findByNotification(notification);
 
+            if (date == null || date.isEmpty()) {
+                System.out.println("No dates found for notification: " + notification.getId());
+            } else {
+                System.out.println("Found dates: " + date);
+            }
+
             this.mailService.sendEmail(receiver.getEmail(), "Notifica da TaskFlow", notification.getMessage(), date.get(0));
             
         }
