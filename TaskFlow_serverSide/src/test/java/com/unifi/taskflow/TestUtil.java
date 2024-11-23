@@ -217,10 +217,7 @@ public class TestUtil {
         }
     }
 
-    public ArrayList<Organization> getEntireDatabaseMockup(int nOrganization, 
-                                                int nProjectForOrganization, 
-                                                int nActivitiesForProject, 
-                                                int nUsers) {
+    public ArrayList<Organization> getEntireDatabaseMockup(int nOrganization, int nProjectForOrganization, int nActivitiesForProject, int nUsers) {
         this.cleanDatabase();
         ArrayList<User> applicationUsers = this.addGetMultipleRandomUserToDatabase(nUsers);
 
@@ -291,7 +288,7 @@ public class TestUtil {
         return organizations;
     }
 
-    private Field getField(FieldDefinition fieldDefinition){
+    public Field getField(FieldDefinition fieldDefinition){
         Field field;
         switch (fieldDefinition.getType()) {
             case ASSIGNEE:
@@ -338,7 +335,7 @@ public class TestUtil {
         return field;
     }
 
-    private FieldDefinition getFieldDefinition(FieldType type){
+    public FieldDefinition getFieldDefinition(FieldType type){
         FieldDefinition fieldDefinition;
         switch (type) {
             case ASSIGNEE:

@@ -2,6 +2,7 @@ package com.unifi.taskflow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import com.unifi.taskflow.daos.ActivityDAO;
 import com.unifi.taskflow.daos.FieldDAO;
 import com.unifi.taskflow.daos.FieldDefinitionDAO;
 import com.unifi.taskflow.domainModel.Activity;
+import com.unifi.taskflow.domainModel.EntityFactory;
 import com.unifi.taskflow.domainModel.fieldDefinitions.FieldDefinition;
 import com.unifi.taskflow.domainModel.fieldDefinitions.FieldType;
 import com.unifi.taskflow.domainModel.fields.Field;
@@ -56,7 +58,7 @@ public class ActivityTest {
         this.fieldDefinitionDao.save(fieldDefinition2);
 
         Field field1 = (new TextBuilder(fieldDefinition1))
-                .addText("diocan")
+                .addText("Test")
                 .build();
 
         Field field2 = (new NumberBuilder(fieldDefinition2))
@@ -83,30 +85,61 @@ public class ActivityTest {
     }
 
     @Test
-    public void modifyActivity(){
-        FieldDefinition fieldDefinition1 = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.TEXT);
-        FieldDefinition fieldDefinition2 = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.NUMBER);
+    public void testFieldMethods(){
+        // creazione di field casuali
+        FieldDefinition fieldDef1 = this.testUtil.getFieldDefinition(FieldType.TEXT);
+        FieldDefinition fieldDef2 = this.testUtil.getFieldDefinition(FieldType.NUMBER);
+        Field field1 = this.testUtil.getField(fieldDef1);
+        Field field2 = this.testUtil.getField(fieldDef2);
 
-        
-        Field field1 = (new TextBuilder(fieldDefinition1))
-                .addText("foo")
-                .build();
+        // test su ordinamento dei fields
+        this.activity.addField(field1);
+        this.activity.addField(field2);
+        assertEquals(this.activity.getFields().get(0), field1);
+        assertEquals(this.activity.getFields().get(1), field2);
 
-        Field field2 = (new NumberBuilder(fieldDefinition2))
-                .addParameter(BigDecimal.valueOf(Math.random()))
-                .build();
+        // test di rimozione field
+        this.activity.removeField(field1);
+        this.activity.removeField(field2);
+        assertTrue(this.activity.getFields().isEmpty());
 
+        // test di aggiunta con metodo addFields()
         ArrayList<Field> fields = new ArrayList<Field>();
         fields.add(field1);
         fields.add(field2);
+        this.activity.addFields(fields);
+        assertEquals(this.activity.getFields().get(0), field1);
+        assertEquals(this.activity.getFields().get(1), field2);
+    }
 
+    @Test
+    public void testActivityFieldsModificationDB(){
+        // creazione di field casuali e persistenza
+        FieldDefinition fieldDefinition1 = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.TEXT);
+        FieldDefinition fieldDefinition2 = this.testUtil.pushGetFieldDefinitionToDatabase(FieldType.NUMBER);
+        Field field1 = this.testUtil.getField(fieldDefinition1);
+        Field field2 = this.testUtil.getField(fieldDefinition2);
         field1 = this.fieldDao.save(field1);
         field2 = this.fieldDao.save(field2);
-        Activity found1 = activityDAO.findById(this.activity.getId()).orElse(null);
-        found1.setFields(fields);
-        activityDAO.save(found1);
-        Activity found2 = activityDAO.findById(activity.getId()).orElse(null);
-        this.testUtil.checkEqualActivities(found1, found2);
+
+        // aggiunta dei field all'activity e persistenza
+        this.activity.addField(field1);
+        this.activity.addField(field2);
+        this.activityDAO.save(this.activity);
+
+        // test della persistenza dell'aggiunta dei fields
+        Activity activitySearchedInDB = activityDAO.findById(this.activity.getId()).orElse(null);
+        assertEquals(activitySearchedInDB.getFields().get(0), field1);
+        assertEquals(activitySearchedInDB.getFields().get(1), field2);
+
+        // rimozione di un field dall'activity e persistenza
+        this.activity.removeField(field2);
+        this.activityDAO.save(activity);
+        
+        // test della persistenza della rimozione del field
+        activitySearchedInDB = activityDAO.findById(this.activity.getId()).orElse(null);
+        assertEquals(this.activity.getFields().size(), 1);
+        assertEquals(this.activity.getFields().get(0), field1);
     }
 
     @Test
