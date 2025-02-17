@@ -18,7 +18,6 @@ TaskFlow è un'applicazione web progettata per ottimizzare la gestione dei fluss
 - **Servizi Aggiuntivi**: MapStruct per il mapping degli oggetti, Spring Mail per l'invio di notifiche via email.
 
 ### Frontend
-- **Linguaggio**: TypeScript
 - **Framework**: Angular
 - **UI Framework**: Angular Material (Material Design 3)
 
@@ -29,25 +28,6 @@ TaskFlow segue un'architettura RESTful, con una netta separazione tra frontend e
 - **Spring Boot**: Implementa il backend con API REST per la gestione delle organizzazioni, progetti e attività.
 - **Angular**: Frontend dinamico e reattivo per una user experience intuitiva.
 
-## Installazione e Avvio
-### Prerequisiti
-- **Java 17 o superiore**
-- **Node.js e npm**
-- **MongoDB installato e in esecuzione**
-
-### Backend
-```bash
-cd backend
-mvn spring-boot:run
-```
-
-### Frontend
-```bash
-cd frontend
-npm install
-ng serve
-```
-
 L'applicazione sarà accessibile su `http://localhost:4200/`.
 
 ## Contributi
@@ -56,4 +36,4 @@ Sviluppato da:
 - **Alberto Giovannoni**
 - **Daniele Morganti**
 
-Relazione del Progetto: [Link al PDF](swam.pdf)
+Relazione del Progetto: [Visualizza il PDF](swam.pdf)
